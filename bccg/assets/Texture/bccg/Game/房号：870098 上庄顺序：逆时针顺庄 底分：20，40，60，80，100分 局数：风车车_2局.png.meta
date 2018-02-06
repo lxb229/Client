@@ -1,0 +1,30 @@
+{
+  "ver": "1.0.0",
+  "uuid": "0f736d25-4c95-4050-a71b-5fb5cee45135",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "subMetas": {
+    "房号：870098 上庄顺序：逆时针顺庄 底分：20，40，60，80，100分 局数：风车车_2局": {
+      "ver": "1.0.3",
+      "uuid": "d1a6c8be-e9ab-4088-bc3f-e025241b4e0c",
+      "rawTextureUuid": "0f736d25-4c95-4050-a71b-5fb5cee45135",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 272,
+      "height": 92,
+      "rawWidth": 272,
+      "rawHeight": 92,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

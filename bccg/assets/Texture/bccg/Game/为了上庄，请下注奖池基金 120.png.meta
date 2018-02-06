@@ -1,0 +1,30 @@
+{
+  "ver": "1.0.0",
+  "uuid": "c3f42613-d8fe-431c-8926-89a89d4c5fb0",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "subMetas": {
+    "为了上庄，请下注奖池基金 120": {
+      "ver": "1.0.3",
+      "uuid": "aef36d50-a50b-465a-9fc8-739abfd64ec5",
+      "rawTextureUuid": "c3f42613-d8fe-431c-8926-89a89d4c5fb0",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 412,
+      "height": 29,
+      "rawWidth": 412,
+      "rawHeight": 29,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "hot-update-tools",
+  "version": "0.0.1",
+  "description": "热更新工具",
+  "author": "wangjie",
+  "main": "main.js",
+  "main-menu": {
+    "工具/热更新工具": {
+      "message": "hot-update-tools:showPanel"
+    }
+  },
+  "panel": {
+    "main": "panel/index.js",
+    "type": "dockable",
+    "title": "热更资源工具",
+    "width": 600,
+    "height": 800
+  }
+}
