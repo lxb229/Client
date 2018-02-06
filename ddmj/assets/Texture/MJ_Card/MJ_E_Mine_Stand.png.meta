@@ -1,0 +1,30 @@
+{
+  "ver": "1.0.0",
+  "uuid": "d822ed1f-5063-44bc-9bcf-38b805aa0e36",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "subMetas": {
+    "MJ_E_Mine_Stand": {
+      "ver": "1.0.3",
+      "uuid": "2f989544-938c-4dba-8b75-fce8342c82fa",
+      "rawTextureUuid": "d822ed1f-5063-44bc-9bcf-38b805aa0e36",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 85,
+      "height": 122,
+      "rawWidth": 85,
+      "rawHeight": 122,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

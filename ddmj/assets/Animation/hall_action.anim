@@ -1,0 +1,269 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "hall_action",
+  "_objFlags": 0,
+  "_rawFiles": null,
+  "_duration": 0.85,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 1,
+  "curveData": {
+    "paths": {
+      "RootNode/top": {
+        "props": {
+          "opacity": [
+            {
+              "frame": 0.6,
+              "value": 255
+            },
+            {
+              "frame": 0.8333333333333334,
+              "value": 255
+            }
+          ]
+        },
+        "comps": {
+          "cc.Widget": {
+            "top": [
+              {
+                "frame": 0.6,
+                "value": -102
+              },
+              {
+                "frame": 0.8333333333333334,
+                "value": 0
+              }
+            ]
+          }
+        }
+      },
+      "RootNode/btm": {
+        "props": {
+          "opacity": [
+            {
+              "frame": 0.6,
+              "value": 0
+            },
+            {
+              "frame": 0.85,
+              "value": 255
+            }
+          ]
+        },
+        "comps": {
+          "cc.Widget": {
+            "bottom": [
+              {
+                "frame": 0.6,
+                "value": -65
+              },
+              {
+                "frame": 0.85,
+                "value": 0
+              }
+            ]
+          }
+        }
+      },
+      "RootNode/center/clubLayer/hall_img_icon2": {
+        "props": {
+          "position": [
+            {
+              "frame": 0,
+              "value": [
+                1000,
+                -152
+              ]
+            },
+            {
+              "frame": 0.2,
+              "value": [
+                -313.4,
+                -152.1
+              ]
+            }
+          ]
+        }
+      },
+      "RootNode/center/clubLayer/hall_btn_notice": {
+        "props": {
+          "opacity": [
+            {
+              "frame": 0.6,
+              "value": 0
+            },
+            {
+              "frame": 0.75,
+              "value": 255
+            }
+          ]
+        }
+      },
+      "RootNode/center/clubLayer": {
+        "props": {
+          "position": [
+            {
+              "frame": 0,
+              "value": [
+                0,
+                0
+              ]
+            }
+          ]
+        }
+      },
+      "RootNode/center/clubLayer/hall_img_center/btn_return_club": {
+        "props": {
+          "scaleX": [
+            {
+              "frame": 0.26666666666666666,
+              "value": 2
+            },
+            {
+              "frame": 0.35,
+              "value": 1
+            }
+          ],
+          "scaleY": [
+            {
+              "frame": 0.26666666666666666,
+              "value": 2
+            },
+            {
+              "frame": 0.35,
+              "value": 1
+            }
+          ],
+          "opacity": [
+            {
+              "frame": 0.25,
+              "value": 0
+            },
+            {
+              "frame": 0.26666666666666666,
+              "value": 100
+            },
+            {
+              "frame": 0.35,
+              "value": 255
+            }
+          ]
+        }
+      },
+      "RootNode/center/clubLayer/hall_img_center/btn_create_room1": {
+        "props": {
+          "scaleX": [
+            {
+              "frame": 0.35,
+              "value": 1.5
+            },
+            {
+              "frame": 0.43333333333333335,
+              "value": 1
+            }
+          ],
+          "scaleY": [
+            {
+              "frame": 0.35,
+              "value": 1.5
+            },
+            {
+              "frame": 0.43333333333333335,
+              "value": 1
+            }
+          ],
+          "opacity": [
+            {
+              "frame": 0.3333333333333333,
+              "value": 0
+            },
+            {
+              "frame": 0.35,
+              "value": 100
+            },
+            {
+              "frame": 0.43333333333333335,
+              "value": 255
+            }
+          ]
+        }
+      },
+      "RootNode/center/clubLayer/hall_img_center/btn_enter_room1": {
+        "comps": {
+          "cc.Widget": {}
+        },
+        "props": {
+          "scaleX": [
+            {
+              "frame": 0.43333333333333335,
+              "value": 1.5
+            },
+            {
+              "frame": 0.5166666666666667,
+              "value": 1
+            }
+          ],
+          "scaleY": [
+            {
+              "frame": 0.43333333333333335,
+              "value": 1.5
+            },
+            {
+              "frame": 0.5166666666666667,
+              "value": 1
+            }
+          ],
+          "opacity": [
+            {
+              "frame": 0.4166666666666667,
+              "value": 0
+            },
+            {
+              "frame": 0.43333333333333335,
+              "value": 100
+            },
+            {
+              "frame": 0.5166666666666667,
+              "value": 255
+            }
+          ]
+        }
+      },
+      "RootNode/center/clubLayer/hall_img_center/btn_mode_normal": {
+        "props": {
+          "position": [
+            {
+              "frame": 0.5166666666666667,
+              "value": [
+                555,
+                -260
+              ]
+            },
+            {
+              "frame": 0.6333333333333333,
+              "value": [
+                106.5,
+                -260
+              ]
+            }
+          ]
+        }
+      },
+      "RootNode/center/clubLayer/hall_img_center": {
+        "props": {
+          "opacity": [
+            {
+              "frame": 0.2,
+              "value": 0
+            },
+            {
+              "frame": 0.25,
+              "value": 255
+            }
+          ]
+        }
+      }
+    }
+  },
+  "events": []
+}

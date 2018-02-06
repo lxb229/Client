@@ -1,0 +1,30 @@
+{
+  "ver": "1.0.0",
+  "uuid": "e9d3b37c-1310-46f3-b2f9-4f11ff0fb709",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "subMetas": {
+    "club_table_game": {
+      "ver": "1.0.3",
+      "uuid": "9f1a1674-4614-49dc-9114-94b3e35e9673",
+      "rawTextureUuid": "e9d3b37c-1310-46f3-b2f9-4f11ff0fb709",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 280,
+      "height": 134,
+      "rawWidth": 280,
+      "rawHeight": 134,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}
