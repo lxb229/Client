@@ -1,0 +1,58 @@
+2018-02-06T07:50:23.369Z - normal: Load ~/.CocosCreator/settings.json
+2018-02-06T07:50:23.373Z - normal: checking language setting...
+2018-02-06T07:50:23.374Z - normal: Language: zh
+2018-02-06T07:50:25.245Z - success: protocol editor-framework registered
+2018-02-06T07:50:25.245Z - success: protocol app registered
+2018-02-06T07:50:25.245Z - success: protocol theme registered
+2018-02-06T07:50:25.245Z - success: protocol packages registered
+2018-02-06T07:50:25.245Z - success: protocol unpack registerred
+2018-02-06T07:50:25.245Z - success: protocol disable-commonjs registerred
+2018-02-06T07:50:25.516Z - normal: connected!
+2018-02-06T07:50:25.518Z - normal: Check project C:\Users\lxb22\Desktop\Client\bccg
+2018-02-06T07:50:25.521Z - normal: Initializing Cocos2d
+2018-02-06T07:50:25.772Z - normal: Initializing Asset Database
+2018-02-06T07:50:25.807Z - success: protocol uuid registerred
+2018-02-06T07:50:25.807Z - success: protocol db registerred
+2018-02-06T07:50:25.808Z - success: protocol thumbnail registerred
+2018-02-06T07:50:25.808Z - normal: Loading editor/builtin packages
+2018-02-06T07:50:25.830Z - success: anysdk loaded
+2018-02-06T07:50:25.970Z - success: assets loaded
+2018-02-06T07:50:25.972Z - success: builder loaded
+2018-02-06T07:50:25.974Z - success: cocos-analytics loaded
+2018-02-06T07:50:25.977Z - success: console loaded
+2018-02-06T07:50:25.979Z - success: hierarchy loaded
+2018-02-06T07:50:25.981Z - success: inspector loaded
+2018-02-06T07:50:25.982Z - success: keystore loaded
+2018-02-06T07:50:25.984Z - success: node-library loaded
+2018-02-06T07:50:25.986Z - success: package-asset loaded
+2018-02-06T07:50:25.987Z - success: preferences loaded
+2018-02-06T07:50:25.989Z - success: project-exporter loaded
+2018-02-06T07:50:26.005Z - success: project-importer loaded
+2018-02-06T07:50:26.013Z - success: project-settings loaded
+2018-02-06T07:50:26.015Z - success: ui-kit loaded
+2018-02-06T07:50:26.016Z - success: ui-grid loaded
+2018-02-06T07:50:26.019Z - success: scene loaded
+2018-02-06T07:50:26.020Z - success: sprite-editor loaded
+2018-02-06T07:50:26.022Z - success: store loaded
+2018-02-06T07:50:26.026Z - success: timeline loaded
+2018-02-06T07:50:26.027Z - normal: Loading builtin packages
+2018-02-06T07:50:26.029Z - success: asset-db-debugger loaded
+2018-02-06T07:50:26.030Z - success: code-editor loaded
+2018-02-06T07:50:26.030Z - success: color-picker loaded
+2018-02-06T07:50:26.032Z - success: package-manager loaded
+2018-02-06T07:50:26.035Z - success: sdkbox loaded
+2018-02-06T07:50:26.039Z - success: tester loaded
+2018-02-06T07:50:26.040Z - success: ui-kit-preview-extra loaded
+2018-02-06T07:50:26.042Z - success: ui-kit-preview loaded
+2018-02-06T07:50:26.043Z - success: ui-tree loaded
+2018-02-06T07:50:27.508Z - normal: Initializing project C:\Users\lxb22\Desktop\Client\bccg
+2018-02-06T07:50:27.513Z - normal: Loading packages
+2018-02-06T07:50:27.524Z - success: clean loaded
+2018-02-06T07:50:27.527Z - success: resource loaded
+2018-02-06T07:50:27.632Z - success: unpack-textureatlas loaded
+2018-02-06T07:50:27.635Z - success: hot-update-tools loaded
+2018-02-06T07:50:27.639Z - success: hot-update loaded
+2018-02-06T07:50:27.639Z - normal: Watching packages
+2018-02-06T07:50:27.706Z - normal: Run Application
+2018-02-06T07:50:36.598Z - success: preview server running at http://localhost:7457
+2018-02-06T07:50:42.089Z - normal: 1.8.1

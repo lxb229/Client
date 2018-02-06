@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "img_board_join",
+    "texture": "4e045134-57d7-43d5-b960-ad083d282161",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      1205,
+      750
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      1205,
+      750
+    ]
+  }
+}

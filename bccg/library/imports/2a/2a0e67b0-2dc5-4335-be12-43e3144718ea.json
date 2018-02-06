@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "quick_chat6",
+    "texture": "068c0710-1f15-44bf-adfa-7388c2d4afdb",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      392,
+      57
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      392,
+      57
+    ]
+  }
+}

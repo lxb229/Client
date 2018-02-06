@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "btn_cuopai",
+    "texture": "ddb734b5-a53b-4bc3-ba7a-ff6de43b2012",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      150,
+      94
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      150,
+      94
+    ]
+  }
+}

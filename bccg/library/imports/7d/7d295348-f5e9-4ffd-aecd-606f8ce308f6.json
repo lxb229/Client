@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "img_head_box",
+    "texture": "26e1a713-af60-453c-9813-e08f96c275e0",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      105,
+      105
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      105,
+      105
+    ]
+  }
+}

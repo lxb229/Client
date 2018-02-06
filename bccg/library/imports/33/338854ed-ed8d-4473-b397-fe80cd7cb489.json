@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "边城主界面 拷贝",
+    "texture": "e6ed7c0c-5ace-4523-a522-2fc3c163042f",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      1334,
+      750
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      1334,
+      750
+    ]
+  }
+}

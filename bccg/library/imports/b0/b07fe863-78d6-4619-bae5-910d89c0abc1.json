@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "回放 拷贝",
+    "texture": "fb815a44-b19d-468c-b4ab-6f12b02e74ac",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      1334,
+      750
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      1334,
+      750
+    ]
+  }
+}

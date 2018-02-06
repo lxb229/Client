@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "lbl_pg",
+    "texture": "8ad40fab-2cbf-4c9c-a615-203776a2bf33",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      136,
+      28
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      136,
+      28
+    ]
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "img_board_notice",
+    "texture": "7f19b99f-60cc-40de-b826-3dfdbfe72f20",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      387,
+      447
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      387,
+      447
+    ]
+  }
+}

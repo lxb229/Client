@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "btn_look_other2",
+    "texture": "7df7efe7-ac8a-49f3-b607-efad77346b7e",
+    "atlas": "",
+    "rect": [
+      11,
+      4,
+      194,
+      75
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      216,
+      83
+    ]
+  }
+}

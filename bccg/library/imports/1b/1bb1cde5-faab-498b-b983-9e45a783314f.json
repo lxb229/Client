@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "btn_baoz",
+    "texture": "acc7e854-6dc3-4fdc-b09e-b46d5dd92e93",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      184,
+      84
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      184,
+      84
+    ]
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "img_message_bg",
+    "texture": "cc5cf116-9040-4027-857b-1a831b28a366",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      422,
+      58
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      422,
+      58
+    ]
+  }
+}

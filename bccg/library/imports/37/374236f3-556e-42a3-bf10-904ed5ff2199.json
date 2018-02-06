@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "btn_leave_room",
+    "texture": "f7b3e97d-87ce-439d-989c-8265f1cecea9",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      232,
+      45
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      232,
+      45
+    ]
+  }
+}

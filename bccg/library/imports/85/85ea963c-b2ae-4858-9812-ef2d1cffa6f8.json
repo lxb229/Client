@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "img_board_rule",
+    "texture": "bcc87f74-3642-4de1-a8f2-89aeaa85f385",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      1205,
+      750
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      1205,
+      750
+    ]
+  }
+}

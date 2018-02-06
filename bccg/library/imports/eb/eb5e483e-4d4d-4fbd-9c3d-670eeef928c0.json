@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "btn_logout1",
+    "texture": "9c645d4f-a15e-456f-a5e8-98f8c92dcece",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      207,
+      88
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      207,
+      88
+    ]
+  }
+}

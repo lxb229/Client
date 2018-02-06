@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "btn_fanpai",
+    "texture": "1e51d042-3506-4123-a208-9d2e4e79792a",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      150,
+      94
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      150,
+      94
+    ]
+  }
+}

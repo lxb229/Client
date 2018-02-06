@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "btn_dissolve_room",
+    "texture": "35aa9ccc-beb2-44db-8c75-ee123ff4f0bb",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      229,
+      45
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      229,
+      45
+    ]
+  }
+}

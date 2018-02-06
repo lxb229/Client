@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "csx",
+    "texture": "450cd5e4-e7d0-414c-9bf6-a9dca47ae72d",
+    "atlas": "",
+    "rect": [
+      13,
+      6,
+      233,
+      107
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      259,
+      119
+    ]
+  }
+}

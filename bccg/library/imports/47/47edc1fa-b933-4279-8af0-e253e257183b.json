@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "lbl_bet",
+    "texture": "4397b038-f7c0-43d4-933f-0179044b0cc1",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      85,
+      27
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      85,
+      27
+    ]
+  }
+}

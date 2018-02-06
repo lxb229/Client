@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "组 3 - Assistor 拷贝",
+    "texture": "bfa159a4-af4e-42da-be9e-cd61756a5c0b",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      1207,
+      103
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      1207,
+      103
+    ]
+  }
+}

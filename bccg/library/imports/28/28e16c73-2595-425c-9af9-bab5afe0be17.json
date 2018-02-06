@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "btn_club1",
+    "texture": "bf93067c-7aa1-44f9-a4d3-78119d36d066",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      435,
+      170
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      435,
+      170
+    ]
+  }
+}

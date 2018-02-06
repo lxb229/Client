@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "lbl_music",
+    "texture": "0ae9ef3d-1405-4d11-9e0a-1506d27d6db5",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      63,
+      31
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      63,
+      31
+    ]
+  }
+}

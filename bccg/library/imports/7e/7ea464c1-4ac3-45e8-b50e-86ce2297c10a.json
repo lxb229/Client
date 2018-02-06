@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "btn_reduce2",
+    "texture": "d5cf296b-8d4b-411e-ba51-54b5d07ac450",
+    "atlas": "",
+    "rect": [
+      3,
+      3,
+      61,
+      61
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      67,
+      67
+    ]
+  }
+}

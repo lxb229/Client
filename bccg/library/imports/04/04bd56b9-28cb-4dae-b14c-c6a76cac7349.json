@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "check_choose",
+    "texture": "a5993411-4d00-4dcb-9f41-29dbfb9fec60",
+    "atlas": "",
+    "rect": [
+      6,
+      0,
+      40,
+      39
+    ],
+    "offset": [
+      3,
+      3
+    ],
+    "originalSize": [
+      46,
+      45
+    ]
+  }
+}
