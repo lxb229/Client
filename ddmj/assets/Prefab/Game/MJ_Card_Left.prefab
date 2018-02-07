@@ -570,8 +570,7 @@
     "light": {
       "__id__": 10
     },
-    "cardBack": null,
-    "maskNode": null
+    "cardBack": null
   },
   {
     "__type__": "cc.PrefabInfo",

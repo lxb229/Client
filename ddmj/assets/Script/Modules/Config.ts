@@ -5,9 +5,9 @@ export const checkUrl: string = 'http://118.31.66.39:8080/checkVer?ver=';
 /**
  * ws连接地址
  */
-export const wsUrl: string = 'ws://ws.wolfsgame.com:40000';
+// export const wsUrl: string = 'ws://ws.wolfsgame.com:40000';
 // export const wsUrl: string = 'ws://192.168.12.156:40000';
-// export const wsUrl: string = 'ws://118.31.66.39:40000';
+export const wsUrl: string = 'ws://118.31.66.39:40000';
 /**
  * 战绩录像数据获取的请求地址
  */

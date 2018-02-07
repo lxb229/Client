@@ -695,8 +695,7 @@
     },
     "cardBack": {
       "__id__": 14
-    },
-    "maskNode": null
+    }
   },
   {
     "__type__": "cc.PrefabInfo",

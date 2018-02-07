@@ -39,16 +39,6 @@ export default class MJ_Card extends cc.Component {
      */
     @property(cc.Node)
     cardBack: cc.Node = null;
-
-    /**
-     * 牌遮罩(手牌有)
-     * 
-     * @type {cc.Node}
-     * @memberof MJ_Card
-     */
-    @property(cc.Node)
-    maskNode: cc.Node = null;
-
     /**
      * 是否显示了遮罩
      * 
@@ -107,8 +97,8 @@ export default class MJ_Card extends cc.Component {
         if (this.light) {
             this.light.active = false;
         }
-        if (this.maskNode) {
-            this.maskNode.active = false;
+        if (this.node.getChildByName('mask')) {
+            this.node.getChildByName('mask').active = false;
         }
         this.node.x = 0;
         this.node.y = 0;
@@ -142,8 +132,8 @@ export default class MJ_Card extends cc.Component {
             this.cardImg.node.active = true;
             this.cardImg.spriteFrame = cardSF;
         }
-        if (this.maskNode) {
-            this.maskNode.active = false;
+        if (this.node.getChildByName('mask')) {
+            this.node.getChildByName('mask').active = false;
         }
         if (this.light) {
             this.light.active = isShow;
@@ -174,9 +164,10 @@ export default class MJ_Card extends cc.Component {
      * @memberof MJ_Card
      */
     showMask(isShowMask: boolean) {
-        if (this.maskNode) {
+        let maskNode = this.node.getChildByName('mask');
+        if (maskNode) {
             this._isShowMask = isShowMask;
-            this.maskNode.active = isShowMask === true ? true : false;
+            maskNode.active = isShowMask === true ? true : false;
         }
     }
 

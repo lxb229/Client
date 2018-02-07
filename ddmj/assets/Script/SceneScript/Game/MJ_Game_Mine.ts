@@ -111,7 +111,13 @@ export default class MJ_Play extends cc.Component {
 
     onLoad() {
         this._canvasTarget = dd.ui_manager.getCanvasNode().getComponent('MJCanvas');
-        this._handList = this.node_mine_card.getComponent('MJ_HandList');
+        let sceneName = cc.director.getScene().name;
+        //是否是绵阳麻将
+        if (sceneName === 'MYMJScene') {
+            this._handList = this.node_mine_card.getComponent('MYMJ_HandList');
+        } else {
+            this._handList = this.node_mine_card.getComponent('MJ_HandList');
+        }
     }
 
     /**
@@ -140,7 +146,13 @@ export default class MJ_Play extends cc.Component {
             this._canvasTarget = dd.ui_manager.getCanvasNode().getComponent('MJCanvas');
         }
         if (!this._handList) {
-            this._handList = this.node_mine_card.getComponent('MJ_HandList');
+            let sceneName = cc.director.getScene().name;
+            //是否是绵阳麻将
+            if (sceneName === 'MYMJScene') {
+                this._handList = this.node_mine_card.getComponent('MYMJ_HandList');
+            } else {
+                this._handList = this.node_mine_card.getComponent('MJ_HandList');
+            }
         }
         this._seatInfo = seatInfo;
 
@@ -288,13 +300,21 @@ export default class MJ_Play extends cc.Component {
         if (isBreakCS) {
             //如果自己在(等待表态)
             if (this._seatInfo.btState === MJ_Act_State.ACT_STATE_WAIT) {
-                this.node_state.active = true;
-                for (var i = 0; i < this._seatInfo.breakCardState.length; i++) {
-                    if (this.node_state_list[i]) {
-                        if (this._seatInfo.breakCardState[i] === 1) {
-                            this.node_state_list[i].active = true;
-                        } else {
-                            this.node_state_list[i].active = false;
+                //正在显示绵阳麻将的躺界面
+                let isTang = false;
+                let btn_hui = this.node.getChildByName('btn_hui');
+                if (btn_hui && btn_hui.active) {
+                    isTang = true;
+                }
+                if (!isTang) {
+                    this.node_state.active = true;
+                    for (var i = 0; i < this._seatInfo.breakCardState.length; i++) {
+                        if (this.node_state_list[i]) {
+                            if (this._seatInfo.breakCardState[i] === 1) {
+                                this.node_state_list[i].active = true;
+                            } else {
+                                this.node_state_list[i].active = false;
+                            }
                         }
                     }
                 }
@@ -430,6 +450,9 @@ export default class MJ_Play extends cc.Component {
             } case '4': {//过
                 this._canvasTarget.sendOtherBreakCard(MJ_Act_Type.ACT_INDEX_DROP, this._seatInfo.breakCard, this.node_state);
                 break;
+            } case '5': {//绵阳麻将
+                this.showTangNode(true);
+                break;
             }
             default:
                 break;
@@ -455,6 +478,33 @@ export default class MJ_Play extends cc.Component {
             sp.spriteFrame = this.img_tj;
             node_tj.setPosition(cc.p(40, 40));
             node_tj.parent = node_dq;
+        }
+    }
+    /**
+     * 绵阳麻将的躺 和 悔 的按钮事件
+     * @memberof MJ_Play
+     */
+    click_btn_hui(event, type: string) {
+        dd.mp_manager.playButton();
+        this.node_state.active = true;
+        let btn_hui = this.node.getChildByName('btn_hui');
+        if (btn_hui) btn_hui.active = false;
+    }
+    /**
+     * 显示绵阳麻将躺节点,进行选躺牌
+     * @param {boolean} isShow  是否显示躺节点
+     * @memberof MJ_Play
+     */
+    showTangNode(isShow: boolean) {
+        if (isShow) {
+            this.node_state.active = false;
+            let btn_hui = this.node.getChildByName('btn_hui');
+            if (btn_hui) btn_hui.active = true;
+        }
+        let canvas = dd.ui_manager.getCanvasNode();
+        let node_tang = canvas.getChildByName('node_tang');
+        if (node_tang) {
+            node_tang.active = isShow;
         }
     }
 }

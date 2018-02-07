@@ -443,7 +443,53 @@ export default class GMManager {
             return false;
         }
     }
-
+    /**
+     * 获取两个数组中 不同的的数据
+     * @param {any} arr1 数组1
+     * @param {any} arr2 数组2
+     * @returns 
+     * @memberof GMManager
+     */
+    getDiffArr(arr1, arr2) {
+        var diff = arr1.concat(arr2).sort((a, b) => {
+            return a - b;//从小到大排序
+        }).filter((valu, index, arr) => {
+            //计算不同的项放入diff
+            return arr.indexOf(valu) === arr.lastIndexOf(valu);
+        });
+        return diff;
+    }
+    /**
+     * 获取两个数组中 相同的的数据
+     * @param {any} arr1 数组1
+     * @param {any} arr2 数组2
+     * @memberof GMManager
+     */
+    getSameArr(arr1, arr2) {
+        let same = arr1.filter((valu, index, arr) => {
+            return arr2.includes(valu);
+        });
+        same.sort((a, b) => {
+            return a - b;
+        });
+        same = this.getNoRepeat(same);
+        return same;
+    }
+    /**
+     * 去掉数组中重复的值
+     * @param {any} arr 
+     * @returns 
+     * @memberof GMManager
+     */
+    getNoRepeat(arr) {
+        let result = [];
+        for (let i = 0; i < arr.length; i++) {
+            if (result.indexOf(arr[i]) === -1) {
+                result.push(arr[i]);
+            }
+        }
+        return result;
+    }
     /**
      * 清空单例对象
      * 

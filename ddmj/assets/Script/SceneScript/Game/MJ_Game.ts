@@ -91,7 +91,13 @@ export default class MJ_Game extends cc.Component {
      */
     @property(cc.Node)
     node_group_list: cc.Node[] = [];
-
+    /**
+     * 躺牌的父节点
+     * @type {cc.Node[]}
+     * @memberof MJ_Game
+     */
+    @property(cc.Node)
+    node_tang_list: cc.Node[] = [];
     /**
      * 打出的牌的父节点容器
      * 
@@ -167,6 +173,9 @@ export default class MJ_Game extends cc.Component {
         }
         for (var i = 0; i < this.node_group_list.length; i++) {
             this.node_group_list[i].removeAllChildren();
+        }
+        for (var i = 0; i < this.node_tang_list.length; i++) {
+            this.node_tang_list[i].removeAllChildren();
         }
         for (var i = 0; i < this.node_act_list.length; i++) {
             this.node_act_list[i].removeAllChildren();
@@ -288,6 +297,7 @@ export default class MJ_Game extends cc.Component {
                     mjOthers.updatePlay(seatInfo);
                 }
                 this.showGroupCard(i, seatInfo);
+                this.shwoTangCard(i, seatInfo);
                 this.showSeatPlayOutCard(i, seatInfo);
                 this.showPlayOutAct(i, seatInfo);
                 this.showHuPai(i, seatInfo);
@@ -317,6 +327,26 @@ export default class MJ_Game extends cc.Component {
                 ocs.showLight(true);
             } else {
                 ocs.showLight(false);
+            }
+        }
+    }
+    /**
+     * 显示绵阳麻将每个玩家的躺牌
+     * @param {number} index 座位索引
+     * @param {SeatVo} seatInfo 座位信息
+     * @memberof MJ_Game
+     */
+    shwoTangCard(index: number, seatInfo: SeatVo) {
+        let node_tang = this.node_tang_list[index];
+        if (node_tang) {
+            if (seatInfo && seatInfo.accountId && seatInfo.accountId !== '' && seatInfo.accountId !== '0') {
+                let sId = this.sId_list[index];
+                node_tang.removeAllChildren();
+                let mymjScript = this.node.getComponent('MYMJScene');
+                //显示躺牌
+                for (let i = 0; i < seatInfo.handCards.length; i++) {
+                    mymjScript.showTangCard(sId, seatInfo.handCards[i], node_tang);
+                }
             }
         }
     }

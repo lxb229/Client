@@ -70,11 +70,16 @@ export default class MJ_Ting extends cc.Component {
      * @memberof MJ_Ting
      */
     updateCardData(Card: CardAttrib, CardNode: cc.Node) {
-        let hcs: MJ_Card = CardNode.getComponent('MJ_Card');
-        let cardId: number = (Card.suit - 1) * 36 + (Card.point - 1) * 4 + 1;
-        let csf: cc.SpriteFrame = this._canvasTarget.getMJCardSF(cardId);
-        hcs.initData(cardId, csf);
-        let isShowMask = dd.gm_manager.getDieTing(Card);
-        hcs.showMask(isShowMask);
+        let cardImg = CardNode.getChildByName('cardImg');
+        let mask = CardNode.getChildByName('mask');
+        if (cardImg) {
+            let cardId: number = (Card.suit - 1) * 36 + (Card.point - 1) * 4 + 1;
+            let csf: cc.SpriteFrame = this._canvasTarget.getMJCardSF(cardId);
+            cardImg.getComponent(cc.Sprite).spriteFrame = csf;
+        }
+        if (mask) {
+            let isShowMask = dd.gm_manager.getDieTing(Card);
+            mask.active = isShowMask;
+        }
     }
 }
