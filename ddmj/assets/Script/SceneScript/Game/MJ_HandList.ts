@@ -896,145 +896,6 @@ export default class MJ_HandList extends cc.Component {
         }
         return isUnSuit;
     }
-    /**
-     * 判断是否可以胡牌
-     * 
-     * @param {MJCard[]} cards 
-     * @returns {boolean} 
-     * @memberof ChildClass
-     */
-    canHuPai(cards: CardAttrib[]): boolean {
-        if (cards.length % 3 !== 2) return false;
-        if (this.getSuits(cards).length > 2) return false;
-        if (cards.length === 2) {
-            if (cards[0].point === cards[1].point && cards[0].suit === cards[1].suit) return true;
-            else return false;
-        } else {//5,8,11,14
-            let nums = cards.map((card) => {
-                return card.suit * 10 + card.point;
-            }, this);
-            nums.sort();
-            if (this.checkQiDui(nums)) return true;
-            let dups = this.getDuplicate(nums);
-            for (let i = 0; i < dups.length; i++) {
-                let num = dups[i];
-                let temps = nums.slice(0);
-                for (let i = 0; i < 2; i++) {
-                    let index = temps.indexOf(num);
-                    temps.splice(index, 1);
-                }
-                if (this.checkRemaining(temps)) return true;
-            }
-            return false;
-        }
-    }
-
-    /**
-     * 检查花色
-     * 
-     * @param {MJCard[]} cards 
-     * @returns {number} 
-     * @memberof ChildClass
-     */
-    getSuits(cards: CardAttrib[]): number[] {
-        let suits: number[] = [];
-        cards.forEach((card) => {
-            if (suits.indexOf(card.suit) === -1) {
-                suits.push(card.suit);
-            }
-        }, this);
-        return suits;
-    }
-
-    /**
-     * 判断移除将牌后剩余的牌是否满足顺子和克子，通过递归移除法验证，当剩余牌为0是返回能胡牌，反之则不能胡牌
-     * 余牌数量不为0是必定是3的倍数，余牌是排序过的从小到大
-     * 
-     * @param {number[]} nums 
-     * @returns {boolean} 
-     * @memberof ChildClass
-     */
-    checkRemaining(nums: number[]): boolean {
-        if (nums.length === 0) return true;
-        if (nums[0] === nums[1] && nums[1] === nums[2]) {
-            let temps = nums.slice(3);
-            return this.checkRemaining(temps);
-        } else {
-            if (nums.indexOf(nums[0] + 1) !== -1 && nums.indexOf(nums[0] + 2) !== -1) {
-                let temps = nums.slice(0);
-                let remove = 0, index = 0;
-                for (let i = 0; i < 3; i++) {
-                    remove = temps.splice(index, 1)[0];
-                    index = temps.indexOf(remove + 1);
-                }
-                return this.checkRemaining(temps);
-            }
-            return false;
-        }
-    }
-
-    /**
-     * 找出可以当将牌的重复项
-     * 
-     * @param {number[]} nums 
-     * @returns {number[]} 
-     * @memberof ChildClass
-     */
-    getDuplicate(nums: number[]): number[] {
-        var result: number[] = [];
-        nums.forEach((num) => {
-            if (nums.indexOf(num) !== nums.lastIndexOf(num) && result.indexOf(num) === -1)
-                result.push(num);
-        })
-        return result;
-    }
-
-    /**
-     * 判断7对
-     * 
-     * @param {number[]} nums 
-     * @returns {boolean} 
-     * @memberof ChildClass
-     */
-    checkQiDui(nums: number[]): boolean {
-        if (nums.length !== 14) return false;
-        for (let i = 0; i < 13; i += 2) {
-            if (nums[i] !== nums[i + 1]) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * 获取可以胡的牌，即听牌
-     * 
-     * @param {MJCard[]} cards 
-     * @returns {MJCard[]} 
-     * @memberof ChildClass
-     */
-    getTingPai(cards: CardAttrib[]): CardAttrib[] {
-        let results: CardAttrib[] = [];
-        let checkList: CardAttrib[] = [];
-        let suits = this.getSuits(cards);
-        if (suits.length > 2 || suits.indexOf(this._seatInfo.unSuit) > -1) return [];
-        suits.forEach((suit) => {
-            switch (suit) {
-                case 1: checkList = checkList.concat(this.wans); break;
-                case 2: checkList = checkList.concat(this.tongs); break;
-                case 3: checkList = checkList.concat(this.tiaos); break;
-                default: break;
-            }
-        }, this);
-        checkList.forEach((card) => {
-            let temps = cards.slice(0);
-            temps.push(card);
-            if (this.canHuPai(temps)) {
-                results.push(card);
-            }
-        }, this);
-        return results;
-    }
 
     /**
      * 根据cardId计算，打出这张牌是否可以听牌（胡牌）
@@ -1051,13 +912,12 @@ export default class MJ_HandList extends cc.Component {
         let cards = hands.map((cardId) => {
             return dd.gm_manager.getCardById(cardId);
         }, this);
-        let tings = this.getTingPai(cards);
+        let tings = dd.gm_manager.getTingPai(cards);
         if (tings.length > 0) {//有听牌需要显示
             return tings;
         }
         return null;
     }
-
     /**
      * 播放插牌的动作
      * 

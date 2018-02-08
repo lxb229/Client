@@ -321,25 +321,28 @@ export default class MJ_HandList extends cc.Component {
      */
     getIsCP() {
         let isCP = false;
-        switch (dd.gm_manager.mjGameData.tableBaseVo.gameState) {
-            case MJ_GameState.STATE_TABLE_SWAPCARD:
-                if (this._seatInfo.swapCards) {
-                    isCP = false;
-                } else {
-                    isCP = true;
-                }
-                break;
-            case MJ_GameState.STATE_TABLE_OUTCARD:
-                //如果表态人是自己
-                if (this._seatInfo.btState === MJ_Act_State.ACT_STATE_WAIT &&
-                    this._seatInfo.seatIndex === dd.gm_manager.mjGameData.tableBaseVo.btIndex) {
-                    isCP = true;
-                } else {
-                    isCP = false;
-                }
-                break;
-            default:
-                break;
+        //绵阳麻将 == 如果该玩家躺牌了，也不能出牌
+        if (this._seatInfo.tangCardState === 0) {
+            switch (dd.gm_manager.mjGameData.tableBaseVo.gameState) {
+                case MJ_GameState.STATE_TABLE_SWAPCARD:
+                    if (this._seatInfo.swapCards) {
+                        isCP = false;
+                    } else {
+                        isCP = true;
+                    }
+                    break;
+                case MJ_GameState.STATE_TABLE_OUTCARD:
+                    //如果表态人是自己
+                    if (this._seatInfo.btState === MJ_Act_State.ACT_STATE_WAIT &&
+                        this._seatInfo.seatIndex === dd.gm_manager.mjGameData.tableBaseVo.btIndex) {
+                        isCP = true;
+                    } else {
+                        isCP = false;
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
         return isCP;
     }
@@ -373,22 +376,31 @@ export default class MJ_HandList extends cc.Component {
             this._moPaiCardId = this._seatInfo.moPaiCard;
         }
 
-        //如果是重播，就刷新手牌
-        if (dd.gm_manager.replayMJ === 1) {
-            this.showReplayHandCards(handCards, this._moPaiCardId, isUnSuit);
-        } else {
-            //如果不是出牌阶段,移除
-            if (dd.gm_manager.mjGameData.tableBaseVo.gameState !== MJ_GameState.STATE_TABLE_OUTCARD) {
-                this._canvasTarget.showTingPai(false);
-            }
-            this.showHandCard(handCards, this._moPaiCardId, isUnSuit);
-            this.deleteNotCard(handCards);
-            //桌子上有无听牌提示
-            if (dd.gm_manager.mjGameData.tableBaseVo.tingTips === 1) {
-                this.showTingCard(handCards);
-            }
-            this.showSwapCards();
+        //绵阳麻将 == 如果该玩家躺牌了并存在躺牌，就要把手牌中的躺牌去重 
+        if (this._seatInfo.tangCardState === 1 && this._seatInfo.tangCardList) {
+            handCards = dd.gm_manager.getDiffArr(handCards, this._seatInfo.tangCardList);
         }
+        //绵阳麻将 == 如果正在躺牌，就不刷新手牌了
+        let isTang = this._mineScript.getIsShowHui();
+        if (!isTang) {
+            //如果是重播，就刷新手牌
+            if (dd.gm_manager.replayMJ === 1) {
+                this.showReplayHandCards(handCards, this._moPaiCardId, isUnSuit);
+            } else {
+                //如果不是出牌阶段,移除
+                if (dd.gm_manager.mjGameData.tableBaseVo.gameState !== MJ_GameState.STATE_TABLE_OUTCARD) {
+                    this._canvasTarget.showTingPai(false);
+                }
+                this.showHandCard(handCards, this._moPaiCardId, isUnSuit);
+                this.deleteNotCard(handCards);
+                //桌子上有无听牌提示
+                if (dd.gm_manager.mjGameData.tableBaseVo.tingTips === 1) {
+                    this.showTingCard(handCards);
+                }
+                this.showSwapCards();
+            }
+        }
+
         //是否是绵阳麻将
         //如果是自己表态，并且 摸牌存在，合并到手牌数组中
         if (dd.gm_manager.mjGameData.tableBaseVo.btIndex === this._seatInfo.seatIndex && this._seatInfo.moPaiCard > 0) {
@@ -458,7 +470,23 @@ export default class MJ_HandList extends cc.Component {
             }
         }
     }
-
+    /**
+     * 根据是否躺牌显示手牌,用来切换点躺牌按钮之后，只亮可以听牌的牌，而点击悔之后，就显示回正常
+     * @param {boolean} isShowTang 
+     * @memberof MJ_HandList
+     */
+    showHandCardsByTang(isShowTang: boolean) {
+        for (var i = 0; i < this._hand_card_list.length; i++) {
+            let cardNode = this._hand_card_list[i];
+            if (cardNode) {
+                let hcs: MJ_Card = cardNode.getComponent('MJ_Card');
+                //标识不存在 或 不显示躺牌
+                if (!hcs.bsNode.active || !isShowTang) {
+                    hcs.showMask(true);
+                }
+            }
+        }
+    }
     /**
      * 显示重播时候的手牌
      * 
@@ -904,147 +932,7 @@ export default class MJ_HandList extends cc.Component {
         return isUnSuit;
     }
     /**
-     * 判断是否可以胡牌
-     * 
-     * @param {MJCard[]} cards 
-     * @returns {boolean} 
-     * @memberof ChildClass
-     */
-    canHuPai(cards: CardAttrib[]): boolean {
-        if (cards.length % 3 !== 2) return false;
-        if (this.getSuits(cards).length > 2) return false;
-        if (cards.length === 2) {
-            if (cards[0].point === cards[1].point && cards[0].suit === cards[1].suit) return true;
-            else return false;
-        } else {//5,8,11,14
-            let nums = cards.map((card) => {
-                return card.suit * 10 + card.point;
-            }, this);
-            nums.sort();
-            if (this.checkQiDui(nums)) return true;
-            let dups = this.getDuplicate(nums);
-            for (let i = 0; i < dups.length; i++) {
-                let num = dups[i];
-                let temps = nums.slice(0);
-                for (let i = 0; i < 2; i++) {
-                    let index = temps.indexOf(num);
-                    temps.splice(index, 1);
-                }
-                if (this.checkRemaining(temps)) return true;
-            }
-            return false;
-        }
-    }
-
-    /**
-     * 检查花色
-     * 
-     * @param {MJCard[]} cards 
-     * @returns {number} 
-     * @memberof ChildClass
-     */
-    getSuits(cards: CardAttrib[]): number[] {
-        let suits: number[] = [];
-        cards.forEach((card) => {
-            if (suits.indexOf(card.suit) === -1) {
-                suits.push(card.suit);
-            }
-        }, this);
-        return suits;
-    }
-
-    /**
-     * 判断移除将牌后剩余的牌是否满足顺子和克子，通过递归移除法验证，当剩余牌为0是返回能胡牌，反之则不能胡牌
-     * 余牌数量不为0是必定是3的倍数，余牌是排序过的从小到大
-     * 
-     * @param {number[]} nums 
-     * @returns {boolean} 
-     * @memberof ChildClass
-     */
-    checkRemaining(nums: number[]): boolean {
-        if (nums.length === 0) return true;
-        if (nums[0] === nums[1] && nums[1] === nums[2]) {
-            let temps = nums.slice(3);
-            return this.checkRemaining(temps);
-        } else {
-            if (nums.indexOf(nums[0] + 1) !== -1 && nums.indexOf(nums[0] + 2) !== -1) {
-                let temps = nums.slice(0);
-                let remove = 0, index = 0;
-                for (let i = 0; i < 3; i++) {
-                    remove = temps.splice(index, 1)[0];
-                    index = temps.indexOf(remove + 1);
-                }
-                return this.checkRemaining(temps);
-            }
-            return false;
-        }
-    }
-
-    /**
-     * 找出可以当将牌的重复项
-     * 
-     * @param {number[]} nums 
-     * @returns {number[]} 
-     * @memberof ChildClass
-     */
-    getDuplicate(nums: number[]): number[] {
-        var result: number[] = [];
-        nums.forEach((num) => {
-            if (nums.indexOf(num) !== nums.lastIndexOf(num) && result.indexOf(num) === -1)
-                result.push(num);
-        })
-        return result;
-    }
-
-    /**
-     * 判断7对
-     * 
-     * @param {number[]} nums 
-     * @returns {boolean} 
-     * @memberof ChildClass
-     */
-    checkQiDui(nums: number[]): boolean {
-        if (nums.length !== 14) return false;
-        for (let i = 0; i < 13; i += 2) {
-            if (nums[i] !== nums[i + 1]) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * 获取可以胡的牌，即听牌
-     * 
-     * @param {MJCard[]} cards 
-     * @returns {MJCard[]} 
-     * @memberof ChildClass
-     */
-    getTingPai(cards: CardAttrib[]): CardAttrib[] {
-        let results: CardAttrib[] = [];
-        let checkList: CardAttrib[] = [];
-        let suits = this.getSuits(cards);
-        if (suits.length > 2 || suits.indexOf(this._seatInfo.unSuit) > -1) return [];
-        suits.forEach((suit) => {
-            switch (suit) {
-                case 1: checkList = checkList.concat(this.wans); break;
-                case 2: checkList = checkList.concat(this.tongs); break;
-                case 3: checkList = checkList.concat(this.tiaos); break;
-                default: break;
-            }
-        }, this);
-        checkList.forEach((card) => {
-            let temps = cards.slice(0);
-            temps.push(card);
-            if (this.canHuPai(temps)) {
-                results.push(card);
-            }
-        }, this);
-        return results;
-    }
-
-    /**
-     * 根据cardId计算，打出这张牌是否可以听牌（胡牌）
+     * 根据cardId计算，打出这张牌是否可以听牌（胡牌）,返回可以 胡的牌的数组
      * 
      * @param {number[]} cardIds 手牌列表 = 手牌 + 摸牌(如果存在)
      * @param {number} cardId 
@@ -1058,9 +946,29 @@ export default class MJ_HandList extends cc.Component {
         let cards = hands.map((cardId) => {
             return dd.gm_manager.getCardById(cardId);
         }, this);
-        let tings = this.getTingPai(cards);
+        let tings = dd.gm_manager.getTingPai(cards);
         if (tings.length > 0) {//有听牌需要显示
             return tings;
+        }
+        return null;
+    }
+    /**
+     * 根据cardId计算，打出这张牌是否可以躺牌,返回可以躺的牌的数组
+     * @param {number[]} cardIds 
+     * @param {number} cardId 
+     * @returns 
+     * @memberof MJ_HandList
+     */
+    getTangsByCardId(cardIds: number[], cardId: number) {
+        let hands = cardIds.slice(0);
+        let index = hands.indexOf(cardId);
+        hands.splice(index, 1);
+        let cards = hands.map((cardId) => {
+            return dd.gm_manager.getCardById(cardId);
+        }, this);
+        let tings = dd.gm_manager.getTingPai(cards);
+        if (tings.length > 0) {//有听牌需要显示
+            return cards;
         }
         return null;
     }

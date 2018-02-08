@@ -1,6 +1,5 @@
 const { ccclass, property } = cc._decorator;
 
-import MJ_HandList from './MJ_HandList';
 import MJ_Card from './MJ_Card';
 import MJ_Card_Group from './MJ_Card_Group';
 import MJCanvas from './MJCanvas';
@@ -70,7 +69,7 @@ export default class MJ_Play extends cc.Component {
     @property([cc.Node])
     node_dq_list: cc.Node[] = [];
     /**
-     * 杠、碰、胡、过的节点列表
+     * 胡、杠、碰、吃、躺、过的节点列表
      * 
      * @type {cc.Node[]}
      * @memberof MJ_Play
@@ -107,7 +106,7 @@ export default class MJ_Play extends cc.Component {
      * @type {MJ_HandList}
      * @memberof MJ_Play
      */
-    _handList: MJ_HandList = null;
+    _handList = null;
 
     onLoad() {
         this._canvasTarget = dd.ui_manager.getCanvasNode().getComponent('MJCanvas');
@@ -301,11 +300,7 @@ export default class MJ_Play extends cc.Component {
             //如果自己在(等待表态)
             if (this._seatInfo.btState === MJ_Act_State.ACT_STATE_WAIT) {
                 //正在显示绵阳麻将的躺界面
-                let isTang = false;
-                let btn_hui = this.node.getChildByName('btn_hui');
-                if (btn_hui && btn_hui.active) {
-                    isTang = true;
-                }
+                let isTang = this.getIsShowHui();
                 if (!isTang) {
                     this.node_state.active = true;
                     for (var i = 0; i < this._seatInfo.breakCardState.length; i++) {
@@ -316,6 +311,10 @@ export default class MJ_Play extends cc.Component {
                                 this.node_state_list[i].active = false;
                             }
                         }
+                    }
+                    //绵阳麻将 如果该玩家已经躺了，并且有 胡的状态,那么不显示 胡按钮
+                    if (this._seatInfo.tangCardState === 1 && this._seatInfo.breakCardState[0] === 1) {
+                        this.node_state_list[0].active = false;
                     }
                 }
             } else {
@@ -487,6 +486,7 @@ export default class MJ_Play extends cc.Component {
     click_btn_hui(event, type: string) {
         dd.mp_manager.playButton();
         this.node_state.active = true;
+        this._handList.showHandCardsByTang(false);
         let btn_hui = this.node.getChildByName('btn_hui');
         if (btn_hui) btn_hui.active = false;
     }
@@ -497,6 +497,7 @@ export default class MJ_Play extends cc.Component {
      */
     showTangNode(isShow: boolean) {
         if (isShow) {
+            this._handList.showHandCardsByTang(true);
             this.node_state.active = false;
             let btn_hui = this.node.getChildByName('btn_hui');
             if (btn_hui) btn_hui.active = true;
@@ -506,6 +507,15 @@ export default class MJ_Play extends cc.Component {
         if (node_tang) {
             node_tang.active = isShow;
         }
+    }
+    /**
+     * 获取是否显示悔按钮
+     * @memberof MJ_Play
+     */
+    getIsShowHui() {
+        let btn_hui = this.node.getChildByName('btn_hui');
+        if (btn_hui && btn_hui.active) return true;
+        return false;
     }
 }
 

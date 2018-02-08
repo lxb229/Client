@@ -339,14 +339,23 @@ export default class MJ_Game extends cc.Component {
     shwoTangCard(index: number, seatInfo: SeatVo) {
         let node_tang = this.node_tang_list[index];
         if (node_tang) {
-            if (seatInfo && seatInfo.accountId && seatInfo.accountId !== '' && seatInfo.accountId !== '0') {
+            if (seatInfo && seatInfo.accountId && seatInfo.accountId !== '0' && seatInfo.tangCardList) {
+                node_tang.active = true;
                 let sId = this.sId_list[index];
                 node_tang.removeAllChildren();
                 let mymjScript = this.node.getComponent('MYMJScene');
-                //显示躺牌
-                for (let i = 0; i < seatInfo.handCards.length; i++) {
-                    mymjScript.showTangCard(sId, seatInfo.handCards[i], node_tang);
+                let tangCardList = seatInfo.tangCardList;
+                if (sId === 1) {//左边
+                    tangCardList.sort((a, b) => {
+                        return b - a;
+                    });
                 }
+                //显示躺牌
+                for (let i = 0; i < tangCardList.length; i++) {
+                    mymjScript.showTangCard(sId, tangCardList[i], node_tang);
+                }
+            } else {
+                node_tang.active = false;
             }
         }
     }

@@ -8,6 +8,9 @@ import { MJ_Suit } from "./Protocol";
  * @class GMManager
  */
 export default class GMManager {
+    private wans: CardAttrib[] = [];
+    private tongs: CardAttrib[] = [];
+    private tiaos: CardAttrib[] = [];
     private static _instance: GMManager = null;
     private constructor() { }
     /**
@@ -20,6 +23,19 @@ export default class GMManager {
     static getInstance(): GMManager {
         if (GMManager._instance === null) {
             GMManager._instance = new GMManager();
+
+            //初始化牌
+            for (let i = 1; i < 4; i++) {
+                for (let j = 1; j < 10; j++) {
+                    let card: CardAttrib = { suit: j, point: i, cardId: 0 };
+                    switch (i) {
+                        case 1: GMManager._instance.wans.push(card); break;
+                        case 2: GMManager._instance.tongs.push(card); break;
+                        case 3: GMManager._instance.tiaos.push(card); break;
+                        default: break;
+                    }
+                }
+            }
         }
         return GMManager._instance;
     }
@@ -490,6 +506,376 @@ export default class GMManager {
         }
         return result;
     }
+
+
+    /***************************************麻将算法*************************************************************************** */
+    /**
+     * 获取可以胡的牌，即听牌
+     * 
+     * @param {CardAttrib[]} cards 
+     * @returns {CardAttrib[]} 
+     * @memberof ChildClass
+     */
+    getTingPai(cards: CardAttrib[]): CardAttrib[] {
+        let results: CardAttrib[] = [];
+        let checkList: CardAttrib[] = [];
+        let suits = this.getSuits(cards);
+        if (suits.length > 2) return [];
+        suits.forEach((suit) => {
+            switch (suit) {
+                case 1: checkList = checkList.concat(this.wans); break;
+                case 2: checkList = checkList.concat(this.tongs); break;
+                case 3: checkList = checkList.concat(this.tiaos); break;
+                default: break;
+            }
+        }, this);
+        checkList.forEach((card) => {
+            let temps = cards.slice(0);
+            temps.push(card);
+            if (this.canHuPai(temps)) {
+
+                results.push(card);
+            }
+        }, this);
+        return results;
+    }
+
+    /**
+     * 根据所选躺拍获取指定听牌，如果选择了多余的牌不能获取到听牌
+     * 
+     * @param {CardAttrib[]} cards 
+     * @param {CardAttrib[]} outs 
+     * @returns {CardAttrib[]} 
+     * @memberof ChildClass
+     */
+    getTingByTang(cards: CardAttrib[], outs: CardAttrib[]): CardAttrib[] {
+        if (outs.length % 3 === 0) return [];
+        this.sortCards(cards);
+        this.sortCards(outs);
+        let tings = this.getTingPai(cards);
+        this.sortCards(tings);
+        if (outs.length % 3 === 1) {//选出添加一张听牌到躺牌数组中必定满足能够胡牌的
+            let result = [];
+            tings.forEach((card: CardAttrib) => {
+                let temp = outs.slice(0);
+                temp.push(card);
+                if (this.canHuPai(temp)) {
+                    result.push(card);
+                }
+            }, this);
+            if (outs.length > 3) {//校验是否选择了多余项
+                if (this.canRemoveK(outs, result, true) || this.canRemoveS(outs, result, true)) {
+                    return [];
+                } else
+                    return result;
+            } else {
+                return result;
+            }
+        }
+        if (outs.length % 3 === 2) {//选出添加一张听牌到躺牌数组中必定满足能够凑成3个一样的牌或者3个同色的顺子
+            if (outs.length === 8 || outs.length === 11) return [];
+            let result = [];
+            tings.forEach((card: CardAttrib) => {
+                let temp = outs.slice(0);
+                temp.push(card);
+                let nums = temp.map((card) => {
+                    return card.suit * 10 + card.point;
+                }, this);
+                nums.sort();
+                if (this.checkRemaining(nums)) {
+                    result.push(card);
+                }
+            }, this);
+            if (outs.length > 3) {//校验是否选择了多余项
+                if (this.canRemoveK(outs, result, false) || this.canRemoveS(outs, result, false)) {
+                    return [];
+                } else
+                    return result;
+            } else {
+                return result;
+            }
+        }
+    }
+
+    /**
+     * 判断是否可以胡牌
+     * 
+     * @param {CardAttrib[]} cards 
+     * @returns {boolean} 
+     * @memberof ChildClass
+     */
+    private canHuPai(cards: CardAttrib[]): boolean {
+        if (cards.length % 3 !== 2) return false;
+        if (this.getSuits(cards).length > 2) return false;
+        if (cards.length === 2) {
+            if (cards[0].point === cards[1].point && cards[0].suit === cards[1].suit) return true;
+            else return false;
+        } else {//5,8,11,14
+            let nums = cards.map((card) => {
+                return card.suit * 10 + card.point;
+            }, this);
+            nums.sort();
+            if (this.checkQiDui(nums)) return true;
+            let dups = this.getDuplicate(nums);
+            for (let i = 0; i < dups.length; i++) {
+                let num = dups[i];
+                let temps = nums.slice(0);
+                for (let i = 0; i < 2; i++) {
+                    let index = temps.indexOf(num);
+                    temps.splice(index, 1);
+                }
+                if (this.checkRemaining(temps)) return true;
+            }
+            return false;
+        }
+    }
+
+    /**
+     * 检查花色
+     * 
+     * @param {CardAttrib[]} cards 
+     * @returns {number} 
+     * @memberof ChildClass
+     */
+    private getSuits(cards: CardAttrib[]): number[] {
+        let suits: number[] = [];
+        cards.forEach((card) => {
+            if (suits.indexOf(card.suit) === -1) {
+                suits.push(card.suit);
+            }
+        }, this);
+        return suits;
+    }
+
+    /**
+     * 判断移除将牌后剩余的牌是否满足顺子和克子，通过递归移除法验证，当剩余牌为0是返回能胡牌，反之则不能胡牌
+     * 余牌数量不为0是必定是3的倍数，余牌是排序过的从小到大
+     * 
+     * @param {number[]} nums 
+     * @returns {boolean} 
+     * @memberof ChildClass
+     */
+    private checkRemaining(nums: number[]): boolean {
+        if (nums.length === 0) return true;
+        if (nums[0] === nums[1] && nums[1] === nums[2]) {
+            let temps = nums.slice(3);
+            return this.checkRemaining(temps);
+        } else {
+            if (nums.indexOf(nums[0] + 1) !== -1 && nums.indexOf(nums[0] + 2) !== -1) {
+                let temps = nums.slice(0);
+                let remove = 0, index = 0;
+                for (let i = 0; i < 3; i++) {
+                    remove = temps.splice(index, 1)[0];
+                    index = temps.indexOf(remove + 1);
+                }
+                return this.checkRemaining(temps);
+            }
+            return false;
+        }
+    }
+
+    /**
+     * 找出可以当将牌的重复项
+     * 
+     * @param {number[]} nums 
+     * @returns {number[]} 
+     * @memberof ChildClass
+     */
+    private getDuplicate(nums: number[]): number[] {
+        var result: number[] = [];
+        nums.forEach((num) => {
+            if (nums.indexOf(num) !== nums.lastIndexOf(num) && result.indexOf(num) === -1)
+                result.push(num);
+        })
+        return result;
+    }
+
+    /**
+     * 判断7对
+     * 
+     * @param {number[]} nums 
+     * @returns {boolean} 
+     * @memberof ChildClass
+     */
+    private checkQiDui(nums: number[]): boolean {
+        if (nums.length !== 14) return false;
+        for (let i = 0; i < 12; i += 2) {
+            if (nums[i] !== nums[i + 1]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 按照花色和点数排序
+     * 
+     * @param {CardAttrib[]} cards 
+     * @memberof ChildClass
+     */
+    private sortCards(cards: CardAttrib[]) {
+        cards.sort((a: CardAttrib, b: CardAttrib) => {
+            if (a.suit > b.suit) {
+                return 1;
+            } else if (a.suit < b.suit) {
+                return -1;
+            } else {
+                return a.point - b.point;
+            }
+        });
+    }
+    /**
+     * 判断元素是否相同
+     * 
+     * @param {CardAttrib} card1 
+     * @param {CardAttrib} card2 
+     * @returns {boolean} 
+     * @memberof ChildClass
+     */
+    isSameCard(card1: CardAttrib, card2: CardAttrib): boolean {
+        if (card1.suit === card2.suit && card1.point === card2.point) {
+            return true;
+        } else return false;
+    }
+    /**
+     * 判断数组对应元素是否相同
+     * 
+     * @param {CardAttrib[]} arr1 
+     * @param {CardAttrib[]} arr2 
+     * @returns {boolean} 
+     * @memberof ChildClass
+     */
+    isSameArray(arr1: CardAttrib[], arr2: CardAttrib[]): boolean {
+        if (arr1.length !== arr2.length) return false;
+        this.sortCards(arr2);
+        this.sortCards(arr1);
+        for (let i = 0; i < arr1.length; i++) {
+            let card1 = arr1[i];
+            let card2 = arr2[i];
+            if (!this.isSameCard(card1, card2)) {
+                return false
+            }
+        }
+        return true;
+    }
+    /**
+     * 根据起始位置找到构成顺子的3张牌的下标
+     * 
+     * @param {CardAttrib[]} cards 
+     * @param {number} start 
+     * @returns 
+     * @memberof ChildClass
+     */
+    private getIndexs(cards: CardAttrib[], start: number) {
+        let card1 = cards[start];
+        if (card1.point > 7) return null;
+        let card2: CardAttrib = { suit: card1.suit, point: card1.point + 1, cardId: (card1.suit) % 36 + (card1.point + 1) + (card1.suit - 1) * 4 };
+        let card3: CardAttrib = { suit: card1.suit, point: card1.point + 2, cardId: (card1.suit) % 36 + (card1.point + 2) + (card1.suit - 1) * 4 };
+        let index2 = -1;
+        let index3 = -1;
+        for (let i = start; i < cards.length; i++) {
+            if (index2 === -1 && this.isSameCard(cards[i], card2)) {
+                index2 = i;
+            }
+            if (index3 === -1 && this.isSameCard(cards[i], card3)) {
+                index3 = i;
+            }
+            if (index2 > -1 && index3 > -1) {
+                break;
+            }
+        }
+        if (index2 > -1 && index3 > -1) {
+            return [start, index2, index3];
+        } else {
+            return null;
+        }
+    }
+    /**
+     * 去多余项后的数组听牌集合和原始的听牌集合是否相同
+     * 
+     * @param {CardAttrib[]} newCards 
+     * @param {CardAttrib[]} result 
+     * @param {boolean} checkHu 
+     * @returns 
+     * @memberof ChildClass
+     */
+    private checkLen(newCards: CardAttrib[], result: CardAttrib[], checkHu: boolean) {
+        let count = 0;
+        result.forEach((card: CardAttrib) => {
+            let temp = newCards.slice(0);
+            temp.push(card);
+            if (checkHu) {
+                if (this.canHuPai(temp)) {
+                    count++;
+                }
+            } else {
+                let nums = temp.map((card) => {
+                    return card.suit * 10 + card.point;
+                }, this);
+                nums.sort();
+                if (this.checkRemaining(nums)) {
+                    count++;
+                }
+            }
+        }, this);
+        if (count === result.length) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    /**
+     * 是否能够去除多余的3个一样的牌后还能满足和原始听牌一样
+     * 
+     * @param {CardAttrib[]} cards 
+     * @param {CardAttrib[]} result 
+     * @param {boolean} [checkHu=true] 
+     * @returns {boolean} 
+     * @memberof ChildClass
+     */
+    private canRemoveK(cards: CardAttrib[], result: CardAttrib[], checkHu: boolean = true): boolean {
+        let res = false;
+        for (let i = 0; i < cards.length - 2; i++) {
+            if (this.isSameArray([cards[i], cards[i], cards[i]], [cards[i], cards[i + 1], cards[i + 2]])) {
+                let newCards = cards.slice(0);
+                newCards.splice(i, 3);
+                if (this.checkLen(newCards, result, checkHu)) {
+                    res = true;
+                    break;
+                }
+            }
+        }
+        return res;
+    }
+    /**
+     * 是否能够去除3个顺子牌后还能满足和原始听牌一样
+     * 
+     * @param {CardAttrib[]} cards 
+     * @param {CardAttrib[]} result 
+     * @param {boolean} [checkHu=true] 
+     * @returns {boolean} 
+     * @memberof ChildClass
+     */
+    private canRemoveS(cards: CardAttrib[], result: CardAttrib[], checkHu: boolean = true): boolean {
+        let res = false;
+        for (let i = 0; i < cards.length; i++) {
+            let indexs = this.getIndexs(cards, i);
+            let newCards = [];
+            if (indexs && indexs.length === 3) {
+                for (let j = 0; j < cards.length; j++) {
+                    if (indexs.indexOf(j) === -1) {
+                        newCards.push(cards[j]);
+                    }
+                }
+                if (this.checkLen(newCards, result, checkHu)) {
+                    res = true;
+                    break;
+                }
+            }
+        }
+        return res;
+    }
+    /****************************************************************************************************************** */
     /**
      * 清空单例对象
      * 

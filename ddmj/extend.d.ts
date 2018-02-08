@@ -407,11 +407,23 @@ declare interface SeatVo {
      */
     breakCard: number;
     /**
-     *胡杠碰吃状态 
+     *胡杠碰躺吃状态 
      * @type {number[]}
      * @memberof SeatVo
      */
     breakCardState: number[];
+    /**
+     * 躺牌状态(0=未躺牌,1=已躺牌)
+     * @type {number}
+     * @memberof SeatVo
+     */
+    tangCardState: number;
+    /**
+     *躺的牌
+     * @type {number[]}
+     * @memberof SeatVo
+     */
+    tangCardList: number[];
 }
 
 

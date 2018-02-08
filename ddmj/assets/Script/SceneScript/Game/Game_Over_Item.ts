@@ -95,6 +95,20 @@ export default class Game_Over_Item extends cc.Component {
     @property(cc.Node)
     node_hu: cc.Node = null;
     /**
+     * 玩家列表
+     * @type {cc.Label[]}
+     * @memberof Game_Over_Item
+     */
+    @property([cc.Label])
+    lbl_player_list: cc.Label[] = [];
+    /**
+     * 各个玩家的输赢
+     * @type {cc.Label[]}
+     * @memberof Game_Over_Item
+     */
+    @property([cc.Label])
+    lbl_score_list: cc.Label[] = [];
+    /**
      * canvas脚本
      * 
      * @memberof MJ_Table
@@ -125,6 +139,20 @@ export default class Game_Over_Item extends cc.Component {
         this.node_light.active = index % 2 === 0 ? true : false;
         this.node_banker.active = data.banker === 0 ? false : true;
 
+        for (let i = 0; i < this.lbl_player_list.length; i++) {
+            if (i !== index) {
+                this.lbl_player_list[i].string = '玩家' + (i + 1);
+            }
+        }
+        //显示各个玩家对这个玩家的输赢
+        for (let i = 0; i < this.lbl_score_list.length; i++) {
+            let wlScore = 1;
+            if (wlScore > 0) {
+                this.lbl_player_list[i].string = '+' + wlScore;
+            } else {
+                this.lbl_player_list[i].string = wlScore.toString();
+            }
+        }
         this.node_group.removeAllChildren();
         this.node_hand.removeAllChildren();
         this.node_hu.removeAllChildren();
