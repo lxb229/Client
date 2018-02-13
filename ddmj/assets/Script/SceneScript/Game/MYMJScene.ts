@@ -66,7 +66,7 @@ export default class MYMJScene extends cc.Component {
         }
         if (cardNode) {
             cardNode.tag = cardId;
-            let cardImg: cc.Node = cardNode.getComponent('img_card');
+            let cardImg: cc.Node = cardNode.getChildByName('img_card');
             if (cardId > 0 && cardImg) {
                 let cardSF = this._canvasTarget.getMJCardSF(cardId);
                 cardImg.getComponent(cc.Sprite).spriteFrame = cardSF;

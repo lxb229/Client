@@ -517,7 +517,40 @@ declare interface SettlementOnceVo {
      * @memberof SettlementAllVo
      */
     huPaiDesc: string;
+    /**
+     * 座位单局结算分数
+     * @type {SettementSeatScore[]}
+     * @memberof SettlementOnceVo
+     */
+    seatScore: SettementSeatScore[];
 }
+declare interface SettementSeatScore {
+    /**
+     * 分数
+     * @type {number}
+     * @memberof SettementSeatScore
+     */
+    score: number;
+    /**
+     * 躺个数 -1=游戏中没有躺规则 0=无躺 1=单躺 2=双躺
+     * @type {number}
+     * @memberof SettementSeatScore
+     */
+    tangNum: number;
+    /**
+     * 总翻数
+     * @type {number}
+     * @memberof SettementSeatScore
+     */
+    totalFanNum: number;
+    /**
+     * 飞数量
+     * @type {number}
+     * @memberof SettementSeatScore
+     */
+    flyNum: number;
+}
+
 /**
  * 总结算数据
  * 
@@ -1751,7 +1784,36 @@ declare interface Product {
      */
     productid: string;
 }
-
+/**
+ * 躺牌的信息
+ * @interface TangCfg
+ */
+declare interface TangCfg {
+    /**
+     * 躺牌后要打出的牌
+     * @type {number}
+     * @memberof TangInfo
+     */
+    outcard: number,
+    /**
+     * 躺牌后胡的牌
+     * @type {number[]}
+     * @memberof TangInfo
+     */
+    hucards: number[],
+    /**
+     * 除了要打出的牌，剩余的手牌
+     * @type {number[]}
+     * @memberof TangInfo
+     */
+    cardIds: number[],
+    /**
+     * 表态的牌
+     * @type {number[]}
+     * @memberof TangInfo
+     */
+    btcards: number[]
+}
 
 
 

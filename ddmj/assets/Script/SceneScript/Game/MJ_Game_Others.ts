@@ -77,12 +77,17 @@ export default class MJ_Play extends cc.Component {
     * @memberof MJ_Play
     */
     showHandCard() {
-        if (this._seatInfo.handCardsLen > 0) {
+        let handLen = this._seatInfo.handCardsLen;
+        //绵阳麻将 == 如果该玩家躺牌了并存在躺牌，就要把手牌中的躺牌去重 
+        if (this._seatInfo.tangCardState === 1 && this._seatInfo.tangCardList) {
+            handLen -= this._seatInfo.tangCardList.length;
+        }
+        if (handLen > 0) {
             this.node_hand.active = true;
             //显示其他手牌
             for (var i = 1; i < this.hand_card_list.length; i++) {
                 //如果这张牌大于了手牌的长度，就不显示了
-                if (i > this._seatInfo.handCardsLen) {
+                if (i > handLen) {
                     this.hand_card_list[i].active = false;
                 } else {
                     this.hand_card_list[i].active = true;

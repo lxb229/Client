@@ -361,7 +361,7 @@ export default class MJ_HandList extends cc.Component {
         this._mineScript = target;
         this._seatInfo = seatInfo;
         this._isCanPlay = this.getIsCP();
-        let isUnSuit = this.getIsUnSuit();
+
         //移动其他手牌
         let handCards = [];
         if (this._seatInfo.handCards) {
@@ -372,6 +372,7 @@ export default class MJ_HandList extends cc.Component {
             handCards = handCards.concat(this._seatInfo.moPaiCard);
             this._moPaiCardId = this._seatInfo.moPaiCard;
         }
+        let isUnSuit = this.getIsUnSuit(handCards);
 
         //如果是重播，就刷新手牌
         if (dd.gm_manager.replayMJ === 1) {
@@ -672,6 +673,7 @@ export default class MJ_HandList extends cc.Component {
      * @memberof MJ_HandList
      */
     moveCardAct(index: number, cardNode: cc.Node, isAct: boolean = true) {
+        cardNode.stopAllActions();
         let ePos = cc.p((index * (-cardNode.width) - cardNode.width / 2), 0);
         let nPos = cardNode.getPosition();
         if (ePos.x !== nPos.x || ePos.y !== nPos.y) {
@@ -715,7 +717,7 @@ export default class MJ_HandList extends cc.Component {
     deleteNotCard(handCards: number[]) {
         for (var i = 0; i < this._hand_card_list.length; i++) {
             let cardNode = this._hand_card_list[i];
-            let index = this.getIndexByCardId(cardNode.tag);
+            let index = this.getIndexByCardId(cardNode.tag, handCards);
             if (index === -1) {
                 cc.log('---删除---' + cardNode.tag);
                 this._hand_card_list.splice(i, 1);
@@ -808,11 +810,12 @@ export default class MJ_HandList extends cc.Component {
 
     /**
      * 根据cardId获取手牌位置
-     * 
-     * @param {any} cardId 
+     * @param {number} cardId  节点的cardId
+     * @param {number[]} handCards  手牌 + 摸牌列表
+     * @returns {number} 
      * @memberof MJ_HandList
      */
-    getIndexByCardId(cardId): number {
+    getIndexByCardId(cardId: number, handCards: number[]): number {
         if (cardId === this._seatInfo.moPaiCard) {
             return this._seatInfo.handCards.length;
         }
@@ -879,12 +882,7 @@ export default class MJ_HandList extends cc.Component {
     * @returns {boolean} 
     * @memberof MJ_Play
     */
-    getIsUnSuit(): boolean {
-        let list = this._seatInfo.handCards;
-        //如果(摸牌)存在，并且是(自己摸牌)，就要把摸得牌算进去
-        if (this._seatInfo.moPaiCard && dd.gm_manager.mjGameData.tableBaseVo.btIndex === this._seatInfo.seatIndex) {
-            list = list.concat(this._seatInfo.moPaiCard);
-        }
+    getIsUnSuit(list: number[]): boolean {
         //是否打完打缺
         let isUnSuit = true;
         for (var i = 0; i < list.length; i++) {

@@ -1,6 +1,6 @@
 import UDManager from "./UDManager";
 import { MJ_Suit } from "./Protocol";
-
+import MJ_Game_Mine from '../SceneScript/Game/MJ_Game_Mine';
 /**
  * 游戏管理类
  * 
@@ -27,7 +27,7 @@ export default class GMManager {
             //初始化牌
             for (let i = 1; i < 4; i++) {
                 for (let j = 1; j < 10; j++) {
-                    let card: CardAttrib = { suit: j, point: i, cardId: 0 };
+                    let card: CardAttrib = { suit: i, point: j, cardId: (i - 1) * 36 + (j - 1) * 4 + 1 };
                     switch (i) {
                         case 1: GMManager._instance.wans.push(card); break;
                         case 2: GMManager._instance.tongs.push(card); break;
@@ -82,6 +82,7 @@ export default class GMManager {
      */
     isReplayPause: boolean = false;
 
+    _minScript: MJ_Game_Mine = null;
     /**
      * 刷新游戏桌子对象
      * 
@@ -232,6 +233,16 @@ export default class GMManager {
             point: Math.floor(((cardId - 1) % 36) / 4) + 1,
         };
         return card;
+    }
+    /**
+     * 根据花色点数算cardId
+     * @param {number} suit 
+     * @param {number} point 
+     * @returns 
+     * @memberof GMManager
+     */
+    getCardBySP(suit: number, point: number) {
+        return (suit - 1) * 36 + (point - 1) * 4 + point % 4;
     }
     /**
      * 根据牌唯一Id列表获取排序后的列表
@@ -506,7 +517,19 @@ export default class GMManager {
         }
         return result;
     }
-
+    /**
+     * 从a数组中去除B数组中的元素
+     * @memberof GMManager
+     */
+    getDiffAToB(cardIds1: number[], cardIds2: number[]) {
+        let list = [];
+        cardIds1.forEach(cardid => {
+            if (cardIds2.indexOf(cardid) === -1) {
+                list.push(cardid);
+            }
+        });
+        return list;
+    }
 
     /***************************************麻将算法*************************************************************************** */
     /**
@@ -556,20 +579,34 @@ export default class GMManager {
         this.sortCards(tings);
         if (outs.length % 3 === 1) {//选出添加一张听牌到躺牌数组中必定满足能够胡牌的
             let result = [];
-            tings.forEach((card: CardAttrib) => {
-                let temp = outs.slice(0);
-                temp.push(card);
-                if (this.canHuPai(temp)) {
-                    result.push(card);
+            if (outs.length === 1) {
+                let newCards = cards.slice(0);
+                this.removeCard(newCards, outs[0]);
+                let nums = newCards.map((card) => {
+                    return card.suit * 10 + card.point;
+                }, this);
+                nums.sort();
+                if (this.checkSixDui(nums)) {
+                    result = outs;
+                } else {
+                    if (this.checkRemaining(nums)) {
+                        result = outs;
+                    }
                 }
-            }, this);
-            if (outs.length > 3) {//校验是否选择了多余项
-                if (this.canRemoveK(outs, result, true) || this.canRemoveS(outs, result, true)) {
+                return result;
+            } else {//>=4张躺牌
+                tings.forEach((card: CardAttrib) => {
+                    let temp = outs.slice(0);
+                    temp.push(card);
+                    if (this.canHuPai(temp)) {
+                        result.push(card);
+                    }
+                }, this);
+                //校验是否选择了多余项
+                if (this.canRemoveK(outs, result, true) || this.canRemoveS(outs, result, true) || this.canRemoveD(outs, result, false)) {
                     return [];
                 } else
                     return result;
-            } else {
-                return result;
             }
         }
         if (outs.length % 3 === 2) {//选出添加一张听牌到躺牌数组中必定满足能够凑成3个一样的牌或者3个同色的顺子
@@ -586,17 +623,22 @@ export default class GMManager {
                     result.push(card);
                 }
             }, this);
-            if (outs.length > 3) {//校验是否选择了多余项
+            if (outs.length === 2) {
+                if (result.length > 0) {
+                    if (this.isSameCard(outs[0], outs[1])) {
+                        return [];
+                    }
+                }
+                return result;
+            } else {
+                //校验是否选择了多余项
                 if (this.canRemoveK(outs, result, false) || this.canRemoveS(outs, result, false)) {
                     return [];
                 } else
                     return result;
-            } else {
-                return result;
             }
         }
     }
-
     /**
      * 判断是否可以胡牌
      * 
@@ -691,6 +733,22 @@ export default class GMManager {
     }
 
     /**
+    * 判断6对
+    * 
+    * @param {number[]} nums 
+    * @returns {boolean} 
+    * @memberof ChildClass
+    */
+    checkSixDui(nums: number[]): boolean {
+        if (nums.length !== 12) return false;
+        for (let i = 0; i < 10; i += 2) {
+            if (nums[i] !== nums[i + 1]) {
+                return false;
+            }
+        }
+        return true;
+    }
+    /**
      * 判断7对
      * 
      * @param {number[]} nums 
@@ -736,6 +794,21 @@ export default class GMManager {
         if (card1.suit === card2.suit && card1.point === card2.point) {
             return true;
         } else return false;
+    }
+    /**
+     * 移除数组中的对象
+     * 
+     * @param {MJCard[]} cards 
+     * @param {MJCard} card 
+     * @memberof ChildClass
+     */
+    removeCard(cards: CardAttrib[], card: CardAttrib) {
+        for (let i = 0; i < cards.length; i++) {
+            if (this.isSameCard(cards[i], card)) {
+                cards.splice(i, 1);
+                break;
+            }
+        }
     }
     /**
      * 判断数组对应元素是否相同
@@ -867,6 +940,29 @@ export default class GMManager {
                         newCards.push(cards[j]);
                     }
                 }
+                if (this.checkLen(newCards, result, checkHu)) {
+                    res = true;
+                    break;
+                }
+            }
+        }
+        return res;
+    }
+    /**
+     * 是否能够去除一个对子后还能满足和原始听牌一样
+     * 
+     * @param {CardAttrib[]} cards 
+     * @param {CardAttrib[]} result 
+     * @param {boolean} [checkHu=true] 
+     * @returns {boolean} 
+     * @memberof ChildClass
+     */
+    canRemoveD(cards: CardAttrib[], result: CardAttrib[], checkHu: boolean = true): boolean {
+        let res = false;
+        for (let i = 0; i < cards.length - 1; i++) {
+            if (this.isSameCard(cards[i], cards[i + 1])) {
+                let newCards = cards.slice(0);
+                newCards.splice(i, 2);
                 if (this.checkLen(newCards, result, checkHu)) {
                     res = true;
                     break;

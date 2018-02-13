@@ -908,7 +908,7 @@ export default class MJCanvas extends cc.Component {
                 this._act_swap.parent = dd.ui_manager.getRootNode();
             }
             let swapAct = this._act_swap.getComponent('MJ_ActionSwap');
-            swapAct.showSwapCard(dd.gm_manager.mjGameData);
+            swapAct.showSwapCard(dd.gm_manager.mjGameData, dd.gm_manager.mjGameData.tableBaseVo.cfgId);
         } else {
             if (this._act_swap && this._act_swap.isValid && dd.gm_manager.mjGameData.tableBaseVo.gameState !== MJ_GameState.STATE_TABLE_DINGQUE) {
                 this._act_swap.removeFromParent(true);

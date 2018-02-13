@@ -217,6 +217,7 @@ export default class HomeCanvas extends cc.Component {
     _auth_phone: cc.Node = null;
     _record: cc.Node = null;
     _gift: cc.Node = null;
+    _noticeStr: string = '';
     /**
      * 获取ios内购列表的回调
      * 
@@ -238,6 +239,7 @@ export default class HomeCanvas extends cc.Component {
         this.showHead();
         cc.systemEvent.on('cb_getProducts', this.cb_getProducts, this);
         cc.systemEvent.on('qyiap', this.qyiap, this);
+        dd.mp_manager.playBackGround();
     }
 
     qyiap() {
@@ -269,6 +271,9 @@ export default class HomeCanvas extends cc.Component {
                                 break;
                             case 4:
                                 cc.director.loadScene('LRMJScene');
+                                break;
+                            case 5:
+                                cc.director.loadScene('MYMJScene');
                                 break;
                             default:
                         }
@@ -389,7 +394,7 @@ export default class HomeCanvas extends cc.Component {
         this.msgLayout.removeAllChildren();
         for (let i = 0; i < data.contents.length; i++) {
             let msgData = data.contents[i];
-            let tNode = new cc.Node('notice');
+            let tNode = new cc.Node('lblNotice');
             tNode.color = new cc.Color(msgData.color[0], msgData.color[1], msgData.color[2]);
             let lbl = tNode.addComponent(cc.Label);
             lbl.fontSize = 30;
@@ -400,6 +405,12 @@ export default class HomeCanvas extends cc.Component {
             lbl.string = msgData.content;
             // lbl.string = '大王叫我来巡山，我来牌馆转一转。胡着我的牌，数着赢的钱，生活充满节奏感。';
             this.msgLayout.addChild(tNode);
+            this._noticeStr = msgData.content;
+            //如果公告
+            if (this.noticeLayer.active) {
+                this.lblNoticeCT.node.color = new cc.Color(msgData.color[0], msgData.color[1], msgData.color[2]);
+                this.lblNoticeCT.string = msgData.content;
+            }
         }
         this._isRunNotice = true;
         this.noticeNode.active = true;
@@ -444,12 +455,7 @@ export default class HomeCanvas extends cc.Component {
         this.noticeLayer.active = !this.noticeLayer.active;
         if (this.noticeLayer.active) {
             dd.mp_manager.playAlert();
-            let ntNode = this.msgLayout.getChildByName('notice');
-            if (ntNode) {
-                this.lblNoticeCT.string = ntNode.getComponent(cc.Label).string;
-            } else {
-                this.lblNoticeCT.string = '抵制不良游戏, 拒绝盗版游戏。 注意自我保护, 谨防受骗上当。 适度游戏益脑, 沉迷游戏伤身。 合理安排时间, 享受健康生活！'
-            }
+            this.lblNoticeCT.string = this._noticeStr;
         }
     }
 

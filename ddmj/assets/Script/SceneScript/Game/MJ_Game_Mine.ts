@@ -110,6 +110,7 @@ export default class MJ_Play extends cc.Component {
 
     onLoad() {
         this._canvasTarget = dd.ui_manager.getCanvasNode().getComponent('MJCanvas');
+        dd.gm_manager._minScript = this;
         let sceneName = cc.director.getScene().name;
         //是否是绵阳麻将
         if (sceneName === 'MYMJScene') {
@@ -285,6 +286,10 @@ export default class MJ_Play extends cc.Component {
                 this.node_lack.active = false;
                 break;
         }
+        //绵阳麻将 == 如果不为躺阶段，就不显示躺节点
+        if (dd.gm_manager.mjGameData.tableBaseVo.gameState !== MJ_GameState.STATE_TABLE_BREAKCARD) {
+            this.unShowTang();
+        }
     }
 
     /**
@@ -314,7 +319,7 @@ export default class MJ_Play extends cc.Component {
                     }
                     //绵阳麻将 如果该玩家已经躺了，并且有 胡的状态,那么不显示 胡按钮
                     if (this._seatInfo.tangCardState === 1 && this._seatInfo.breakCardState[0] === 1) {
-                        this.node_state_list[0].active = false;
+                        this.node_state.active = false;
                     }
                 }
             } else {
@@ -408,7 +413,12 @@ export default class MJ_Play extends cc.Component {
                 break;
             }
             case '1': {//杠
-                //如果表态是自己,就有多杠的情况
+                //如果已经躺牌的话,就只能杠摸的那张牌
+                if (this._seatInfo.tangCardState === 1) {
+                    this._canvasTarget.sendOtherBreakCard(MJ_Act_Type.ACT_INDEX_GANG, this._seatInfo.breakCard, this.node_state);
+                    break;
+                }
+                //如果表态是自己,
                 if (this._seatInfo.seatIndex === dd.gm_manager.mjGameData.tableBaseVo.btIndex) {
                     let list = this._seatInfo.handCards;
                     //如果(摸牌)存在，并且是(自己摸牌)，就要把摸得牌算进去
@@ -450,7 +460,7 @@ export default class MJ_Play extends cc.Component {
                 this._canvasTarget.sendOtherBreakCard(MJ_Act_Type.ACT_INDEX_DROP, this._seatInfo.breakCard, this.node_state);
                 break;
             } case '5': {//绵阳麻将
-                this.showTangNode(true);
+                this.showHuiBtn();
                 break;
             }
             default:
@@ -493,20 +503,49 @@ export default class MJ_Play extends cc.Component {
     /**
      * 显示绵阳麻将躺节点,进行选躺牌
      * @param {boolean} isShow  是否显示躺节点
+     * 
      * @memberof MJ_Play
      */
-    showTangNode(isShow: boolean) {
-        if (isShow) {
-            this._handList.showHandCardsByTang(true);
-            this.node_state.active = false;
-            let btn_hui = this.node.getChildByName('btn_hui');
-            if (btn_hui) btn_hui.active = true;
-        }
+    showTangNode(isShow: boolean, tangObj: TangCfg = null) {
         let canvas = dd.ui_manager.getCanvasNode();
-        let node_tang = canvas.getChildByName('node_tang');
+        let node_tang = canvas.getChildByName('Tang');
         if (node_tang) {
             node_tang.active = isShow;
+            if (isShow) {
+                let mjTang = node_tang.getComponent('MJ_Tang');
+                mjTang.initData(tangObj, (flag) => {
+                    if (this.node_state && this.node_state.isValid) {
+                        if (flag === 0) {
+                            this.node_state.active = false;
+                        } else {
+                            this.node_state.active = true;
+                        }
+                    }
+                });
+            }
         }
+    }
+    /**
+     * 不显示躺
+     * @memberof MJ_Play
+     */
+    unShowTang() {
+        let canvas = dd.ui_manager.getCanvasNode();
+        let node_tang = canvas.getChildByName('Tang');
+        if (node_tang) node_tang.active = false;
+        let btn_hui = this.node.getChildByName('btn_hui');
+        if (btn_hui) btn_hui.active = false;
+    }
+    /**
+     * 点击躺之后，显示悔按钮
+     * @memberof MJ_Play
+     */
+    showHuiBtn() {
+        //悔状态下显示手牌
+        this._handList.showHandCardsByTang(true);
+        this.node_state.active = false;
+        let btn_hui = this.node.getChildByName('btn_hui');
+        if (btn_hui) btn_hui.active = true;
     }
     /**
      * 获取是否显示悔按钮

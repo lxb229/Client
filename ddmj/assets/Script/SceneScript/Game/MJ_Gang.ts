@@ -48,11 +48,12 @@ export default class MJ_Gang extends cc.Component {
     };
     MJ_Gang_Touch_End = (event: cc.Event.EventTouch) => {
         let cardNode: cc.Node = event.currentTarget;
-        cardNode.color = cc.Color.WHITE;
-        let hcs: MJ_Card = cardNode.getComponent('MJ_Card');
-        this._canvasTarget.sendOtherBreakCard(MJ_Act_Type.ACT_INDEX_GANG, hcs._cardId, null);
-        this.node.removeFromParent(true);
-        this.node.destroy();
+        if (cardNode) {
+            cardNode.color = cc.Color.WHITE;
+            this._canvasTarget.sendOtherBreakCard(MJ_Act_Type.ACT_INDEX_GANG, cardNode.tag, null);
+            this.node.removeFromParent(true);
+            this.node.destroy();
+        }
         event.stopPropagation();
     };
     onLoad() {
@@ -94,12 +95,13 @@ export default class MJ_Gang extends cc.Component {
      * 刷新牌数据
      * 
      * @param {number} cardId 牌数据
-     * @param {cc.Node} CardNode 牌节点
+     * @param {cc.Node} cardNode 牌节点
      * @memberof MJ_Gang
      */
-    updateCardData(cardId: number, CardNode: cc.Node) {
-        let cardImg = CardNode.getChildByName('cardImg');
-        let mask = CardNode.getChildByName('mask');
+    updateCardData(cardId: number, cardNode: cc.Node) {
+        let cardImg = cardNode.getChildByName('cardImg');
+        let mask = cardNode.getChildByName('mask');
+        cardNode.tag = cardId;
         if (cardImg) {
             let csf: cc.SpriteFrame = this._canvasTarget.getMJCardSF(cardId);
             cardImg.getComponent(cc.Sprite).spriteFrame = csf;

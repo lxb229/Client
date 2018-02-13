@@ -339,15 +339,17 @@ export default class MJ_Game extends cc.Component {
     shwoTangCard(index: number, seatInfo: SeatVo) {
         let node_tang = this.node_tang_list[index];
         if (node_tang) {
-            if (seatInfo && seatInfo.accountId && seatInfo.accountId !== '0' && seatInfo.tangCardList) {
+            if (seatInfo && seatInfo.accountId && seatInfo.accountId !== '0'
+                && seatInfo.tangCardList && seatInfo.tangCardList.length > 0) {
                 node_tang.active = true;
                 let sId = this.sId_list[index];
                 node_tang.removeAllChildren();
-                let mymjScript = this.node.getComponent('MYMJScene');
+
+                let mymjScript = dd.ui_manager.getCanvasNode().getComponent('MYMJScene');
                 let tangCardList = seatInfo.tangCardList;
-                if (sId === 1) {//左边
+                if (sId === 3) {//you边
                     tangCardList.sort((a, b) => {
-                        return b - a;
+                        return a - b;
                     });
                 }
                 //显示躺牌
@@ -478,6 +480,12 @@ export default class MJ_Game extends cc.Component {
                             cardConfig.row = 16;
                             cardConfig.cScale = 1;
                             cardConfig.minSpacing = cc.v2(0, -11);
+                            break;
+                        case 5://绵阳麻将
+                            cardConfig.row = 10;
+                            cardConfig.cScale = 1;
+                            cardConfig.minSpacing = cc.v2(0, -10);
+                            cardConfig.rightSpacing = cc.v2(0, -11);
                             break;
                         default:
                     }
@@ -617,6 +625,9 @@ export default class MJ_Game extends cc.Component {
                     if (playIndex === 0) {
                         dd.mp_manager.playPokerSound(dd.mp_manager.audioSetting.language, 4, seatInfo.sex, 3);
                     }
+                    break;
+                case MJ_Act_Type.ACT_INDEX_TANG:
+                    dd.mp_manager.playTangSound(seatInfo.sex);
                     break;
                 default:
                     break;

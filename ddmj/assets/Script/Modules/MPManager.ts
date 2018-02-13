@@ -337,7 +337,7 @@ export default class MPManager {
     async playQuicklySound(sex: number, id: number): Promise<void> {
         if (sex < 0 || sex > 2) return;
         if (id < 0 || id > 11) return;
-        if (this.audioSetting.language > 0) {//0表示不播放报牌音
+        if (this.audioSetting.isEffect) {
             let path = 'Audio/' + 3 + '/' + (sex === 0 ? 2 : sex) + '/' + id;
             this.playGameAudioByPath(path);
         }
@@ -360,6 +360,20 @@ export default class MPManager {
         if (suit === 4 && point > 4) return;
         if (this.audioSetting.language > 0) {//0表示不播放报牌音
             let path = 'Audio/' + type + '/' + suit + '/' + (sex === 0 ? 2 : sex) + '/' + point;
+            this.playGameAudioByPath(path);
+        }
+    }
+    /**
+     * 播放躺拍音效
+     * 
+     * @param {number} sex 
+     * @returns {Promise<void>} 
+     * @memberof MPManager
+     */
+    async playTangSound(sex: number): Promise<void> {
+        if (sex < 0 || sex > 2) return;
+        if (this.audioSetting.isEffect) {
+            let path = 'Audio/' + 3 + '/' + (sex === 0 ? 2 : sex) + '/' + 'tang';
             this.playGameAudioByPath(path);
         }
     }

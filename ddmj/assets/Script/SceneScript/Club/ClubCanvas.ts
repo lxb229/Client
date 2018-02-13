@@ -771,6 +771,9 @@ export default class Club extends cc.Component {
                         case 4:
                             cc.director.loadScene('LRMJScene');
                             break;
+                        case 5:
+                            cc.director.loadScene('MYMJScene');
+                            break;
                         default:
                     }
                 } else if (flag === -1) {//超时

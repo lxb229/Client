@@ -53,8 +53,10 @@ export enum MJ_Act_Type {
     ACT_INDEX_PENG = 2,
     //吃
     ACT_INDEX_CHI = 3,
+    //躺
+    ACT_INDEX_TANG = 4,
     //过
-    ACT_INDEX_DROP = 4,
+    ACT_INDEX_DROP = 5,
 }
 
 /**
@@ -137,7 +139,7 @@ export enum MJ_GameState {
      */
     STATE_TABLE_OUTCARD = 6,
 	/**
-     * 杠碰吃胡牌表态状态
+     * 胡杠碰吃躺牌表态状态
      */
     STATE_TABLE_BREAKCARD = 7,
 	/**
@@ -153,7 +155,6 @@ export enum MJ_GameState {
      */
     STATE_TABLE_DESTORY = 10,
 }
-
 
 /**
  * 通信协议枚举
@@ -383,6 +384,15 @@ export enum Protocol {
      * 点击下一局游戏
      */
     MAJIANG_ROOM_NEXT_GAME = 512,
+
+    /**
+     * 躺牌表态
+     * tableId [int] 桌子号
+     * btcards [[B] 表态的牌
+     * hucards [[B] 躺牌后胡的牌
+     * outcard [byte] 躺牌后要打出的牌
+     */
+    MAJIANG_ROOM_TANG_CARD_BT = 513,
 
     /**
      * 发送聊天信息

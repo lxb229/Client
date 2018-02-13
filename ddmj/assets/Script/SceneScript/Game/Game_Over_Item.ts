@@ -76,7 +76,13 @@ export default class Game_Over_Item extends cc.Component {
      */
     @property(cc.Node)
     node_group: cc.Node = null;
-
+    /**
+     * 躺牌的父节点
+     * @type {cc.Node}
+     * @memberof Game_Over_Item
+     */
+    @property(cc.Node)
+    node_tang: cc.Node = null;
     /**
      * 手牌牌的父节点
      * 
@@ -95,19 +101,12 @@ export default class Game_Over_Item extends cc.Component {
     @property(cc.Node)
     node_hu: cc.Node = null;
     /**
-     * 玩家列表
+     * 各个玩家的输赢列表
      * @type {cc.Label[]}
      * @memberof Game_Over_Item
      */
-    @property([cc.Label])
-    lbl_player_list: cc.Label[] = [];
-    /**
-     * 各个玩家的输赢
-     * @type {cc.Label[]}
-     * @memberof Game_Over_Item
-     */
-    @property([cc.Label])
-    lbl_score_list: cc.Label[] = [];
+    @property([cc.RichText])
+    lbl_player_list: cc.RichText[] = [];
     /**
      * canvas脚本
      * 
@@ -127,7 +126,8 @@ export default class Game_Over_Item extends cc.Component {
         this._canvasTarget = dd.ui_manager.getCanvasNode().getComponent('MJCanvas');
 
         this.lblName.string = data.nick;
-        this.lblScore.string = data.score + '';
+        this.lblScore.node.color = data.score > 0 ? cc.Color.RED : cc.Color.GREEN;
+        this.lblScore.string = data.score > 0 ? ('+' + data.score) : ('' + data.score);
         this.lblDes.string = data.huPaiDesc;
         this.lblFan.string = data.rate + '番';
         if (data.huPaiIndex > 0) {
@@ -139,24 +139,44 @@ export default class Game_Over_Item extends cc.Component {
         this.node_light.active = index % 2 === 0 ? true : false;
         this.node_banker.active = data.banker === 0 ? false : true;
 
-        for (let i = 0; i < this.lbl_player_list.length; i++) {
-            if (i !== index) {
-                this.lbl_player_list[i].string = '玩家' + (i + 1);
+        if (data.seatScore) {
+            let pScore = [];
+            data.seatScore.forEach((sScore, sIndex) => {
+                let str = '玩家<index><br/><color=#FFC200><number>番</c><br/><color><socre></c><br/><tang>';
+                if (sIndex !== index) {
+                    str = str.replace('<index>', (sIndex + 1).toString());
+                    str = str.replace('<number>', sScore.totalFanNum.toString());
+                    str = str.replace('<color>', (sScore.score > 0 ? '<color=#FF0000>' : '<color=#00FF00>'));
+                    str = str.replace('<socre>', (sScore.score > 0 ? ('+' + sScore.score) : ('' + sScore.score)));
+                    switch (sScore.tangNum) {
+                        case 0:
+                            str = str.replace('<tang>', '(无躺)');
+                            break;
+                        case 1:
+                            str = str.replace('<tang>', '(单躺)');
+                            break;
+                        case 2:
+                            str = str.replace('<tang>', '(双躺)');
+                            break;
+                        default:
+                            str = str.replace('<br/><tang>', '');
+                            break;
+                    }
+                    pScore.push(str);
+                }
+            });
+            for (let i = 0; i < this.lbl_player_list.length; i++) {
+                if (i < data.seatScore.length - 1 && pScore[i]) {
+                    this.lbl_player_list[i].node.active = true;
+                    this.lbl_player_list[i].string = pScore[i];
+                } else {
+                    this.lbl_player_list[i].node.active = false;
+                    this.lbl_player_list[i].string = '';
+                }
             }
         }
-        //显示各个玩家对这个玩家的输赢
-        for (let i = 0; i < this.lbl_score_list.length; i++) {
-            let wlScore = 1;
-            if (wlScore > 0) {
-                this.lbl_player_list[i].string = '+' + wlScore;
-            } else {
-                this.lbl_player_list[i].string = wlScore.toString();
-            }
-        }
-        this.node_group.removeAllChildren();
-        this.node_hand.removeAllChildren();
-        this.node_hu.removeAllChildren();
 
+        this.node_group.removeAllChildren();
         let minGang = [];
         if (data.baGangCards) {
             minGang = data.baGangCards;
@@ -183,8 +203,26 @@ export default class Game_Over_Item extends cc.Component {
         if (this.node_group.childrenCount === 0) {
             this.node_group.active = false;
         }
-        if (data.handCards) {
-            let handCards = dd.gm_manager.getSortCardByCardIds(data.handCards);
+        let handCards = data.handCards;
+        let seatInfo = dd.gm_manager.getSeatById(data.accountId);
+        if (seatInfo && seatInfo.tangCardList && seatInfo.tangCardList.length > 0) {
+            this.node_tang.active = true;
+            this.node_tang.removeAllChildren();
+            let tangCardList = seatInfo.tangCardList.sort((a, b) => {
+                return a - b;
+            });
+            let mymjScript = dd.ui_manager.getCanvasNode().getComponent('MYMJScene');
+            for (var i = 0; i < tangCardList.length; i++) {
+                mymjScript.showTangCard(0, tangCardList[i], this.node_tang);
+            }
+            handCards = dd.gm_manager.getDiffAToB(data.handCards, tangCardList);
+        } else {
+            this.node_tang.active = false;
+        }
+        if (handCards && handCards.length > 0) {
+            this.node_hand.active = true;
+            this.node_hand.removeAllChildren();
+            handCards = dd.gm_manager.getSortCardByCardIds(handCards);
             for (var i = 0; i < handCards.length; i++) {
                 this._canvasTarget.showMineCard(handCards[handCards.length - 1 - i], this.node_hand, false, (cardNode: cc.Node) => {
                     cardNode.scale = 0.8;
@@ -192,8 +230,13 @@ export default class Game_Over_Item extends cc.Component {
                     mcm.showMask(false);
                 });
             }
+        } else {
+            this.node_hand.active = false;
         }
+
         if (data.huCards) {
+            this.node_hu.active = true;
+            this.node_hu.removeAllChildren();
             for (var i = 0; i < data.huCards.length; i++) {
                 this._canvasTarget.showMineCard(data.huCards[i], this.node_hu, false, (cardNode: cc.Node) => {
                     cardNode.scale = 0.8;
@@ -201,6 +244,8 @@ export default class Game_Over_Item extends cc.Component {
                     mcm.showMask(false);
                 });
             }
+        } else {
+            this.node_hu.active = false;
         }
 
         let headSF = null;
