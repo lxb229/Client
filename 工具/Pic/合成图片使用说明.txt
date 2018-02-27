@@ -1,0 +1,3 @@
+﻿1、在img文件夹中放入所有小图片，文件名字必须和图片内容一致，例如（一.png,二.png）。
+2、修改config.js配置文件。
+3、在cmd中cd到当前文件夹后，执行node index或用vscode打开index.js文件后再调试窗口点运行！

@@ -1,0 +1,4 @@
+/etc/init.d/node-game stop
+/etc/init.d/node-game start
+/etc/init.d/node-game restart
+b8ueCC00vm9dT16kY8S93i7O

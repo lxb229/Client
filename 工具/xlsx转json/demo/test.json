@@ -1,0 +1,1 @@
+[{"id":123,"desc":"de script ion","flag":true,"otherid":[1,2],"words":["哈     哈","呵     呵"],"map":[true,false],"data":{"mode":"percent","value":45},"hero":[{"id":2,"level":30},{"id":3,"level":80}]},{"id":456,"desc":"描 述","flag":false,"otherid":[3,5,8],"words":["shit","my god"],"map":[false,false],"data":{"a":11,"b":22},"hero":[{"id":9,"level":38},{"id":17,"level":100}]}]

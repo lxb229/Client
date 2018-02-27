@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<script>
+    function validateForm(val, type) {
+        if (val == null || val === "") {
+            alert('不能提交空值');
+            return false;
+        }
+        if (type === 'ver') {//验证版本号
+            let list = val.split('.');
+            if (list.length !== 3) {
+                alert('请输入三段式版本号(如1.0.0)');
+                return false;
+            }
+            for (let i = 0; i < list.length; i++) {
+                if (list[i] === '' || isNaN(list[i])) {
+                    alert('请输入数字')
+                    return false;
+                }
+            }
+        } else {//验证url
+            let reg = /(http|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/;
+            if (!reg.test(val)) {
+                alert('URL格式错误');
+                return false;
+            }
+        }
+    }
+</script>
+
+<body>
+    <form action="/setting" method="post" onsubmit="return validateForm(this['min_ver'].value,'ver')" enctype='application/json'>
+        最低版本号:
+        <input type="text" name="min_ver" value="" style="width:400px;margin-left:40px">
+        <input type="submit" value="提交">
+    </form>
+    <form action="/setting" method="post" onsubmit="return validateForm(this['max_ver'].value,'ver')" enctype='application/json'>
+        最高版本号:
+        <input type="text" name="max_ver" value="" style="width:400px;margin-left:40px">
+        <input type="submit" value="提交">
+    </form>
+    <form action="/setting" method="post" onsubmit="return validateForm(this['apk_url'].value,'url')" enctype='application/json'>
+        安卓下载地址:
+        <input type="text" name="apk_url" value="" style="width:400px;margin-left:24px">
+        <input type="submit" value="提交">
+    </form>
+    <form action="/setting" method="post" onsubmit="return validateForm(this['ipa_url'].value,'url')" enctype='application/json'>
+        苹果下载地址:
+        <input type="text" name="ipa_url" value="" style="width:400px;margin-left:24px">
+        <input type="submit" value="提交">
+    </form>
+    <form action="/setting" method="post" onsubmit="return validateForm(this['dd_url'].value,'url')" enctype='application/json'>
+        豆豆麻将地址:
+        <input type="text" name="dd_url" value="" style="width:400px;margin-left:24px">
+        <input type="submit" value="提交">
+    </form>
+</body>
+
+</html>
