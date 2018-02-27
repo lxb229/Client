@@ -760,22 +760,7 @@ export default class Club extends cc.Component {
                 if (flag === 0) {//成功
                     dd.gm_manager.mjGameData = content as MJGameData;
                     dd.gm_manager.replayMJ = 0;
-                    switch (dd.gm_manager.mjGameData.tableBaseVo.cfgId) {
-                        case 1:
-                            cc.director.loadScene('MJScene');
-                            break;
-                        case 2:
-                        case 3:
-                            cc.director.loadScene('SRMJScene');
-                            break;
-                        case 4:
-                            cc.director.loadScene('LRMJScene');
-                            break;
-                        case 5:
-                            cc.director.loadScene('MYMJScene');
-                            break;
-                        default:
-                    }
+                    dd.gm_manager.turnToGameScene();
                 } else if (flag === -1) {//超时
                     dd.ui_manager.hideLoading();
                 } else {//失败,content是一个字符串

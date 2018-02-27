@@ -424,6 +424,12 @@ declare interface SeatVo {
      * @memberof SeatVo
      */
     tangCardList: number[];
+    /**
+     * 报叫状态(-1=无报叫状态,0=等待报叫,1=已报叫)
+     * @type {number}
+     * @memberof SeatVo
+     */
+    baojiaoState: number;
 }
 
 
@@ -537,6 +543,12 @@ declare interface SettementSeatScore {
      * @memberof SettementSeatScore
      */
     tangNum: number;
+    /**
+     * 报叫个数(-1=无报叫的游戏规则)  0=无叫 1=单叫 2=双叫
+     * @type {number}
+     * @memberof SettementSeatScore
+     */
+    baoJiaoNum: number;
     /**
      * 总翻数
      * @type {number}

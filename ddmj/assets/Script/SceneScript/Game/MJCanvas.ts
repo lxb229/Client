@@ -774,7 +774,7 @@ export default class MJCanvas extends cc.Component {
             }
             //如果是右边，需要修正一下参数，因为用的是同一个预设
             if (type === 1) {
-                mc.setFixCard(cc.p(-1, 1), cc.p(1, 1));
+                mc.setFixCard(cc.p(-1, 1), cc.p(-1, 1));
             }
             cardNode.parent = parentNode;
             if (initCB) {

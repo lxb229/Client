@@ -142,7 +142,7 @@ export default class Game_Over_Item extends cc.Component {
         if (data.seatScore) {
             let pScore = [];
             data.seatScore.forEach((sScore, sIndex) => {
-                let str = '玩家<index><br/><color=#FFC200><number>番</c><br/><color><socre></c><br/><tang>';
+                let str = '玩家<index><br/><color=#FFC200><number>番</c><br/><color><socre></c><br/><tang><br/><baojiao>';
                 if (sIndex !== index) {
                     str = str.replace('<index>', (sIndex + 1).toString());
                     str = str.replace('<number>', sScore.totalFanNum.toString());
@@ -160,6 +160,20 @@ export default class Game_Over_Item extends cc.Component {
                             break;
                         default:
                             str = str.replace('<br/><tang>', '');
+                            break;
+                    }
+                    switch (sScore.baoJiaoNum) {
+                        case 0:
+                            str = str.replace('<baojiao>', '(无叫)');
+                            break;
+                        case 1:
+                            str = str.replace('<baojiao>', '(单叫)');
+                            break;
+                        case 2:
+                            str = str.replace('<baojiao>', '(双叫)');
+                            break;
+                        default:
+                            str = str.replace('<br/><baojiao>', '');
                             break;
                     }
                     pScore.push(str);

@@ -93,7 +93,18 @@ export default class GMManager {
         this.mjGameData = tableData;
         cc.systemEvent.emit('MJ_GamePush');
     }
-
+    /**
+     * 设置报叫的数据消息
+     * @param {*} content 
+     * @memberof GMManager
+     */
+    setBaoJiaoData(content: any) {
+        //报叫表态座位 seatIndex;
+        //报叫结果(0=不报叫,1=报叫)  boaojiaoResult;
+        //桌子座位数据 seats;
+        this.mjGameData.seats = content.seats;
+        cc.systemEvent.emit('MJ_GamePush');
+    }
     /**
      * 深度拷贝对象，通过Json转换的过程来实现
      * @param {any} obj 
@@ -135,6 +146,38 @@ export default class GMManager {
                 break;
         }
         return array;
+    }
+    /**
+     * 根据游戏id，跳转到游戏场景
+     * @memberof GMManager
+     */
+    turnToGameScene() {
+        if (this.mjGameData && this.mjGameData.tableBaseVo) {
+            switch (this.mjGameData.tableBaseVo.cfgId) {
+                case 1:
+                    cc.director.loadScene('MJScene');
+                    break;
+                case 2:
+                case 3:
+                    cc.director.loadScene('SRMJScene');
+                    break;
+                case 4:
+                    cc.director.loadScene('LRMJScene');
+                    break;
+                case 5:
+                    cc.director.loadScene('MYMJScene');
+                    break;
+                case 6:
+                    if (this.mjGameData.seats.length === 3) {
+                        cc.director.loadScene('ZG3MJScene');
+                    } else if (this.mjGameData.seats.length === 4) {
+                        cc.director.loadScene('ZG4MJScene');
+                    } else { }
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     /**
@@ -430,7 +473,19 @@ export default class GMManager {
         }
         return -1;
     }
-
+    /**
+     * 获取游戏手牌张数
+     * @memberof GMManager
+     */
+    getGameCardNum() {
+        let gameCardNum = 13;
+        let index = this.mjGameData.tableBaseVo.ruleShowDesc.indexOf('张手牌');
+        if (index !== -1) {
+            let num = this.mjGameData.tableBaseVo.ruleShowDesc.substring(index - 1, index);
+            gameCardNum = Number(num);
+        }
+        return gameCardNum;
+    }
     /**
      * 获取是否是死觉
      * 

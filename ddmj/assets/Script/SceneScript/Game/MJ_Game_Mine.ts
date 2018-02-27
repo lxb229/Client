@@ -290,6 +290,8 @@ export default class MJ_Play extends cc.Component {
         if (dd.gm_manager.mjGameData.tableBaseVo.gameState !== MJ_GameState.STATE_TABLE_BREAKCARD) {
             this.unShowTang();
         }
+        //自贡麻将 == 显示报叫节点
+        this.showBaoJiao();
     }
 
     /**
@@ -469,6 +471,32 @@ export default class MJ_Play extends cc.Component {
     }
 
     /**
+     * 胡杠碰过的表态
+     * 
+     * @param {any} event 
+     * @param {string} type 
+     * @memberof MJ_Play
+     */
+    click_btn_baojiao(event, type: string) {
+        dd.mp_manager.playButton();
+        let node_baojiao = this.node.getChildByName('node_baojiao');
+        let obj = {
+            'tableId': dd.gm_manager.mjGameData.tableBaseVo.tableId,
+            'btVal': type,
+        };
+        let msg = JSON.stringify(obj);
+        dd.ws_manager.sendMsg(dd.protocol.MAJIANG_ROOM_BAOJIAO_BT, msg, (flag: number, content?: any) => {
+            if (node_baojiao && node_baojiao.isValid) {
+                if (flag === 0) {
+                    node_baojiao.active = false;
+                } else {
+                    node_baojiao.active = true;
+                }
+            }
+        });
+        if (node_baojiao && node_baojiao.isValid) node_baojiao.active = false;
+    }
+    /**
      * 显示推荐定缺的动作
      * 
      * @memberof MJ_Play
@@ -555,6 +583,22 @@ export default class MJ_Play extends cc.Component {
         let btn_hui = this.node.getChildByName('btn_hui');
         if (btn_hui && btn_hui.active) return true;
         return false;
+    }
+    /**
+     * 自贡麻将 === 显示报叫
+     * @memberof MJ_Play
+     */
+    showBaoJiao() {
+        let node_baojiao = this.node.getChildByName('node_baojiao');
+        let mySeat = dd.gm_manager.getSeatById(dd.ud_manager.mineData.accountId);
+        if (node_baojiao && mySeat) {
+            if (dd.gm_manager.mjGameData.tableBaseVo.gameState === MJ_GameState.STATE_TABLE_BAOJIAO
+                && mySeat.baojiaoState === 0) {
+                node_baojiao.active = true;
+            } else {
+                node_baojiao.active = false;
+            }
+        }
     }
 }
 

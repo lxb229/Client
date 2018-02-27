@@ -350,6 +350,9 @@ export default class WSManager {
             case Protocol.MAJIANG_ROOM_BREAKCARD_NOTIFY://推送消息(胡杠碰吃过表态通知)
                 GMManager.getInstance().setTableData(content as MJGameData);
                 break;
+            case Protocol.MAJIANG_ROOM_BAOJIAO_BT_NOTIFY: //推送消息(座位报叫表态通知)
+                GMManager.getInstance().setBaoJiaoData(content);
+                break;
             case Protocol.CHAT_SEND_NOTIFY://推送消息(聊天信息通知)
                 cc.systemEvent.emit('MJ_ChatPush', content);
                 break;

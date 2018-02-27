@@ -154,6 +154,10 @@ export enum MJ_GameState {
      * 桌子解散状态
      */
     STATE_TABLE_DESTORY = 10,
+    /**
+     * 报叫状态
+     */
+    STATE_TABLE_BAOJIAO = 11,
 }
 
 /**
@@ -395,6 +399,13 @@ export enum Protocol {
     MAJIANG_ROOM_TANG_CARD_BT = 513,
 
     /**
+     * 报叫表态
+     * tableId [int] 桌子号
+     * btVal [int] 表态的结果(0=不报叫,1=报叫)
+     */
+    MAJIANG_ROOM_BAOJIAO_BT = 514,
+
+    /**
      * 发送聊天信息
      * tableId [int] 桌子Id
      * type [int] 聊天内容类型
@@ -544,6 +555,11 @@ export enum Protocol {
      * 推送消息(桌子解散表态通知)
      */
     MAJIANG_ROOM_DESTORY_BT_NOTIFY = 50008,
+
+    /**
+     * 推送消息(座位报叫表态通知)
+     */
+    MAJIANG_ROOM_BAOJIAO_BT_NOTIFY = 50009,
 
     /**
      * 推送消息(聊天信息通知)

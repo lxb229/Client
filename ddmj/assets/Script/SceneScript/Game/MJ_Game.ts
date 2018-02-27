@@ -464,6 +464,8 @@ export default class MJ_Game extends cc.Component {
                     };
                     switch (dd.gm_manager.mjGameData.tableBaseVo.cfgId) {
                         case 1://血战到底
+                        case 5://绵阳麻将
+                        case 6://自贡麻将
                             cardConfig.row = 10;
                             cardConfig.cScale = 1;
                             cardConfig.minSpacing = cc.v2(0, -10);
@@ -480,12 +482,6 @@ export default class MJ_Game extends cc.Component {
                             cardConfig.row = 16;
                             cardConfig.cScale = 1;
                             cardConfig.minSpacing = cc.v2(0, -11);
-                            break;
-                        case 5://绵阳麻将
-                            cardConfig.row = 10;
-                            cardConfig.cScale = 1;
-                            cardConfig.minSpacing = cc.v2(0, -10);
-                            cardConfig.rightSpacing = cc.v2(0, -11);
                             break;
                         default:
                     }

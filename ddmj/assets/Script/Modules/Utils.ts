@@ -11,8 +11,31 @@ export function getHeadImgUrl(url: string): string {
     arrayList.pop();
     return arrayList.join('/') + '/96';
 }
-
-
+/**
+ * 返回指定长度的字符串
+ * 
+ * @export
+ * @param {string} str 
+ * @param {number} size 
+ * @returns 
+ */
+export function getStringBySize(str: string, size: number): string {
+    let len = 0;
+    let vaule = '';
+    for (let i = 0; i < str.length; i++) {
+        if (str.charCodeAt(i) > 255) {
+            len += 2;
+        } else {
+            len += 1;
+        }
+        if (len > size) {
+            break;
+        } else {
+            vaule += str.charAt(i);
+        }
+    }
+    return vaule;
+}
 /**
  * 截图保存到本地
  * 
@@ -24,7 +47,7 @@ export function getHeadImgUrl(url: string): string {
  */
 export function captureScreen(node: cc.Node, saveName: string, callback: Function): void {
     if (cc.sys.isNative && cc.sys.isMobile) {
-        let renderTexture = cc.RenderTexture.create(node.width, node.height, cc.Texture2D.PIXEL_FORMAT_RGBA8888, gl.DEPTH24_STENCIL8_OES);
+        let renderTexture = cc.RenderTexture.create(node.width, node.height, cc.Texture2D.PixelFormat.RGBA8888, gl.DEPTH24_STENCIL8_OES);
         node.parent._sgNode.addChild(renderTexture);
         renderTexture.setVisible(false);
         renderTexture.begin();

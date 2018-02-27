@@ -90,20 +90,9 @@ export default class MJ_PlayerUI extends cc.Component {
      */
     async showInfo(seatInfo: SeatVo) {
         this._seatInfo = seatInfo;
-        if (this._seatInfo.nick.length > 4) {
-            this.lblName.horizontalAlign = cc.Label.HorizontalAlign.LEFT;
-        } else {
-            this.lblName.horizontalAlign = cc.Label.HorizontalAlign.CENTER;
-        }
-        this.lblName.string = this._seatInfo.nick;
+        this.lblName.string = dd.utils.getStringBySize(this._seatInfo.nick, 8);
         this.lblScore.string = this._seatInfo.score + '';
-        let headSF = null;
-        try {
-            headSF = await dd.img_manager.loadURLImage(this._seatInfo.headImg);
-        } catch (error) {
-            cc.log('获取头像错误');
-        }
-        this.headImg.spriteFrame = headSF;
+
         //如果座位号是庄家座位号
         if (this._seatInfo.seatIndex === dd.gm_manager.mjGameData.tableBaseVo.bankerIndex) {
             this.node_d.active = true;
@@ -116,13 +105,33 @@ export default class MJ_PlayerUI extends cc.Component {
         } else {
             this.node_offLine.active = false;
         }
-        //如果存在打缺 缺花色(1=万,2=筒,3=条)
-        if (this._seatInfo.unSuit > 0 && dd.gm_manager.mjGameData.tableBaseVo.gameState > MJ_GameState.STATE_TABLE_DINGQUE) {
-            this.unSuit.node.active = true;
-            this.unSuit.spriteFrame = this._canvasTarget.unSuit_list[this._seatInfo.unSuit - 1];
-        } else {
-            this.unSuit.node.active = false;
+
+        switch (dd.gm_manager.mjGameData.tableBaseVo.cfgId) {
+            case 6://自贡麻将
+                if (this._seatInfo.baojiaoState === 1) {
+                    this.unSuit.node.active = true;
+                    this.unSuit.spriteFrame = this._canvasTarget.unSuit_list[3];
+                } else {
+                    this.unSuit.node.active = false;
+                }
+                break;
+            default:
+                //如果存在打缺 缺花色(1=万,2=筒,3=条)
+                if (this._seatInfo.unSuit > 0 && dd.gm_manager.mjGameData.tableBaseVo.gameState > MJ_GameState.STATE_TABLE_DINGQUE) {
+                    this.unSuit.node.active = true;
+                    this.unSuit.spriteFrame = this._canvasTarget.unSuit_list[this._seatInfo.unSuit - 1];
+                } else {
+                    this.unSuit.node.active = false;
+                }
+                break;
         }
 
+        let headSF = null;
+        try {
+            headSF = await dd.img_manager.loadURLImage(this._seatInfo.headImg);
+        } catch (error) {
+            cc.log('获取头像错误');
+        }
+        this.headImg.spriteFrame = headSF;
     }
 }

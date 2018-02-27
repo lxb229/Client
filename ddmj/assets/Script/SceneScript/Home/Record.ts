@@ -225,22 +225,7 @@ export default class Record extends cc.Component {
                         dd.gm_manager.replayDataList = json.datas as ReplayData[];
                         dd.gm_manager.replayRecordId = recordId;
                         dd.gm_manager.mjGameData = dd.gm_manager.replayDataList[0].frameData;
-                        switch (dd.gm_manager.mjGameData.tableBaseVo.cfgId) {
-                            case 1:
-                                cc.director.loadScene('MJScene');
-                                break;
-                            case 2:
-                            case 3:
-                                cc.director.loadScene('SRMJScene');
-                                break;
-                            case 4:
-                                cc.director.loadScene('LRMJScene');
-                                break;
-                            case 5:
-                                cc.director.loadScene('MYMJScene');
-                                break;
-                            default:
-                        }
+                        dd.gm_manager.turnToGameScene();
                     });
                 } else {
                     dd.ui_manager.showTip('获取录像失败');

@@ -304,6 +304,7 @@ export default class MJ_HandList extends cc.Component {
         }
         this._canvasTarget = dd.ui_manager.getCanvasNode().getComponent("MJCanvas");
         this.onTouchEvent();
+        // this.setHandPosition();
     }
 
     initData() {
@@ -343,7 +344,26 @@ export default class MJ_HandList extends cc.Component {
         }
         return isCP;
     }
-
+    /**
+     * 设置手牌的位置
+     * @memberof MJ_HandList
+     */
+    setHandPosition() {
+        let gcn = dd.gm_manager.getGameCardNum();
+        let widget = this.node_hand.getComponent(cc.Widget);
+        switch (gcn) {
+            case 7:
+                widget.right = 138;
+                break;
+            case 10:
+                widget.right = 38;
+                break;
+            case 13:
+                widget.right = 0;
+                break;
+            default:
+        }
+    }
     /**
      * 刷新手牌列表
      * 

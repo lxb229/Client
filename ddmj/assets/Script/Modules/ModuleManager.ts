@@ -120,6 +120,34 @@ export let cb_diconnect: (event: cc.Event.EventCustom) => void = (event: cc.Even
                                                     ui_manager.hideLoading();
                                                 }
                                                 break;
+                                            case 4:
+                                                if (sceneName !== 'LRMJScene') {
+                                                    cc.director.loadScene('LRMJScene');
+                                                } else {
+                                                    ui_manager.getCanvasNode().emit('diconnect_update');
+                                                    ui_manager.hideLoading();
+                                                }
+                                                break;
+                                            case 5:
+                                                if (sceneName !== 'MYMJScene') {
+                                                    cc.director.loadScene('MYMJScene');
+                                                } else {
+                                                    ui_manager.getCanvasNode().emit('diconnect_update');
+                                                    ui_manager.hideLoading();
+                                                }
+                                                break;
+                                            case 6:
+                                                if (sceneName !== 'ZGMJScene') {
+                                                    if (gm_manager.mjGameData.seats.length === 3) {
+                                                        cc.director.loadScene('ZG3MJScene');
+                                                    } else if (gm_manager.mjGameData.seats.length === 4) {
+                                                        cc.director.loadScene('ZG4MJScene');
+                                                    } else { }
+                                                } else {
+                                                    ui_manager.getCanvasNode().emit('diconnect_update');
+                                                    ui_manager.hideLoading();
+                                                }
+                                                break;
                                             default:
                                         }
 
@@ -138,7 +166,8 @@ export let cb_diconnect: (event: cc.Event.EventCustom) => void = (event: cc.Even
                                 });
                             } else {
                                 let sceneName = cc.director.getScene().name;
-                                if (sceneName === 'MJScene' || sceneName === 'SRMJScene') {
+                                if (sceneName === 'MJScene' || sceneName === 'SRMJScene' || sceneName === 'LRMJScene'
+                                    || sceneName === 'MYMJScene' || sceneName === 'ZG3MJScene' || sceneName === 'ZG4MJScene') {
                                     cc.director.loadScene('HomeScene', () => {
                                         ui_manager.showTip('桌子已解散!');
                                     });
