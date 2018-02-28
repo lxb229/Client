@@ -1,0 +1,30 @@
+{
+  "ver": "1.0.0",
+  "uuid": "0508d5bd-9916-4cce-8864-035eaa4961a0",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "subMetas": {
+    "niuniucombat_ic_meiniu": {
+      "ver": "1.0.3",
+      "uuid": "15342147-3d88-444e-b7cd-5635e69cf3b0",
+      "rawTextureUuid": "0508d5bd-9916-4cce-8864-035eaa4961a0",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": -0.5,
+      "trimX": 0,
+      "trimY": 1,
+      "width": 70,
+      "height": 39,
+      "rawWidth": 70,
+      "rawHeight": 40,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "appKey": "",
+  "appSecret": "",
+  "encryptJs": true,
+  "excludeScenes": [],
+  "includeAnySDK": false,
+  "includeSDKBox": false,
+  "inlineSpriteFrames": true,
+  "inlineSpriteFrames_native": false,
+  "jailbreakPlatform": false,
+  "md5Cache": false,
+  "mergeStartScene": false,
+  "oauthLoginServer": "",
+  "optimizeHotUpdate": false,
+  "orientation": {
+    "landscapeLeft": true,
+    "landscapeRight": true,
+    "portrait": false,
+    "upsideDown": false
+  },
+  "packageName": "com.gs.xpj",
+  "privateKey": "",
+  "renderMode": "0",
+  "startScene": "50ae534f-88d7-494d-8d4d-ceaa16417b55",
+  "title": "xpj",
+  "webOrientation": "auto",
+  "xxteaKey": "85a8eace-a6e1-4d"
+}

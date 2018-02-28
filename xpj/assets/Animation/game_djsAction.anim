@@ -1,0 +1,89 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "game_djsAction",
+  "_objFlags": 0,
+  "_rawFiles": null,
+  "_duration": 10.1,
+  "sample": 60,
+  "speed": 0.7,
+  "wrapMode": 0,
+  "curveData": {
+    "comps": {
+      "cc.Mask": {}
+    },
+    "props": {},
+    "paths": {
+      "img_timeDown": {
+        "props": {
+          "color": [
+            {
+              "frame": 0,
+              "value": {
+                "__type__": "cc.Color",
+                "r": 31,
+                "g": 255,
+                "b": 0,
+                "a": 255
+              }
+            },
+            {
+              "frame": 2.8333333333333335,
+              "value": {
+                "__type__": "cc.Color",
+                "r": 31,
+                "g": 255,
+                "b": 0,
+                "a": 255
+              }
+            },
+            {
+              "frame": 2.8833333333333333,
+              "value": {
+                "__type__": "cc.Color",
+                "r": 43,
+                "g": 162,
+                "b": 255,
+                "a": 255
+              }
+            },
+            {
+              "frame": 6.916666666666667,
+              "value": {
+                "__type__": "cc.Color",
+                "r": 43,
+                "g": 162,
+                "b": 255,
+                "a": 255
+              }
+            },
+            {
+              "frame": 7.083333333333333,
+              "value": {
+                "__type__": "cc.Color",
+                "r": 255,
+                "g": 43,
+                "b": 43,
+                "a": 255
+              }
+            }
+          ]
+        },
+        "comps": {
+          "cc.Sprite": {
+            "fillRange": [
+              {
+                "frame": 0,
+                "value": 1
+              },
+              {
+                "frame": 10.1,
+                "value": 0
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "events": []
+}
