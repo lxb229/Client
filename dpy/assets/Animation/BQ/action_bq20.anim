@@ -1,0 +1,43 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "action_bq20",
+  "_objFlags": 0,
+  "_rawFiles": null,
+  "_duration": 0.06666666666666667,
+  "sample": 60,
+  "speed": 0.08,
+  "wrapMode": 1,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "aa627c73-b9f9-4eeb-89ef-420266e8dbb9"
+            }
+          },
+          {
+            "frame": 0.016666666666666666,
+            "value": {
+              "__uuid__": "5987972d-9dca-4f7b-8c4c-addd11659d8a"
+            }
+          },
+          {
+            "frame": 0.03333333333333333,
+            "value": {
+              "__uuid__": "7ad4fa95-a4b5-4e59-9fee-8bab183cecf1"
+            }
+          },
+          {
+            "frame": 0.05,
+            "value": {
+              "__uuid__": "c2e3ade9-8a44-4946-9ab8-b849c27bad7a"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

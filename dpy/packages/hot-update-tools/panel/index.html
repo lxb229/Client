@@ -1,0 +1,57 @@
+<h2>生成Manifest配置文件</h2>
+<div class="layout vertical start-justified">
+    <ui-prop name="版本号">
+        <div class="flex-1 layout horizontal center">
+            <ui-input class="flex-1" v-value="version"></ui-input>
+        </div>
+
+    </ui-prop>
+
+    <ui-prop name="资源服务器根目录">
+        <div class="flex-1 layout horizontal center">
+            <ui-input class="flex-2" v-value="serverRootDir"></ui-input>
+        </div>
+    </ui-prop>
+
+    <ui-prop name="项目资源文件目录">
+        <div class="flex-1 layout horizontal center">
+            <ui-input class="flex-2" v-value="resourceRootDir"></ui-input>
+            <ui-button v-on:confirm="onSelectResourceRootDir">选择</ui-button>
+            <ui-button v-on:confirm="onOpenResourceDir">打开</ui-button>
+        </div>
+    </ui-prop>
+
+    <ui-prop name="manifest存储目录">
+        <div class="flex-1 layout horizontal center">
+            <ui-input class="flex-2" v-value="genManifestDir"></ui-input>
+            <ui-button v-on:confirm="onSelectGenManifestDir">选择</ui-button>
+            <ui-button v-on:confirm="onOpenManifestDir">打开</ui-button>
+        </div>
+    </ui-prop>
+</div>
+<hr>
+<h2>部署配置</h2>
+<div class="layout vertical">
+    <ui-prop name="部署目录">
+        <div class="flex-1 layout horizontal center">
+            <ui-input class="flex-2" v-value="localServerPath"></ui-input>
+            <ui-button v-on:confirm="onSelectLocalServerPath">选择</ui-button>
+            <ui-button v-on:confirm="onOpenLocalServerPath">打开</ui-button>
+        </div>
+    </ui-prop>
+    <ui-prop name="进度条">
+        <div class="flex-1 layout horizontal center">
+            <ui-progress class="flex-2" v-value="copyProgress">0</ui-progress>
+        </div>
+    </ui-prop>
+
+</div>
+<hr>
+<div class="flex-1 layout horizontal center">
+    <ui-label class="flex-2">日志：</ui-label>
+    <ui-button class="flex-2" v-on:confirm="onClearLog">清空日志</ui-button>
+    <ui-button class="flex-2" v-on:confirm="onClickGenCfg">部署</ui-button>
+</div>
+<hr>
+<ui-text-area resize-v class ="massive" style="width: 100%; height: auto" v-value="logView">
+</ui-text-area>
