@@ -5,7 +5,7 @@ import MJ_Card from './MJ_Card';
 import MJ_Card_Group from './MJ_Card_Group';
 
 import * as dd from './../../Modules/ModuleManager';
-import { MJ_GameState, MJ_Suit, MJ_Act_Type } from '../../Modules/Protocol';
+import { MJ_GameState, MJ_Suit, MJ_Act_Type, MJ_Game_Type } from '../../Modules/Protocol';
 @ccclass
 export default class MJCanvas extends cc.Component {
     /**
@@ -651,6 +651,39 @@ export default class MJCanvas extends cc.Component {
             }
         });
     }
+    /**
+     * 胡杠碰吃表态
+     * bt [int] 表态类型(0=胡,1=杠,2=碰,3=吃,4=过)
+     * cardId [byte] 表态的牌(目标牌,如幺鸡当3条用,表态牌为3条)
+     * gangType [int] 杠类型(1=巴杠,2=暗杠或直杠)
+     * replace [int] 表态的牌是否是幺鸡
+     *  @param {cc.Node} node_state 表态节点
+     * @memberof MJCanvas
+     */
+    sendLSGangBreakCard(actType: MJ_Act_Type, gangObj: GangData, node_state?: cc.Node) {
+        let obj = {
+            'tableId': dd.gm_manager.mjGameData.tableBaseVo.tableId,
+            'bt': actType,
+            'cardId': JSON.stringify(gangObj.cardId),
+            'gangType': gangObj.isAnGang,
+            'replace': 0
+        };
+        //只要是巴杠，并且是 使用幺鸡 去巴杠的，就要替换牌
+        if (!gangObj.isAnGang && gangObj.isUseYaoJi) {
+            obj.replace = 1;
+        }
+        let msg = JSON.stringify(obj);
+        dd.ws_manager.sendMsg(dd.protocol.MAJIANG_ROOM_OTHERBREAK_CARD_LSMJ_BT, msg, (flag: number, content?: any) => {
+            if (node_state && node_state.isValid) {
+                if (flag === 0) {
+                    node_state.active = false;
+                } else {
+                    node_state.active = true;
+                }
+            }
+        });
+    }
+
 
     /**
      * 发送聊天信息
@@ -787,19 +820,25 @@ export default class MJCanvas extends cc.Component {
      *  根据类型创建杠/碰牌的节点
      * 
      * @param {number} type 0碰牌 1明杠 2暗杠
-     * @param {number} card 牌数据
+     * @param {number} cards 牌数据列表
      * @param {number} seatId 座位号 0自己 3左边 2上边 1右边
      * @param {cc.Node} parentNode 父节点
      * @memberof MJCanvas
      */
-    showGroupCard(type: number, cardId: number, seatId: number, parentNode: cc.Node, initCB: (mcgNode: cc.Node) => void = null) {
-        let mj_card_group: cc.Node = cc.instantiate(this.mj_card_group_Prefab[seatId]);
-        let mcg: MJ_Card_Group = mj_card_group.getComponent('MJ_Card_Group');
-        let csf: cc.SpriteFrame = this.getMJCardSF(cardId);
-        mcg.initData(type, cardId, csf);
-        mj_card_group.parent = parentNode;
-        if (initCB) {
-            initCB(mj_card_group);
+    showGroupCard(type: number, cards: number[], seatId: number, parentNode: cc.Node, initCB: (mcgNode: cc.Node) => void = null) {
+        if (cards && cards.length > 0) {
+            let mj_card_group: cc.Node = cc.instantiate(this.mj_card_group_Prefab[seatId]);
+            let mcg: MJ_Card_Group = mj_card_group.getComponent('MJ_Card_Group');
+            let csf_list = [];
+            cards.forEach(cardId => {
+                let csf = this.getMJCardSF(cardId);
+                csf_list.push(csf);
+            });
+            mcg.initData(type, cards, csf_list);
+            mj_card_group.parent = parentNode;
+            if (initCB) {
+                initCB(mj_card_group);
+            }
         }
     }
 
@@ -842,6 +881,11 @@ export default class MJCanvas extends cc.Component {
             let cardSF = this.getMJCardSF(cardId);
             mcm.initData(cardId, cardSF);
         }
+        //如果是乐山麻将
+        if (dd.gm_manager.mjGameData.tableBaseVo.cfgId === MJ_Game_Type.GAME_TYPE_LSMJ) {
+            let clon = mj_card_mine.getChildByName('clon');
+            if (clon) clon.active = false;
+        }
         mcm.showLight(true);
         mj_card_mine.parent = parentNode;
         mj_card_mine.scale = 0.1;
@@ -865,11 +909,11 @@ export default class MJCanvas extends cc.Component {
      * @param {number[]} cards 
      * @memberof MJCanvas
      */
-    showMoreGang(cardIds: number[], target) {
+    showMoreGang(gList: GangData[], target) {
         this._node_gang = cc.instantiate(this.mj_card_gang_prefab);
         this._node_gang.parent = dd.ui_manager.getRootNode();
         let mjGang = this._node_gang.getComponent('MJ_Gang');
-        mjGang.initData(cardIds, target);
+        mjGang.initData(gList, target);
     }
 
     /**

@@ -1,3 +1,38 @@
+/**
+ * 麻将游戏的类型
+ * @export
+ * @enum {number}
+ */
+export enum MJ_Game_Type {
+    /**
+     * 血战
+     */
+    GAME_TYPE_XZDD = 1,
+    /**
+     * 三人两方
+     */
+    GAME_TYPE_SRLF = 2,
+    /**
+     * 三人三方
+     */
+    GAME_TYPE_SRSF = 3,
+    /**
+     * 两人两方
+     */
+    GAME_TYPE_LRLF = 4,
+    /**
+     * 绵阳麻将
+     */
+    GAME_TYPE_MYMJ = 5,
+    /**
+     * 自贡麻将
+     */
+    GAME_TYPE_ZGMJ = 6,
+    /**
+     * 乐山麻将
+     */
+    GAME_TYPE_LSMJ = 7,
+}
 
 /**
  * 麻将枚举
@@ -404,6 +439,16 @@ export enum Protocol {
      * btVal [int] 表态的结果(0=不报叫,1=报叫)
      */
     MAJIANG_ROOM_BAOJIAO_BT = 514,
+
+    /**
+     * 乐山麻将胡杠碰吃表态
+     * tableId [int] 桌子号
+     * bt [int] 表态类型(0=胡,1=杠,2=碰,3=吃,4=过)
+     * cardId [byte] 表态的牌(目标牌,如幺鸡当3条用,表态牌为3条)
+     * gangType [int] 杠类型(1=巴杠,2=暗杠或直杠)
+     * replace [int] 表态的牌是否是幺鸡
+     */
+    MAJIANG_ROOM_OTHERBREAK_CARD_LSMJ_BT = 515,
 
     /**
      * 发送聊天信息

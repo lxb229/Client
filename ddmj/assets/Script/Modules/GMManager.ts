@@ -1,5 +1,5 @@
 import UDManager from "./UDManager";
-import { MJ_Suit } from "./Protocol";
+import { MJ_Suit, MJ_Game_Type } from "./Protocol";
 import MJ_Game_Mine from '../SceneScript/Game/MJ_Game_Mine';
 /**
  * 游戏管理类
@@ -154,25 +154,28 @@ export default class GMManager {
     turnToGameScene() {
         if (this.mjGameData && this.mjGameData.tableBaseVo) {
             switch (this.mjGameData.tableBaseVo.cfgId) {
-                case 1:
+                case MJ_Game_Type.GAME_TYPE_XZDD:
                     cc.director.loadScene('MJScene');
                     break;
-                case 2:
-                case 3:
+                case MJ_Game_Type.GAME_TYPE_SRLF:
+                case MJ_Game_Type.GAME_TYPE_SRSF:
                     cc.director.loadScene('SRMJScene');
                     break;
-                case 4:
+                case MJ_Game_Type.GAME_TYPE_LRLF:
                     cc.director.loadScene('LRMJScene');
                     break;
-                case 5:
+                case MJ_Game_Type.GAME_TYPE_MYMJ:
                     cc.director.loadScene('MYMJScene');
                     break;
-                case 6:
+                case MJ_Game_Type.GAME_TYPE_ZGMJ:
                     if (this.mjGameData.seats.length === 3) {
                         cc.director.loadScene('ZG3MJScene');
                     } else if (this.mjGameData.seats.length === 4) {
                         cc.director.loadScene('ZG4MJScene');
                     } else { }
+                    break;
+                case MJ_Game_Type.GAME_TYPE_LSMJ:
+                    cc.director.loadScene('LSMJScene');
                     break;
                 default:
                     break;
@@ -414,10 +417,10 @@ export default class GMManager {
      * @param {number[]} cardIds1 碰牌
      * @param {number[]} cardIds2 手牌
      */
-    getCardIdsByCardId(cardIds1: number[], cardIds2: number[]): number[] {
+    getCardIdsByCardId(cardIds1: number[][], cardIds2: number[]): number[] {
         let list = [];
         for (var i = 0; i < cardIds1.length; i++) {
-            let card1 = this.getCardById(cardIds1[i]);
+            let card1 = this.getCardById(cardIds1[i][0]);
             for (var j = 0; j < cardIds2.length; j++) {
                 let card2 = this.getCardById(cardIds2[j]);
                 if (card1.suit === card2.suit && card1.point === card2.point) {
@@ -428,7 +431,151 @@ export default class GMManager {
         }
         return list;
     }
+    /**
+     * 获取杠牌
+     * @param {number[]} cards 
+     * @param {SeatVo} seatInfo 
+     * @memberof GMManager
+     */
+    getGangList(cards: number[], seatInfo: SeatVo) {
+        let gList = [];
+        //获取自己的手牌中，是否有杠牌
+        let scData: SortCardData = this.getSplitList(cards);
+        let agList = this.sortGang(scData.gangList, 2);
+        let bgList = [];
+        //如果自己有碰牌，看看自己的手牌中是否有碰牌的牌，连起来就有4张牌，也可以杠牌
+        if (seatInfo.pengCards && seatInfo.pengCards.length > 0) {
+            //获取手牌中是否存在 已经碰牌的牌，如果有，可以杠
+            let pList = this.getCardIdsByCardId(seatInfo.pengCards, cards);
+            bgList = this.sortGang(pList, 1);
+        }
+        gList = gList.concat(agList, bgList);
+        return gList;
+    }
+    /**
+     * 
+     * @memberof GMManager
+     */
+    /**
+     * 获取乐山麻将，在幺鸡任用的情况下，返回 排除幺鸡的数据，和幺鸡的数量
+     * 还要排除 定缺的牌
+     * @param {number[]} cards 
+     * @param {MJ_Suit} unSuit 
+     * @returns 
+     * @memberof GMManager
+     */
+    getLSExcludeYaoJi(cards: number[], unSuit: MJ_Suit) {
+        let obj = {
+            list: [],
+            yaojinum: 0,
+        };
+        cards.forEach((cardId: number) => {
+            let card = this.getCardById(cardId);
+            //如果是幺鸡
+            if (card.suit === MJ_Suit.SUIT_TYPE_TIAO && card.point === 1) {
+                obj.yaojinum++;
+                //如果是乐山麻将，并未使用了幺鸡任用,也不是定缺的牌
+                if (this.mjGameData.tableBaseVo.yaojiReplace === 0 && card.suit !== unSuit) {
+                    obj.list.push(cardId);
+                }
+            } else {
+                //如果不是幺鸡，并也不是定缺的牌
+                if (card.suit !== unSuit) {
+                    obj.list.push(cardId);
+                }
+            }
+        });
+        return obj;
+    }
 
+    /**
+     * 获取乐山麻将的杠牌
+     * @param {number[]} cards 牌 = 手牌 + 摸牌
+     * @param {SeatVo} seatInfo 玩家的座位
+     * @returns 
+     * @memberof GMManager
+     */
+    getLSGangList(cards: number[], seatInfo: SeatVo) {
+        //如果是乐山麻将
+        let obj = this.getLSExcludeYaoJi(cards, seatInfo.unSuit);
+        let gangObj = {
+            agList: [],//暗杠
+            bgList: [],//巴杠
+            yj_agList: [],//有幺鸡暗杠
+            yj_bgList: [],//有幺鸡巴杠
+        };
+        //获取自己的手牌中，是否有杠牌
+        let scData: SortCardData = this.getSplitList(obj.list);
+        gangObj.agList = scData.gangList;
+        //如果自己有碰牌，看看自己的手牌中是否有碰牌的牌，连起来就有4张牌，也可以杠牌
+        if (seatInfo.pengCards && seatInfo.pengCards.length > 0) {
+            //获取手牌中是否存在 已经碰牌的牌，如果有，可以杠
+            let pList = this.getCardIdsByCardId(seatInfo.pengCards, obj.list);
+            gangObj.bgList = pList;
+        }
+        /**************上面得到的是正常情况下，可以杠牌的牌*******************/
+        //如果乐山麻将开启了 幺鸡任用 的打法
+        if (this.mjGameData.tableBaseVo.yaojiReplace === 1) {
+            if (obj.yaojinum > 0) {
+                //如果自己有碰牌
+                if (seatInfo.pengCards && seatInfo.pengCards.length > 0) {
+                    gangObj.yj_bgList = gangObj.yj_bgList.concat(seatInfo.pengCards);
+                }
+            }
+            switch (obj.yaojinum) {
+                case 1://一张幺鸡，
+                    //手牌中有三张一样的
+                    if (scData.pengList && scData.pengList.length > 0) {
+                        gangObj.yj_agList = gangObj.yj_agList.concat(scData.pengList);
+                    }
+                    break;
+                case 2://二张幺鸡，
+                    //手牌中有三张一样的
+                    if (scData.pengList && scData.pengList.length > 0) {
+                        gangObj.yj_agList = gangObj.yj_agList.concat(scData.pengList);
+                    }
+                    //手牌中有二张一样的
+                    if (scData.duiList && scData.duiList.length > 0) {
+                        gangObj.yj_agList = gangObj.yj_agList.concat(scData.pengList);
+                    }
+                    break;
+                case 3://三张幺鸡，
+                    gangObj.yj_agList = obj.list;
+                    break;
+                default:
+                    break;
+            }
+        }
+        let gangList = [];
+        let anGangList = this.sortGang(gangObj.agList, 2, false);
+        let baGangList = this.sortGang(gangObj.bgList, 1, false);
+        let yj_anGangList = this.sortGang(gangObj.yj_agList, 2, true);
+        let yj_baGangList = this.sortGang(gangObj.yj_bgList, 1, true);
+        gangList = gangList.concat(anGangList, baGangList, yj_anGangList, yj_baGangList);
+        return gangList;
+    }
+    /**
+     * 设置杠牌的信息
+     * @param {number[]} list 
+     * @param {boolean} isUseYaoJi 是否使用幺鸡
+     * @param {boolean} isAnGang  是否是暗杠 1=巴杠 2=暗杠
+     * @returns 
+     * @memberof GMManager
+     */
+    sortGang(list: number[], isAnGang: number, isUseYaoJi: boolean = false) {
+        let sGang = [];
+        if (list && list.length > 0) {
+            list.forEach((cardId: number) => {
+                let gObj: GangData = {
+                    cardId: cardId,
+                    isAnGang: isAnGang,
+                    isUseYaoJi: isUseYaoJi,
+                };
+                sGang.push(gObj);
+            });
+        }
+        return sGang;
+    }
     /**
      * 根据玩家accountId获取座位号
      * 
@@ -585,7 +732,21 @@ export default class GMManager {
         });
         return list;
     }
-
+    /**
+     * 是否是乐山麻将，并开启幺鸡任用
+     * @returns 
+     * @memberof GMManager
+     */
+    getLSMJ_IsYaoJi_ByCardId(cardId: number) {
+        let card = this.getCardById(cardId);
+        //如果是乐山麻将
+        if (this.mjGameData && this.mjGameData.tableBaseVo.cfgId === MJ_Game_Type.GAME_TYPE_LSMJ
+            && this.mjGameData.tableBaseVo.yaojiReplace === 1
+            && card.suit === MJ_Suit.SUIT_TYPE_TIAO && card.point === 1) {
+            return true;
+        }
+        return false;
+    }
     /***************************************麻将算法*************************************************************************** */
     /**
      * 获取可以胡的牌，即听牌
@@ -812,7 +973,7 @@ export default class GMManager {
      */
     private checkQiDui(nums: number[]): boolean {
         if (nums.length !== 14) return false;
-        for (let i = 0; i < 12; i += 2) {
+        for (let i = 0; i <= 12; i += 2) {
             if (nums[i] !== nums[i + 1]) {
                 return false;
             }

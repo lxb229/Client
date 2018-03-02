@@ -6,7 +6,7 @@ import MJ_Game_Others from './MJ_Game_Others';
 import MJ_Card from './MJ_Card';
 import MJ_Card_Group from './MJ_Card_Group';
 import MJCanvas from './MJCanvas';
-import { MJ_GameState, MJ_Act_State, MJ_Act_Type } from '../../Modules/Protocol';
+import { MJ_GameState, MJ_Act_State, MJ_Act_Type, MJ_Game_Type } from '../../Modules/Protocol';
 
 declare interface CardConfig {
     /**
@@ -463,22 +463,22 @@ export default class MJ_Game extends cc.Component {
                         rightSpacing: cc.v2(0, -11)
                     };
                     switch (dd.gm_manager.mjGameData.tableBaseVo.cfgId) {
-                        case 1://血战到底
-                        case 5://绵阳麻将
-                        case 6://自贡麻将
+                        case MJ_Game_Type.GAME_TYPE_XZDD://血战到底
+                        case MJ_Game_Type.GAME_TYPE_MYMJ://绵阳麻将
+                        case MJ_Game_Type.GAME_TYPE_ZGMJ://自贡麻将
                             cardConfig.row = 10;
                             cardConfig.cScale = 1;
                             cardConfig.minSpacing = cc.v2(0, -10);
                             cardConfig.rightSpacing = cc.v2(0, -11);
                             break;
-                        case 2://三人麻将（二方）
-                        case 3://三人麻将（三方）
+                        case MJ_Game_Type.GAME_TYPE_SRLF://三人麻将（二方）
+                        case MJ_Game_Type.GAME_TYPE_SRSF://三人麻将（三方）
                             cardConfig.row = 15;
                             cardConfig.cScale = 0.75;
                             cardConfig.minSpacing = cc.v2(2, -6);
                             cardConfig.rightSpacing = cc.v2(1, -8);
                             break;
-                        case 4://二人麻将（二方）
+                        case MJ_Game_Type.GAME_TYPE_LRLF://二人麻将（二方）
                             cardConfig.row = 16;
                             cardConfig.cScale = 1;
                             cardConfig.minSpacing = cc.v2(0, -11);

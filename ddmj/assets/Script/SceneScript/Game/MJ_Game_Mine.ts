@@ -4,7 +4,7 @@ import MJ_Card from './MJ_Card';
 import MJ_Card_Group from './MJ_Card_Group';
 import MJCanvas from './MJCanvas';
 import * as dd from './../../Modules/ModuleManager';
-import { MJ_GameState, MJ_Act_State, MJ_Suit, MJ_Act_Type } from '../../Modules/Protocol';
+import { MJ_GameState, MJ_Act_State, MJ_Suit, MJ_Act_Type, MJ_Game_Type } from '../../Modules/Protocol';
 
 @ccclass
 export default class MJ_Play extends cc.Component {
@@ -111,13 +111,7 @@ export default class MJ_Play extends cc.Component {
     onLoad() {
         this._canvasTarget = dd.ui_manager.getCanvasNode().getComponent('MJCanvas');
         dd.gm_manager._minScript = this;
-        let sceneName = cc.director.getScene().name;
-        //是否是绵阳麻将
-        if (sceneName === 'MYMJScene') {
-            this._handList = this.node_mine_card.getComponent('MYMJ_HandList');
-        } else {
-            this._handList = this.node_mine_card.getComponent('MJ_HandList');
-        }
+        this.getHandTarget();
     }
 
     /**
@@ -135,7 +129,39 @@ export default class MJ_Play extends cc.Component {
         this.node_state.active = false;
         this.node_lack.active = false;
     }
+    /**
+     * 获取手牌的脚本
+     * @memberof MJ_Play
+     */
+    getHandTarget() {
+        if (dd.gm_manager && dd.gm_manager.mjGameData) {
+            switch (dd.gm_manager.mjGameData.tableBaseVo.cfgId) {
+                case MJ_Game_Type.GAME_TYPE_MYMJ:
+                    this._handList = this.node_mine_card.getComponent('MYMJ_HandList');
+                    break;
+                case MJ_Game_Type.GAME_TYPE_LSMJ:
+                    this._handList = this.node_mine_card.getComponent('LSMJ_HandList');
+                    break;
+                default:
+                    this._handList = this.node_mine_card.getComponent('MJ_HandList');
+                    break;
+            }
+        } else {
+            let sceneName = cc.director.getScene().name;
+            switch (name) {
+                case 'MYMJScene':
+                    this._handList = this.node_mine_card.getComponent('MYMJ_HandList');
+                    break;
+                case 'LSMJScene':
+                    this._handList = this.node_mine_card.getComponent('LSMJ_HandList');
+                    break;
+                default:
+                    this._handList = this.node_mine_card.getComponent('MJ_HandList');
+                    break;
+            }
+        }
 
+    }
     /**
      * 刷新打牌的信息
      * 
@@ -146,13 +172,7 @@ export default class MJ_Play extends cc.Component {
             this._canvasTarget = dd.ui_manager.getCanvasNode().getComponent('MJCanvas');
         }
         if (!this._handList) {
-            let sceneName = cc.director.getScene().name;
-            //是否是绵阳麻将
-            if (sceneName === 'MYMJScene') {
-                this._handList = this.node_mine_card.getComponent('MYMJ_HandList');
-            } else {
-                this._handList = this.node_mine_card.getComponent('MJ_HandList');
-            }
+            this.getHandTarget();
         }
         this._seatInfo = seatInfo;
 
@@ -411,55 +431,21 @@ export default class MJ_Play extends cc.Component {
         dd.mp_manager.playButton();
         switch (type) {
             case '0': {//胡
-                this._canvasTarget.sendOtherBreakCard(MJ_Act_Type.ACT_INDEX_HU, this._seatInfo.breakCard, this.node_state);
+                this.dealBreakCard(MJ_Act_Type.ACT_INDEX_HU, this._seatInfo.breakCard);
                 break;
             }
             case '1': {//杠
-                //如果已经躺牌的话,就只能杠摸的那张牌
-                if (this._seatInfo.tangCardState === 1) {
-                    this._canvasTarget.sendOtherBreakCard(MJ_Act_Type.ACT_INDEX_GANG, this._seatInfo.breakCard, this.node_state);
-                    break;
-                }
-                //如果表态是自己,
-                if (this._seatInfo.seatIndex === dd.gm_manager.mjGameData.tableBaseVo.btIndex) {
-                    let list = this._seatInfo.handCards;
-                    //如果(摸牌)存在，并且是(自己摸牌)，就要把摸得牌算进去
-                    if (this._seatInfo.moPaiCard && dd.gm_manager.mjGameData.tableBaseVo.btIndex === this._seatInfo.seatIndex) {
-                        list = list.concat(this._seatInfo.moPaiCard);
-                    }
-                    let gList = [];
-                    //获取自己的手牌中，是否有杠牌
-                    let scData: SortCardData = dd.gm_manager.getSplitList(list);
-                    gList = scData.gangList;
-                    //如果自己有碰牌，看看自己的手牌中是否有碰牌的牌，连起来就有4张牌，也可以杠牌
-                    if (this._seatInfo.pengCards && this._seatInfo.pengCards.length > 0) {
-                        //获取手牌中是否存在 已经碰牌的牌，如果有，可以杠
-                        let pList = dd.gm_manager.getCardIdsByCardId(this._seatInfo.pengCards, list);
-                        gList = gList.concat(pList);
-                    }
-                    if (gList.length > 0) {//如果自己有杠牌
-                        if (gList.length > 1) {
-                            this._canvasTarget.showMoreGang(gList, this);
-                            this.node_state.active = false;
-                        } else {
-                            this._canvasTarget.sendOtherBreakCard(MJ_Act_Type.ACT_INDEX_GANG, gList[0], this.node_state);
-                        }
-                    } else {
-                        this._canvasTarget.sendOtherBreakCard(MJ_Act_Type.ACT_INDEX_GANG, this._seatInfo.breakCard, this.node_state);
-                    }
-                } else {
-                    this._canvasTarget.sendOtherBreakCard(MJ_Act_Type.ACT_INDEX_GANG, this._seatInfo.breakCard, this.node_state);
-                }
+                this.dealGangBeakCard();
                 break;
             }
             case '2': {//碰
-                this._canvasTarget.sendOtherBreakCard(MJ_Act_Type.ACT_INDEX_PENG, this._seatInfo.breakCard, this.node_state);
+                this.dealBreakCard(MJ_Act_Type.ACT_INDEX_PENG, this._seatInfo.breakCard);
                 break;
             } case '3': {//吃
-                this._canvasTarget.sendOtherBreakCard(MJ_Act_Type.ACT_INDEX_CHI, this._seatInfo.breakCard, this.node_state);
+                this.dealBreakCard(MJ_Act_Type.ACT_INDEX_CHI, this._seatInfo.breakCard);
                 break;
             } case '4': {//过
-                this._canvasTarget.sendOtherBreakCard(MJ_Act_Type.ACT_INDEX_DROP, this._seatInfo.breakCard, this.node_state);
+                this.dealBreakCard(MJ_Act_Type.ACT_INDEX_DROP, this._seatInfo.breakCard);
                 break;
             } case '5': {//绵阳麻将
                 this.showHuiBtn();
@@ -469,7 +455,116 @@ export default class MJ_Play extends cc.Component {
                 break;
         }
     }
+    /**
+     * 处理胡碰杠吃过
+     * @param {MJ_Act_Type} actType 
+     * @param {number} cardId 
+     * @memberof MJ_Play
+     */
+    dealBreakCard(actType: MJ_Act_Type, cardId: number) {
+        switch (dd.gm_manager.mjGameData.tableBaseVo.cfgId) {
+            case MJ_Game_Type.GAME_TYPE_LSMJ://乐山麻将
+                let obj: GangData = {
+                    cardId: cardId,
+                    isAnGang: 1,
+                    isUseYaoJi: false,
+                };
+                this._canvasTarget.sendLSGangBreakCard(actType, obj, this.node_state);
+                break;
+            default:
+                this._canvasTarget.sendOtherBreakCard(actType, cardId, this.node_state);
+                break;
+        }
+    }
+    /**
+     * 处理杠牌
+     * @memberof MJ_Play
+     */
+    dealGangBeakCard() {
+        switch (dd.gm_manager.mjGameData.tableBaseVo.cfgId) {
+            case MJ_Game_Type.GAME_TYPE_MYMJ://绵阳麻将
+                //绵阳麻将，如果已经躺牌的话,就只能杠摸的那张牌
+                if (this._seatInfo.tangCardState === 1) {
+                    this._canvasTarget.sendOtherBreakCard(MJ_Act_Type.ACT_INDEX_GANG, this._seatInfo.breakCard, this.node_state);
+                    break;
+                }
+                this.baseGang();
+                break;
+            case MJ_Game_Type.GAME_TYPE_LSMJ://乐山麻将
+                this.lsGang();
+                break;
+            default:
+                this.baseGang();
+                break;
+        }
+    }
 
+    /**
+     * 基本的杠牌
+     * @memberof MJ_Play
+     */
+    baseGang() {
+        //如果表态是自己,
+        if (this._seatInfo.seatIndex === dd.gm_manager.mjGameData.tableBaseVo.btIndex) {
+            let list = this._seatInfo.handCards;
+            //如果(摸牌)存在，并且是(自己摸牌)，就要把摸得牌算进去
+            if (this._seatInfo.moPaiCard && dd.gm_manager.mjGameData.tableBaseVo.btIndex === this._seatInfo.seatIndex) {
+                list = list.concat(this._seatInfo.moPaiCard);
+            }
+            let gList: GangData[] = dd.gm_manager.getGangList(list, this._seatInfo);
+            if (gList.length > 0) {//如果自己有杠牌,表示是自己 摸牌摸到的杠(摸到的暗杠 + 摸到的巴杠)
+                //如果自己手中有多张杠牌,就显示 选择杠牌界面
+                if (gList.length > 1) {
+                    this._canvasTarget.showMoreGang(gList, this);
+                    this.node_state.active = false;
+                } else {//如果只有一个杠，就直接杠这张牌
+                    this._canvasTarget.sendOtherBreakCard(MJ_Act_Type.ACT_INDEX_GANG, gList[0].cardId, this.node_state);
+                }
+            } else {//如果自己手中没有杠，就直接 杠别人打出来的那张牌
+                this._canvasTarget.sendOtherBreakCard(MJ_Act_Type.ACT_INDEX_GANG, this._seatInfo.breakCard, this.node_state);
+            }
+        } else {//如果没有轮到自己摸牌时的表态，是杠别人打出来的那张牌
+            this._canvasTarget.sendOtherBreakCard(MJ_Act_Type.ACT_INDEX_GANG, this._seatInfo.breakCard, this.node_state);
+        }
+    }
+    /**
+     * 乐山麻将的杠牌
+     * @memberof MJ_Play
+     */
+    lsGang() {
+        //如果表态是自己,
+        if (this._seatInfo.seatIndex === dd.gm_manager.mjGameData.tableBaseVo.btIndex) {
+            let list = this._seatInfo.handCards;
+            //如果(摸牌)存在，并且是(自己摸牌)，就要把摸得牌算进去
+            if (this._seatInfo.moPaiCard && dd.gm_manager.mjGameData.tableBaseVo.btIndex === this._seatInfo.seatIndex) {
+                list = list.concat(this._seatInfo.moPaiCard);
+            }
+            let gList = dd.gm_manager.getLSGangList(list, this._seatInfo);
+            if (gList.length > 0) {//如果自己有杠牌,表示是自己 摸牌摸到的杠(摸到的暗杠 + 摸到的巴杠)
+                //如果自己手中有多张杠牌,就显示 选择杠牌界面
+                if (gList.length > 1) {
+                    this._canvasTarget.showMoreGang(gList, this);
+                    this.node_state.active = false;
+                } else {//如果只有一个杠，就直接杠这张牌
+                    this._canvasTarget.sendLSGangBreakCard(MJ_Act_Type.ACT_INDEX_GANG, gList[0], this.node_state);
+                }
+            } else {//如果自己手中没有杠，就直接 杠别人打出来的那张牌
+                let obj: GangData = {
+                    cardId: this._seatInfo.breakCard,
+                    isAnGang: 1,
+                    isUseYaoJi: false,
+                };
+                this._canvasTarget.sendLSGangBreakCard(MJ_Act_Type.ACT_INDEX_GANG, obj, this.node_state);
+            }
+        } else {//如果没有轮到自己摸牌时的表态，是杠别人打出来的那张牌
+            let obj: GangData = {
+                cardId: this._seatInfo.breakCard,
+                isAnGang: 1,
+                isUseYaoJi: false,
+            };
+            this._canvasTarget.sendLSGangBreakCard(MJ_Act_Type.ACT_INDEX_GANG, obj, this.node_state);
+        }
+    }
     /**
      * 胡杠碰过的表态
      * 

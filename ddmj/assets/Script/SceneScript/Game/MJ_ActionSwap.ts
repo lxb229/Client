@@ -1,5 +1,5 @@
 import * as dd from "../../Modules/ModuleManager";
-import { MJ_Act_State } from "../../Modules/Protocol";
+import { MJ_Act_State, MJ_Game_Type } from "../../Modules/Protocol";
 
 const { ccclass, property } = cc._decorator;
 
@@ -20,13 +20,10 @@ export default class MJ_ActionSwap extends cc.Component {
      */
     showSwapCard(data: MJGameData, cfgId: number) {
         let isAct = true;
-        let sNode = [];
+        let sNode = this.node_card_list;
         switch (cfgId) {
-            case 1:
-                sNode = this.node_card_list;
-                break;
-            case 2:
-            case 3:
+            case MJ_Game_Type.GAME_TYPE_SRLF:
+            case MJ_Game_Type.GAME_TYPE_SRSF:
                 this.node_card_list.forEach((cNode, i) => {
                     if (i !== 2) {//顶部不显示
                         sNode.push(cNode);
@@ -35,7 +32,7 @@ export default class MJ_ActionSwap extends cc.Component {
                     }
                 });
                 break;
-            case 4:
+            case MJ_Game_Type.GAME_TYPE_LRLF:
                 this.node_card_list.forEach((cNode, i) => {
                     if (i !== 1 && i !== 3) {//左右不显示
                         sNode.push(cNode);
@@ -57,7 +54,7 @@ export default class MJ_ActionSwap extends cc.Component {
             }
         }
 
-        if (cfgId === 2 || cfgId === 3 || cfgId === 4) {
+        if (cfgId === MJ_Game_Type.GAME_TYPE_SRLF || cfgId === MJ_Game_Type.GAME_TYPE_SRSF || cfgId === MJ_Game_Type.GAME_TYPE_LRLF) {
             isAct = false;
         }
 

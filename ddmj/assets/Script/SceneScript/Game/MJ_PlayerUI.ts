@@ -1,7 +1,7 @@
 const { ccclass, property } = cc._decorator;
 import MJCanvas from './MJCanvas';
 import * as dd from './../../Modules/ModuleManager';
-import { MJ_GameState } from '../../Modules/Protocol';
+import { MJ_GameState, MJ_Game_Type } from '../../Modules/Protocol';
 @ccclass
 export default class MJ_PlayerUI extends cc.Component {
 
@@ -107,7 +107,7 @@ export default class MJ_PlayerUI extends cc.Component {
         }
 
         switch (dd.gm_manager.mjGameData.tableBaseVo.cfgId) {
-            case 6://自贡麻将
+            case MJ_Game_Type.GAME_TYPE_ZGMJ://自贡麻将
                 if (this._seatInfo.baojiaoState === 1) {
                     this.unSuit.node.active = true;
                     this.unSuit.spriteFrame = this._canvasTarget.unSuit_list[3];

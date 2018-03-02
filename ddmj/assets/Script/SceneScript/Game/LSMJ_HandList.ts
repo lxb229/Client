@@ -4,7 +4,7 @@ import MJ_Card from './MJ_Card';
 import MJ_Card_Group from './MJ_Card_Group';
 import MJCanvas from './MJCanvas';
 import * as dd from './../../Modules/ModuleManager';
-import { MJ_GameState, MJ_Act_State } from '../../Modules/Protocol';
+import { MJ_GameState, MJ_Act_State, MJ_Suit } from '../../Modules/Protocol';
 
 @ccclass
 export default class MJ_HandList extends cc.Component {
@@ -206,8 +206,13 @@ export default class MJ_HandList extends cc.Component {
         this._firstPos = touches[0].getLocation();
         let cardNode = this.getCardNodeByTouch(this._firstPos);
         if (cardNode) {
-            this._selectCardPos = cardNode.getPosition();
             let hcs: MJ_Card = cardNode.getComponent('MJ_Card');
+            let isYaoJi = dd.gm_manager.getLSMJ_IsYaoJi_ByCardId(hcs._cardId);
+            //如果是乐山麻将 + 幺鸡任用 + 这张牌是幺鸡
+            if (isYaoJi) {
+                return;
+            }
+            this._selectCardPos = cardNode.getPosition();
             if (!hcs._isShowMask) {
                 this._selectCard = cardNode;
                 this._selectCard.color = cc.Color.GRAY;
@@ -793,16 +798,30 @@ export default class MJ_HandList extends cc.Component {
     showUnSuit(cardNode: cc.Node, isUnSuit: boolean) {
         if (cardNode) {
             let hcs: MJ_Card = cardNode.getComponent('MJ_Card');
-            //如果没有定缺的牌了
-            if (isUnSuit) {
+            let clon = cardNode.getChildByName('clon');
+            //乐山麻将
+            let isLSYaoJi = dd.gm_manager.getLSMJ_IsYaoJi_ByCardId(hcs._cardId);
+            if (isLSYaoJi) {
                 hcs.showMask(false);
+                if (clon && clon.isValid) {
+                    clon.active = true;
+                }
             } else {
-                //如果还有定缺的牌，就先打定缺的牌
-                let card: CardAttrib = dd.gm_manager.getCardById(hcs._cardId);
-                if (card.suit === this._seatInfo.unSuit) {
+                //如果不是(幺鸡任用 + 幺鸡)，就不显示任用的亮图
+                if (clon && clon.isValid) {
+                    clon.active = false;
+                }
+                //如果没有定缺的牌了
+                if (isUnSuit) {
                     hcs.showMask(false);
                 } else {
-                    hcs.showMask(true);
+                    //如果还有定缺的牌，就先打定缺的牌
+                    let card: CardAttrib = dd.gm_manager.getCardById(hcs._cardId);
+                    if (card.suit === this._seatInfo.unSuit) {
+                        hcs.showMask(false);
+                    } else {
+                        hcs.showMask(true);
+                    }
                 }
             }
         }
@@ -898,7 +917,7 @@ export default class MJ_HandList extends cc.Component {
 
     /**
     * 获取自己是否打完了定缺的牌
-    * 
+    * 乐山麻将+幺鸡任用，需要排除幺鸡
     * @returns {boolean} 
     * @memberof MJ_Play
     */
@@ -906,10 +925,13 @@ export default class MJ_HandList extends cc.Component {
         //是否打完打缺
         let isUnSuit = true;
         for (var i = 0; i < list.length; i++) {
-            let card: CardAttrib = dd.gm_manager.getCardById(list[i]);
-            if (card.suit === this._seatInfo.unSuit) {
-                isUnSuit = false;
-                break;
+            let isYaoJi = dd.gm_manager.getLSMJ_IsYaoJi_ByCardId(list[i]);
+            if (!isYaoJi) {
+                let card: CardAttrib = dd.gm_manager.getCardById(list[i]);
+                if (card.suit === this._seatInfo.unSuit) {
+                    isUnSuit = false;
+                    break;
+                }
             }
         }
         return isUnSuit;

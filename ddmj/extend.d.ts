@@ -311,19 +311,19 @@ declare interface SeatVo {
      * @type {number[]}
      * @memberof SeatVo
      */
-    anGangCards: number[];
+    anGangCards: number[][];
     /**
      * 座位明杠的牌
      * @type {number[]}
      * @memberof SeatVo
      */
-    baGangCards: number[];
+    baGangCards: number[][];
     /**
      * 座位碰的牌
      * @type {number[]}
      * @memberof SeatVo
      */
-    pengCards: number[];
+    pengCards: number[][];
     /**
      * 玩家打出别人不要的牌
      * @type {number[]}
@@ -474,25 +474,25 @@ declare interface SettlementOnceVo {
      * @type {number[]}
      * @memberof SettlementAllVo
      */
-    anGangCards: number[];
+    anGangCards: number[][];
     /**
      *座位巴杠的牌
      * @type {number[]}
      * @memberof SettlementAllVo
      */
-    baGangCards: number[];
+    baGangCards: number[][];
     /**
      * 座位点杠的牌
      * @type {number[]}
      * @memberof SettlementAllVo
      */
-    dianGangCards: number[];
+    dianGangCards: number[][];
     /**
      * 座位碰的牌
      * @type {number[]}
      * @memberof SettlementAllVo
      */
-    pengCards: number[];
+    pengCards: number[][];
     /**
      * 玩家当前已胡的牌
      * @type {number[]}
@@ -645,7 +645,7 @@ declare interface SettlementAllVo {
  */
 declare interface TableBaseVo {
     /**
-     * 游戏ID 1=血战 2=三人两方 3=三人三方
+     * 游戏ID 1=血战 2=三人两方 3=三人三方 4两人两方 5绵阳麻将 6自贡麻将 乐山麻将
      * @type {number}
      * @memberof TableBaseVo
      */
@@ -758,6 +758,12 @@ declare interface TableBaseVo {
      * @memberof TableBaseVo
      */
     tingTips: number;
+    /**
+     * 是否幺鸡任用(0=不替换,1=任用)
+     * @type {number}
+     * @memberof TableBaseVo
+     */
+    yaojiReplace: number;
 }
 
 /**
@@ -827,7 +833,15 @@ declare interface SortCardData {
      */
     duiList: number[];
 }
-
+/**
+ * 杠牌对象数据
+ * @interface GangData
+ */
+declare interface GangData {
+    cardId: number, //杠的牌
+    isAnGang: number, //1=巴杠,2=暗杠或直杠
+    isUseYaoJi: boolean,//是否使用幺鸡
+}
 declare interface ChatData {
     /**
      * 

@@ -110,7 +110,7 @@ export default class Game_Result extends cc.Component {
         dd.mp_manager.playButton();
         if (dd.ui_manager.showLoading()) {
             dd.ud_manager.mineData.tableId = 0;
-            if (dd.gm_manager.mjGameData.tableBaseVo.corpsId !== '0') {
+            if (dd.gm_manager.mjGameData && dd.gm_manager.mjGameData.tableBaseVo.corpsId !== '0') {
                 cc.director.loadScene('ClubScene', () => {
                     dd.gm_manager.destroySelf();
                     cc.sys.garbageCollect();

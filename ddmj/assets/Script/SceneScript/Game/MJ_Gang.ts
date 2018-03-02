@@ -17,6 +17,8 @@ export default class MJ_Gang extends cc.Component {
     @property(cc.Node)
     node_card: cc.Node = null;
 
+    @property(cc.Sprite)
+    icon_gang: cc.Sprite = null;
     /**
      * 牌父节点
      * 
@@ -26,6 +28,8 @@ export default class MJ_Gang extends cc.Component {
     @property(cc.Node)
     nodeLayout: cc.Node = null;
 
+    @property([cc.SpriteFrame])
+    icon_gang_list: cc.SpriteFrame[] = [];
     /**
      * canvas脚本
      * 
@@ -72,17 +76,17 @@ export default class MJ_Gang extends cc.Component {
     /**
      * 初始化数据
      * 
-     * @param {number[]} cardIds 
+     * @param {number[]} gList 
      * @memberof MJ_Gang
      */
-    initData(cardIds: number[], target) {
+    initData(gList: GangData[], target) {
         this._target = target;
-        if (cardIds && cardIds.length > 0) {
-            this.updateCardData(cardIds[0], this.node_card);
-            if (cardIds.length > 1) {
-                for (var i = 1; i < cardIds.length; i++) {
+        if (gList && gList.length > 0) {
+            this.updateCardData(gList[0], this.node_card);
+            if (gList.length > 1) {
+                for (var i = 1; i < gList.length; i++) {
                     let cardNode = cc.instantiate(this.node_card);
-                    this.updateCardData(cardIds[i], cardNode);
+                    this.updateCardData(gList[i], cardNode);
                     cardNode.on("touchstart", this.MJ_Gang_Touch_Start, this);
                     cardNode.on("touchend", this.MJ_Gang_Touch_End, this);
                     cardNode.parent = this.nodeLayout;
@@ -98,14 +102,15 @@ export default class MJ_Gang extends cc.Component {
      * @param {cc.Node} cardNode 牌节点
      * @memberof MJ_Gang
      */
-    updateCardData(cardId: number, cardNode: cc.Node) {
+    updateCardData(gangData: GangData, cardNode: cc.Node) {
         let cardImg = cardNode.getChildByName('cardImg');
         let mask = cardNode.getChildByName('mask');
-        cardNode.tag = cardId;
+        cardNode.tag = gangData.cardId;
         if (cardImg) {
-            let csf: cc.SpriteFrame = this._canvasTarget.getMJCardSF(cardId);
+            let csf: cc.SpriteFrame = this._canvasTarget.getMJCardSF(gangData.cardId);
             cardImg.getComponent(cc.Sprite).spriteFrame = csf;
         }
+        this.icon_gang.spriteFrame = gangData.isAnGang === 1 ? this.icon_gang_list[0] : this.icon_gang_list[1];
         if (mask) {
             mask.active = false;
         }

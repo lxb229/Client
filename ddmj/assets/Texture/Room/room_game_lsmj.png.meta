@@ -1,0 +1,30 @@
+{
+  "ver": "1.0.0",
+  "uuid": "e455b390-f7f7-4d4d-b81f-f2c6440028b0",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "subMetas": {
+    "room_game_lsmj": {
+      "ver": "1.0.3",
+      "uuid": "ca160e7a-d256-4ac5-bb2e-eb674d4ad9fe",
+      "rawTextureUuid": "e455b390-f7f7-4d4d-b81f-f2c6440028b0",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 270,
+      "height": 91,
+      "rawWidth": 270,
+      "rawHeight": 91,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

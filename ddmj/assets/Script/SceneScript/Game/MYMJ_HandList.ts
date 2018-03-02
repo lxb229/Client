@@ -437,11 +437,15 @@ export default class MJ_HandList extends cc.Component {
         }
 
         //是否是绵阳麻将
+        let cNode_width = 76;
+        if (this._hand_card_list[0]) {
+            cNode_width = this._hand_card_list[0].width;
+        }
         //如果是自己表态，并且 摸牌存在，合并到手牌数组中
         if (dd.gm_manager.mjGameData.tableBaseVo.btIndex === this._seatInfo.seatIndex && this._seatInfo.moPaiCard > 0) {
-            this.node_hand.width = 85 * (handCards.length - 1) + 10;
+            this.node_hand.width = cNode_width * (handCards.length - 1) + 10;
         } else {
-            this.node_hand.width = 85 * handCards.length + 10;
+            this.node_hand.width = cNode_width * handCards.length + 10;
         }
         cc.log('手牌的数量-----' + handCards.length + '-----手牌节点的宽度：' + this.node_hand.width);
     }

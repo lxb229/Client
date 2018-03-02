@@ -9,7 +9,7 @@ import GMManager from './GMManager';
 import UIManager from './UIManager';
 import ENCManger from './ENCManager';
 import MPManager from './MPManager';
-import { Protocol } from './Protocol';
+import { Protocol, MJ_Game_Type } from './Protocol';
 
 /**
  * js调用native管理对象
@@ -103,7 +103,7 @@ export let cb_diconnect: (event: cc.Event.EventCustom) => void = (event: cc.Even
                                         gm_manager.mjGameData = content as MJGameData;
                                         gm_manager.replayMJ = 0;
                                         switch (gm_manager.mjGameData.tableBaseVo.cfgId) {
-                                            case 1:
+                                            case MJ_Game_Type.GAME_TYPE_XZDD:
                                                 if (sceneName !== 'MJScene') {
                                                     cc.director.loadScene('MJScene');
                                                 } else {
@@ -111,8 +111,8 @@ export let cb_diconnect: (event: cc.Event.EventCustom) => void = (event: cc.Even
                                                     ui_manager.hideLoading();
                                                 }
                                                 break;
-                                            case 2:
-                                            case 3:
+                                            case MJ_Game_Type.GAME_TYPE_SRLF:
+                                            case MJ_Game_Type.GAME_TYPE_SRSF:
                                                 if (sceneName !== 'SRMJScene') {
                                                     cc.director.loadScene('SRMJScene');
                                                 } else {
@@ -120,7 +120,7 @@ export let cb_diconnect: (event: cc.Event.EventCustom) => void = (event: cc.Even
                                                     ui_manager.hideLoading();
                                                 }
                                                 break;
-                                            case 4:
+                                            case MJ_Game_Type.GAME_TYPE_LRLF:
                                                 if (sceneName !== 'LRMJScene') {
                                                     cc.director.loadScene('LRMJScene');
                                                 } else {
@@ -128,7 +128,7 @@ export let cb_diconnect: (event: cc.Event.EventCustom) => void = (event: cc.Even
                                                     ui_manager.hideLoading();
                                                 }
                                                 break;
-                                            case 5:
+                                            case MJ_Game_Type.GAME_TYPE_MYMJ:
                                                 if (sceneName !== 'MYMJScene') {
                                                     cc.director.loadScene('MYMJScene');
                                                 } else {
@@ -136,7 +136,7 @@ export let cb_diconnect: (event: cc.Event.EventCustom) => void = (event: cc.Even
                                                     ui_manager.hideLoading();
                                                 }
                                                 break;
-                                            case 6:
+                                            case MJ_Game_Type.GAME_TYPE_ZGMJ:
                                                 if (sceneName !== 'ZGMJScene') {
                                                     if (gm_manager.mjGameData.seats.length === 3) {
                                                         cc.director.loadScene('ZG3MJScene');
