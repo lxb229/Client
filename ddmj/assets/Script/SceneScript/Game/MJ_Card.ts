@@ -181,7 +181,6 @@ export default class MJ_Card extends cc.Component {
         this._isSelect = isSelect;
         if (isSelect) {
             this.node.y = this._chooseY;
-            mp_manager.playSelect();
         } else {
             this.node.y = this._nomalY;
         }

@@ -214,6 +214,23 @@ export default class MJ_HandList extends cc.Component {
     touchBegan = (event: cc.Event.EventTouch) => {
         event.stopPropagation();
         if (event.getTouches().length > 1) return;
+        //只要点中牌，就播放音效，并且把其他牌都收回来
+
+        let touches = event.getTouches();
+        let cardNode = this.getCardNodeByTouch(touches[0].getLocation());
+        let tag = -1;
+        if (cardNode) {
+            tag = cardNode.tag;
+        }
+        if (cardNode !== this._selectCard) {
+            dd.mp_manager.playSelect();
+        }
+        //不在换牌 和 定缺的阶段
+        if (dd.gm_manager.mjGameData.tableBaseVo.gameState !== MJ_GameState.STATE_TABLE_SWAPCARD
+            && dd.gm_manager.mjGameData.tableBaseVo.gameState !== MJ_GameState.STATE_TABLE_DINGQUE) {
+            this.unSelectExclude(tag);
+        }
+
         if (dd.gm_manager.touchTarget || !this._isCanPlay) {
             dd.gm_manager.touchTarget = null;
             if (this._selectCard) {
@@ -224,9 +241,7 @@ export default class MJ_HandList extends cc.Component {
             return;
         }
         dd.gm_manager.touchTarget = event.touch;
-        let touches = event.getTouches();
         this._firstPos = touches[0].getLocation();
-        let cardNode = this.getCardNodeByTouch(this._firstPos);
         if (cardNode) {
             this._selectCardPos = cardNode.getPosition();
             let hcs: MJ_Card = cardNode.getComponent('MJ_Card');
@@ -951,7 +966,19 @@ export default class MJ_HandList extends cc.Component {
         }
         return cNode;
     }
-
+    /**
+     * 除了 cardId 之外，其他牌都收回来
+     * @memberof MJ_HandList
+     */
+    unSelectExclude(cardId: number) {
+        for (var i = 0; i < this._hand_card_list.length; i++) {
+            let hnc: cc.Node = this._hand_card_list[i];
+            let hcs: MJ_Card = hnc.getComponent('MJ_Card');
+            if (hcs._cardId !== cardId) {
+                hcs.showSelectCard(false);
+            }
+        }
+    }
     /**
      * 根据cardId选中牌
      * 

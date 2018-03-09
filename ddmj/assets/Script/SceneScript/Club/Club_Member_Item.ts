@@ -54,7 +54,7 @@ export default class Club_Member_Item extends cc.Component {
         this._cb = cb;
         this._target = target;
 
-        this.lblName.string = data.nick;
+        this.lblName.string = dd.utils.getStringBySize(data.nick,8);
         this.showHead();
         switch (data.state) {
             case 0:

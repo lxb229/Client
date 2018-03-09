@@ -1,14 +1,14 @@
 {
   "ver": "1.0.0",
-  "uuid": "45ba8efe-2c4e-45a9-bbcc-15da5bf39da6",
+  "uuid": "e6c9f3ad-761b-4983-b31e-3f5d56f4ca5a",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
   "subMetas": {
-    "room_game_mjym": {
+    "room_game_ncmj": {
       "ver": "1.0.3",
-      "uuid": "ff6fdcb6-1555-447f-8c44-7a70c5959704",
-      "rawTextureUuid": "45ba8efe-2c4e-45a9-bbcc-15da5bf39da6",
+      "uuid": "b2a2d5c3-f91b-4935-8317-eaa208842269",
+      "rawTextureUuid": "e6c9f3ad-761b-4983-b31e-3f5d56f4ca5a",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,

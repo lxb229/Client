@@ -319,6 +319,12 @@ declare interface SeatVo {
      */
     baGangCards: number[][];
     /**
+     * 座位点杠的牌
+     * @type {number[]}
+     * @memberof SeatVo
+     */
+    dianGangCards: number[][];
+    /**
      * 座位碰的牌
      * @type {number[]}
      * @memberof SeatVo
@@ -764,6 +770,12 @@ declare interface TableBaseVo {
      * @memberof TableBaseVo
      */
     yaojiReplace: number;
+    /**
+     * 手牌张数
+     * @type {number}
+     * @memberof TableBaseVo
+     */
+    handCardNum: number;
 }
 
 /**
@@ -839,7 +851,12 @@ declare interface SortCardData {
  */
 declare interface GangData {
     cardId: number, //杠的牌
-    isAnGang: number, //1=巴杠,2=暗杠或直杠
+    /**
+     * 1=巴杠,2=暗杠或直杠
+     * @type {number}
+     * @memberof GangData
+     */
+    isAnGang: number,
     isUseYaoJi: boolean,//是否使用幺鸡
 }
 declare interface ChatData {

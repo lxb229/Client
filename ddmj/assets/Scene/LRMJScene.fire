@@ -45,7 +45,7 @@
     "_globalZOrder": 0,
     "_opacityModifyRGB": false,
     "groupIndex": 0,
-    "autoReleaseAssets": null
+    "autoReleaseAssets": {}
   },
   {
     "__type__": "cc.Node",
@@ -1232,7 +1232,7 @@
     "_N$file": null,
     "_isSystemFontUsed": true,
     "_spacingX": 0,
-    "_N$string": "4番封顶 碰碰胡 将对 自摸加番 换三张",
+    "_N$string": "",
     "_N$horizontalAlign": 1,
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Arial",
@@ -1300,7 +1300,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 50.05,
+      "width": 0,
       "height": 20
     },
     "_rotationX": 0,
@@ -1335,7 +1335,7 @@
     "_N$file": null,
     "_isSystemFontUsed": true,
     "_spacingX": 0,
-    "_N$string": "21:40",
+    "_N$string": "",
     "_N$horizontalAlign": 1,
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Arial",
@@ -1403,7 +1403,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 121.17,
+      "width": 65.56,
       "height": 20
     },
     "_rotationX": 0,
@@ -1438,7 +1438,7 @@
     "_N$file": null,
     "_isSystemFontUsed": true,
     "_spacingX": 0,
-    "_N$string": "房间号:99999",
+    "_N$string": "房间号:",
     "_N$horizontalAlign": 0,
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Arial",
@@ -3246,7 +3246,7 @@
       }
     ],
     "_tag": -1,
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 118
@@ -4421,7 +4421,7 @@
       }
     ],
     "_tag": -1,
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 151
@@ -5882,7 +5882,7 @@
       }
     ],
     "_tag": -1,
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 299
@@ -8509,7 +8509,7 @@
       "__id__": 188
     },
     "_enabled": true,
-    "isAlignOnce": true,
+    "isAlignOnce": false,
     "_target": null,
     "_alignFlags": 9,
     "_left": 0,
@@ -8823,7 +8823,7 @@
       "__id__": 182
     },
     "_enabled": true,
-    "isAlignOnce": true,
+    "isAlignOnce": false,
     "_target": null,
     "_alignFlags": 17,
     "_left": 984,
@@ -8852,6 +8852,10 @@
     "node_hand": {
       "__id__": 193
     },
+    "node_all_cards": {
+      "__id__": 188
+    },
+    "node_id": 2,
     "lblTip": {
       "__id__": 232
     },
@@ -9616,7 +9620,7 @@
       "__id__": 251
     },
     "_enabled": true,
-    "isAlignOnce": true,
+    "isAlignOnce": false,
     "_target": null,
     "_alignFlags": 36,
     "_left": 0,
@@ -10245,7 +10249,7 @@
     "_alignFlags": 17,
     "_left": 0,
     "_right": 0,
-    "_top": -58,
+    "_top": -30,
     "_bottom": 120,
     "_verticalCenter": 0,
     "_horizontalCenter": 0,
@@ -11169,7 +11173,7 @@
     "_position": {
       "__type__": "cc.Vec2",
       "x": 0,
-      "y": 31
+      "y": 179
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -11213,7 +11217,7 @@
     "_alignFlags": 17,
     "_left": 0,
     "_right": 0,
-    "_top": 64,
+    "_top": -84,
     "_bottom": 123,
     "_verticalCenter": 74,
     "_horizontalCenter": 0,

@@ -2,7 +2,9 @@
   "appKey": "",
   "appSecret": "",
   "encryptJs": true,
-  "excludeScenes": [],
+  "excludeScenes": [
+    "7402eba9-dc6d-49e1-95f6-6bb247223357"
+  ],
   "includeAnySDK": false,
   "includeSDKBox": false,
   "inlineSpriteFrames": true,

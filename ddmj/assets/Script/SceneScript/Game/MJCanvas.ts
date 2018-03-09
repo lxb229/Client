@@ -5,7 +5,7 @@ import MJ_Card from './MJ_Card';
 import MJ_Card_Group from './MJ_Card_Group';
 
 import * as dd from './../../Modules/ModuleManager';
-import { MJ_GameState, MJ_Suit, MJ_Act_Type, MJ_Game_Type } from '../../Modules/Protocol';
+import { MJ_GameState, MJ_Suit, MJ_Act_Type, MJ_Game_Type, MJ_Act_State } from '../../Modules/Protocol';
 @ccclass
 export default class MJCanvas extends cc.Component {
     /**
@@ -525,14 +525,14 @@ export default class MJCanvas extends cc.Component {
         } else {
             this.node_game.active = true;
         }
-        this._mjGame.showGameInfo();
 
+        let isSwapEnd = this.getIsSwapEnd();
+        if (!isSwapEnd) {
+            this._mjGame.showGameInfo();
+        }
         //游戏状态
         switch (dd.gm_manager.mjGameData.tableBaseVo.gameState) {
             case MJ_GameState.STATE_TABLE_READY:
-                break;
-            case MJ_GameState.STATE_TABLE_SWAPCARD:
-                this.showSwapAct();
                 break;
             case MJ_GameState.STATE_TABLE_BREAKCARD:
                 //处理胡杠碰吃过表态结果
@@ -558,17 +558,39 @@ export default class MJCanvas extends cc.Component {
                     });
                 }
                 break;
-            case MJ_GameState.STATE_TABLE_DESTORY:
-                this.showDisband();
-                break;
             default:
                 break;
         }
 
         this.showDisband();
-        this.showSwapAct();
+        this.showSwapAct(isSwapEnd);
     }
 
+    /**
+     * 获取是否换牌结束
+     * @memberof MJCanvas
+     */
+    getIsSwapEnd() {
+        let isSwapEnd = false;
+        if (dd.gm_manager.mjGameData.tableBaseVo.gameState === MJ_GameState.STATE_TABLE_SWAPCARD) {
+            let isEnd = true;
+            let handCard = 0;
+            for (var i = 0; i < dd.gm_manager.mjGameData.seats.length; i++) {
+                let seat: SeatVo = dd.gm_manager.mjGameData.seats[i];
+                if (seat.btState === MJ_Act_State.ACT_STATE_WAIT) {
+                    isEnd = false;
+                }
+                if (seat.accountId === dd.ud_manager.mineData.accountId) {
+                    handCard = seat.handCardsLen;
+                }
+            }
+            //换牌结束后，不刷新界面
+            if (isEnd && handCard === 13) {
+                isSwapEnd = true;
+            }
+        }
+        return isSwapEnd;
+    }
     /**
      * 换牌表态
      * 
@@ -655,7 +677,7 @@ export default class MJCanvas extends cc.Component {
      * 胡杠碰吃表态
      * bt [int] 表态类型(0=胡,1=杠,2=碰,3=吃,4=过)
      * cardId [byte] 表态的牌(目标牌,如幺鸡当3条用,表态牌为3条)
-     * gangType [int] 杠类型(1=巴杠,2=暗杠或直杠)
+     * gangType [int] 杠类型(1=巴杠,2=暗杠 3=直杠)
      * replace [int] 表态的牌是否是幺鸡
      *  @param {cc.Node} node_state 表态节点
      * @memberof MJCanvas
@@ -819,7 +841,7 @@ export default class MJCanvas extends cc.Component {
     /**
      *  根据类型创建杠/碰牌的节点
      * 
-     * @param {number} type 0碰牌 1明杠 2暗杠
+     * @param {number} type 0碰牌 1巴杠 2暗杠 3直杠
      * @param {number} cards 牌数据列表
      * @param {number} seatId 座位号 0自己 3左边 2上边 1右边
      * @param {cc.Node} parentNode 父节点
@@ -944,15 +966,17 @@ export default class MJCanvas extends cc.Component {
      * 
      * @memberof MJCanvas
      */
-    showSwapAct() {
+    showSwapAct(isSwapEnd: boolean) {
         if (dd.gm_manager.mjGameData.tableBaseVo.gameState === MJ_GameState.STATE_TABLE_SWAPCARD) {
-            if (!this._act_swap || !this._act_swap.isValid) {
-                this._act_swap = cc.instantiate(this.act_swap_prefab);
-                this._act_swap.setPosition(cc.p(0, 12));
-                this._act_swap.parent = dd.ui_manager.getRootNode();
+            if (!isSwapEnd) {
+                if (!this._act_swap || !this._act_swap.isValid) {
+                    this._act_swap = cc.instantiate(this.act_swap_prefab);
+                    this._act_swap.setPosition(cc.p(0, 12));
+                    this._act_swap.parent = dd.ui_manager.getRootNode();
+                }
+                let swapAct = this._act_swap.getComponent('MJ_ActionSwap');
+                swapAct.showSwapCard(dd.gm_manager.mjGameData, dd.gm_manager.mjGameData.tableBaseVo.cfgId);
             }
-            let swapAct = this._act_swap.getComponent('MJ_ActionSwap');
-            swapAct.showSwapCard(dd.gm_manager.mjGameData, dd.gm_manager.mjGameData.tableBaseVo.cfgId);
         } else {
             if (this._act_swap && this._act_swap.isValid && dd.gm_manager.mjGameData.tableBaseVo.gameState !== MJ_GameState.STATE_TABLE_DINGQUE) {
                 this._act_swap.removeFromParent(true);

@@ -3121,7 +3121,7 @@
     "_alignFlags": 18,
     "_left": 0,
     "_right": 0,
-    "_top": 0,
+    "_top": 120,
     "_bottom": 21,
     "_verticalCenter": -36,
     "_horizontalCenter": 0,
@@ -3777,7 +3777,7 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 180,
+      "x": 179.95839999999998,
       "y": 2
     },
     "_skewX": 0,
@@ -5267,7 +5267,7 @@
       "__id__": 139
     },
     "_enabled": true,
-    "isAlignOnce": true,
+    "isAlignOnce": false,
     "_target": null,
     "_alignFlags": 45,
     "_left": 0,
@@ -5293,7 +5293,7 @@
       "__id__": 138
     },
     "_enabled": true,
-    "isAlignOnce": true,
+    "isAlignOnce": false,
     "_target": null,
     "_alignFlags": 40,
     "_left": 0,
@@ -5456,20 +5456,20 @@
     "_enabled": true,
     "isAlignOnce": false,
     "_target": null,
-    "_alignFlags": 37,
-    "_left": 603.9999999999999,
-    "_right": 20,
+    "_alignFlags": 45,
+    "_left": 0.3006,
+    "_right": 0.015855696202531657,
     "_top": 20,
     "_bottom": 24,
     "_verticalCenter": 0,
     "_horizontalCenter": 0,
-    "_isAbsLeft": true,
-    "_isAbsRight": true,
+    "_isAbsLeft": false,
+    "_isAbsRight": false,
     "_isAbsTop": true,
     "_isAbsBottom": true,
     "_isAbsHorizontalCenter": true,
     "_isAbsVerticalCenter": true,
-    "_originalWidth": 240,
+    "_originalWidth": 864,
     "_originalHeight": 670
   },
   {
@@ -5511,7 +5511,7 @@
     "_alignFlags": 18,
     "_left": 0,
     "_right": 0,
-    "_top": 130,
+    "_top": 120,
     "_bottom": 14,
     "_verticalCenter": -48,
     "_horizontalCenter": 0,
@@ -5580,7 +5580,7 @@
     "_position": {
       "__type__": "cc.Vec2",
       "x": 0,
-      "y": -12
+      "y": -5
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -9030,9 +9030,9 @@
     "_alignFlags": 18,
     "_left": 0,
     "_right": 0,
-    "_top": 89,
+    "_top": 120,
     "_bottom": 55,
-    "_verticalCenter": -12,
+    "_verticalCenter": -5,
     "_horizontalCenter": 0,
     "_isAbsLeft": true,
     "_isAbsRight": true,
@@ -12438,7 +12438,7 @@
     "_alignFlags": 18,
     "_left": 0,
     "_right": 0,
-    "_top": 89,
+    "_top": 135,
     "_bottom": 55,
     "_verticalCenter": -50,
     "_horizontalCenter": 0,
@@ -13541,7 +13541,7 @@
       "b": 105,
       "a": 255
     },
-    "_N$maxLength": 9,
+    "_N$maxLength": 8,
     "_N$stayOnTop": false
   },
   {
@@ -14918,7 +14918,7 @@
       "b": 105,
       "a": 255
     },
-    "_N$maxLength": 9,
+    "_N$maxLength": 6,
     "_N$stayOnTop": false
   },
   {
@@ -15357,8 +15357,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 212,
-      "height": 40
+      "width": 0,
+      "height": 30
     },
     "_rotationX": 0,
     "_rotationY": 0,
@@ -15388,7 +15388,7 @@
     "_actualFontSize": 30,
     "_fontSize": 30,
     "_lineHeight": 30,
-    "_enableWrapText": true,
+    "_enableWrapText": false,
     "_N$file": null,
     "_isSystemFontUsed": true,
     "_spacingX": 0,
@@ -15396,7 +15396,7 @@
     "_N$horizontalAlign": 0,
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Arial",
-    "_N$overflow": 1
+    "_N$overflow": 0
   },
   {
     "__type__": "cc.Widget",
@@ -15412,7 +15412,7 @@
     "_left": 240,
     "_right": 0,
     "_top": 0,
-    "_bottom": 0,
+    "_bottom": 5,
     "_verticalCenter": 0,
     "_horizontalCenter": 0,
     "_isAbsLeft": true,
@@ -15460,8 +15460,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 212,
-      "height": 40
+      "width": 0,
+      "height": 30
     },
     "_rotationX": 0,
     "_rotationY": 0,
@@ -15491,7 +15491,7 @@
     "_actualFontSize": 30,
     "_fontSize": 30,
     "_lineHeight": 30,
-    "_enableWrapText": true,
+    "_enableWrapText": false,
     "_N$file": null,
     "_isSystemFontUsed": true,
     "_spacingX": 0,
@@ -15499,7 +15499,7 @@
     "_N$horizontalAlign": 0,
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Arial",
-    "_N$overflow": 1
+    "_N$overflow": 0
   },
   {
     "__type__": "cc.Widget",
@@ -15514,7 +15514,7 @@
     "_alignFlags": 9,
     "_left": 240,
     "_right": 0,
-    "_top": 0,
+    "_top": 5,
     "_bottom": 0,
     "_verticalCenter": 0,
     "_horizontalCenter": 0,

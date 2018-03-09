@@ -55,7 +55,6 @@ export default class MJ_Game extends cc.Component {
      */
     @property(cc.RichText)
     lblGameInfo: cc.RichText = null;
-
     /**
      * 轮到该谁表态的节点列表
      * 
@@ -196,11 +195,17 @@ export default class MJ_Game extends cc.Component {
     showTableState() {
         this._nowTime = dd.gm_manager.getDiffTime(dd.gm_manager.mjGameData.tableBaseVo.svrTime, dd.gm_manager.mjGameData.tableBaseVo.actTime);
         this.lblTime.string = this._nowTime + '';
-        this.lblGameInfo.string = '<color=#4ecab1>剩余 </c><color=#ffc600>' + dd.gm_manager.mjGameData.tableBaseVo.tableCardNum
-            + '</c><color=#4ecab1> 张</c><color=#4ecab1>   第 </c><color=#ffc600>'
-            + dd.gm_manager.mjGameData.tableBaseVo.currGameNum + '/' + dd.gm_manager.mjGameData.tableBaseVo.maxGameNum + '</c><color=#4ecab1> 局</c>';
-
-        let pIndex = dd.gm_manager.getIndexBySeatId(dd.gm_manager.mjGameData.tableBaseVo.btIndex);
+        let pIndex = -1;
+        //大于定缺的时候，显示游戏信息
+        if (dd.gm_manager.mjGameData.tableBaseVo.gameState > MJ_GameState.STATE_TABLE_DINGQUE) {
+            this.lblGameInfo.node.parent.active = true;
+            this.lblGameInfo.string = '<color=#4ecab1>剩余 </c><color=#ffc600>' + dd.gm_manager.mjGameData.tableBaseVo.tableCardNum
+                + '</c><color=#4ecab1> 张</c><color=#4ecab1>   第 </c><color=#ffc600>'
+                + dd.gm_manager.mjGameData.tableBaseVo.currGameNum + '/' + dd.gm_manager.mjGameData.tableBaseVo.maxGameNum + '</c><color=#4ecab1> 局</c>';
+            pIndex = dd.gm_manager.getIndexBySeatId(dd.gm_manager.mjGameData.tableBaseVo.btIndex);
+        } else {
+            this.lblGameInfo.node.parent.active = false;
+        }
         for (var i = 0; i < this.node_state_list.length; i++) {
             if (pIndex === i) {
                 this.node_state_list[i].active = true;
@@ -388,6 +393,11 @@ export default class MJ_Game extends cc.Component {
                 if (seatInfo.anGangCards) {
                     for (var i = 0; i < seatInfo.anGangCards.length; i++) {
                         this._canvasTarget.showGroupCard(2, seatInfo.anGangCards[i], sId, node_group);
+                    }
+                }
+                if (seatInfo.dianGangCards) {
+                    for (var i = 0; i < seatInfo.dianGangCards.length; i++) {
+                        this._canvasTarget.showGroupCard(3, seatInfo.dianGangCards[i], sId, node_group);
                     }
                 }
             }

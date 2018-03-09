@@ -57,7 +57,6 @@ export default class MJ_ActionSwap extends cc.Component {
         if (cfgId === MJ_Game_Type.GAME_TYPE_SRLF || cfgId === MJ_Game_Type.GAME_TYPE_SRSF || cfgId === MJ_Game_Type.GAME_TYPE_LRLF) {
             isAct = false;
         }
-
         if (isAct) {
             let anim = this.node.getComponent(cc.Animation);
             switch (data.tableBaseVo.swapCardType) {

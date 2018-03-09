@@ -17,7 +17,20 @@ export default class MJ_Play extends cc.Component {
      */
     @property(cc.Node)
     node_hand: cc.Node = null;
-
+    /**
+     * 所有手牌的节点(碰 + 杠 + 手牌 + 摸牌)
+     * @type {cc.Node}
+     * @memberof MJ_Play
+     */
+    @property(cc.Node)
+    node_all_cards: cc.Node = null;
+    /**
+     * 节点的id 1=右边 2=上 3=左边
+     * @type {Number}
+     * @memberof MJ_Play
+     */
+    @property(Number)
+    node_id: number = 0;
     /**
      * 提示的文本
      * 
@@ -54,6 +67,48 @@ export default class MJ_Play extends cc.Component {
     _seatInfo: SeatVo = null;
     onLoad() {
         this._canvasTarget = dd.ui_manager.getCanvasNode().getComponent('MJCanvas');
+        this.setHandPosition();
+    }
+    /**
+     * 设置手牌的位置
+     * @memberof MJ_HandList
+     */
+    setHandPosition() {
+        let dx = 0;
+        switch (dd.gm_manager.mjGameData.tableBaseVo.handCardNum) {
+            case 7:
+                if (this.node_id === 2) {
+                    dx = 150;
+                } else {
+                    dx = 100;
+                }
+                break;
+            case 10:
+                if (this.node_id === 2) {
+                    dx = 100;
+                } else {
+                    dx = 50;
+                }
+                break;
+            case 13:
+                dx = 0;
+                break;
+            default:
+        }
+        let widget = this.node_all_cards.getComponent(cc.Widget);
+        switch (this.node_id) {
+            case 1:
+                widget.top = dx;
+                break;
+            case 2:
+                widget.left = dx;
+                break;
+            case 3:
+                widget.bottom = dx;
+                break;
+            default:
+                break;
+        }
     }
 
     /**

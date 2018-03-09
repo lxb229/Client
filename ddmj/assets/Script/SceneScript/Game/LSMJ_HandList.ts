@@ -4,7 +4,7 @@ import MJ_Card from './MJ_Card';
 import MJ_Card_Group from './MJ_Card_Group';
 import MJCanvas from './MJCanvas';
 import * as dd from './../../Modules/ModuleManager';
-import { MJ_GameState, MJ_Act_State, MJ_Suit } from '../../Modules/Protocol';
+import { MJ_GameState, MJ_Act_State, MJ_Suit, MJ_Game_Type } from '../../Modules/Protocol';
 
 @ccclass
 export default class MJ_HandList extends cc.Component {
@@ -192,6 +192,23 @@ export default class MJ_HandList extends cc.Component {
     touchBegan = (event: cc.Event.EventTouch) => {
         event.stopPropagation();
         if (event.getTouches().length > 1) return;
+        //只要点中牌，就播放音效，并且把其他牌都收回来
+
+        let touches = event.getTouches();
+        let cardNode = this.getCardNodeByTouch(touches[0].getLocation());
+        let tag = -1;
+        if (cardNode) {
+            tag = cardNode.tag;
+        }
+        if (cardNode !== this._selectCard) {
+            dd.mp_manager.playSelect();
+        }
+        //不在换牌 和 定缺的阶段
+        if (dd.gm_manager.mjGameData.tableBaseVo.gameState !== MJ_GameState.STATE_TABLE_SWAPCARD
+            && dd.gm_manager.mjGameData.tableBaseVo.gameState !== MJ_GameState.STATE_TABLE_DINGQUE) {
+            this.unSelectExclude(tag);
+        }
+
         if (dd.gm_manager.touchTarget || !this._isCanPlay) {
             dd.gm_manager.touchTarget = null;
             if (this._selectCard) {
@@ -202,9 +219,7 @@ export default class MJ_HandList extends cc.Component {
             return;
         }
         dd.gm_manager.touchTarget = event.touch;
-        let touches = event.getTouches();
         this._firstPos = touches[0].getLocation();
-        let cardNode = this.getCardNodeByTouch(this._firstPos);
         if (cardNode) {
             let hcs: MJ_Card = cardNode.getComponent('MJ_Card');
             let isYaoJi = dd.gm_manager.getLSMJ_IsYaoJi_ByCardId(hcs._cardId);
@@ -354,14 +369,13 @@ export default class MJ_HandList extends cc.Component {
      * @memberof MJ_HandList
      */
     setHandPosition() {
-        let gcn = dd.gm_manager.getGameCardNum();
         let widget = this.node_hand.getComponent(cc.Widget);
-        switch (gcn) {
+        switch (dd.gm_manager.mjGameData.tableBaseVo.handCardNum) {
             case 7:
-                widget.right = 138;
+                widget.right = 150;
                 break;
             case 10:
-                widget.right = 38;
+                widget.right = 50;
                 break;
             case 13:
                 widget.right = 0;
@@ -390,7 +404,17 @@ export default class MJ_HandList extends cc.Component {
         //移动其他手牌
         let handCards = [];
         if (this._seatInfo.handCards) {
-            handCards = this._seatInfo.handCards;
+            let yjList = [];
+            this._seatInfo.handCards.forEach((cardId: number) => {
+                let card = dd.gm_manager.getCardById(cardId);
+                //如果是幺鸡
+                if (card.suit === MJ_Suit.SUIT_TYPE_TIAO && card.point === 1) {
+                    yjList.push(cardId);
+                } else {
+                    handCards.push(cardId);
+                }
+            });
+            handCards = handCards.concat(yjList);
         }
         //如果是自己表态，并且 摸牌存在，合并到手牌数组中
         if (dd.gm_manager.mjGameData.tableBaseVo.btIndex === this._seatInfo.seatIndex && this._seatInfo.moPaiCard > 0) {
@@ -461,11 +485,15 @@ export default class MJ_HandList extends cc.Component {
                 isShow = true;
             }
         }
+        //如果要显示听牌提示
+        let list = handCards.splice(0);
         for (var i = 0; i < this._hand_card_list.length; i++) {
             let hcn: cc.Node = this._hand_card_list[i];
             let hcs: MJ_Card = hcn.getComponent('MJ_Card');
-            if (isShow && isUnSuit) {
-                let tings = this.getTingsByCardId(handCards, hcn.tag);
+            let isYaoJi = dd.gm_manager.getLSMJ_IsYaoJi_ByCardId(hcn.tag);
+            //乐山麻将，如果开启幺鸡，判断是否是幺鸡
+            if (!isYaoJi && isShow && isUnSuit) {
+                let tings = this.getTingsByCardId(list, hcn.tag);
                 //如果有听牌的话
                 if (tings && tings.length > 0) {
                     this._tingsList.push(hcn.tag);
@@ -885,7 +913,19 @@ export default class MJ_HandList extends cc.Component {
         }
         return cNode;
     }
-
+    /**
+     * 除了 cardId 之外，其他牌都收回来
+     * @memberof MJ_HandList
+     */
+    unSelectExclude(cardId: number) {
+        for (var i = 0; i < this._hand_card_list.length; i++) {
+            let hnc: cc.Node = this._hand_card_list[i];
+            let hcs: MJ_Card = hnc.getComponent('MJ_Card');
+            if (hcs._cardId !== cardId) {
+                hcs.showSelectCard(false);
+            }
+        }
+    }
     /**
      * 根据cardId选中牌
      * 
@@ -952,7 +992,14 @@ export default class MJ_HandList extends cc.Component {
         let cards = hands.map((cardId) => {
             return dd.gm_manager.getCardById(cardId);
         }, this);
-        let tings = dd.gm_manager.getTingPai(cards);
+        let tings = [];
+        //如果乐山麻将开启了，幺鸡任用
+        if (dd.gm_manager.mjGameData.tableBaseVo.cfgId === MJ_Game_Type.GAME_TYPE_LSMJ
+            && dd.gm_manager.mjGameData.tableBaseVo.yaojiReplace === 1) {
+            tings = dd.gm_manager.getTingPaiByGui(cards, dd.gm_manager.getCardBySP(3, 1), this._seatInfo.unSuit);
+        } else {
+            tings = dd.gm_manager.getTingPai(cards);
+        }
         if (tings.length > 0) {//有听牌需要显示
             return tings;
         }

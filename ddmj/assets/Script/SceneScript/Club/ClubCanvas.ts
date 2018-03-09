@@ -2,7 +2,7 @@ const { ccclass, property } = cc._decorator;
 
 import * as dd from './../../Modules/ModuleManager';
 
-const RT: number = 15;
+const RT: number = 5;
 @ccclass
 export default class Club extends cc.Component {
     /**

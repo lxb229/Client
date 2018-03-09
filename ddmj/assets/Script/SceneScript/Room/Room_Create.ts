@@ -1,3 +1,4 @@
+
 const { ccclass, property } = cc._decorator;
 import * as dd from './../../Modules/ModuleManager';
 import Room_Create_Rule from './Room_Create_Rule';
@@ -8,14 +9,14 @@ export interface RuleToggle {
 }
 export interface SendRuleCfg {
     /**
-     * 游戏id
+     * 俱乐部id
      * 
      * @type {string}
      * @memberof Room_Create
      */
     corpsId: string;
     /**
-     * 俱乐部id
+     * 游戏id
      * 
      * @type {number}
      * @memberof Room_Create
@@ -212,6 +213,18 @@ export default class Room_Create extends cc.Component {
                 }
                 cc.log(content);
             });
+
+            //存储本地的游戏配置目录
+            let ruleCfgVo = [];
+            for (let i = 0; i < this._ruleCfgVo.length; i++) {
+                if (this._ruleCfgVo[i].itemId === obj.roomItemId) {
+                    ruleCfgVo.unshift(this._ruleCfgVo[i]);
+                } else {
+                    ruleCfgVo.push(this._ruleCfgVo[i]);
+                }
+            }
+            let db = cc.sys.localStorage;
+            db.setItem('ruleCfgVo', JSON.stringify(ruleCfgVo));
         }
     }
 
@@ -248,6 +261,40 @@ export default class Room_Create extends cc.Component {
     showConfigInfo() {
         this.node_game.removeAllChildren();
         this.node_game.opacity = 0;
+
+        let db = cc.sys.localStorage;
+        let ruleCfgVo = db.getItem('ruleCfgVo');
+        if (ruleCfgVo) {
+            ruleCfgVo = JSON.parse(ruleCfgVo);
+            this._ruleCfgVo.forEach((data: RuleCfgVo) => {
+                let index = -1;
+                for (let i = 0; i < ruleCfgVo.length; i++) {
+                    if (data.itemId === ruleCfgVo[i].itemId) {
+                        index = i;
+                        //更新本地配置
+                        ruleCfgVo[i] = data;
+                        break;
+                    }
+                }
+                if (index === -1) {
+                    ruleCfgVo.push(data);
+                }
+            });
+            ruleCfgVo.forEach((data: RuleCfgVo, d: number) => {
+                let index = -1;
+                for (let i = 0; i < this._ruleCfgVo.length; i++) {
+                    if (data.itemId === this._ruleCfgVo[i].itemId) {
+                        index = i;
+                        break;
+                    }
+                }
+                //如果不存在就移除
+                if (index === -1) {
+                    ruleCfgVo.splice(d, 1);
+                }
+            });
+            this._ruleCfgVo = ruleCfgVo;
+        }
 
         for (var i = 0; i < this._ruleCfgVo.length; i++) {
             this.create_game_item(this._ruleCfgVo[i]);

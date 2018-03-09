@@ -1140,15 +1140,15 @@
     "node_card": {
       "__id__": 11
     },
-    "icon_gang": {
-      "__id__": 22
-    },
     "nodeLayout": {
       "__id__": 6
     },
     "icon_gang_list": [
       {
         "__uuid__": "d2eb0393-36c6-446f-bf9a-b5ddb7a9b7c2"
+      },
+      {
+        "__uuid__": "673a299d-1d3b-4569-9276-b2bf5cff4774"
       },
       {
         "__uuid__": "cb3b2184-48e1-4dae-b26c-860462cf5b39"
