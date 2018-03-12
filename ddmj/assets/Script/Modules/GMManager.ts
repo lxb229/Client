@@ -1,7 +1,7 @@
 import UDManager from "./UDManager";
 import { MJ_Suit, MJ_Game_Type } from "./Protocol";
-import MJ_Game_Mine from '../SceneScript/Game/MJ_Game_Mine';
-
+import MJCanvas from '../SceneScript/Game/MJCanvas';
+import MJ_Table from '../SceneScript/Game/MJ_Table';
 /**
  * 将对数据
  */
@@ -96,7 +96,18 @@ export default class GMManager {
      */
     isReplayPause: boolean = false;
 
-    _minScript: MJ_Game_Mine = null;
+    _minScript = null;
+    /**
+     * 游戏场景的脚本
+     * @memberof GMManager
+     */
+    _gameCanvas: MJCanvas = null;
+    /**
+     * 游戏场景table的脚本
+     * @type {MJ_Table}
+     * @memberof GMManager
+     */
+    _mjTableScript: MJ_Table = null;
     /**
      * 刷新游戏桌子对象
      * 
@@ -1617,6 +1628,8 @@ export default class GMManager {
      * @memberof GMManager
      */
     destroySelf(): void {
+        this._gameCanvas = null;
+        this._minScript = null;
         this.mjGameData = null;
         this.replayMJ = 0;
         this.replayDataList.length = 0;

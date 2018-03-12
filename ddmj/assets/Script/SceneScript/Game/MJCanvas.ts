@@ -166,20 +166,6 @@ export default class MJCanvas extends cc.Component {
     @property(cc.Prefab)
     act_xy_prefab: cc.Prefab = null;
     /**
-     * 聊天
-     * @type {cc.Node}
-     * @memberof MJCanvas
-     */
-    @property(cc.Node)
-    node_chat: cc.Node = null;
-    /**
-     * 设置
-     * @type {cc.Node}
-     * @memberof MJCanvas
-     */
-    @property(cc.Node)
-    node_setting: cc.Node = null;
-    /**
      * 杠/碰牌的预设列表 0下 1左 2上 3右
      * 
      * @type {cc.Prefab[]}
@@ -226,13 +212,6 @@ export default class MJCanvas extends cc.Component {
      */
     _node_disband: cc.Node = null;
     /**
-     * 是否跳转加载
-     * 
-     * @type {boolean}
-     * @memberof MJCanvas
-     */
-    _isLoad: boolean = false;
-    /**
      * 
      * 麻将的牌图片列表 1~9万 10~18筒 19~27条 
      * @type {cc.SpriteFrame[]}
@@ -254,28 +233,6 @@ export default class MJCanvas extends cc.Component {
         this.showChatInfo(data);
     };
     /**
-     * 
-     * 推送消息(房间已解散通知) 回调函数
-     * @memberof MJCanvas
-     */
-    MJ_OutPush = (event: cc.Event.EventCustom) => {
-        let data = event.detail;
-        //如果在空闲等待阶段解散房间
-        if (dd.gm_manager.mjGameData.tableBaseVo.gameState === MJ_GameState.STATE_TABLE_IDLE
-            && dd.gm_manager.mjGameData.tableBaseVo.createPlayer !== dd.ud_manager.mineData.accountId) {
-            dd.ui_manager.showAlert('房主解散了房间！'
-                , '温馨提示',
-                {
-                    lbl_name: '确定',
-                    callback: () => {
-                        this.quitGame();
-                    }
-                }, null, 1);
-        } else {
-            this.quitGame();
-        }
-    };
-    /**
      * 微信分享回调
      * 
      * @memberof MJ_Table
@@ -288,20 +245,6 @@ export default class MJCanvas extends cc.Component {
             dd.ui_manager.showTip('好友邀请发送失败！');
         }
     };
-    /**
-     * 游戏界面脚本
-     * 
-     * @type {}
-     * @memberof MJCanvas
-     */
-    _mjGame = null;
-    /**
-     * 桌子界面脚本
-     * 
-     * @type {MJ_Table}
-     * @memberof MJCanvas
-     */
-    _mjTable = null;
     /**
      * 语音房语音加载次数
      * 
@@ -316,6 +259,7 @@ export default class MJCanvas extends cc.Component {
     _node_ting: cc.Node = null;
 
     onLoad() {
+        dd.gm_manager._gameCanvas = this;
         dd.ui_manager.fixIPoneX(this.node);
         //如果游戏数据存在
         if (dd.gm_manager && dd.gm_manager.mjGameData) {
@@ -328,11 +272,6 @@ export default class MJCanvas extends cc.Component {
                 dd.gm_manager.mjGameData.seats = dd.gm_manager.sortSeatList(dd.gm_manager.mjGameData.seats);
             }
         }
-        this.node_chat.active = false;
-        this.node_setting.active = false;
-        this._mjGame = this.node_game.getComponent('MJ_Game');
-        this._mjTable = this.node_table.getComponent('MJ_Table');
-
         dd.mp_manager.stopBackGround();
         this.bindOnPush();
 
@@ -441,40 +380,6 @@ export default class MJCanvas extends cc.Component {
     }
 
     /**
-     * 退出游戏房间，跳转到大厅
-     * 
-     * @memberof MJCanvas
-     */
-    quitGame() {
-        if (!this._isLoad) {
-            if (dd.ui_manager.showLoading()) {
-                this._isLoad = true;
-                dd.ud_manager.mineData.tableId = 0;
-
-                //如果是语音房间，退出的时候，要退出语音
-                if (dd.gm_manager.mjGameData.tableBaseVo.tableChatType === 1) {
-                    let b = dd.js_call_native.quitRoom();
-                    if (b === 0) {
-                        // '离开房间成功';
-                    } else {
-                        // '离开房间失败';
-                    }
-                }
-                if (dd.gm_manager.mjGameData.tableBaseVo.corpsId !== '0') {
-                    cc.director.loadScene('ClubScene', () => {
-                        dd.gm_manager.destroySelf();
-                        cc.sys.garbageCollect();
-                    });
-                } else {
-                    cc.director.loadScene('HomeScene', () => {
-                        dd.gm_manager.destroySelf();
-                        cc.sys.garbageCollect();
-                    });
-                }
-            }
-        }
-    }
-    /**
      * 绑定游戏push
      * 
      * @memberof MJCanvas
@@ -484,8 +389,6 @@ export default class MJCanvas extends cc.Component {
         cc.systemEvent.on('MJ_GamePush', this.showMJInfo, this);
         //推送消息(聊天信息通知)
         cc.systemEvent.on('MJ_ChatPush', this.MJ_ChatPush, this);
-        //推送消息(房间已解散通知)
-        cc.systemEvent.on('MJ_OutPush', this.MJ_OutPush, this);
         cc.systemEvent.on('cb_share', this.wxShareCallBack, this);
         this.node.on('diconnect_update', this.showMJInfo, this);
     }
@@ -500,8 +403,6 @@ export default class MJCanvas extends cc.Component {
         cc.systemEvent.off('MJ_GamePush', this.showMJInfo, this);
         //推送消息(聊天信息通知)
         cc.systemEvent.off('MJ_ChatPush', this.MJ_ChatPush, this);
-        //推送消息(房间已解散通知)
-        cc.systemEvent.off('MJ_OutPush', this.MJ_OutPush, this);
         cc.systemEvent.off('cb_voiceLogin', this.cb_voiceInit, this);
         cc.systemEvent.off('cb_share', this.wxShareCallBack, this);
         this.node.off('diconnect_update', this.showMJInfo, this);
@@ -517,7 +418,7 @@ export default class MJCanvas extends cc.Component {
         cc.log(dd.gm_manager.mjGameData);
         //座位排序
         dd.gm_manager.mjGameData.seats = dd.gm_manager.sortSeatList(dd.gm_manager.mjGameData.seats);
-        this._mjTable.showTableInfo();
+        dd.gm_manager._mjTableScript.showTableInfo();
 
         //如果在空闲状态，就不显示打游戏界面
         if (dd.gm_manager.mjGameData.tableBaseVo.gameState === MJ_GameState.STATE_TABLE_IDLE) {
@@ -729,31 +630,6 @@ export default class MJCanvas extends cc.Component {
             }
         });
     }
-
-    /**
-     * 退出桌子
-     * 
-     * @memberof MJCanvas
-     */
-    sendOutGame() {
-        if (dd.ui_manager.showLoading()) {
-            let obj = {
-                'tableId': dd.gm_manager.mjGameData.tableBaseVo.tableId,
-            };
-            let msg = JSON.stringify(obj);
-            dd.ws_manager.sendMsg(dd.protocol.MAJIANG_ROOM_LEAV, msg, (flag: number, content?: any) => {
-                dd.ui_manager.hideLoading();
-                if (flag === 0) {//成功
-                    this.quitGame();
-                } else if (flag === -1) {//超时
-                    cc.log(content);
-                } else {//失败,content是一个字符串
-                    dd.ui_manager.showAlert(content, '错误提示');
-                }
-            });
-        }
-    }
-
     /**
      *  申请解散桌子
      * 
@@ -1031,18 +907,6 @@ export default class MJCanvas extends cc.Component {
         act_xy.parent = parentNode;
     }
     /**
-     * 显示游戏聊天界面
-     * 
-     * @memberof MJCanvas
-     */
-    showChat() {
-        dd.mp_manager.playAlert();
-        this.node_chat.active = true;
-        let chatScript = this.node_chat.getComponent('Game_Chat');
-        chatScript.showChatLayer(0);
-    }
-
-    /**
      * 显示游戏聊天信息
      * @param {any} type 
      * @memberof MJCanvas
@@ -1091,19 +955,6 @@ export default class MJCanvas extends cc.Component {
             bqNode.runAction(seq);
         }
     }
-
-    /**
-     * 显示游戏设置
-     * 
-     * @memberof MJCanvas
-     */
-    showSetting() {
-        dd.mp_manager.playAlert();
-        this.node_setting.active = true;
-        let sets = this.node_setting.getComponent('Setting');
-        sets.initData(dd.gm_manager.mjGameData.tableBaseVo.tableChatType);
-    }
-
     /**
      * 显示游戏解散房间界面
      * 
@@ -1118,7 +969,7 @@ export default class MJCanvas extends cc.Component {
             }
             let script = this._node_disband.getComponent('Game_Disband');
             script.initData();
-            this.unShowPopup();
+            dd.gm_manager._tableScript.unShowPopup();
         } else {
             if (this._node_disband && this._node_disband.isValid) {
                 this._node_disband.removeFromParent(true);
@@ -1126,16 +977,6 @@ export default class MJCanvas extends cc.Component {
                 this._node_disband = null;
             }
         }
-    }
-
-    /**
-     * 不显示弹框
-     * 
-     * @memberof MJCanvas
-     */
-    unShowPopup() {
-        this.node_setting.active = false;
-        this.node_chat.active = false;
     }
 
     /**
