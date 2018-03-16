@@ -436,6 +436,12 @@ declare interface SeatVo {
      * @memberof SeatVo
      */
     baojiaoState: number;
+    /**
+     * 南充麻将，飘的数量
+     * @type {number}
+     * @memberof SeatVo
+     */
+    piaoNum: number;
 }
 
 
@@ -535,6 +541,12 @@ declare interface SettlementOnceVo {
      * @memberof SettlementOnceVo
      */
     seatScore: SettementSeatScore[];
+    /**
+     * 我的漂牌数量
+     * @type {number}
+     * @memberof SettementSeatScore
+     */
+    myPiaoNum: number;
 }
 declare interface SettementSeatScore {
     /**
@@ -567,6 +579,12 @@ declare interface SettementSeatScore {
      * @memberof SettementSeatScore
      */
     flyNum: number;
+    /**
+     * 漂牌总输赢数量
+     * @type {number}
+     * @memberof SettementSeatScore
+     */
+    winPiaoNum: number;
 }
 
 /**
@@ -776,6 +794,18 @@ declare interface TableBaseVo {
      * @memberof TableBaseVo
      */
     handCardNum: number;
+    /**
+     * 最大漂牌数
+     * @type {number}
+     * @memberof TableBaseVo
+     */
+    maxPiaoPaiNum: number;
+    /**
+     * 躺胡的牌
+     * @type {number[]}
+     * @memberof MJGameData
+     */
+    tangCanHuList: number[];
 }
 
 /**

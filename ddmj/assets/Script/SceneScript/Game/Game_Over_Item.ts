@@ -3,6 +3,7 @@ const { ccclass, property } = cc._decorator;
 import * as dd from './../../Modules/ModuleManager';
 import MJCanvas from './MJCanvas';
 import MJ_Card from './MJ_Card';
+import { MJ_Game_Type } from '../../Modules/Protocol';
 
 @ccclass
 export default class Game_Over_Item extends cc.Component {
@@ -58,7 +59,13 @@ export default class Game_Over_Item extends cc.Component {
      */
     @property(cc.Label)
     lblHu: cc.Label = null;
-
+    /**
+     * 南充麻将的飘
+     * @type {cc.Label}
+     * @memberof Game_Over_Item
+     */
+    @property(cc.Label)
+    lblPiao: cc.Label = null;
     /**
      * 庄家节点
      * 
@@ -141,44 +148,76 @@ export default class Game_Over_Item extends cc.Component {
 
         if (data.seatScore) {
             let pScore = [];
-            data.seatScore.forEach((sScore, sIndex) => {
-                let str = '玩家<index><br/><color=#FFC200><number>番</c><br/><color><socre></c><br/><tang><br/><baojiao>';
-                if (sIndex !== index) {
-                    str = str.replace('<index>', (sIndex + 1).toString());
-                    str = str.replace('<number>', sScore.totalFanNum.toString());
-                    str = str.replace('<color>', (sScore.score > 0 ? '<color=#FF0000>' : '<color=#00FF00>'));
-                    str = str.replace('<socre>', (sScore.score > 0 ? ('+' + sScore.score) : ('' + sScore.score)));
-                    switch (sScore.tangNum) {
-                        case 0:
-                            str = str.replace('<tang>', '(无躺)');
-                            break;
-                        case 1:
-                            str = str.replace('<tang>', '(单躺)');
-                            break;
-                        case 2:
-                            str = str.replace('<tang>', '(双躺)');
-                            break;
-                        default:
-                            str = str.replace('<br/><tang>', '');
-                            break;
+            //南充麻将
+            if (dd.gm_manager.mjGameData.tableBaseVo.cfgId === MJ_Game_Type.GAME_TYPE_NCMJ) {
+                this.lblPiao.node.parent.active = true;
+                this.lblPiao.string = 'x' + data.myPiaoNum;
+                this.lblHu.node.active = false;
+                data.seatScore.forEach((sScore, sIndex) => {
+                    let str = '玩家<index><br/><piao><br/><bai><br/><color><socre></c>';
+                    if (sIndex !== index) {
+                        str = str.replace('<index>', (sIndex + 1).toString());
+                        str = str.replace('<color>', (sScore.score > 0 ? '<color=#FF0000>' : '<color=#00FF00>'));
+                        str = str.replace('<socre>', (sScore.score > 0 ? ('+' + sScore.score) : ('' + sScore.score)));
+                        str = str.replace('<piao>', (sScore.winPiaoNum > 0 ? ('飘+' + sScore.winPiaoNum) : ('飘' + sScore.winPiaoNum)));
+                        switch (sScore.tangNum) {
+                            case 0:
+                                str = str.replace('<bai>', '(无摆)');
+                                break;
+                            case 1:
+                                str = str.replace('<bai>', '(单摆)');
+                                break;
+                            case 2:
+                                str = str.replace('<bai>', '(双摆)');
+                                break;
+                            default:
+                                str = str.replace('<br/><bai>', '');
+                                break;
+                        }
+                        pScore.push(str);
                     }
-                    switch (sScore.baoJiaoNum) {
-                        case 0:
-                            str = str.replace('<baojiao>', '(无叫)');
-                            break;
-                        case 1:
-                            str = str.replace('<baojiao>', '(单叫)');
-                            break;
-                        case 2:
-                            str = str.replace('<baojiao>', '(双叫)');
-                            break;
-                        default:
-                            str = str.replace('<br/><baojiao>', '');
-                            break;
+                });
+            } else {
+                this.lblPiao.node.parent.active = false;
+                data.seatScore.forEach((sScore, sIndex) => {
+                    let str = '玩家<index><br/><color=#FFC200><number>番</c><br/><color><socre></c><br/><tang><br/><baojiao>';
+                    if (sIndex !== index) {
+                        str = str.replace('<index>', (sIndex + 1).toString());
+                        str = str.replace('<number>', sScore.totalFanNum.toString());
+                        str = str.replace('<color>', (sScore.score > 0 ? '<color=#FF0000>' : '<color=#00FF00>'));
+                        str = str.replace('<socre>', (sScore.score > 0 ? ('+' + sScore.score) : ('' + sScore.score)));
+                        switch (sScore.tangNum) {
+                            case 0:
+                                str = str.replace('<tang>', '(无躺)');
+                                break;
+                            case 1:
+                                str = str.replace('<tang>', '(单躺)');
+                                break;
+                            case 2:
+                                str = str.replace('<tang>', '(双躺)');
+                                break;
+                            default:
+                                str = str.replace('<br/><tang>', '');
+                                break;
+                        }
+                        switch (sScore.baoJiaoNum) {
+                            case 0:
+                                str = str.replace('<baojiao>', '(无叫)');
+                                break;
+                            case 1:
+                                str = str.replace('<baojiao>', '(单叫)');
+                                break;
+                            case 2:
+                                str = str.replace('<baojiao>', '(双叫)');
+                                break;
+                            default:
+                                str = str.replace('<br/><baojiao>', '');
+                                break;
+                        }
+                        pScore.push(str);
                     }
-                    pScore.push(str);
-                }
-            });
+                });
+            }
             for (let i = 0; i < this.lbl_player_list.length; i++) {
                 if (i < data.seatScore.length - 1 && pScore[i]) {
                     this.lbl_player_list[i].node.active = true;
@@ -191,16 +230,15 @@ export default class Game_Over_Item extends cc.Component {
         }
 
         this.node_group.removeAllChildren();
-        let minGang = [];
-        if (data.baGangCards) {
-            minGang = data.baGangCards;
-        }
+
         if (data.dianGangCards) {
-            minGang = minGang.concat(data.dianGangCards);
+            for (var i = 0; i < data.dianGangCards.length; i++) {
+                this._canvasTarget.showGroupCard(3, data.dianGangCards[i], 0, this.node_group);
+            }
         }
-        if (minGang) {
-            for (var i = 0; i < minGang.length; i++) {
-                this._canvasTarget.showGroupCard(1, minGang[i], 0, this.node_group);
+        if (data.baGangCards) {
+            for (var i = 0; i < data.baGangCards.length; i++) {
+                this._canvasTarget.showGroupCard(1, data.baGangCards[i], 0, this.node_group);
             }
         }
         if (data.anGangCards) {

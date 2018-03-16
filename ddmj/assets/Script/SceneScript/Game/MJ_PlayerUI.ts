@@ -115,6 +115,18 @@ export default class MJ_PlayerUI extends cc.Component {
                     this.unSuit.node.active = false;
                 }
                 break;
+            case MJ_Game_Type.GAME_TYPE_NCMJ://南充麻将
+                if ((dd.gm_manager.mjGameData.tableBaseVo.gameState !== MJ_GameState.STATE_TABLE_PIAOPAI
+                    && dd.gm_manager.mjGameData.tableBaseVo.gameState > MJ_GameState.STATE_TABLE_READY)
+                    || this._seatInfo.piaoNum > 0) {
+                    this.unSuit.node.active = true;
+                    this.unSuit.spriteFrame = this._canvasTarget.unSuit_list[3];
+                    let lblPiao = this.unSuit.node.getChildByName('lblPiao');
+                    if (lblPiao) lblPiao.getComponent(cc.Label).string = 'x' + this._seatInfo.piaoNum;
+                } else {
+                    this.unSuit.node.active = false;
+                }
+                break;
             default:
                 //如果存在打缺 缺花色(1=万,2=筒,3=条)
                 if (this._seatInfo.unSuit > 0 && dd.gm_manager.mjGameData.tableBaseVo.gameState > MJ_GameState.STATE_TABLE_DINGQUE) {

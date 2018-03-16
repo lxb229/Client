@@ -205,6 +205,15 @@ export default class MJ_Play extends cc.Component {
                 }
                 break;
             }
+            case MJ_GameState.STATE_TABLE_PIAOPAI: {//飘表态状态
+                this.lblTip.node.active = true;
+                if (this._seatInfo.piaoNum === 0) {
+                    this.lblTip.string = '正在选飘...';
+                } else {
+                    this.lblTip.string = '已选飘...';
+                }
+                break;
+            }
             default:
                 this.lblTip.node.active = false;
                 break;

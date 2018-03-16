@@ -148,7 +148,24 @@ export let cb_diconnect: (event: cc.Event.EventCustom) => void = (event: cc.Even
                                                     ui_manager.hideLoading();
                                                 }
                                                 break;
+                                            case MJ_Game_Type.GAME_TYPE_LSMJ:
+                                                if (sceneName !== 'LSMJScene') {
+                                                    cc.director.loadScene('LSMJScene');
+                                                } else {
+                                                    ui_manager.getCanvasNode().emit('diconnect_update');
+                                                    ui_manager.hideLoading();
+                                                }
+                                                break;
+                                            case MJ_Game_Type.GAME_TYPE_NCMJ:
+                                                if (sceneName !== 'NCMJScene') {
+                                                    cc.director.loadScene('NCMJScene');
+                                                } else {
+                                                    ui_manager.getCanvasNode().emit('diconnect_update');
+                                                    ui_manager.hideLoading();
+                                                }
+                                                break;
                                             default:
+                                                break;
                                         }
 
                                     }

@@ -444,9 +444,9 @@ export default class MJ_HandList extends cc.Component {
                 this.showHandCard(handCards, this._moPaiCardId, this._isUnSuit);
                 this.deleteNotCard(handCards);
                 //桌子上有无听牌提示
-                // if (dd.gm_manager.mjGameData.tableBaseVo.tingTips === 1) {
-                this.showTingCard(handCards, this._isUnSuit);
-                // }
+                if (dd.gm_manager.mjGameData.tableBaseVo.tingTips === 1) {
+                    this.showTingCard(handCards, this._isUnSuit);
+                }
                 this.showSwapCards();
             }
         }
@@ -542,6 +542,7 @@ export default class MJ_HandList extends cc.Component {
             }
         }
     }
+
     /**
      * 根据是否躺牌显示手牌,用来切换点躺牌按钮之后，只亮可以听牌的牌，而点击悔之后，就显示回正常
      * @param {boolean} isShowTang 
@@ -840,8 +841,7 @@ export default class MJ_HandList extends cc.Component {
     deleteNotCard(handCards: number[]) {
         for (var i = 0; i < this._hand_card_list.length; i++) {
             let cardNode = this._hand_card_list[i];
-            let index = this.getIndexByCardId(cardNode.tag, handCards);
-            if (index === -1) {
+            if (handCards.indexOf(cardNode.tag) === -1) {
                 cc.log('---删除---' + cardNode.tag);
                 this._hand_card_list.splice(i, 1);
                 //移除节点
@@ -929,22 +929,6 @@ export default class MJ_HandList extends cc.Component {
             }
         }
         return cNode;
-    }
-
-    /**
-     * 根据cardId获取手牌位置
-     * @param {number} cardId  节点的cardId
-     * @param {number[]} handCards  手牌 + 摸牌列表
-     * @returns {number} 
-     * @memberof MJ_HandList
-     */
-    getIndexByCardId(cardId: number, handCards: number[]): number {
-        for (var i = 0; i < handCards.length; i++) {
-            if (handCards[i] === cardId) {
-                return i;
-            }
-        }
-        return -1;
     }
     /**
      * 根据触摸点获取牌节点
@@ -1077,33 +1061,12 @@ export default class MJ_HandList extends cc.Component {
         let cards = hands.map((cardId) => {
             return dd.gm_manager.getCardById(cardId);
         }, this);
-        let tings = dd.gm_manager.getTingPai(cards);
+        let tings = dd.gm_manager.getTingPai(cards, this._seatInfo.unSuit);
         if (tings.length > 0) {//有听牌需要显示
             return tings;
         }
         return null;
     }
-    /**
-     * 根据cardId计算，打出这张牌是否可以躺牌,返回可以躺的牌的数组
-     * @param {number[]} cardIds 
-     * @param {number} cardId 
-     * @returns 
-     * @memberof MJ_HandList
-     */
-    getTangsByCardId(cardIds: number[], cardId: number) {
-        let hands = cardIds.slice(0);
-        let index = hands.indexOf(cardId);
-        hands.splice(index, 1);
-        let cards = hands.map((cardId) => {
-            return dd.gm_manager.getCardById(cardId);
-        }, this);
-        let tings = dd.gm_manager.getTingPai(cards);
-        if (tings.length > 0) {//有听牌需要显示
-            return cards;
-        }
-        return null;
-    }
-
     /**
      * 播放插牌的动作
      * 

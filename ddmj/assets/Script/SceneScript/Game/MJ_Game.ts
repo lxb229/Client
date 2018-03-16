@@ -197,7 +197,9 @@ export default class MJ_Game extends cc.Component {
         this.lblTime.string = this._nowTime + '';
         let pIndex = -1;
         //大于定缺的时候，显示游戏信息
-        if (dd.gm_manager.mjGameData.tableBaseVo.gameState > MJ_GameState.STATE_TABLE_DINGQUE) {
+        if (dd.gm_manager.mjGameData.tableBaseVo.gameState > MJ_GameState.STATE_TABLE_DINGQUE
+        && dd.gm_manager.mjGameData.tableBaseVo.gameState !== MJ_GameState.STATE_TABLE_PIAOPAI
+        && dd.gm_manager.mjGameData.tableBaseVo.gameState !== MJ_GameState.STATE_TABLE_BAOJIAO) {
             this.lblGameInfo.node.parent.active = true;
             this.lblGameInfo.string = '<color=#4ecab1>剩余 </c><color=#ffc600>' + dd.gm_manager.mjGameData.tableBaseVo.tableCardNum
                 + '</c><color=#4ecab1> 张</c><color=#4ecab1>   第 </c><color=#ffc600>'

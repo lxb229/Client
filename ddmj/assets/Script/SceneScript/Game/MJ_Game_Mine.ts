@@ -142,11 +142,17 @@ export default class MJ_Play extends cc.Component {
                 case MJ_Game_Type.GAME_TYPE_LSMJ:
                     this._handList = this.node_mine_card.getComponent('LSMJ_HandList');
                     break;
+                case MJ_Game_Type.GAME_TYPE_NCMJ:
+                    this._handList = this.node_mine_card.getComponent('NCMJ_HandList');
+                    break;
                 default:
                     this._handList = this.node_mine_card.getComponent('MJ_HandList');
                     break;
             }
-        } else {
+        }
+
+        //如果获取不到的话
+        if (!this._handList) {
             let sceneName = cc.director.getScene().name;
             switch (name) {
                 case 'MYMJScene':
@@ -155,12 +161,14 @@ export default class MJ_Play extends cc.Component {
                 case 'LSMJScene':
                     this._handList = this.node_mine_card.getComponent('LSMJ_HandList');
                     break;
+                case 'NCMJScene':
+                    this._handList = this.node_mine_card.getComponent('NCMJ_HandList');
+                    break;
                 default:
                     this._handList = this.node_mine_card.getComponent('MJ_HandList');
                     break;
             }
         }
-
     }
     /**
      * 刷新打牌的信息
@@ -300,6 +308,15 @@ export default class MJ_Play extends cc.Component {
                 this.showBreakState();
                 break;
             }
+            case MJ_GameState.STATE_TABLE_PIAOPAI: {//飘表态状态
+                this.lblTip.node.active = true;
+                if (this._seatInfo.piaoNum === 0) {
+                    this.lblTip.string = '请选择飘...';
+                } else {
+                    this.lblTip.string = '已选飘...';
+                }
+                break;
+            }
             default:
                 this.lblTip.node.active = false;
                 this.node_state.active = false;
@@ -312,6 +329,8 @@ export default class MJ_Play extends cc.Component {
         }
         //自贡麻将 == 显示报叫节点
         this.showBaoJiao();
+        //南充麻将 == 显示飘节点
+        this.showPiaoNode();
     }
 
     /**
@@ -339,10 +358,31 @@ export default class MJ_Play extends cc.Component {
                             }
                         }
                     }
-                    //绵阳麻将 如果该玩家已经躺了，并且有 胡的状态,那么不显示 胡按钮
-                    if (this._seatInfo.tangCardState === 1 && this._seatInfo.breakCardState[0] === 1) {
-                        this.node_state.active = false;
-                    }
+
+                }
+                switch (dd.gm_manager.mjGameData.tableBaseVo.cfgId) {
+                    case MJ_Game_Type.GAME_TYPE_MYMJ:
+                        //绵阳麻将 如果该玩家已经躺了，并且有 胡的状态,那么不显示 胡按钮
+                        if (this._seatInfo.tangCardState === 1 && this._seatInfo.breakCardState[0] === 1) {
+                            this.node_state.active = false;
+                        }
+                        break;
+                    case MJ_Game_Type.GAME_TYPE_NCMJ:
+                        //南充麻将 如果有 胡的状态,那么不显示 胡按钮
+                        if (this._seatInfo.breakCardState[0] === 1) {
+                            //如果该玩家已经躺了
+                            if (this._seatInfo.tangCardState === 1) {
+                                this.node_state.active = false;
+                            } else {
+                                //如果桌子上的牌少于12张，也不显示 胡按钮
+                                if (dd.gm_manager.mjGameData.tableBaseVo.handCardNum < 12) {
+                                    this.node_state.active = false;
+                                }
+                            }
+                        }
+                        break;
+                    default:
+                        break;
                 }
             } else {
                 this.node_state.active = false;
@@ -566,32 +606,6 @@ export default class MJ_Play extends cc.Component {
         }
     }
     /**
-     * 胡杠碰过的表态
-     * 
-     * @param {any} event 
-     * @param {string} type 
-     * @memberof MJ_Play
-     */
-    click_btn_baojiao(event, type: string) {
-        dd.mp_manager.playButton();
-        let node_baojiao = this.node.getChildByName('node_baojiao');
-        let obj = {
-            'tableId': dd.gm_manager.mjGameData.tableBaseVo.tableId,
-            'btVal': type,
-        };
-        let msg = JSON.stringify(obj);
-        dd.ws_manager.sendMsg(dd.protocol.MAJIANG_ROOM_BAOJIAO_BT, msg, (flag: number, content?: any) => {
-            if (node_baojiao && node_baojiao.isValid) {
-                if (flag === 0) {
-                    node_baojiao.active = false;
-                } else {
-                    node_baojiao.active = true;
-                }
-            }
-        });
-        if (node_baojiao && node_baojiao.isValid) node_baojiao.active = false;
-    }
-    /**
      * 显示推荐定缺的动作
      * 
      * @memberof MJ_Play
@@ -612,6 +626,7 @@ export default class MJ_Play extends cc.Component {
             node_tj.parent = node_dq;
         }
     }
+
     /**
      * 绵阳麻将的躺 和 悔 的按钮事件
      * @memberof MJ_Play
@@ -679,19 +694,96 @@ export default class MJ_Play extends cc.Component {
         if (btn_hui && btn_hui.active) return true;
         return false;
     }
+
+    /**
+     * 胡杠碰过的表态
+     * 
+     * @param {any} event 
+     * @param {string} type 
+     * @memberof MJ_Play
+     */
+    click_btn_baojiao(event, type: string) {
+        dd.mp_manager.playButton();
+        let node_baojiao = this.node.getChildByName('node_baojiao');
+        let obj = {
+            'tableId': dd.gm_manager.mjGameData.tableBaseVo.tableId,
+            'btVal': type,
+        };
+        let msg = JSON.stringify(obj);
+        dd.ws_manager.sendMsg(dd.protocol.MAJIANG_ROOM_BAOJIAO_BT, msg, (flag: number, content?: any) => {
+            if (node_baojiao && node_baojiao.isValid) {
+                if (flag === 0) {
+                    node_baojiao.active = false;
+                } else {
+                    node_baojiao.active = true;
+                }
+            }
+        });
+        if (node_baojiao && node_baojiao.isValid) node_baojiao.active = false;
+    }
     /**
      * 自贡麻将 === 显示报叫
      * @memberof MJ_Play
      */
     showBaoJiao() {
         let node_baojiao = this.node.getChildByName('node_baojiao');
-        let mySeat = dd.gm_manager.getSeatById(dd.ud_manager.mineData.accountId);
-        if (node_baojiao && mySeat) {
+        if (node_baojiao && this._seatInfo) {
             if (dd.gm_manager.mjGameData.tableBaseVo.gameState === MJ_GameState.STATE_TABLE_BAOJIAO
-                && mySeat.baojiaoState === 0) {
+                && this._seatInfo.baojiaoState === 0) {
                 node_baojiao.active = true;
             } else {
                 node_baojiao.active = false;
+            }
+        }
+    }
+    /**
+     * 南充麻将飘按钮
+     * @param {any} event 
+     * @param {string} type 
+     * @memberof MJ_Play
+     */
+    click_btn_piao(event, type: string) {
+        dd.mp_manager.playButton();
+        let node_piao = this.node.getChildByName('node_piao');
+        let obj = {
+            'tableId': dd.gm_manager.mjGameData.tableBaseVo.tableId,
+            'btVal': type,
+        };
+        let msg = JSON.stringify(obj);
+        dd.ws_manager.sendMsg(dd.protocol.MAJIANG_ROOM_NCMJ_PIAOPAI_BT, msg, (flag: number, content?: any) => {
+            if (node_piao && node_piao.isValid) {
+                if (flag === 0) {
+                    node_piao.active = false;
+                } else {
+                    node_piao.active = true;
+                }
+            }
+        });
+        if (node_piao && node_piao.isValid) node_piao.active = false;
+    }
+    /**
+     * 南充麻将 === 显示飘
+     * @memberof MJ_Play
+     */
+    showPiaoNode() {
+        let node_piao = this.node.getChildByName('node_piao');
+        if (node_piao && this._seatInfo) {
+            //如果在飘的阶段，并且还未飘
+            if (dd.gm_manager.mjGameData.tableBaseVo.gameState === MJ_GameState.STATE_TABLE_PIAOPAI
+                && this._seatInfo.btState === MJ_Act_State.ACT_STATE_WAIT) {
+                node_piao.active = true;
+                for (let i = 1; i < 6; i++) {
+                    let btn_piao = node_piao.getChildByName('btn_piao' + i);
+                    if (btn_piao) {
+                        if (i <= dd.gm_manager.mjGameData.tableBaseVo.maxPiaoPaiNum) {
+                            btn_piao.active = true;
+                        } else {
+                            btn_piao.active = false;
+                        }
+                    }
+                }
+            } else {
+                node_piao.active = false;
             }
         }
     }

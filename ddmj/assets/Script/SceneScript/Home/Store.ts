@@ -97,10 +97,16 @@ export default class Store extends cc.Component {
                     if (flag === 0) {//成功
                         dd.ui_manager.showAlert('购买成功!', '温馨提示', null, null, 1);
                     } else if (flag === -1) {//超时
+                        dd.ui_manager.hideLoading();
+                        dd.ui_manager.showTip('消息超时！');
                     } else {//失败,content是一个字符串
                         dd.ui_manager.showTip(content);
                     }
                 });
+                break;
+            case -1://用户取消购买
+                dd.ui_manager.hideLoading();
+                dd.ui_manager.showTip('取消购买!');
                 break;
             case -2://支付失败
                 dd.ui_manager.showAlert('支付失败!', '温馨提示', null, null, 1);

@@ -32,6 +32,10 @@ export enum MJ_Game_Type {
      * 乐山麻将
      */
     GAME_TYPE_LSMJ = 7,
+    /**
+     * 南充麻将
+     */
+    GAME_TYPE_NCMJ = 8,
 }
 
 /**
@@ -193,6 +197,11 @@ export enum MJ_GameState {
      * 报叫状态
      */
     STATE_TABLE_BAOJIAO = 11,
+    /**
+     * 定漂状态
+     */
+    STATE_TABLE_PIAOPAI = 12,
+
 }
 
 /**
@@ -451,6 +460,13 @@ export enum Protocol {
     MAJIANG_ROOM_OTHERBREAK_CARD_LSMJ_BT = 515,
 
     /**
+     * 南充麻将漂牌表态
+     * tableId [int] 桌子号
+     * btVal [int] 表态的结果(漂几个)
+     */
+    MAJIANG_ROOM_NCMJ_PIAOPAI_BT = 516,
+
+    /**
      * 发送聊天信息
      * tableId [int] 桌子Id
      * type [int] 聊天内容类型
@@ -605,6 +621,11 @@ export enum Protocol {
      * 推送消息(座位报叫表态通知)
      */
     MAJIANG_ROOM_BAOJIAO_BT_NOTIFY = 50009,
+
+    /**
+     * 推送消息(南充麻将漂牌数据通知)
+     */
+    MAJIANG_ROOM_NCMJ_PIAOPAI_BT_NOTIFY = 50010,
 
     /**
      * 推送消息(聊天信息通知)

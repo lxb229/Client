@@ -770,8 +770,7 @@ export default class MJ_HandList extends cc.Component {
     deleteNotCard(handCards: number[]) {
         for (var i = 0; i < this._hand_card_list.length; i++) {
             let cardNode = this._hand_card_list[i];
-            let index = this.getIndexByCardId(cardNode.tag, handCards);
-            if (index === -1) {
+            if (handCards.indexOf(cardNode.tag) === -1) {
                 cc.log('---删除---' + cardNode.tag);
                 this._hand_card_list.splice(i, 1);
                 //移除节点
@@ -876,24 +875,6 @@ export default class MJ_HandList extends cc.Component {
     }
 
     /**
-     * 根据cardId获取手牌位置
-     * @param {number} cardId  节点的cardId
-     * @param {number[]} handCards  手牌 + 摸牌列表
-     * @returns {number} 
-     * @memberof MJ_HandList
-     */
-    getIndexByCardId(cardId: number, handCards: number[]): number {
-        if (cardId === this._seatInfo.moPaiCard) {
-            return this._seatInfo.handCards.length;
-        }
-        for (var i = 0; i < this._seatInfo.handCards.length; i++) {
-            if (this._seatInfo.handCards[i] === cardId) {
-                return i;
-            }
-        }
-        return -1;
-    }
-    /**
      * 根据触摸点获取牌节点
      * 
      * @param {cc.Vec2} touch 
@@ -996,9 +977,9 @@ export default class MJ_HandList extends cc.Component {
         //如果乐山麻将开启了，幺鸡任用
         if (dd.gm_manager.mjGameData.tableBaseVo.cfgId === MJ_Game_Type.GAME_TYPE_LSMJ
             && dd.gm_manager.mjGameData.tableBaseVo.yaojiReplace === 1) {
-            tings = dd.gm_manager.getTingPaiByGui(cards, dd.gm_manager.getCardBySP(3, 1), this._seatInfo.unSuit);
+            tings = dd.gm_manager.getTingPai(cards, this._seatInfo.unSuit, dd.gm_manager.getCardBySP(3, 1));
         } else {
-            tings = dd.gm_manager.getTingPai(cards);
+            tings = dd.gm_manager.getTingPai(cards, this._seatInfo.unSuit);
         }
         if (tings.length > 0) {//有听牌需要显示
             return tings;

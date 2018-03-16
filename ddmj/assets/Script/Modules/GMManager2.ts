@@ -114,7 +114,7 @@ export default class GMManager {
      */
     setBaoJiaoData(content: any) {
         //报叫表态座位 seatIndex;
-        //报叫结果(0=不报叫,1=报叫)  boaojiaoResult;
+        //报叫结果(0=不报叫,1=报叫)  btResult;
         //桌子座位数据 seats;
         this.mjGameData.seats = content.seats;
         cc.systemEvent.emit('MJ_GamePush');
@@ -311,51 +311,6 @@ export default class GMManager {
             cardId: (suit - 1) * 36 + (point - 1) * 4 + 1
         };
         return card;
-    }
-
-    /**
-     * 根据玩家accountId获取座位号
-     * 
-     * @param {string} accountId 
-     * @returns {SeatVo} 
-     */
-    getSeatById(accountId: string): SeatVo {
-        let seatData: SeatVo = null;
-        if (this.mjGameData && this.mjGameData.seats) {
-            this.mjGameData.seats.forEach((seat: SeatVo) => {
-                if (seat.accountId === accountId) {
-                    seatData = seat;
-                }
-            }, this);
-        }
-        return seatData;
-    }
-
-    /**
-     * 根据座位id获取位置索引 
-     * 
-     * @export
-     * @param {number} seatId   seatId位-1的时候，根据accountId返回
-     * @param {string} [accountId=''] 
-     * @returns 
-     */
-    getIndexBySeatId(seatId: number, accountId: string = ''): number {
-        if (this.mjGameData && this.mjGameData.seats) {
-            let seats = this.mjGameData.seats;
-            for (let i = 0; i < seats.length; i++) {
-                let seat: SeatVo = seats[i];
-                if (seatId === -1) {
-                    if (seat.accountId !== '0' && seat.accountId === accountId) {
-                        return i;
-                    }
-                } else {
-                    if (seat.seatIndex === seatId) {
-                        return i;
-                    }
-                }
-            }
-        }
-        return -1;
     }
     /**
      * 根据牌唯一Id列表获取排序后的列表
@@ -649,6 +604,63 @@ export default class GMManager {
         return sGang;
     }
     /**
+     * 根据玩家accountId获取座位号
+     * 
+     * @param {string} accountId 
+     * @returns {SeatVo} 
+     */
+    getSeatById(accountId: string): SeatVo {
+        let seatData: SeatVo = null;
+        if (this.mjGameData && this.mjGameData.seats) {
+            this.mjGameData.seats.forEach((seat: SeatVo) => {
+                if (seat.accountId === accountId) {
+                    seatData = seat;
+                }
+            }, this);
+        }
+        return seatData;
+    }
+
+    /**
+     * 根据座位id获取位置索引 
+     * 
+     * @export
+     * @param {number} seatId   seatId位-1的时候，根据accountId返回
+     * @param {string} [accountId=''] 
+     * @returns 
+     */
+    getIndexBySeatId(seatId: number, accountId: string = ''): number {
+        if (this.mjGameData && this.mjGameData.seats) {
+            let seats = this.mjGameData.seats;
+            for (let i = 0; i < seats.length; i++) {
+                let seat: SeatVo = seats[i];
+                if (seatId === -1) {
+                    if (seat.accountId !== '0' && seat.accountId === accountId) {
+                        return i;
+                    }
+                } else {
+                    if (seat.seatIndex === seatId) {
+                        return i;
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+    /**
+     * 获取游戏手牌张数
+     * @memberof GMManager
+     */
+    getGameCardNum() {
+        let gameCardNum = 13;
+        let index = this.mjGameData.tableBaseVo.ruleShowDesc.indexOf('张手牌');
+        if (index !== -1) {
+            let num = this.mjGameData.tableBaseVo.ruleShowDesc.substring(index - 1, index);
+            gameCardNum = Number(num);
+        }
+        return gameCardNum;
+    }
+    /**
      * 获取是否是死觉
      * 
      * @export
@@ -688,19 +700,51 @@ export default class GMManager {
         }
     }
     /**
-     * 是否是乐山麻将，并开启幺鸡任用
+     * 获取两个数组中 不同的的数据
+     * @param {any} arr1 数组1
+     * @param {any} arr2 数组2
      * @returns 
      * @memberof GMManager
      */
-    getLSMJ_IsYaoJi_ByCardId(cardId: number) {
-        let card = this.getCardById(cardId);
-        //如果是乐山麻将
-        if (this.mjGameData && this.mjGameData.tableBaseVo.cfgId === MJ_Game_Type.GAME_TYPE_LSMJ
-            && this.mjGameData.tableBaseVo.yaojiReplace === 1
-            && card.suit === MJ_Suit.SUIT_TYPE_TIAO && card.point === 1) {
-            return true;
+    getDiffArr(arr1, arr2) {
+        let diff = arr1.concat(arr2).sort((a, b) => {
+            return a - b;//从小到大排序
+        }).filter((valu, index, arr) => {
+            //计算不同的项放入diff
+            return arr.indexOf(valu) === arr.lastIndexOf(valu);
+        });
+        return diff;
+    }
+    /**
+     * 获取两个数组中 相同的的数据
+     * @param {any} arr1 数组1
+     * @param {any} arr2 数组2
+     * @memberof GMManager
+     */
+    getSameArr(arr1, arr2) {
+        let same = arr1.filter((valu, index, arr) => {
+            return arr2.includes(valu);
+        });
+        same.sort((a, b) => {
+            return a - b;
+        });
+        same = this.getNoRepeat(same);
+        return same;
+    }
+    /**
+     * 去掉数组中重复的值
+     * @param {any} arr 
+     * @returns 
+     * @memberof GMManager
+     */
+    getNoRepeat(arr) {
+        let result = [];
+        for (let i = 0; i < arr.length; i++) {
+            if (result.indexOf(arr[i]) === -1) {
+                result.push(arr[i]);
+            }
         }
-        return false;
+        return result;
     }
     /**
      * 从a数组中去除B数组中的元素
@@ -715,62 +759,93 @@ export default class GMManager {
         });
         return list;
     }
-    /***************************************麻将躺牌算法*************************************************************************** */
     /**
-     * 根据所选躺拍获取指定听牌，如果选择了多余的牌不能获取到听牌
+     * 是否是乐山麻将，并开启幺鸡任用
+     * @returns 
+     * @memberof GMManager
+     */
+    getLSMJ_IsYaoJi_ByCardId(cardId: number) {
+        let card = this.getCardById(cardId);
+        //如果是乐山麻将
+        if (this.mjGameData && this.mjGameData.tableBaseVo.cfgId === MJ_Game_Type.GAME_TYPE_LSMJ
+            && this.mjGameData.tableBaseVo.yaojiReplace === 1
+            && card.suit === MJ_Suit.SUIT_TYPE_TIAO && card.point === 1) {
+            return true;
+        }
+        return false;
+    }
+    /***************************************麻将算法*************************************************************************** */
+    /**
+     * 获取可以胡的牌，即听牌
      * 
-     * @param {CardAttrib[]} cards 手牌
-     * @param {CardAttrib[]} outs 躺出的牌
+     * @param {CardAttrib[]} cards 
      * @returns {CardAttrib[]} 
      * @memberof GMManager
      */
-    getTingByTang(cards: CardAttrib[], outs: CardAttrib[], unSuit: MJ_Suit): CardAttrib[] {
+    getTingPai(cards: CardAttrib[]): CardAttrib[] {
+        let results: CardAttrib[] = [];
+        let checkList: CardAttrib[] = [];
+        let suits = this.getSuits(cards);
+        if (suits.length > 2) return [];
+        suits.forEach((suit) => {
+            switch (suit) {
+                case 1: checkList = checkList.concat(this.wans); break;
+                case 2: checkList = checkList.concat(this.tongs); break;
+                case 3: checkList = checkList.concat(this.tiaos); break;
+                default: break;
+            }
+        }, this);
+        checkList.forEach((card) => {
+            let temps = cards.slice(0);
+            temps.push(card);
+            if (this.canHuPai(temps)) {
+                results.push(card);
+            }
+        }, this);
+        return results;
+    }
+
+    /**
+     * 根据所选躺拍获取指定听牌，如果选择了多余的牌不能获取到听牌
+     * 
+     * @param {CardAttrib[]} cards 
+     * @param {CardAttrib[]} outs 
+     * @returns {CardAttrib[]} 
+     * @memberof GMManager
+     */
+    getTingByTang(cards: CardAttrib[], outs: CardAttrib[]): CardAttrib[] {
         if (outs.length % 3 === 0) return [];
         this.sortCards(cards);
         this.sortCards(outs);
-        let tings = this.getTingPai(cards, unSuit);
-        if (tings.length === 0) return [];
+        let tings = this.getTingPai(cards);
         this.sortCards(tings);
-        //当有定缺时，胡牌花色为2门，当无定缺时,胡牌花色可以为3门
-        let maxSuit = unSuit === MJ_Suit.SUIT_TYPE_NAN ? 3 : 2;
         if (outs.length % 3 === 1) {//选出添加一张听牌到躺牌数组中必定满足能够胡牌的
             let result = [];
             if (outs.length === 1) {
-                let temp_cards = cards.slice(0);
-                this.removeCard(temp_cards, outs[0]);
-                //判断是否是6对牌
-                if (this.checkAllDui(6, temp_cards)) {
+                let newCards = cards.slice(0);
+                this.removeCard(newCards, outs[0]);
+                let nums = newCards.map((card) => {
+                    return card.suit * 10 + card.point;
+                }, this);
+                nums.sort();
+                if (this.checkSixDui(nums)) {
                     result = outs;
                 } else {
-                    this.sortCards(temp_cards);
-                    //再移除3同和3连
-                    this.remove3TL(temp_cards);
-                    if (temp_cards.length === 0) {
+                    if (this.checkRemaining(nums)) {
                         result = outs;
                     }
                 }
                 return result;
             } else {//>=4张躺牌
                 tings.forEach((card: CardAttrib) => {
-                    let temp_cards = outs.slice(0);
-                    temp_cards.push(card);
-                    if (this.canHuPaiByGui(temp_cards, maxSuit)) {
-                        let new_cards = cards.slice(0);
-                        outs.forEach(card => {
-                            this.removeCard(new_cards, card);
-                        });
-                        this.sortCards(new_cards);
-                        //再移除3同和3连
-                        this.remove3TL(new_cards);
-                        if (new_cards.length === 0) {
-                            result.push(card);
-                        }
+                    let temp = outs.slice(0);
+                    temp.push(card);
+                    if (this.canHuPai(temp)) {
+                        result.push(card);
                     }
                 }, this);
                 //校验是否选择了多余项
-                if (this.canRemoveK(outs, result, true, maxSuit)
-                    || this.canRemoveS(outs, result, true, maxSuit)
-                    || this.canRemoveD(outs, result, false, maxSuit)) {
+                if (this.canRemoveK(outs, result, true) || this.canRemoveS(outs, result, true) || this.canRemoveD(outs, result, false)) {
                     return [];
                 } else
                     return result;
@@ -780,19 +855,14 @@ export default class GMManager {
             if (outs.length === 8 || outs.length === 11) return [];
             let result = [];
             tings.forEach((card: CardAttrib) => {
-                let temp_cards = outs.slice(0);
-                temp_cards.push(card);
-                this.sortCards(temp_cards);
-                //再移除3同和3连
-                this.remove3TL(temp_cards);
-                if (temp_cards.length === 0) {
-                    let new_cards = cards.slice(0);
-                    outs.forEach(card => {
-                        this.removeCard(new_cards, card);
-                    });
-                    if (this.canHuPaiByGui(new_cards, maxSuit)) {
-                        result.push(card);
-                    }
+                let temp = outs.slice(0);
+                temp.push(card);
+                let nums = temp.map((card) => {
+                    return card.suit * 10 + card.point;
+                }, this);
+                nums.sort();
+                if (this.checkRemaining(nums)) {
+                    result.push(card);
                 }
             }, this);
             if (outs.length === 2) {
@@ -804,13 +874,167 @@ export default class GMManager {
                 return result;
             } else {
                 //校验是否选择了多余项
-                if (this.canRemoveK(outs, result, false, maxSuit)
-                    || this.canRemoveS(outs, result, false, maxSuit)) {
+                if (this.canRemoveK(outs, result, false) || this.canRemoveS(outs, result, false)) {
                     return [];
                 } else
                     return result;
             }
         }
+    }
+
+    /**
+     * 获取乐山可以胡的牌，即听牌
+     * 
+     * @param {CardAttrib[]} cards 
+     * @returns {CardAttrib[]} 
+     * @memberof GMManager
+     */
+    getLSTingPai(cards: CardAttrib[]): CardAttrib[] {
+        let results: CardAttrib[] = [];
+        return results;
+    }
+    /**
+     * 判断是否可以胡牌
+     * 
+     * @param {CardAttrib[]} cards 
+     * @returns {boolean} 
+     * @memberof GMManager
+     */
+    private canHuPai(cards: CardAttrib[]): boolean {
+        if (cards.length % 3 !== 2) return false;
+        if (this.getSuits(cards).length > 2) return false;
+        if (cards.length === 2) {
+            if (cards[0].point === cards[1].point && cards[0].suit === cards[1].suit) return true;
+            else return false;
+        } else {//5,8,11,14
+            let nums = cards.map((card) => {
+                return card.suit * 10 + card.point;
+            }, this);
+            nums.sort();
+            if (this.checkQiDui(nums)) return true;
+            let dups = this.getDuplicate(nums);
+            for (let i = 0; i < dups.length; i++) {
+                let num = dups[i];
+                let temps = nums.slice(0);
+                for (let i = 0; i < 2; i++) {
+                    let index = temps.indexOf(num);
+                    temps.splice(index, 1);
+                }
+                if (this.checkRemaining(temps)) return true;
+            }
+            return false;
+        }
+    }
+
+    /**
+     * 检查花色
+     * 
+     * @param {CardAttrib[]} cards 
+     * @returns {number} 
+     * @memberof GMManager
+     */
+    private getSuits(cards: CardAttrib[]): number[] {
+        let suits: number[] = [];
+        cards.forEach((card) => {
+            if (suits.indexOf(card.suit) === -1) {
+                suits.push(card.suit);
+            }
+        }, this);
+        return suits;
+    }
+
+    /**
+     * 判断移除将牌后剩余的牌是否满足顺子和克子，通过递归移除法验证，当剩余牌为0是返回能胡牌，反之则不能胡牌
+     * 余牌数量不为0是必定是3的倍数，余牌是排序过的从小到大
+     * 
+     * @param {number[]} nums 
+     * @returns {boolean} 
+     * @memberof GMManager
+     */
+    private checkRemaining(nums: number[]): boolean {
+        if (nums.length === 0) return true;
+        if (nums[0] === nums[1] && nums[1] === nums[2]) {
+            let temps = nums.slice(3);
+            return this.checkRemaining(temps);
+        } else {
+            if (nums.indexOf(nums[0] + 1) !== -1 && nums.indexOf(nums[0] + 2) !== -1) {
+                let temps = nums.slice(0);
+                let remove = 0, index = 0;
+                for (let i = 0; i < 3; i++) {
+                    remove = temps.splice(index, 1)[0];
+                    index = temps.indexOf(remove + 1);
+                }
+                return this.checkRemaining(temps);
+            }
+            return false;
+        }
+    }
+
+    /**
+     * 找出可以当将牌的重复项
+     * 
+     * @param {number[]} nums 
+     * @returns {number[]} 
+     * @memberof GMManager
+     */
+    private getDuplicate(nums: number[]): number[] {
+        let result: number[] = [];
+        nums.forEach((num) => {
+            if (nums.indexOf(num) !== nums.lastIndexOf(num) && result.indexOf(num) === -1)
+                result.push(num);
+        })
+        return result;
+    }
+
+    /**
+    * 判断6对
+    * 
+    * @param {number[]} nums 
+    * @returns {boolean} 
+    * @memberof GMManager
+    */
+    checkSixDui(nums: number[]): boolean {
+        if (nums.length !== 12) return false;
+        for (let i = 0; i < 10; i += 2) {
+            if (nums[i] !== nums[i + 1]) {
+                return false;
+            }
+        }
+        return true;
+    }
+    /**
+     * 判断7对
+     * 
+     * @param {number[]} nums 
+     * @returns {boolean} 
+     * @memberof GMManager
+     */
+    private checkQiDui(nums: number[]): boolean {
+        if (nums.length !== 14) return false;
+        for (let i = 0; i <= 12; i += 2) {
+            if (nums[i] !== nums[i + 1]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 按照花色和点数排序
+     * 
+     * @param {CardAttrib[]} cards 
+     * @memberof GMManager
+     */
+    private sortCards(cards: CardAttrib[]) {
+        cards.sort((a: CardAttrib, b: CardAttrib) => {
+            if (a.suit > b.suit) {
+                return 1;
+            } else if (a.suit < b.suit) {
+                return -1;
+            } else {
+                return a.point - b.point;
+            }
+        });
     }
     /**
      * 判断元素是否相同
@@ -902,19 +1126,21 @@ export default class GMManager {
      * @returns 
      * @memberof GMManager
      */
-    private checkLen(newCards: CardAttrib[], result: CardAttrib[], checkHu: boolean, maxSuit: number) {
+    private checkLen(newCards: CardAttrib[], result: CardAttrib[], checkHu: boolean) {
         let count = 0;
         result.forEach((card: CardAttrib) => {
             let temp = newCards.slice(0);
             temp.push(card);
             if (checkHu) {
-                if (this.canHuPaiByGui(temp, maxSuit)) {
+                if (this.canHuPai(temp)) {
                     count++;
                 }
             } else {
-                this.sortCards(temp);
-                this.remove3TL(temp);
-                if (temp.length === 0) {
+                let nums = temp.map((card) => {
+                    return card.suit * 10 + card.point;
+                }, this);
+                nums.sort();
+                if (this.checkRemaining(nums)) {
                     count++;
                 }
             }
@@ -934,13 +1160,13 @@ export default class GMManager {
      * @returns {boolean} 
      * @memberof GMManager
      */
-    private canRemoveK(cards: CardAttrib[], result: CardAttrib[], checkHu: boolean = true, maxSuit: number = 2): boolean {
+    private canRemoveK(cards: CardAttrib[], result: CardAttrib[], checkHu: boolean = true): boolean {
         let res = false;
         for (let i = 0; i < cards.length - 2; i++) {
             if (this.isSameArray([cards[i], cards[i], cards[i]], [cards[i], cards[i + 1], cards[i + 2]])) {
                 let newCards = cards.slice(0);
                 newCards.splice(i, 3);
-                if (this.checkLen(newCards, result, checkHu, maxSuit)) {
+                if (this.checkLen(newCards, result, checkHu)) {
                     res = true;
                     break;
                 }
@@ -957,7 +1183,7 @@ export default class GMManager {
      * @returns {boolean} 
      * @memberof GMManager
      */
-    private canRemoveS(cards: CardAttrib[], result: CardAttrib[], checkHu: boolean = true, maxSuit: number = 2): boolean {
+    private canRemoveS(cards: CardAttrib[], result: CardAttrib[], checkHu: boolean = true): boolean {
         let res = false;
         for (let i = 0; i < cards.length; i++) {
             let indexs = this.getIndexs(cards, i);
@@ -968,7 +1194,7 @@ export default class GMManager {
                         newCards.push(cards[j]);
                     }
                 }
-                if (this.checkLen(newCards, result, checkHu, maxSuit)) {
+                if (this.checkLen(newCards, result, checkHu)) {
                     res = true;
                     break;
                 }
@@ -985,13 +1211,13 @@ export default class GMManager {
      * @returns {boolean} 
      * @memberof GMManager
      */
-    canRemoveD(cards: CardAttrib[], result: CardAttrib[], checkHu: boolean = true, maxSuit: number = 2): boolean {
+    canRemoveD(cards: CardAttrib[], result: CardAttrib[], checkHu: boolean = true): boolean {
         let res = false;
         for (let i = 0; i < cards.length - 1; i++) {
             if (this.isSameCard(cards[i], cards[i + 1])) {
                 let newCards = cards.slice(0);
                 newCards.splice(i, 2);
-                if (this.checkLen(newCards, result, checkHu, maxSuit)) {
+                if (this.checkLen(newCards, result, checkHu)) {
                     res = true;
                     break;
                 }
@@ -999,240 +1225,27 @@ export default class GMManager {
         }
         return res;
     }
-    /****************************************************躺牌算法************************************************************** */
+    /****************************************************正常听牌算法************************************************************** */
 
 
-    /***********************************听牌算法(赖子)****************************************** */
+    /***********************************赖子听牌算法****************************************** */
     /**
-    * 获取可以胡的牌，即听牌
-    * 
-    * @param {CardAttrib[]} cards 手牌
-    * @param {MJ_Suit} unSuit 定缺的花色
-    * @param {CardAttrib} [gui] 鬼牌
-    * @returns {CardAttrib[]} 
-    * @memberof GMManager
-    */
-    getTingPai(cards: CardAttrib[], unSuit: MJ_Suit, gui?: CardAttrib): CardAttrib[] {
-        let results: CardAttrib[] = [];
-        if (cards.length % 3 !== 1) return results;
-        this.sortCards(cards);
-        let temp_cards = cards.slice(0);
-        if (gui) { let guis = this.getSameCards(temp_cards, gui); }
-        let list = this.splistToListBySuit(temp_cards);
-        //当有定缺时，胡牌花色为2门，当无定缺时,胡牌花色可以为3门
-        let maxSuit = unSuit === MJ_Suit.SUIT_TYPE_NAN ? 3 : 2;
-        if (list.length > maxSuit || list.length <= 0) return results;
-        let checkList: CardAttrib[] = this.getAllCheck(unSuit, gui);
-        checkList.forEach((card) => {
-            let isGui = false;
-            if (gui) isGui = this.isSameCard(card, gui);
-            if (!isGui) {
-                let temps = cards.slice(0);
-                temps.push(card);
-                if (this.canHuPaiByGui(temps, maxSuit, gui)) {
-                    results.push(card);
-                }
-            }
-        }, this);
-        return results;
-    }
-
-    /**
-     * 判断是否可以胡牌(带鬼)
+     * 移除所有两张相同的牌
      * 
      * @param {CardAttrib[]} cards 
-     * @param {CardAttrib} gui 
-     * @returns {boolean} 
+     * @returns {CardAttrib[][]} 返回对子集合
      * @memberof GMManager
      */
-    canHuPaiByGui(cards: CardAttrib[], maxSuit: number, gui?: CardAttrib): boolean {
-        if (cards.length % 3 !== 2) return false;
-        this.sortCards(cards);
-        let temp_cards = cards.slice(0);
-        let guis = [];
-        if (gui) { guis = this.getSameCards(temp_cards, gui); }
-        let list = this.splistToListBySuit(temp_cards);
-        //判断花色是否超出
-        if (list.length > maxSuit || list.length <= 0) return false;
-        //判断是否是7对
-        if (this.checkAllDui(7, temp_cards, guis)) return true;
-        //判断剩余的牌
-        let res = this.checkRemainingIsCanHu(list, guis);
-        return res;
-    }
-    /**
-     * 判断剩余的牌是否能胡牌
-     * @private
-     * @param {CardAttrib[][]} list 
-     * @param {CardAttrib[]} guis 
-     * @returns 
-     * @memberof GMManager
-     */
-    private checkRemainingIsCanHu(list: CardAttrib[][], guis: CardAttrib[] = []) {
-        let res = false;
-        switch (list.length) {
-            case 1:
-                res = this.checkRemaining2(list[0], guis);
-                break;
-            case 2:
-                if (guis.length > 0) {
-                    res = this.checkRemaining2(list[0], guis, list[1]);
-                    if (!res) {
-                        res = this.checkRemaining2(list[1], guis, list[0]);
-                    }
-                } else {
-                    //因为有两种花色,所以将牌可能在两种花色中的任意一种,
-                    //包含将对的花色加上添加的鬼牌满足3*n+2,不包含将对的花色加上添加的鬼牌满足3*n
-                    if (list[0].length % 3 === 2) {
-                        res = this.checkRemaining2(list[0], guis, list[1]);
-                    } else {
-                        res = this.checkRemaining2(list[1], guis, list[0]);
-                    }
-                }
-                break;
-            case 3:
-                if (guis.length > 0) {
-                    res = this.checkRemaining2(list[0], guis, list[1], list[2]);
-                    if (!res) {
-                        res = this.checkRemaining2(list[1], guis, list[0], list[2]);
-                    }
-                    if (!res) {
-                        res = this.checkRemaining2(list[2], guis, list[0], list[1]);
-                    }
-                } else {
-                    //包含将对的花色加上添加的鬼牌满足3*n+2,不包含将对的花色加上添加的鬼牌满足3*n
-                    if (list[0].length % 3 === 2) {
-                        res = this.checkRemaining2(list[0], guis, list[1], list[2]);
-                    } else if (list[1].length % 3 === 2) {
-                        res = this.checkRemaining2(list[1], guis, list[0], list[2]);
-                    } else {
-                        res = this.checkRemaining2(list[2], guis, list[0], list[1]);
-                    }
-                }
-                break;
-            default:
-                break;
-        }
-        return res;
-    }
-    /**
-     * 判断duiNum对，是否都是对子牌
-     * @private
-     * @param {number} duiNum 几对牌(7对、6对)
-     * @param {CardAttrib[]} cards 牌
-     * @param {CardAttrib[]} guis 鬼牌
-     * @returns {boolean} 
-     * @memberof GMManager
-     */
-    private checkAllDui(duiNum: number, cards: CardAttrib[], guis: CardAttrib[] = []): boolean {
-        if ((cards.length + guis.length) !== duiNum * 2) return false;
-        let temps = cards.slice(0);
-        this.remove2Tong(temps);
-        let diffLen = guis.length - temps.length;
-        if (diffLen >= 0 && diffLen % 2 === 0) {
-            return true;
-        }
-        return false;
-    }
-    /**
-     * 判断7对
-     * 
-     * @param {number[]} nums 
-     * @returns {boolean} 
-     * @memberof GMManager
-     */
-    private checkQiDui2(nums: number[]): boolean {
-        if (nums.length !== 14) return false;
-        for (let i = 0; i <= 12; i += 2) {
-            if (nums[i] !== nums[i + 1]) {
-                return false;
-            }
-        }
-        return true;
-    }
-    /**
-     * 判断移除将牌后剩余的牌是否满足顺子和克子
-     * 
-     *说明:因为有多种花色,所以将牌可能在每个花色中的任意一种,
-     *包含将对的花色加上添加的鬼牌满足3*n+2,不包含将对的花色加上添加的鬼牌满足3*n
-     * @private
-     * @param {CardAttrib[]} cardList1 牌列表1
-     * @param {CardAttrib[]} guis 鬼牌列表
-     * @param {CardAttrib[]} [cardList2] 牌列表2
-     * @param {CardAttrib[]} [cardList3] 牌列表3
-     * @returns {boolean} true or false
-     * @memberof GMManager
-     */
-    private checkRemaining2(cardList1: CardAttrib[], guis: CardAttrib[], cardList2?: CardAttrib[], cardList3?: CardAttrib[]): boolean {
-        let jds = this.extractJD(cardList1, guis);
-        let res = false;
-        for (let i = 0; i < jds.length; i++) {
-            let jdObj = jds[i];
-            let cards_0 = cardList1.slice(0);
-            let count = jdObj.count;
-            //不是两个鬼牌组成的将对,需要先把牌集合中的相同牌移除
-            if (count !== 2) {
-                for (let j = 0; j < cards_0.length; j++) {
-                    //从手牌中移除这个 对子牌
-                    if (this.isSameCard(jdObj.card, cards_0[j])) {
-                        cards_0.splice(j, 1);
-                        j--;
-                        count++;
-                    }
-                    //对子牌是2张牌
-                    if (count === 2) {
-                        break;
-                    }
-                }
-            }
-            //移除一个对子牌之后，再移除3同和3连
-            this.remove3TL(cards_0);
-            let needCount = this.remove2LT(cards_0) + jdObj.count;
-            if (needCount <= guis.length) {
-                if (cardList2) {
-                    let lastCount = guis.length - needCount;
-                    let cards_2 = cardList2.slice(0);
-                    this.remove3TL(cards_2);
-                    let count2 = this.remove2LT(cards_2);
-                    if (count2 <= lastCount) {
-                        if (cardList3) {
-                            lastCount = guis.length - needCount;
-                            let cards_3 = cardList3.slice(0);
-                            this.remove3TL(cards_3);
-                            let count3 = this.remove2LT(cards_3);
-                            if (count3 <= lastCount) {
-                                res = true;
-                                break;
-                            }
-                        } else {
-                            res = true;
-                            break;
-                        }
-                    }
-                } else {
-                    res = true;
-                    break;
-                }
+    private remove2Tong(cards: CardAttrib[]): CardAttrib[][] {
+        let res: CardAttrib[][] = [];
+        if (cards.length < 2) return res;
+        for (let i = 0; i < cards.length - 1; i++) {
+            if (this.isSameCard(cards[i], cards[i + 1])) {
+                res.push(cards.splice(i, 2));
+                i--;
             }
         }
         return res;
-    }
-    /**
-     * 按照花色和点数排序
-     * 
-     * @param {CardAttrib[]} cards 
-     * @memberof GMManager
-     */
-    private sortCards(cards: CardAttrib[]) {
-        cards.sort((a: CardAttrib, b: CardAttrib) => {
-            if (a.suit > b.suit) {
-                return 1;
-            } else if (a.suit < b.suit) {
-                return -1;
-            } else {
-                return a.point - b.point;
-            }
-        });
     }
     /**
      * 按花色拆分成多个数组
@@ -1272,34 +1285,6 @@ export default class GMManager {
         }
         return res;
     }
-    /**
-     * 获取除去定缺后所有的牌,排除鬼牌
-     * @param {MJ_Suit} unSuit 定缺的花色
-     * @param {CardAttrib} gui 游戏的癞子牌
-     * @returns {CardAttrib[]} 
-     * @memberof GMManager
-     */
-    private getAllCheck(unSuit: MJ_Suit, gui: CardAttrib): CardAttrib[] {
-        let res = [];
-        switch (unSuit) {
-            case MJ_Suit.SUIT_TYPE_WAN: res.push(...this.tongs, ...this.tiaos); break;
-            case MJ_Suit.SUIT_TYPE_TONG: res.push(...this.wans, ...this.tiaos); break;
-            case MJ_Suit.SUIT_TYPE_TIAO: res.push(...this.wans, ...this.tongs); break;
-            case MJ_Suit.SUIT_TYPE_NAN: res.push(...this.wans, ...this.tongs, ...this.tiaos); break;
-            default: break;
-        }
-        //如果鬼存在的话， 需要从数组中排除
-        if (gui) {
-            for (let i = 0; i < res.length; i++) {
-                if (this.isSameCard(gui, res[i])) {
-                    res.splice(i, 1);
-                    break;
-                }
-            }
-        }
-        return res;
-    }
-
     /**
      * 在相同花色的数组中抽取将对
      * 
@@ -1367,23 +1352,6 @@ export default class GMManager {
         return index;
     }
     /**
-     * 移除所有两张相同的牌
-     * @param {CardAttrib[]} cards 
-     * @returns {CardAttrib[][]} 返回对子集合
-     * @memberof GMManager
-     */
-    private remove2Tong(cards: CardAttrib[]): CardAttrib[][] {
-        let res: CardAttrib[][] = [];
-        if (cards.length < 2) return res;
-        for (let i = 0; i < cards.length - 1; i++) {
-            if (this.isSameCard(cards[i], cards[i + 1])) {
-                res.push(cards.splice(i, 2));
-                i--;
-            }
-        }
-        return res;
-    }
-    /**
      * 从左到右依次移除3同和3连,先3同后3连
      * 
      * @param {CardAttrib[]} cards 
@@ -1395,14 +1363,12 @@ export default class GMManager {
             let card1 = cards[0];
             let card2 = cards[1];
             let card3 = cards[2];
-            //直接判断 第二张牌 和 第三张牌 是否和第一张牌相同
             if (this.isSameCard(card1, card2) && this.isSameCard(card2, card3)) {
                 cards.splice(0, 3);
             } else {
                 let point = card1.point;
                 let index2 = this.findCard(cards, this.getCardBySP(card1.suit, card1.point + 1));
                 let index3 = this.findCard(cards, this.getCardBySP(card1.suit, card1.point + 2));
-                //如果相连的第二张牌 或 第三张牌 存在，就是3连
                 if (index2 > -1 && index3 > -1) {
                     cards.splice(index3, 1);
                     cards.splice(index2, 1);
@@ -1429,19 +1395,17 @@ export default class GMManager {
             let card1 = cards[0];
             let index2 = this.findCard(cards, this.getCardBySP(card1.suit, card1.point + 1));
             let index3 = this.findCard(cards, this.getCardBySP(card1.suit, card1.point + 2));
-            //如果相连的第二张牌 或 第三张牌 存在，就是3连
             if (index2 > -1 || index3 > -1) {
                 let index = index2 > -1 ? index2 : index3;
                 cards.splice(index, 1);
                 cards.splice(0, 1);
                 lianCount++;
             } else {
-                //如果相连 的第二张牌 和第一张牌 相同，就是2同(对子)
                 let card2 = cards[1];
                 if (this.isSameCard(card1, card2)) {
                     cards.splice(0, 2)
                     duiCount++;
-                } else {//如果不是3连或2同，就是单牌
+                } else {
                     cards.splice(0, 1);
                     danCount++;
                 }
@@ -1469,6 +1433,184 @@ export default class GMManager {
             }
         }
         return removes;
+    }
+    /**
+     * 判断是否可以胡牌(带鬼)
+     * 
+     * @param {CardAttrib[]} cards 
+     * @param {CardAttrib} gui 
+     * @returns {boolean} 
+     * @memberof GMManager
+     */
+    canHuPaiByGui(cards: CardAttrib[], gui: CardAttrib): boolean {
+        if (cards.length % 3 !== 2) return false;
+        this.sortCards(cards);
+        let temp_cards = cards.slice(0);
+        let guis = this.getSameCards(temp_cards, gui);
+        let list = this.splistToListBySuit(temp_cards);
+        if (list.length > 2 || list.length <= 0) return false;
+        if (temp_cards.length + guis.length === 14) {//判断是否是7对
+            let temps = temp_cards.slice(0);
+            this.remove2Tong(temps);
+            let diffLen = guis.length - temps.length;
+            if (diffLen >= 0 && diffLen % 2 === 0) {
+                return true;
+            }
+        }
+        if (list.length === 1) {
+            //因为只有一种花色,所以将牌必然在其中
+            let jds = this.extractJD(list[0], guis);
+            let res = false;
+            for (let i = 0; i < jds.length; i++) {
+                let jdObj = jds[i];
+                let cards_0 = list[0].slice(0);
+                let count = jdObj.count;
+                if (count !== 2) {//不是两个鬼牌组成的将对,需要先把牌集合中的相同牌移除
+                    for (let j = 0; j < cards_0.length; j++) {
+                        if (this.isSameCard(jdObj.card, cards_0[j])) {
+                            cards_0.splice(j, 1);
+                            j--;
+                            count++;
+                        }
+                        if (count === 2) {
+                            break;
+                        }
+                    }
+                }
+                this.remove3TL(cards_0);
+                let needCount = this.remove2LT(cards_0) + jdObj.count;
+                if (needCount <= guis.length) {
+                    res = true;
+                    break;
+                }
+            }
+            return res;
+        }
+        else {
+            //list.length === 2
+            //因为有两种花色,所以将牌可能在两种花色中的任意一种,包含将对的花色加上添加的鬼牌满足3*n+2,不包含将对的花色加上添加的鬼牌满足3*n
+            //当将对在list[0]中
+            let jds = this.extractJD(list[0], guis);
+            let res_1 = false;
+            for (let i = 0; i < jds.length; i++) {
+                let jdObj = jds[i];
+                let cards_1 = list[0].slice(0);
+                let count = jdObj.count;
+                if (count !== 2) {//不是两个鬼牌组成的将对,需要先把牌集合中的相同牌移除
+                    for (let j = 0; j < cards_1.length; j++) {
+                        if (this.isSameCard(jdObj.card, cards_1[j])) {
+                            cards_1.splice(j, 1);
+                            j--;
+                            count++;
+                        }
+                        if (count === 2) {
+                            break;
+                        }
+                    }
+                }
+                this.remove3TL(cards_1);
+                let count1 = this.remove2LT(cards_1) + jdObj.count;
+                if (count1 <= guis.length) {
+                    let lastCount = guis.length - count1;
+                    let cards_2 = list[1].slice(0);
+                    this.remove3TL(cards_2);
+                    let count2 = this.remove2LT(cards_2);
+                    if (count2 <= lastCount) {
+                        res_1 = true;
+                        break;
+                    }
+                }
+            }
+            if (res_1) {
+                return res_1;
+            } else {
+                //当将对在list[1]中
+                let jds = this.extractJD(list[1], guis);
+                let res_2 = false;
+                for (let i = 0; i < jds.length; i++) {
+                    let jdObj = jds[i];
+                    let cards_2 = list[1].slice(0);
+                    let count = jdObj.count;
+                    if (count !== 2) {//不是两个鬼牌组成的将对,需要先把牌集合中的相同牌移除
+                        for (let j = 0; j < cards_2.length; j++) {
+                            if (this.isSameCard(jdObj.card, cards_2[j])) {
+                                cards_2.splice(j, 1);
+                                j--;
+                                count++;
+                            }
+                            if (count === 2) {
+                                break;
+                            }
+                        }
+                    }
+                    this.remove3TL(cards_2);
+                    let count2 = this.remove2LT(cards_2) + jdObj.count;
+                    if (count2 <= guis.length) {
+                        let lastCount = guis.length - count2;
+                        let cards_1 = list[0].slice(0);
+                        this.remove3TL(cards_1);
+                        let count1 = this.remove2LT(cards_1);
+                        if (count1 <= lastCount) {
+                            res_2 = true;
+                            break;
+                        }
+                    }
+                }
+                return res_2;
+            }
+        }
+    }
+    /**
+     * 获取除去定缺后所有的牌,排除鬼牌
+     * 
+     * @param {CardAttrib} gui 
+     * @param {number} suit 
+     * @returns {CardAttrib[]} 
+     * @memberof GMManager
+     */
+    getAllCheck(gui: CardAttrib, suit: number): CardAttrib[] {
+        let res = [];
+        switch (suit) {
+            case 1: res.push(...this.tongs, ...this.tiaos); break;
+            case 2: res.push(...this.wans, ...this.tiaos); break;
+            case 3: res.push(...this.wans, ...this.tongs); break;
+            default: break;
+        }
+        for (let i = 0; i < res.length; i++) {
+            if (this.isSameCard(gui, res[i])) {
+                res.splice(i, 1);
+                break;
+            }
+        }
+        return res;
+    }
+    /**
+     * 获取可以胡的牌，即听牌
+     * 
+     * @param {CardAttrib[]} cards 移除要打的牌,剩余的手牌
+     * @param {number} 定缺的花色
+     * @returns {CardAttrib[]} 
+     * @memberof GMManager
+     */
+    getTingPaiByGui(cards: CardAttrib[], gui: CardAttrib, suit: number): CardAttrib[] {
+        let results: CardAttrib[] = [];
+        if (cards.length % 3 !== 1) return results;
+        this.sortCards(cards);
+        let temp_cards = cards.slice(0);
+        let guis = this.getSameCards(temp_cards, gui);
+        let list = this.splistToListBySuit(temp_cards);
+        if (list.length > 2 || list.length <= 0) return results;
+        let checkList: CardAttrib[] = this.getAllCheck(gui, suit);
+        checkList.forEach((card) => {
+            if (!this.isSameCard(card, gui)) {
+                let temps = cards.slice(0);
+                temps.push(card);
+                if (this.canHuPaiByGui(temps, gui)) {
+                    results.push(card);
+                }
+            }
+        }, this);
+        return results;
     }
     /************************************赖子听牌算法****************************************** */
 

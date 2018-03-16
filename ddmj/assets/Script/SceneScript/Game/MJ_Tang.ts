@@ -4,7 +4,7 @@ const { ccclass, property } = cc._decorator;
 import MJCanvas from './MJCanvas';
 import MJ_Card from './MJ_Card';
 import * as dd from './../../Modules/ModuleManager';
-import { MJ_Act_Type } from '../../Modules/Protocol';
+import { MJ_Act_Type, MJ_Game_Type } from '../../Modules/Protocol';
 /**
  * 绵阳麻将的躺
  * @export
@@ -157,7 +157,8 @@ export default class MJ_Tang extends cc.Component {
             let outcards = tangList.map((cardId) => {
                 return dd.gm_manager.getCardById(cardId);
             }, this);
-            let tangs = dd.gm_manager.getTingByTang(cards, outcards);
+            let mySeat: SeatVo = dd.gm_manager.getSeatById(dd.ud_manager.mineData.accountId);
+            let tangs = dd.gm_manager.getTingByTang(cards, outcards, mySeat.unSuit);
             let hucards = tangs.map((card: CardAttrib) => {
                 return card.cardId;
             });
@@ -177,7 +178,12 @@ export default class MJ_Tang extends cc.Component {
                 dd.ui_manager.showTip('请选择正确的躺牌！');
             }
         } else {
-            dd.ui_manager.showTip('请选择要躺的牌！');
+            //南充麻将
+            if (dd.gm_manager.mjGameData.tableBaseVo.cfgId === MJ_Game_Type.GAME_TYPE_NCMJ) {
+                dd.ui_manager.showTip('请选择要摆的牌！');
+            } else {
+                dd.ui_manager.showTip('请选择要躺的牌！');
+            }
         }
     }
 }
