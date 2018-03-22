@@ -34,10 +34,8 @@ export default class MYMJScene extends cc.Component {
      */
     @property(cc.Prefab)
     mj_card_table_tang_prefab: cc.Prefab = null;
-
-    _canvasTarget = null;
     onLoad() {
-        this._canvasTarget = this.node.getComponent('MJCanvas');
+
     }
 
     /**
@@ -68,7 +66,7 @@ export default class MYMJScene extends cc.Component {
             cardNode.tag = cardId;
             let cardImg: cc.Node = cardNode.getChildByName('img_card');
             if (cardId > 0 && cardImg) {
-                let cardSF = this._canvasTarget.getMJCardSF(cardId);
+                let cardSF = dd.gm_manager._gmScript.getMJCardSF(cardId);
                 cardImg.getComponent(cc.Sprite).spriteFrame = cardSF;
                 //如果是右边，需要修正一下参数，因为用的是同一个预设
                 if (type === 1) {

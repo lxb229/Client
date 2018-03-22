@@ -259,9 +259,7 @@ export default class HomeCanvas extends cc.Component {
                 let msg = JSON.stringify(obj);
                 dd.ws_manager.sendMsg(dd.protocol.MAJIANG_ROOM_JOIN, msg, (flag: number, content?: any) => {
                     if (flag === 0) {//成功
-                        dd.gm_manager.mjGameData = content as MJGameData;
-                        dd.gm_manager.replayMJ = 0;
-                        dd.gm_manager.turnToGameScene();
+                        dd.gm_manager.turnToGameScene(content as MJGameData, 0);
                     } else if (flag === -1) {//超时
                         dd.ui_manager.hideLoading();
                     } else {//失败,content是一个字符串

@@ -227,7 +227,7 @@ export default class Game_Setting extends cc.Component {
     /**
     * 退出游戏房间，跳转到大厅
     * 
-    * @memberof MJCanvas
+    * @memberof Game_Setting
     */
     quitGame() {
         if (dd.ui_manager.showLoading()) {

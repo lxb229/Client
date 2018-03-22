@@ -316,16 +316,13 @@ export default class MJCanvas extends cc.Component {
     _node_ting: cc.Node = null;
 
     onLoad() {
+        dd.gm_manager._gmScript = this;
         dd.ui_manager.fixIPoneX(this.node);
         //如果游戏数据存在
         if (dd.gm_manager && dd.gm_manager.mjGameData) {
             //在语音房和原生平台下
             if (dd.gm_manager.mjGameData.tableBaseVo.tableChatType === 1 && cc.sys.isNative && dd.gm_manager.replayMJ === 0) {
                 this.initVoice();
-            }
-            //对座位列表进行排序
-            if (dd.gm_manager.mjGameData.seats) {
-                dd.gm_manager.mjGameData.seats = dd.gm_manager.sortSeatList(dd.gm_manager.mjGameData.seats);
             }
         }
         this.node_chat.active = false;
@@ -340,14 +337,16 @@ export default class MJCanvas extends cc.Component {
         this.node.on("touchend", (event: cc.Event.EventTouch) => {
             if (dd.gm_manager.touchTarget) return;
             //对自己的牌进行选中
-            let mjPlay = this._mjGame.node_player_list[0].getComponent('MJ_Game_Mine');
-            mjPlay.unSelectCard();
+            if (!dd.gm_manager._minScript) {
+                dd.gm_manager._minScript = this._mjGame.node_player_list[0].getComponent('MJ_Game_Mine');
+            }
+            dd.gm_manager._minScript.unSelectCard();
             this.showTSCard(-1);
 
             this.showTingPai(false);
             if (dd.gm_manager.mjGameData && dd.gm_manager.mjGameData.tableBaseVo.gameState === MJ_GameState.STATE_TABLE_SWAPCARD) {//如果是换牌
-                mjPlay._swapCardList.length = 0;
-                mjPlay.btn_swap.interactable = false;
+                dd.gm_manager._minScript._swapCardList.length = 0;
+                dd.gm_manager._minScript.btn_swap.interactable = false;
             }
         }, this);
     }
@@ -361,8 +360,7 @@ export default class MJCanvas extends cc.Component {
                 let msg = JSON.stringify(obj);
                 dd.ws_manager.sendMsg(dd.protocol.MAJIANG_ROOM_JOIN, msg, (flag: number, content?: any) => {
                     if (flag === 0) {//成功
-                        dd.gm_manager.mjGameData = content as MJGameData;
-                        this.showMJInfo();
+                        dd.gm_manager.setTableData(content as MJGameData, true);
                     } else if (flag === -1) {//超时
                     } else {//失败,content是一个字符串
                     }
@@ -487,7 +485,6 @@ export default class MJCanvas extends cc.Component {
         //推送消息(房间已解散通知)
         cc.systemEvent.on('MJ_OutPush', this.MJ_OutPush, this);
         cc.systemEvent.on('cb_share', this.wxShareCallBack, this);
-        this.node.on('diconnect_update', this.showMJInfo, this);
     }
 
     /**
@@ -504,7 +501,6 @@ export default class MJCanvas extends cc.Component {
         cc.systemEvent.off('MJ_OutPush', this.MJ_OutPush, this);
         cc.systemEvent.off('cb_voiceLogin', this.cb_voiceInit, this);
         cc.systemEvent.off('cb_share', this.wxShareCallBack, this);
-        this.node.off('diconnect_update', this.showMJInfo, this);
     }
 
     /**
@@ -513,12 +509,9 @@ export default class MJCanvas extends cc.Component {
      * @memberof MJCanvas
      */
     showMJInfo() {
-        cc.log('------游戏状态----' + dd.gm_manager.mjGameData.tableBaseVo.gameState);
+        cc.log('------游戏数据----' + dd.gm_manager.mjGameData.tableBaseVo.gameState);
         cc.log(dd.gm_manager.mjGameData);
-        //座位排序
-        dd.gm_manager.mjGameData.seats = dd.gm_manager.sortSeatList(dd.gm_manager.mjGameData.seats);
         this._mjTable.showTableInfo();
-
         //如果在空闲状态，就不显示打游戏界面
         if (dd.gm_manager.mjGameData.tableBaseVo.gameState === MJ_GameState.STATE_TABLE_IDLE) {
             this.node_game.active = false;
@@ -645,7 +638,13 @@ export default class MJCanvas extends cc.Component {
             'cardId': JSON.stringify(cardId)
         };
         let msg = JSON.stringify(obj);
-        dd.ws_manager.sendMsg(dd.protocol.MAJIANG_ROOM_OUT_CARD, msg, null);
+        dd.ws_manager.sendMsg(dd.protocol.MAJIANG_ROOM_OUT_CARD, msg, (flag: number, content?: any) => {
+            if (flag === 0) {//成功
+            } else if (flag === -1) {//超时
+            } else {//失败,content是一个字符串
+                this.showMJInfo();
+            }
+        });
     }
 
     /**
@@ -731,61 +730,15 @@ export default class MJCanvas extends cc.Component {
     }
 
     /**
-     * 退出桌子
-     * 
-     * @memberof MJCanvas
-     */
-    sendOutGame() {
-        if (dd.ui_manager.showLoading()) {
-            let obj = {
-                'tableId': dd.gm_manager.mjGameData.tableBaseVo.tableId,
-            };
-            let msg = JSON.stringify(obj);
-            dd.ws_manager.sendMsg(dd.protocol.MAJIANG_ROOM_LEAV, msg, (flag: number, content?: any) => {
-                dd.ui_manager.hideLoading();
-                if (flag === 0) {//成功
-                    this.quitGame();
-                } else if (flag === -1) {//超时
-                    cc.log(content);
-                } else {//失败,content是一个字符串
-                    dd.ui_manager.showAlert(content, '错误提示');
-                }
-            });
-        }
-    }
-
-    /**
-     *  申请解散桌子
-     * 
-     * @param {number} bt 表态
-     * @memberof MJCanvas
-     */
-    sendDisband(bt: number) {
-        if (dd.ui_manager.showLoading()) {
-            let obj = {
-                'tableId': dd.gm_manager.mjGameData.tableBaseVo.tableId,
-                'bt': bt,
-            };
-            let msg = JSON.stringify(obj);
-            dd.ws_manager.sendMsg(dd.protocol.MAJIANG_ROOM_DELETE_BT, msg, (flag: number, content?: any) => {
-                if (flag === 0) {//成功
-                } else if (flag === -1) {//超时
-                } else {//失败,content是一个字符串
-                    dd.ui_manager.showAlert(content, '错误提示', null, null, 1);
-                }
-                dd.ui_manager.hideLoading();
-            });
-        }
-    }
-
-    /**
      * 获取cardId麻将牌的图片
      * 
      * @param {number} cardId 
      * @memberof MJCanvas
      */
     getMJCardSF(cardId: number): cc.SpriteFrame {
-        let index = Math.floor((cardId - 1) / 4);
+        let suit = cardId > 100 ? Math.floor(cardId / 100) : Math.floor(cardId / 10);
+        let point = cardId > 100 ? Math.floor(cardId / 10) % 10 : cardId % 10;
+        let index = (suit - 1) * 9 + (point - 1);
         let sf: cc.SpriteFrame = null;
         if (index >= 0 && index < this.mj_sf_list.length) {
             sf = this.mj_sf_list[index];
@@ -921,8 +874,9 @@ export default class MJCanvas extends cc.Component {
         mj_card_mine.runAction(seq);
 
         //播放音效
-        let card: CardAttrib = dd.gm_manager.getCardById(cardId);
-        dd.mp_manager.playPokerSound(dd.mp_manager.audioSetting.language, card.suit, seatInfo.sex, card.point);
+        let suit = Math.floor(cardId / 100);
+        let point = Math.floor(cardId / 10) % 10;
+        dd.mp_manager.playPokerSound(dd.mp_manager.audioSetting.language, suit, seatInfo.sex, point);
     }
 
     /**
@@ -940,11 +894,11 @@ export default class MJCanvas extends cc.Component {
 
     /**
      * 显示听牌，可以胡什么牌的预设
-     * 
-     * @param {CardAttrib[]} cards (cardId不能用)
+     * @param {boolean} isShow 
+     * @param {number[]} [cards] 牌数组是花色和点数组成的 两位数
      * @memberof MJCanvas
      */
-    showTingPai(isShow: boolean, cards?: any, ) {
+    showTingPai(isShow: boolean, cards?: number[], ) {
         let rootNode = dd.ui_manager.getRootNode();
         if (isShow) {
             if (!this._node_ting || !this._node_ting.isValid) {

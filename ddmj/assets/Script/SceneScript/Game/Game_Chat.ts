@@ -1,4 +1,4 @@
-import { mp_manager, ui_manager } from './../../Modules/ModuleManager';
+import { mp_manager, ui_manager, gm_manager } from './../../Modules/ModuleManager';
 const { ccclass, property } = cc._decorator;
 
 @ccclass
@@ -38,14 +38,7 @@ export default class Game_Chat extends cc.Component {
      */
     _bqList: cc.Node[] = [];
 
-    /**
-     * canvas脚本
-     * 
-     * @memberof Game_Chat
-     */
-    _canvasTarget = null;
     onLoad() {
-        this._canvasTarget = ui_manager.getCanvasNode().getComponent('MJCanvas');
         this.node.on("touchend", (event: cc.Event.EventTouch) => {
             this.exitChat();
             event.stopPropagation();
@@ -68,7 +61,7 @@ export default class Game_Chat extends cc.Component {
         mp_manager.playButton();
         let chatNode: cc.Node = event.currentTarget;
         cc.log(chatNode.tag);
-        this._canvasTarget.sendChatInfo(0, chatNode.tag);
+        gm_manager._gmScript.sendChatInfo(0, chatNode.tag);
         this.exitChat();
     };
 
@@ -103,7 +96,7 @@ export default class Game_Chat extends cc.Component {
             bqNode.tag = i;
             if (bqNode) {
                 bqNode.on(cc.Node.EventType.TOUCH_END, () => {
-                    this._canvasTarget.sendChatInfo(1, bqNode.tag);
+                    gm_manager._gmScript.sendChatInfo(1, bqNode.tag);
                     this.exitChat();
                 }, this);
             }

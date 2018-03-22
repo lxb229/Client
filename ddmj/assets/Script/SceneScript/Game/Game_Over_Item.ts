@@ -1,7 +1,6 @@
 const { ccclass, property } = cc._decorator;
 
 import * as dd from './../../Modules/ModuleManager';
-import MJCanvas from './MJCanvas';
 import MJ_Card from './MJ_Card';
 import { MJ_Game_Type } from '../../Modules/Protocol';
 
@@ -114,12 +113,7 @@ export default class Game_Over_Item extends cc.Component {
      */
     @property([cc.RichText])
     lbl_player_list: cc.RichText[] = [];
-    /**
-     * canvas脚本
-     * 
-     * @memberof MJ_Table
-     */
-    _canvasTarget: MJCanvas = null;
+
     onLoad() {
 
     }
@@ -130,7 +124,6 @@ export default class Game_Over_Item extends cc.Component {
      * @memberof Game_Over_Item
      */
     async updateItem(index: number, data: SettlementOnceVo) {
-        this._canvasTarget = dd.ui_manager.getCanvasNode().getComponent('MJCanvas');
 
         this.lblName.string = data.nick;
         this.lblScore.node.color = data.score > 0 ? cc.Color.RED : cc.Color.GREEN;
@@ -233,22 +226,22 @@ export default class Game_Over_Item extends cc.Component {
 
         if (data.dianGangCards) {
             for (var i = 0; i < data.dianGangCards.length; i++) {
-                this._canvasTarget.showGroupCard(3, data.dianGangCards[i], 0, this.node_group);
+                dd.gm_manager._gmScript.showGroupCard(3, data.dianGangCards[i], 0, this.node_group);
             }
         }
         if (data.baGangCards) {
             for (var i = 0; i < data.baGangCards.length; i++) {
-                this._canvasTarget.showGroupCard(1, data.baGangCards[i], 0, this.node_group);
+                dd.gm_manager._gmScript.showGroupCard(1, data.baGangCards[i], 0, this.node_group);
             }
         }
         if (data.anGangCards) {
             for (var i = 0; i < data.anGangCards.length; i++) {
-                this._canvasTarget.showGroupCard(2, data.anGangCards[i], 0, this.node_group);
+                dd.gm_manager._gmScript.showGroupCard(2, data.anGangCards[i], 0, this.node_group);
             }
         }
         if (data.pengCards) {
             for (var i = 0; i < data.pengCards.length; i++) {
-                this._canvasTarget.showGroupCard(0, data.pengCards[i], 0, this.node_group);
+                dd.gm_manager._gmScript.showGroupCard(0, data.pengCards[i], 0, this.node_group);
             }
         }
         //如果没有杠牌和碰牌
@@ -276,7 +269,7 @@ export default class Game_Over_Item extends cc.Component {
             this.node_hand.removeAllChildren();
             handCards = dd.gm_manager.getSortCardByCardIds(handCards);
             for (var i = 0; i < handCards.length; i++) {
-                this._canvasTarget.showMineCard(handCards[handCards.length - 1 - i], this.node_hand, false, (cardNode: cc.Node) => {
+                dd.gm_manager._gmScript.showMineCard(handCards[handCards.length - 1 - i], this.node_hand, false, (cardNode: cc.Node) => {
                     cardNode.scale = 0.8;
                     let mcm: MJ_Card = cardNode.getComponent('MJ_Card');
                     mcm.showMask(false);
@@ -290,7 +283,7 @@ export default class Game_Over_Item extends cc.Component {
             this.node_hu.active = true;
             this.node_hu.removeAllChildren();
             for (var i = 0; i < data.huCards.length; i++) {
-                this._canvasTarget.showMineCard(data.huCards[i], this.node_hu, false, (cardNode: cc.Node) => {
+                dd.gm_manager._gmScript.showMineCard(data.huCards[i], this.node_hu, false, (cardNode: cc.Node) => {
                     cardNode.scale = 0.8;
                     let mcm: MJ_Card = cardNode.getComponent('MJ_Card');
                     mcm.showMask(false);

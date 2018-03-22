@@ -1,7 +1,6 @@
 
 const { ccclass, property } = cc._decorator;
 
-import MJCanvas from './MJCanvas';
 import MJ_Card from './MJ_Card';
 import * as dd from './../../Modules/ModuleManager';
 import { MJ_Act_Type, MJ_Game_Type } from '../../Modules/Protocol';
@@ -27,12 +26,6 @@ export default class MJ_Gang extends cc.Component {
 
     @property([cc.SpriteFrame])
     icon_gang_list: cc.SpriteFrame[] = [];
-    /**
-     * canvas脚本
-     * 
-     * @memberof MJ_Table
-     */
-    _canvasTarget: MJCanvas = null;
 
     /**
      * 调用的父节点
@@ -70,15 +63,14 @@ export default class MJ_Gang extends cc.Component {
     sendGangInfo(tag: number) {
         switch (dd.gm_manager.mjGameData.tableBaseVo.cfgId) {
             case MJ_Game_Type.GAME_TYPE_LSMJ://乐山麻将
-                this._canvasTarget.sendLSGangBreakCard(MJ_Act_Type.ACT_INDEX_GANG, this._gangList[tag], null);
+                dd.gm_manager._gmScript.sendLSGangBreakCard(MJ_Act_Type.ACT_INDEX_GANG, this._gangList[tag], null);
                 break;
             default:
-                this._canvasTarget.sendOtherBreakCard(MJ_Act_Type.ACT_INDEX_GANG, this._gangList[tag].cardId, null);
+                dd.gm_manager._gmScript.sendOtherBreakCard(MJ_Act_Type.ACT_INDEX_GANG, this._gangList[tag].cardId, null);
                 break;
         }
     }
     onLoad() {
-        this._canvasTarget = dd.ui_manager.getCanvasNode().getComponent('MJCanvas');
         this.node.on("touchend", (event: cc.Event.EventTouch) => {
             this._target.node_state.active = true;
             this.node.removeFromParent(true);
@@ -111,7 +103,7 @@ export default class MJ_Gang extends cc.Component {
             return a.cardId - b.cardId;
         });
         this._gangList = result;
-        
+
         if (result && result.length > 0) {
             for (let i = 0; i < result.length; i++) {
                 if (i === 0) {
@@ -134,10 +126,10 @@ export default class MJ_Gang extends cc.Component {
      * @memberof MJ_Gang
      */
     getIsRepeat(gangInfo: GangData, result: GangData[]) {
-        let card1 = dd.gm_manager.getCardById(gangInfo.cardId);
+        let card1 = Math.floor(gangInfo.cardId / 10);
         for (let j = 0; j < result.length; j++) {
-            let card2 = dd.gm_manager.getCardById(result[j].cardId);
-            if (card1.suit === card2.suit && card1.point === card2.point) {
+            let card2 = Math.floor(result[j].cardId / 10);
+            if (card1 === card2) {
                 return true;
             }
         }
@@ -156,7 +148,7 @@ export default class MJ_Gang extends cc.Component {
         let icon_gang = cardNode.getChildByName('icon_gang');
         cardNode.tag = index;
         if (cardImg) {
-            let csf: cc.SpriteFrame = this._canvasTarget.getMJCardSF(gangData.cardId);
+            let csf: cc.SpriteFrame = dd.gm_manager._gmScript.getMJCardSF(gangData.cardId);
             cardImg.getComponent(cc.Sprite).spriteFrame = csf;
         }
 

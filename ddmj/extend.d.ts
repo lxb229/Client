@@ -882,7 +882,7 @@ declare interface SortCardData {
 declare interface GangData {
     cardId: number, //杠的牌
     /**
-     * 1=巴杠,2=暗杠或直杠
+     * 1=巴杠,2=暗杠 3=直杠
      * @type {number}
      * @memberof GangData
      */

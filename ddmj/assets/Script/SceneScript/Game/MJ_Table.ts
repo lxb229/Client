@@ -1,6 +1,5 @@
 const { ccclass, property } = cc._decorator;
 
-import MJCanvas from './MJCanvas';
 import MJ_PlayerUI from './MJ_PlayerUI';
 import * as dd from './../../Modules/ModuleManager';
 import { MJ_GameState } from '../../Modules/Protocol';
@@ -110,13 +109,6 @@ export default class MJ_Table extends cc.Component {
     @property([cc.Node])
     playerReadyList: cc.Node[] = [];
     /**
-     * canvas脚本
-     * 
-     * @memberof MJ_Table
-     */
-    _canvasTarget: MJCanvas = null;
-
-    /**
      * 
      * 当前时间
      * @type {string}
@@ -143,7 +135,6 @@ export default class MJ_Table extends cc.Component {
     _msTime: number = 1;
 
     onLoad() {
-        this._canvasTarget = dd.ui_manager.getCanvasNode().getComponent('MJCanvas');
         if (dd.config.wxState === 0) {
             this.node_wx_invit.active = true;
         } else {
@@ -180,9 +171,6 @@ export default class MJ_Table extends cc.Component {
      * @memberof MJ_Table
      */
     showTableInfo() {
-        if (!this._canvasTarget) {
-            this._canvasTarget = dd.ui_manager.getCanvasNode().getComponent('MJCanvas');
-        }
         this._cdTime = 1;
         this.lblTitle.string = dd.gm_manager.mjGameData.tableBaseVo.ruleShowDesc;
         this.lblRoomId.string = '房间号:' + dd.gm_manager.mjGameData.tableBaseVo.tableId;
@@ -279,6 +267,31 @@ export default class MJ_Table extends cc.Component {
         }
         this.lblDelay.string = ms + 'ms';
     }
+
+
+    /**
+     * 退出桌子
+     * 
+     * @memberof MJ_Table
+     */
+    sendOutGame() {
+        if (dd.ui_manager.showLoading()) {
+            let obj = {
+                'tableId': dd.gm_manager.mjGameData.tableBaseVo.tableId,
+            };
+            let msg = JSON.stringify(obj);
+            dd.ws_manager.sendMsg(dd.protocol.MAJIANG_ROOM_LEAV, msg, (flag: number, content?: any) => {
+                dd.ui_manager.hideLoading();
+                if (flag === 0) {//成功
+                    dd.gm_manager._gmScript.quitGame();
+                } else if (flag === -1) {//超时
+                    cc.log(content);
+                } else {//失败,content是一个字符串
+                    dd.ui_manager.showAlert(content, '错误提示');
+                }
+            });
+        }
+    }
     /**
      * 返回大厅
      * 
@@ -286,7 +299,7 @@ export default class MJ_Table extends cc.Component {
      */
     click_btn_return() {
         dd.mp_manager.playButton();
-        this._canvasTarget.sendOutGame();
+        this.sendOutGame();
     }
     /**
      * 解散
@@ -300,7 +313,7 @@ export default class MJ_Table extends cc.Component {
             {
                 lbl_name: '确定',
                 callback: () => {
-                    this._canvasTarget.sendOutGame();
+                    this.sendOutGame();
                 }
             }, {
                 lbl_name: '取消',
@@ -345,7 +358,7 @@ export default class MJ_Table extends cc.Component {
     click_btn_chat() {
         if (dd.gm_manager.touchTarget) return;
         dd.mp_manager.playButton();
-        this._canvasTarget.showChat();
+        dd.gm_manager._gmScript.showChat();
     }
     /**
      * 设置
@@ -355,7 +368,7 @@ export default class MJ_Table extends cc.Component {
     click_btn_setting() {
         if (dd.gm_manager.touchTarget) return;
         dd.mp_manager.playButton();
-        this._canvasTarget.showSetting();
+        dd.gm_manager._gmScript.showSetting();
     }
     /**
      * 语音

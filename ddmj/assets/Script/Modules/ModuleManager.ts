@@ -100,14 +100,12 @@ export let cb_diconnect: (event: cc.Event.EventCustom) => void = (event: cc.Even
                                 let msg = JSON.stringify(obj);
                                 ws_manager.sendMsg(protocol.MAJIANG_ROOM_JOIN, msg, (flag: number, content?: any) => {
                                     if (flag === 0) {//成功
-                                        gm_manager.mjGameData = content as MJGameData;
-                                        gm_manager.replayMJ = 0;
+                                        gm_manager.setTableData(content, true, 0);
                                         switch (gm_manager.mjGameData.tableBaseVo.cfgId) {
                                             case MJ_Game_Type.GAME_TYPE_XZDD:
                                                 if (sceneName !== 'MJScene') {
                                                     cc.director.loadScene('MJScene');
                                                 } else {
-                                                    ui_manager.getCanvasNode().emit('diconnect_update');
                                                     ui_manager.hideLoading();
                                                 }
                                                 break;
@@ -116,7 +114,6 @@ export let cb_diconnect: (event: cc.Event.EventCustom) => void = (event: cc.Even
                                                 if (sceneName !== 'SRMJScene') {
                                                     cc.director.loadScene('SRMJScene');
                                                 } else {
-                                                    ui_manager.getCanvasNode().emit('diconnect_update');
                                                     ui_manager.hideLoading();
                                                 }
                                                 break;
@@ -124,7 +121,6 @@ export let cb_diconnect: (event: cc.Event.EventCustom) => void = (event: cc.Even
                                                 if (sceneName !== 'LRMJScene') {
                                                     cc.director.loadScene('LRMJScene');
                                                 } else {
-                                                    ui_manager.getCanvasNode().emit('diconnect_update');
                                                     ui_manager.hideLoading();
                                                 }
                                                 break;
@@ -132,7 +128,6 @@ export let cb_diconnect: (event: cc.Event.EventCustom) => void = (event: cc.Even
                                                 if (sceneName !== 'MYMJScene') {
                                                     cc.director.loadScene('MYMJScene');
                                                 } else {
-                                                    ui_manager.getCanvasNode().emit('diconnect_update');
                                                     ui_manager.hideLoading();
                                                 }
                                                 break;
@@ -144,7 +139,6 @@ export let cb_diconnect: (event: cc.Event.EventCustom) => void = (event: cc.Even
                                                         cc.director.loadScene('ZG4MJScene');
                                                     } else { }
                                                 } else {
-                                                    ui_manager.getCanvasNode().emit('diconnect_update');
                                                     ui_manager.hideLoading();
                                                 }
                                                 break;
@@ -152,7 +146,6 @@ export let cb_diconnect: (event: cc.Event.EventCustom) => void = (event: cc.Even
                                                 if (sceneName !== 'LSMJScene') {
                                                     cc.director.loadScene('LSMJScene');
                                                 } else {
-                                                    ui_manager.getCanvasNode().emit('diconnect_update');
                                                     ui_manager.hideLoading();
                                                 }
                                                 break;
@@ -160,7 +153,6 @@ export let cb_diconnect: (event: cc.Event.EventCustom) => void = (event: cc.Even
                                                 if (sceneName !== 'NCMJScene') {
                                                     cc.director.loadScene('NCMJScene');
                                                 } else {
-                                                    ui_manager.getCanvasNode().emit('diconnect_update');
                                                     ui_manager.hideLoading();
                                                 }
                                                 break;

@@ -333,37 +333,37 @@ export default class WSManager {
                 UDManager.getInstance().mineData.roomCard = wallet.roomCard;
                 break;
             case Protocol.MAJIANG_ROOM_GAMESTATE_NOTIFY://推送消息(游戏状态变化)
-                GMManager.getInstance().setTableData(content as MJGameData);
+                GMManager.getInstance().setStateData(content);
                 break;
             case Protocol.MAJIANG_ROOM_SEAT_NOTIFY://推送消息(座位数据变化)
-                GMManager.getInstance().setTableData(content as MJGameData);
+                GMManager.getInstance().setSeatData(content, 1);
                 break;
             case Protocol.MAJIANG_ROOM_DINQUE_NOTIFY://推送消息(定缺数据通知)
-                GMManager.getInstance().setTableData(content as MJGameData);
+                GMManager.getInstance().setSeatData(content, 2);
                 break;
             case Protocol.MAJIANG_ROOM_SWAPCARD_NOTIFY://推送消息(换牌数据通知)
-                GMManager.getInstance().setTableData(content as MJGameData);
+                GMManager.getInstance().setSwapCardData(content);
                 break;
             case Protocol.MAJIANG_ROOM_OUTCARD_NOTIFY://推送消息(出牌数据通知)
-                GMManager.getInstance().setTableData(content as MJGameData);
+                GMManager.getInstance().setSeatData(content, 3);
                 break;
             case Protocol.MAJIANG_ROOM_BREAKCARD_NOTIFY://推送消息(胡杠碰吃过表态通知)
-                GMManager.getInstance().setTableData(content as MJGameData);
+                GMManager.getInstance().setBreakCardData(content);
+                break;
+            case Protocol.MAJIANG_ROOM_DESTORY_BT_NOTIFY:// 推送消息(桌子解散表态通知)
+                GMManager.getInstance().setSeatData(content, 4);
                 break;
             case Protocol.MAJIANG_ROOM_BAOJIAO_BT_NOTIFY: //推送消息(座位报叫表态通知)
-                GMManager.getInstance().setBaoJiaoData(content);
+                GMManager.getInstance().setSeatData(content, 5);
                 break;
             case Protocol.MAJIANG_ROOM_NCMJ_PIAOPAI_BT_NOTIFY: //推送消息(座位飘表态通知)
-                GMManager.getInstance().setBaoJiaoData(content);
+                GMManager.getInstance().setSeatData(content, 6);
                 break;
             case Protocol.CHAT_SEND_NOTIFY://推送消息(聊天信息通知)
                 cc.systemEvent.emit('MJ_ChatPush', content);
                 break;
             case Protocol.MAJIANG_ROOM_DESTORY_NOTIFY:// 推送消息(房间已解散通知)
                 cc.systemEvent.emit('MJ_OutPush', content);
-                break;
-            case Protocol.MAJIANG_ROOM_DESTORY_BT_NOTIFY:// 推送消息(桌子解散表态通知)
-                GMManager.getInstance().setTableData(content as MJGameData);
                 break;
             case Protocol.CORPS_ADD_MEMBER_NOTIFY://推送消息(俱乐部成员添加通知)
                 ui_manager.showAlert(content.content, '俱乐部', null, null, 1);

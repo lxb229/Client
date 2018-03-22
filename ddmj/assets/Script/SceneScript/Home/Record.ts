@@ -221,11 +221,9 @@ export default class Record extends cc.Component {
                 if (response.ok) {
                     response.json().then((json) => {
                         cc.log(JSON.stringify(json).length);
-                        dd.gm_manager.replayMJ = 1;
                         dd.gm_manager.replayDataList = json.datas as ReplayData[];
                         dd.gm_manager.replayRecordId = recordId;
-                        dd.gm_manager.mjGameData = dd.gm_manager.replayDataList[0].frameData;
-                        dd.gm_manager.turnToGameScene();
+                        dd.gm_manager.turnToGameScene(dd.gm_manager.replayDataList[0].frameData, 1);
                     });
                 } else {
                     dd.ui_manager.showTip('获取录像失败');

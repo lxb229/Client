@@ -2,7 +2,6 @@ const { ccclass, property } = cc._decorator;
 
 import MJ_Card from './MJ_Card';
 import MJ_Card_Group from './MJ_Card_Group';
-import MJCanvas from './MJCanvas';
 import * as dd from './../../Modules/ModuleManager';
 import { MJ_GameState } from '../../Modules/Protocol';
 
@@ -51,14 +50,6 @@ export default class MJ_Play extends cc.Component {
 
 
     /**
-     * canvas脚本
-     * 
-     * @type {MJCanvas}
-     * @memberof MJ_Play
-     */
-    _canvasTarget: MJCanvas = null;
-
-    /**
      * 当前玩家的信息
      * 
      * @type {SeatVo}
@@ -66,7 +57,6 @@ export default class MJ_Play extends cc.Component {
      */
     _seatInfo: SeatVo = null;
     onLoad() {
-        this._canvasTarget = dd.ui_manager.getCanvasNode().getComponent('MJCanvas');
         this.setHandPosition();
     }
     /**
@@ -117,9 +107,6 @@ export default class MJ_Play extends cc.Component {
      * @memberof MJ_Play
      */
     updatePlay(seatInfo: SeatVo) {
-        if (!this._canvasTarget) {
-            this._canvasTarget = dd.ui_manager.getCanvasNode().getComponent('MJCanvas');
-        }
         this._seatInfo = seatInfo;
         this.showPlayState();
         this.showHandCard();

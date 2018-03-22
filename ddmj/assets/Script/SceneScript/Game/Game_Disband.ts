@@ -1,7 +1,6 @@
 
 import * as dd from './../../Modules/ModuleManager';
 const { ccclass, property } = cc._decorator;
-import MJCanvas from './MJCanvas';
 import { MJ_Act_State } from '../../Modules/Protocol';
 
 @ccclass
@@ -107,12 +106,6 @@ export default class Game_Disband extends cc.Component {
      */
     _downTime: number = 3;
 
-    /**
-     * canvas脚本
-     * 
-     * @memberof MJ_Table
-     */
-    _canvasTarget: MJCanvas = null;
 
     /**
      * 房间信息获取时间
@@ -123,7 +116,6 @@ export default class Game_Disband extends cc.Component {
     _rTime: number = 10;
 
     onLoad() {
-        this._canvasTarget = dd.ui_manager.getCanvasNode().getComponent('MJCanvas');
         this.node.on("touchend", (event: cc.Event.EventTouch) => {
             event.stopPropagation();
         }, this);
@@ -199,7 +191,7 @@ export default class Game_Disband extends cc.Component {
      */
     click_btn_ok() {
         dd.mp_manager.playButton();
-        this._canvasTarget.sendDisband(2);
+        this.sendDisband(2);
     }
 
     /**
@@ -209,7 +201,30 @@ export default class Game_Disband extends cc.Component {
      */
     click_btn_refuse() {
         dd.mp_manager.playButton();
-        this._canvasTarget.sendDisband(1);
+        this.sendDisband(1);
+    }
+    /**
+   *  申请解散桌子
+   * 
+   * @param {number} bt 表态
+   * @memberof Game_Disband
+   */
+    sendDisband(bt: number) {
+        if (dd.ui_manager.showLoading()) {
+            let obj = {
+                'tableId': dd.gm_manager.mjGameData.tableBaseVo.tableId,
+                'bt': bt,
+            };
+            let msg = JSON.stringify(obj);
+            dd.ws_manager.sendMsg(dd.protocol.MAJIANG_ROOM_DELETE_BT, msg, (flag: number, content?: any) => {
+                if (flag === 0) {//成功
+                } else if (flag === -1) {//超时
+                } else {//失败,content是一个字符串
+                    dd.ui_manager.showAlert(content, '错误提示', null, null, 1);
+                }
+                dd.ui_manager.hideLoading();
+            });
+        }
     }
 
     /**
@@ -225,7 +240,7 @@ export default class Game_Disband extends cc.Component {
             if (flag === 0) {//成功
             } else if (flag === -1) {//超时
             } else {//失败,content是一个字符串
-                this._canvasTarget.quitGame();
+                dd.gm_manager._gmScript.quitGame();
             }
         });
     }

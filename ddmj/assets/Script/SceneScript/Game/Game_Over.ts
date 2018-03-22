@@ -56,12 +56,10 @@ export default class Game_Over extends cc.Component {
     @property([cc.SpriteFrame])
     img_title_list: cc.SpriteFrame[] = [];
 
-    _canvasTarget = null;
     onLoad() {
         this.node.on("touchend", (event: cc.Event.EventTouch) => {
             event.stopPropagation();
         }, this);
-        this._canvasTarget = dd.ui_manager.getCanvasNode().getComponent('MJCanvas');
     }
 
     /**
@@ -123,15 +121,15 @@ export default class Game_Over extends cc.Component {
     * 发送下一局
     * 
     * @param {number[]} cardIds 
-    * @memberof MJCanvas
+    * @memberof Game_Over
     */
     sendNextGame() {
         if (dd.ui_manager.showLoading()) {
             dd.ws_manager.sendMsg(dd.protocol.MAJIANG_ROOM_NEXT_GAME, '', (flag: number, content?: any) => {
                 if (flag === 0) {//成功
                     dd.ui_manager.hideLoading();
-                    dd.gm_manager.mjGameData = content as MJGameData;
-                    this._canvasTarget.showMJInfo();
+                    dd.gm_manager.setTableData(content as MJGameData, true, 0);
+
                     this.node.removeFromParent(true);
                     this.node.destroy();
                 } else if (flag === -1) {//超时

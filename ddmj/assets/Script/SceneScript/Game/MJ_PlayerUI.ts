@@ -1,5 +1,5 @@
 const { ccclass, property } = cc._decorator;
-import MJCanvas from './MJCanvas';
+
 import * as dd from './../../Modules/ModuleManager';
 import { MJ_GameState, MJ_Game_Type } from '../../Modules/Protocol';
 @ccclass
@@ -67,18 +67,10 @@ export default class MJ_PlayerUI extends cc.Component {
      */
     _seatInfo: SeatVo = null;
 
-    /**
-     * canvas脚本
-     * 
-     * @type {MJCanvas}
-     * @memberof MJ_PlayerUI
-     */
-    _canvasTarget: MJCanvas = null;
     onLoad() {
-        this._canvasTarget = dd.ui_manager.getCanvasNode().getComponent('MJCanvas');
         this.node.on(cc.Node.EventType.TOUCH_END, (event: cc.Event.EventTouch) => {
             if (dd.gm_manager.touchTarget) return;
-            this._canvasTarget.showRoleInfo(this._seatInfo.accountId);
+            dd.gm_manager._gmScript.showRoleInfo(this._seatInfo.accountId);
             event.stopPropagation();
         }, this);
     }
@@ -110,7 +102,7 @@ export default class MJ_PlayerUI extends cc.Component {
             case MJ_Game_Type.GAME_TYPE_ZGMJ://自贡麻将
                 if (this._seatInfo.baojiaoState === 1) {
                     this.unSuit.node.active = true;
-                    this.unSuit.spriteFrame = this._canvasTarget.unSuit_list[3];
+                    this.unSuit.spriteFrame = dd.gm_manager._gmScript.unSuit_list[3];
                 } else {
                     this.unSuit.node.active = false;
                 }
@@ -120,7 +112,7 @@ export default class MJ_PlayerUI extends cc.Component {
                     && dd.gm_manager.mjGameData.tableBaseVo.gameState > MJ_GameState.STATE_TABLE_READY)
                     || this._seatInfo.piaoNum > 0) {
                     this.unSuit.node.active = true;
-                    this.unSuit.spriteFrame = this._canvasTarget.unSuit_list[3];
+                    this.unSuit.spriteFrame = dd.gm_manager._gmScript.unSuit_list[3];
                     let lblPiao = this.unSuit.node.getChildByName('lblPiao');
                     if (lblPiao) lblPiao.getComponent(cc.Label).string = 'x' + this._seatInfo.piaoNum;
                 } else {
@@ -131,7 +123,7 @@ export default class MJ_PlayerUI extends cc.Component {
                 //如果存在打缺 缺花色(1=万,2=筒,3=条)
                 if (this._seatInfo.unSuit > 0 && dd.gm_manager.mjGameData.tableBaseVo.gameState > MJ_GameState.STATE_TABLE_DINGQUE) {
                     this.unSuit.node.active = true;
-                    this.unSuit.spriteFrame = this._canvasTarget.unSuit_list[this._seatInfo.unSuit - 1];
+                    this.unSuit.spriteFrame = dd.gm_manager._gmScript.unSuit_list[this._seatInfo.unSuit - 1];
                 } else {
                     this.unSuit.node.active = false;
                 }

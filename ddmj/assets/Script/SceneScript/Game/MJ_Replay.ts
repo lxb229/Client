@@ -1,7 +1,6 @@
 
 const { ccclass, property } = cc._decorator;
 
-import MJCanvas from './MJCanvas';
 import * as dd from './../../Modules/ModuleManager';
 @ccclass
 export default class MJ_Replay extends cc.Component {
@@ -11,13 +10,6 @@ export default class MJ_Replay extends cc.Component {
 
     @property(cc.Node)
     btn_play: cc.Node = null;
-
-    /**
-     * canvas脚本
-     * 
-     * @memberof MJ_Table
-     */
-    _canvasTarget: MJCanvas = null;
 
     /**
      * 帧时间
@@ -36,7 +28,6 @@ export default class MJ_Replay extends cc.Component {
     _replayIndex: number = 0;
 
     onLoad() {
-        this._canvasTarget = dd.ui_manager.getCanvasNode().getComponent('MJCanvas');
         this.node.on("touchend", (event: cc.Event.EventTouch) => {
             event.stopPropagation();
         }, this);
@@ -83,9 +74,9 @@ export default class MJ_Replay extends cc.Component {
                     lbl_name: '确定',
                     callback: () => {
                         //移除结算面板
-                        if (this._canvasTarget._game_over && this._canvasTarget._game_over.isValid) {
-                            this._canvasTarget._game_over.removeFromParent(true);
-                            this._canvasTarget._game_over.destroy();
+                        if (dd.gm_manager._gmScript._game_over && dd.gm_manager._gmScript._game_over.isValid) {
+                            dd.gm_manager._gmScript._game_over.removeFromParent(true);
+                            dd.gm_manager._gmScript._game_over.destroy();
                         }
                         this._replayIndex = 0;
                         this.showReplayInfo();
@@ -109,13 +100,13 @@ export default class MJ_Replay extends cc.Component {
             return;
         }
         let nowReplay = dd.gm_manager.replayDataList[this._replayIndex];
-        dd.gm_manager.mjGameData = nowReplay.frameData;
+        //刷新下一局的游戏数据
+        dd.gm_manager.setTableData(nowReplay.frameData as MJGameData, true, 1);
         if (this._replayIndex + 1 < dd.gm_manager.replayDataList.length) {
             let nextReplay = dd.gm_manager.replayDataList[this._replayIndex + 1];
             let ft = dd.gm_manager.getDiffTime(nowReplay.startTime, nextReplay.startTime);
             this._frameTime = (Number(nextReplay.startTime) - Number(nowReplay.startTime)) / 1000;
         }
-        this._canvasTarget.showMJInfo();
     }
 
     /**

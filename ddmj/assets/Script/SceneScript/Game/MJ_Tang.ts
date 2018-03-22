@@ -1,7 +1,6 @@
 
 const { ccclass, property } = cc._decorator;
 
-import MJCanvas from './MJCanvas';
 import MJ_Card from './MJ_Card';
 import * as dd from './../../Modules/ModuleManager';
 import { MJ_Act_Type, MJ_Game_Type } from '../../Modules/Protocol';
@@ -25,12 +24,6 @@ export default class MJ_Tang extends cc.Component {
 
     @property(cc.Prefab)
     card_tang_prefab: cc.Prefab = null;
-    /**
-     * canvas脚本
-     * 
-     * @memberof MJ_Table
-     */
-    _canvasTarget: MJCanvas = null;
 
     /**
      * 调用的回调
@@ -52,7 +45,6 @@ export default class MJ_Tang extends cc.Component {
         event.stopPropagation();
     };
     onLoad() {
-        this._canvasTarget = dd.ui_manager.getCanvasNode().getComponent('MJCanvas');
         this.node.on("touchend", (event: cc.Event.EventTouch) => {
             event.stopPropagation();
         }, this);
@@ -63,7 +55,7 @@ export default class MJ_Tang extends cc.Component {
      * btcards [[B] 表态的牌
      * hucards [[B] 躺牌后胡的牌
      * outcard [byte] 躺牌后要打出的牌
-     * @memberof MJCanvas
+     * @memberof MJ_Tang
      */
     initData(tangCfg: TangCfg, cb) {
         this._cb = cb;
@@ -85,7 +77,7 @@ export default class MJ_Tang extends cc.Component {
      * btcards [[B] 表态的牌
      * hucards [[B] 躺牌后胡的牌
      * outcard [byte] 躺牌后要打出的牌
-     * @memberof MJCanvas
+     * @memberof MJ_Tang
      */
     sendTang(tangCfg: TangCfg) {
         let obj = {
@@ -119,7 +111,7 @@ export default class MJ_Tang extends cc.Component {
         cardNode.tag = cardId;
         let cardImg = cardNode.getChildByName('cardImg');
         if (cardImg) {
-            let csf: cc.SpriteFrame = this._canvasTarget.getMJCardSF(cardId);
+            let csf: cc.SpriteFrame = dd.gm_manager._gmScript.getMJCardSF(cardId);
             cardImg.getComponent(cc.Sprite).spriteFrame = csf;
         }
         let toggle = cardNode.getChildByName('toggle').getComponent(cc.Toggle);
@@ -151,21 +143,16 @@ export default class MJ_Tang extends cc.Component {
         });
         if (tangList.length > 0) {
             cc.log('要躺的牌的列表' + tangList);
-            let cards = this._tangCfg.cardIds.map((cardId) => {
-                return dd.gm_manager.getCardById(cardId);
-            }, this);
-            let outcards = tangList.map((cardId) => {
-                return dd.gm_manager.getCardById(cardId);
-            }, this);
+            let cards = this._tangCfg.cardIds.slice();
             let mySeat: SeatVo = dd.gm_manager.getSeatById(dd.ud_manager.mineData.accountId);
-            let tangs = dd.gm_manager.getTingByTang(cards, outcards, mySeat.unSuit);
-            let hucards = tangs.map((card: CardAttrib) => {
-                return card.cardId;
-            });
+            let tangs = dd.gm_manager.getTingByTang(cards, tangList, mySeat.unSuit);
+
             cc.log('听牌列表' + this._tangCfg.hucards);
-            cc.log('躺牌后胡牌列表' + hucards);
+            cc.log('躺牌后胡牌列表' + tangs);
             if (tangs.length > 0) {
-                this._tangCfg.hucards = hucards;
+                this._tangCfg.hucards = tangs.map((card) => {
+                    return card * 10 + 1;
+                }, this);
                 this._tangCfg.btcards = tangList;
                 this.sendTang(this._tangCfg);
             } else {
@@ -175,7 +162,12 @@ export default class MJ_Tang extends cc.Component {
                         toggle.isChecked = false;
                     }
                 });
-                dd.ui_manager.showTip('请选择正确的躺牌！');
+                //南充麻将
+                if (dd.gm_manager.mjGameData.tableBaseVo.cfgId === MJ_Game_Type.GAME_TYPE_NCMJ) {
+                    dd.ui_manager.showTip('请选择要摆的牌！');
+                } else {
+                    dd.ui_manager.showTip('请选择要躺的牌！');
+                }
             }
         } else {
             //南充麻将

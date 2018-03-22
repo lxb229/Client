@@ -2,7 +2,6 @@ const { ccclass, property } = cc._decorator;
 
 import MJ_Card from './MJ_Card';
 import MJ_Card_Group from './MJ_Card_Group';
-import MJCanvas from './MJCanvas';
 import * as dd from './../../Modules/ModuleManager';
 import { MJ_GameState, MJ_Act_State } from '../../Modules/Protocol';
 
@@ -31,14 +30,6 @@ export default class MJ_HandList extends cc.Component {
      * @memberof MJ_HandList
      */
     _endPos: cc.Vec2 = cc.p(0, 0);
-    /**
-     * canvas脚本
-     * 
-     * @type {MJCanvas}
-     * @memberof MJ_HandList
-     */
-    _canvasTarget: MJCanvas = null;
-
     /**
      * 自己的脚本
      * 
@@ -97,9 +88,6 @@ export default class MJ_HandList extends cc.Component {
      */
     _huList = [];
 
-    wans: CardAttrib[] = [];
-    tongs: CardAttrib[] = [];
-    tiaos: CardAttrib[] = [];
     _moPaiCardId: number = -1;
     /**
      * 自己是否能出牌
@@ -120,7 +108,7 @@ export default class MJ_HandList extends cc.Component {
      * @memberof MJ_HandList
      */
     setSelectCard(cardNode: cc.Node) {
-        this._canvasTarget.showTingPai(false);
+        dd.gm_manager._gmScript.showTingPai(false);
         if (cardNode && cardNode.isValid) {
             cardNode.color = cc.Color.WHITE;
             let hcs: MJ_Card = cardNode.getComponent('MJ_Card');
@@ -155,21 +143,23 @@ export default class MJ_HandList extends cc.Component {
                             if (d > 150 && dy > 80) {
                                 cc.log('打出这张牌,拖动距离：' + d + ';拖动高度：' + dy);
                                 if (this._seatInfo.seatIndex === dd.gm_manager.mjGameData.tableBaseVo.btIndex) {
-                                    this._canvasTarget.sendOutCard(hcs._cardId);
+                                    dd.gm_manager._gmScript.sendOutCard(hcs._cardId);
                                     //移除节点
-                                    this.deleteCardByNode(cardNode);
+                                    cardNode.removeFromParent(true);
+                                    cardNode.destroy();
                                 }
                             } else {
                                 cc.log('选中这张牌');
                                 this.selectCardByCardId(hcs._cardId);
-                                this._canvasTarget.showTSCard(hcs._cardId);
+                                dd.gm_manager._gmScript.showTSCard(hcs._cardId);
                             }
                         } else {
                             cc.log('打出这张牌');
                             if (this._seatInfo.seatIndex === dd.gm_manager.mjGameData.tableBaseVo.btIndex) {
-                                this._canvasTarget.sendOutCard(hcs._cardId);
+                                dd.gm_manager._gmScript.sendOutCard(hcs._cardId);
                                 //移除节点
-                                this.deleteCardByNode(cardNode);
+                                cardNode.removeFromParent(true);
+                                cardNode.destroy();
                             } else {
                                 hcs.showSelectCard(false);
                             }
@@ -180,7 +170,7 @@ export default class MJ_HandList extends cc.Component {
                             //如果显示悔按钮状态下，就选中牌，并显示躺界面
                             cc.log('选中这张牌');
                             let tangObj: TangCfg = this.selectTangOutCard(hcs._cardId);
-                            this._canvasTarget.showTSCard(hcs._cardId);
+                            dd.gm_manager._gmScript.showTSCard(hcs._cardId);
                             this._mineScript.showTangNode(true, tangObj);
                         } else {
                             //如果当前牌没有选中
@@ -189,14 +179,15 @@ export default class MJ_HandList extends cc.Component {
                             if (d > 200 && dy > 80) {
                                 cc.log('打出这张牌,拖动距离：' + d + ';拖动高度：' + dy);
                                 if (this._seatInfo.seatIndex === dd.gm_manager.mjGameData.tableBaseVo.btIndex) {
-                                    this._canvasTarget.sendOutCard(hcs._cardId);
+                                    dd.gm_manager._gmScript.sendOutCard(hcs._cardId);
                                     //移除节点
-                                    this.deleteCardByNode(cardNode);
+                                    cardNode.removeFromParent(true);
+                                    cardNode.destroy();
                                 }
                             } else {
                                 cc.log('选中这张牌');
                                 this.selectCardByCardId(hcs._cardId);
-                                this._canvasTarget.showTSCard(hcs._cardId);
+                                dd.gm_manager._gmScript.showTSCard(hcs._cardId);
                             }
                         }
                     }
@@ -325,30 +316,11 @@ export default class MJ_HandList extends cc.Component {
     }
 
     onLoad() {
-        for (let i = 1; i < 4; i++) {
-            for (let j = 1; j < 10; j++) {
-                let card: CardAttrib = {
-                    cardId: 0,
-                    suit: i,
-                    point: j
-                };
-                switch (i) {
-                    case 1: this.wans.push(card); break;
-                    case 2: this.tongs.push(card); break;
-                    case 3: this.tiaos.push(card); break;
-                    default: break;
-                }
-            }
-        }
-        this._canvasTarget = dd.ui_manager.getCanvasNode().getComponent("MJCanvas");
         this.onTouchEvent();
         this.setHandPosition();
     }
 
     initData() {
-        if (!this._canvasTarget) {
-            this._canvasTarget = dd.ui_manager.getCanvasNode().getComponent('MJCanvas');
-        }
         this._hand_card_list.length = 0;
         this.node_hand.removeAllChildren();
         this._moPaiCardId = -1;
@@ -411,9 +383,6 @@ export default class MJ_HandList extends cc.Component {
      * @memberof MJ_HandList
      */
     updateHandList(seatInfo: SeatVo, target) {
-        if (!this._canvasTarget) {
-            this._canvasTarget = dd.ui_manager.getCanvasNode().getComponent('MJCanvas');
-        }
         //如果在准备阶段，就初始化数据
         if (dd.gm_manager.mjGameData.tableBaseVo.gameState <= MJ_GameState.STATE_TABLE_READY) {
             this.initData();
@@ -446,11 +415,11 @@ export default class MJ_HandList extends cc.Component {
         if (!isTang) {
             //如果是重播，就刷新手牌
             if (dd.gm_manager.replayMJ === 1) {
-                this.showReplayHandCards(handCards, this._moPaiCardId);
+                this.showReplayHandCards(handCards);
             } else {
                 //如果不是出牌阶段,移除
                 if (dd.gm_manager.mjGameData.tableBaseVo.gameState !== MJ_GameState.STATE_TABLE_OUTCARD) {
-                    this._canvasTarget.showTingPai(false);
+                    dd.gm_manager._gmScript.showTingPai(false);
                 }
                 this.showHandCard(handCards, this._moPaiCardId);
                 this.deleteNotCard(handCards);
@@ -550,7 +519,6 @@ export default class MJ_HandList extends cc.Component {
     showIsCanPlay(cardNode: cc.Node) {
         if (cardNode) {
             let hcs: MJ_Card = cardNode.getComponent('MJ_Card');
-            let card: CardAttrib = dd.gm_manager.getCardById(hcs._cardId);
             if (this.getIsShowTangHu(hcs._cardId)) {
                 hcs.showMask(true);
             } else {
@@ -599,10 +567,10 @@ export default class MJ_HandList extends cc.Component {
         let isTangHu = false;
         let tangHuList = dd.gm_manager.mjGameData.tableBaseVo.tangCanHuList;
         if (tangHuList && tangHuList.length > 0) {
-            let card: CardAttrib = dd.gm_manager.getCardById(cardId);
-            for (let j = 0; j < tangHuList.length; j++) {
-                let card1: CardAttrib = dd.gm_manager.getCardById(tangHuList[j]);
-                if (dd.gm_manager.isSameCard(card, card1)) {
+            let card = Math.floor(cardId / 10);
+            let tempList = dd.gm_manager.getSplitCards(tangHuList);
+            for (let i = 0; i < tempList.length; i++) {
+                if (card === tempList[i]) {
                     isTangHu = true;
                     break;
                 }
@@ -617,19 +585,19 @@ export default class MJ_HandList extends cc.Component {
      * @param {number} [moPaiCard]   摸牌
      * @memberof MJ_HandList
      */
-    showReplayHandCards(handCards: number[], moPaiCard: number) {
+    showReplayHandCards(handCards: number[]) {
         this.node_hand.removeAllChildren();
         for (var i = 0; i < handCards.length; i++) {
             let index = i;
             let cardId = handCards[i];
             //如果是摸牌,并且轮到自己表态，摸牌存在,就在摸牌位置创建摸牌
-            if (cardId === moPaiCard && dd.gm_manager.mjGameData.tableBaseVo.btIndex === this._seatInfo.seatIndex && this._seatInfo.moPaiCard > 0) {
-                this._canvasTarget.showMineCard(this._seatInfo.moPaiCard, this.node_hand, false, (cardNode: cc.Node) => {
+            if (cardId === this._seatInfo.moPaiCard && dd.gm_manager.mjGameData.tableBaseVo.btIndex === this._seatInfo.seatIndex) {
+                dd.gm_manager._gmScript.showMineCard(this._seatInfo.moPaiCard, this.node_hand, false, (cardNode: cc.Node) => {
                     cardNode.setPosition(cardNode.width, 0);
                     this.showIsCanPlay(cardNode);
                 });
             } else {
-                this._canvasTarget.showMineCard(cardId, this.node_hand, false, (cardNode: cc.Node) => {
+                dd.gm_manager._gmScript.showMineCard(cardId, this.node_hand, false, (cardNode: cc.Node) => {
                     let ePos = cc.p((index * (-cardNode.width) - cardNode.width / 2), 0);
                     cardNode.setPosition(ePos);
                     this.showIsCanPlay(cardNode);
@@ -647,24 +615,29 @@ export default class MJ_HandList extends cc.Component {
     showHandCard(handCards: number[], moPaiCard: number) {
         let isMyBreakState = false;
         let isAllSwap = false;
-        if (dd.gm_manager.mjGameData.tableBaseVo.gameState === MJ_GameState.STATE_TABLE_BREAKCARD) {
-            isMyBreakState = this.getIsMyBreakState();
-        } else if (dd.gm_manager.mjGameData.tableBaseVo.gameState === MJ_GameState.STATE_TABLE_SWAPCARD) {
-            //在换三张阶段，获取是否是自己确定换三张
-            isAllSwap = this.getIsAllSwap();
-        } else { }
+        switch (dd.gm_manager.mjGameData.tableBaseVo.gameState) {
+            case MJ_GameState.STATE_TABLE_BREAKCARD:
+                isMyBreakState = this.getIsMyBreakState();
+                break;
+            case MJ_GameState.STATE_TABLE_SWAPCARD:
+                //在换三张阶段，获取是否是自己确定换三张
+                isAllSwap = this.getIsAllSwap();
+                break;
+            default:
+                break;
+        }
 
         for (var i = 0; i < handCards.length; i++) {
             let index = i;
             let cardId = handCards[i];
 
-            let hnc: cc.Node = this.getCardNodeByCardId(cardId, i);
+            let hnc: cc.Node = this.getCardNodeByCardId(cardId);
             if (cardId !== moPaiCard) {
                 if (hnc) {
                     //如果拍存在，修正牌的数据
                     this.fixCardNode(hnc, index, isMyBreakState, isAllSwap);
                 } else {
-                    this._canvasTarget.showMineCard(cardId, this.node_hand, false, (cardNode: cc.Node) => {
+                    dd.gm_manager._gmScript.showMineCard(cardId, this.node_hand, false, (cardNode: cc.Node) => {
                         let ePos = cc.p((index * (-cardNode.width) - cardNode.width / 2), 0);
                         cardNode.setPosition(ePos);
                         this._hand_card_list.push(cardNode);
@@ -672,7 +645,7 @@ export default class MJ_HandList extends cc.Component {
                     });
                 }
             } else {
-                this.showMPCard(index, cardId, hnc);
+                this.showMPCard(index, hnc);
             }
         }
     }
@@ -683,62 +656,54 @@ export default class MJ_HandList extends cc.Component {
      * @memberof MJ_HandList
      */
     fixCardNode(hnc: cc.Node, index: number, isMyBreakState: boolean, isAllSwap: boolean) {
-        //如果自己出牌
-        if (dd.gm_manager.mjGameData.tableBaseVo.gameState === MJ_GameState.STATE_TABLE_OUTCARD) {
-            //只有在 （自己表态）、（自己已经表态）、（游戏出牌）的条件下，才会做动作
-            if (dd.gm_manager.mjGameData.tableBaseVo.btIndex === this._seatInfo.seatIndex
-                && this._seatInfo.btState !== MJ_Act_State.ACT_STATE_WAIT) {
-                //移动牌的位置
-                this.moveCardAct(index, hnc);
-            } else {
-                //如果是重播
-                if (dd.gm_manager.replayMJ === 1) {
+        switch (dd.gm_manager.mjGameData.tableBaseVo.gameState) {
+            case MJ_GameState.STATE_TABLE_OUTCARD://出牌
+                //只有在 （自己表态）、（自己已经表态））的条件下，才会做动作
+                if (dd.gm_manager.mjGameData.tableBaseVo.btIndex === this._seatInfo.seatIndex
+                    && this._seatInfo.btState !== MJ_Act_State.ACT_STATE_WAIT) {
                     //移动牌的位置
                     this.moveCardAct(index, hnc);
                 }
-            }
-        } else if (dd.gm_manager.mjGameData.tableBaseVo.gameState === MJ_GameState.STATE_TABLE_BREAKCARD) {//胡碰杠
-            //在杠碰胡阶段，如果自己有杠碰胡，说明牌面有变化，需要移动牌的位置
-            if (isMyBreakState) {
-                //移动牌的位置
-                this.moveCardAct(index, hnc);
-            }
-        } else if (dd.gm_manager.mjGameData.tableBaseVo.gameState === MJ_GameState.STATE_TABLE_SWAPCARD) {//换三张
-            //如果所有人都换牌了
-            if (isAllSwap) {
-                //重置牌的位置
-                this.moveCardAct(index, hnc, false);
-            } else {
-                //如果自己换牌了，就移动下位置
-                if (this._seatInfo.swapCards) {
+                break;
+            case MJ_GameState.STATE_TABLE_BREAKCARD://胡碰杠
+                //在杠碰胡阶段，如果自己有杠碰胡，说明牌面有变化，需要移动牌的位置
+                if (isMyBreakState) {
                     //移动牌的位置
                     this.moveCardAct(index, hnc);
                 }
-                //如果自己还没有换牌，就不需要移动位置
-            }
-        } else if (dd.gm_manager.mjGameData.tableBaseVo.gameState === MJ_GameState.STATE_TABLE_DINGQUE) {//定缺
-            //如果定缺了
-            if (this._seatInfo.unSuit && this._seatInfo.unSuit > 0) {
-                //重置牌的位置
-                this.moveCardAct(index, hnc, false);
-            } else {
-                //如果刚进入定缺阶段
-                if (this._swapState === 0) {
+                break;
+            case MJ_GameState.STATE_TABLE_SWAPCARD://换三张
+                //如果所有人都换牌了
+                if (isAllSwap) {
                     //重置牌的位置
                     this.moveCardAct(index, hnc, false);
+                } else {
+                    //如果自己换牌了，就移动下位置
+                    if (this._seatInfo.swapCards) {
+                        //移动牌的位置
+                        this.moveCardAct(index, hnc);
+                    }
+                    //如果自己还没有换牌，就不需要移动位置
                 }
-            }
-        } else {
-            //如果是重播
-            if (dd.gm_manager.replayMJ === 1) {
-                //移动牌的位置
-                this.moveCardAct(index, hnc);
-            }
+                break;
+            case MJ_GameState.STATE_TABLE_DINGQUE://定缺
+                //如果定缺了
+                if (this._seatInfo.unSuit && this._seatInfo.unSuit > 0) {
+                    //重置牌的位置
+                    this.moveCardAct(index, hnc, false);
+                } else {
+                    //如果刚进入定缺阶段
+                    if (this._swapState === 0) {
+                        //重置牌的位置
+                        this.moveCardAct(index, hnc, false);
+                    }
+                }
+                break;
+            default:
+                break;
         }
         this.showIsCanPlay(hnc);
     }
-
-
     /**
      * 获取自己是否有碰杠胡的状态
      * 
@@ -773,47 +738,38 @@ export default class MJ_HandList extends cc.Component {
     }
 
     /**
-     * 显示位置
+     * 显示摸牌
      * 
      * @param {number} index 插入位置
-     * @param {number} cardId 牌的唯一Id
      * @param {cc.Node} mpCard 摸牌节点
      * @memberof MJ_HandList
      */
-    showMPCard(index: number, cardId: number, mpCard: cc.Node) {
-        //如果是自己表态
-        if (dd.gm_manager.mjGameData.tableBaseVo.btIndex === this._seatInfo.seatIndex) {
-            //如果自己的表态状态在（等待表态），并且有（摸牌），显示摸牌
-            if (this._seatInfo.btState === MJ_Act_State.ACT_STATE_WAIT && this._seatInfo.moPaiCard > 0) {
-                if (!mpCard) {
-                    this._canvasTarget.showMineCard(this._seatInfo.moPaiCard, this.node_hand, false, (cardNode: cc.Node) => {
-                        cardNode.setPosition(cardNode.width, 0);
-                        this._hand_card_list.push(cardNode);
-                        this.showIsCanPlay(cardNode);
-                    });
-                } else {
-                    mpCard.setPosition(mpCard.width, 0);
-                }
-            } else {
-                if (mpCard) {//如果自己已经摸牌表态了，就把摸得这张牌插入到手牌中
-                    //只有在 （自己表态）、（自己已经表态）、（游戏出牌）的条件下，才会做动作
-                    if (dd.gm_manager.mjGameData.tableBaseVo.gameState === MJ_GameState.STATE_TABLE_OUTCARD
-                        || dd.gm_manager.mjGameData.tableBaseVo.gameState === MJ_GameState.STATE_TABLE_BREAKCARD) {
-                        if (this._seatInfo.btState !== MJ_Act_State.ACT_STATE_WAIT) {
-                            cc.log('-----移动摸牌---' + this._seatInfo);
-                            //计算最终的位置进行插牌
-                            let ePos = cc.p((index * (-mpCard.width) - mpCard.width / 2), 0);
-                            mpCard.setPosition(ePos);
-                            mpCard.scale = 0;
-                            mpCard.runAction(cc.scaleTo(0.2, 1));
-                            this._moPaiCardId = -1;
-                            this.showIsCanPlay(mpCard);
-                        }
-                    } else {
-                        this.deleteCardNodeByCardId(cardId);
-                        //移除节点
-                        this.deleteCardByNode(mpCard);
-                    }
+    showMPCard(index: number, mpCard: cc.Node) {
+        //如果自己还未表态
+        if (this._seatInfo.btState === MJ_Act_State.ACT_STATE_WAIT) {
+            //如果摸牌的节点存在
+            if (mpCard && mpCard.isValid && mpCard.tag === this._seatInfo.moPaiCard) {
+                //如果存在，就刷新位置
+                mpCard.setPosition(mpCard.width, 0);
+            } else {//如果不存在，就创建
+                dd.gm_manager._gmScript.showMineCard(this._seatInfo.moPaiCard, this.node_hand, false, (cardNode: cc.Node) => {
+                    cardNode.setPosition(cardNode.width, 0);
+                    this._hand_card_list.push(cardNode);
+                });
+            }
+        } else {
+            //如果自己已经摸牌表态了，就把摸得这张牌插入到手牌中
+            if (mpCard) {
+                //只有在 （自己表态）、（自己已经表态）、（游戏出牌）的条件下，才会做动作
+                if (dd.gm_manager.mjGameData.tableBaseVo.gameState === MJ_GameState.STATE_TABLE_OUTCARD
+                    || dd.gm_manager.mjGameData.tableBaseVo.gameState === MJ_GameState.STATE_TABLE_BREAKCARD) {
+                    cc.log('-----移动摸牌---');
+                    //计算最终的位置进行插牌
+                    let ePos = cc.p((index * (-mpCard.width) - mpCard.width / 2), 0);
+                    mpCard.setPosition(ePos);
+                    mpCard.scale = 0;
+                    mpCard.runAction(cc.scaleTo(0.2, 1));
+                    this._moPaiCardId = -1;
                 }
             }
         }
@@ -828,6 +784,7 @@ export default class MJ_HandList extends cc.Component {
      */
     moveCardAct(index: number, cardNode: cc.Node, isAct: boolean = true) {
         cardNode.stopAllActions();
+        cardNode.scale = 1;
         let ePos = cc.p((index * (-cardNode.width) - cardNode.width / 2), 0);
         let nPos = cardNode.getPosition();
         if (ePos.x !== nPos.x || ePos.y !== nPos.y) {
@@ -839,30 +796,7 @@ export default class MJ_HandList extends cc.Component {
             }
         }
     }
-    /**
-     * 插牌动作
-     * 
-     * @param {number} index 插入位置
-     * @param {cc.Node} cardNode 牌节点
-     * @param {cc.Vec2} sPos 起始位置
-     * @memberof MJ_HandList
-     */
-    insertCardAct(index: number, cardNode: cc.Node, sPos: cc.Vec2) {
-        let ePos = cc.p((index * (-cardNode.width) - cardNode.width / 2), 0);
-        let d = cc.pDistance(sPos, ePos);
-        let mTime = d / 1500;
-        let action = null;
-        if (index > 0) {
-            let dTime = 0.3;
-            let addH = 0;
-            let action1 = cc.spawn(cc.rotateTo(dTime, 20), cc.moveTo(dTime, cc.p(sPos.x, sPos.y + cardNode.height + addH)));
-            let move = cc.moveTo(mTime, cc.p(ePos.x, ePos.y + cardNode.height + addH));
-            action = cc.sequence(action1, move, cc.rotateTo(0.12, 0), cc.moveTo(dTime, ePos));
-        } else {
-            action = cc.moveTo(mTime, cc.p(ePos.x, ePos.y));
-        }
-        cardNode.runAction(action);
-    }
+
     /**
      * 删除不要的牌节点
      * 
@@ -875,45 +809,12 @@ export default class MJ_HandList extends cc.Component {
                 cc.log('---删除---' + cardNode.tag);
                 this._hand_card_list.splice(i, 1);
                 //移除节点
-                cardNode.removeFromParent(true);
-                cardNode.destroy();
+                if (cardNode && cardNode.isValid) {
+                    cardNode.removeFromParent(true);
+                    cardNode.destroy();
+                }
                 //因为数组减1,所以下标不变
                 i -= 1;
-            }
-        }
-    }
-    /**
-     * 根据节点删除该节点,并从数组中移除
-     * @param {cc.Node} cardNode 
-     * @memberof MJ_HandList
-     */
-    deleteCardByNode(tagetNode: cc.Node) {
-        for (var i = 0; i < this._hand_card_list.length; i++) {
-            let cardNode = this._hand_card_list[i];
-            if (tagetNode === cardNode) {
-                this._hand_card_list.splice(i, 1);
-                //移除节点
-                cardNode.removeFromParent(true);
-                cardNode.destroy();
-                break;
-            }
-        }
-    }
-    /**
-     * 根据cardId删除牌节点
-     * 
-     * @param {number} cardId 
-     * @memberof MJ_HandList
-     */
-    deleteCardNodeByCardId(cardId: number) {
-        for (var i = 0; i < this._hand_card_list.length; i++) {
-            let hnc: cc.Node = this._hand_card_list[i];
-            if (hnc.tag === cardId) {
-                //移除节点
-                hnc.removeFromParent(true);
-                hnc.destroy();
-                this._hand_card_list.splice(i, 1);
-                break;
             }
         }
     }
@@ -923,7 +824,7 @@ export default class MJ_HandList extends cc.Component {
      * @returns {cc.Node} 
      * @memberof MJ_HandList
      */
-    getCardNodeByCardId(cardId: number, index: number = 0): cc.Node {
+    getCardNodeByCardId(cardId: number): cc.Node {
         let cNode: cc.Node = null;
         if (cardId > 0) {
             for (var i = 0; i < this._hand_card_list.length; i++) {
@@ -989,7 +890,7 @@ export default class MJ_HandList extends cc.Component {
                     if (index !== -1) {
                         //显示听牌的界面
                         cc.log('显示胡牌');
-                        this._canvasTarget.showTingPai(true, this._huList[index]);
+                        dd.gm_manager._gmScript.showTingPai(true, this._huList[index]);
                     }
                 }
             } else {
@@ -1021,10 +922,7 @@ export default class MJ_HandList extends cc.Component {
                 if (index !== -1) {
                     //显示听牌的界面
                     cc.log('返回的听牌');
-                    let hucards = this._huList[index].map((card: CardAttrib) => {
-                        return card.cardId;
-                    });
-                    obj.hucards = hucards;
+                    obj.hucards = this._huList[index];
                 }
             } else {
                 obj.cardIds.push(hcs._cardId);
@@ -1045,10 +943,7 @@ export default class MJ_HandList extends cc.Component {
         let hands = cardIds.slice(0);
         let index = hands.indexOf(cardId);
         hands.splice(index, 1);
-        let cards = hands.map((cardId) => {
-            return dd.gm_manager.getCardById(cardId);
-        }, this);
-        let tings = dd.gm_manager.getTingPai(cards, this._seatInfo.unSuit);
+        let tings = dd.gm_manager.getTingPai(hands, this._seatInfo.unSuit);
         if (tings.length > 0) {//有听牌需要显示
             return tings;
         }
@@ -1077,5 +972,31 @@ export default class MJ_HandList extends cc.Component {
             target.destroy();
         }, this));
         cardNode.runAction(seq);
+    }
+
+
+    /**
+     * 插牌动作
+     * 
+     * @param {number} index 插入位置
+     * @param {cc.Node} cardNode 牌节点
+     * @param {cc.Vec2} sPos 起始位置
+     * @memberof MJ_HandList
+     */
+    insertCardAct(index: number, cardNode: cc.Node, sPos: cc.Vec2) {
+        let ePos = cc.p((index * (-cardNode.width) - cardNode.width / 2), 0);
+        let d = cc.pDistance(sPos, ePos);
+        let mTime = d / 1500;
+        let action = null;
+        if (index > 0) {
+            let dTime = 0.3;
+            let addH = 0;
+            let action1 = cc.spawn(cc.rotateTo(dTime, 20), cc.moveTo(dTime, cc.p(sPos.x, sPos.y + cardNode.height + addH)));
+            let move = cc.moveTo(mTime, cc.p(ePos.x, ePos.y + cardNode.height + addH));
+            action = cc.sequence(action1, move, cc.rotateTo(0.12, 0), cc.moveTo(dTime, ePos));
+        } else {
+            action = cc.moveTo(mTime, cc.p(ePos.x, ePos.y));
+        }
+        cardNode.runAction(action);
     }
 }

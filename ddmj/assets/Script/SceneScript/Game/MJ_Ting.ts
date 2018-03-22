@@ -1,7 +1,6 @@
 
 const { ccclass, property } = cc._decorator;
 
-import MJCanvas from './MJCanvas';
 import MJ_Card from './MJ_Card';
 import * as dd from './../../Modules/ModuleManager';
 @ccclass
@@ -17,13 +16,6 @@ export default class MJ_Ting extends cc.Component {
     node_card: cc.Node = null;
 
     /**
-     * canvas脚本
-     * 
-     * @memberof MJ_Table
-     */
-    _canvasTarget: MJCanvas = null;
-
-    /**
      * 牌节点列表
      * 
      * @type {cc.Node[]}
@@ -34,16 +26,15 @@ export default class MJ_Ting extends cc.Component {
         this.node.on("touchend", (event: cc.Event.EventTouch) => {
             event.stopPropagation();
         }, this);
-        this._canvasTarget = dd.ui_manager.getCanvasNode().getComponent('MJCanvas');
     }
 
     /**
      * 初始化数据
      * 
-     * @param {CardAttrib[]} cardIds (cardId不能用)
+     * @param {number[]} cardIds
      * @memberof MJ_Ting
      */
-    initData(cardIds: CardAttrib[]) {
+    initData(cardIds: number[]) {
         this._node_card_list.forEach(cardNode => {
             cardNode.removeFromParent(true);
             cardNode.destroy();
@@ -69,16 +60,15 @@ export default class MJ_Ting extends cc.Component {
      * @param {cc.Node} CardNode 牌节点
      * @memberof MJ_Ting
      */
-    updateCardData(Card: CardAttrib, CardNode: cc.Node) {
+    updateCardData(card: number, CardNode: cc.Node) {
         let cardImg = CardNode.getChildByName('cardImg');
         let mask = CardNode.getChildByName('mask');
         if (cardImg) {
-            let cardId: number = (Card.suit - 1) * 36 + (Card.point - 1) * 4 + 1;
-            let csf: cc.SpriteFrame = this._canvasTarget.getMJCardSF(cardId);
+            let csf: cc.SpriteFrame = dd.gm_manager._gmScript.getMJCardSF(card);
             cardImg.getComponent(cc.Sprite).spriteFrame = csf;
         }
         if (mask) {
-            let isShowMask = dd.gm_manager.getDieTing(Card);
+            let isShowMask = dd.gm_manager.getDieTing(card);
             mask.active = isShowMask;
         }
     }

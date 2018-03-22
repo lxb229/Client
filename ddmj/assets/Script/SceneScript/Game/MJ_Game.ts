@@ -5,7 +5,6 @@ import MJ_Game_Mine from './MJ_Game_Mine';
 import MJ_Game_Others from './MJ_Game_Others';
 import MJ_Card from './MJ_Card';
 import MJ_Card_Group from './MJ_Card_Group';
-import MJCanvas from './MJCanvas';
 import { MJ_GameState, MJ_Act_State, MJ_Act_Type, MJ_Game_Type } from '../../Modules/Protocol';
 
 declare interface CardConfig {
@@ -149,16 +148,7 @@ export default class MJ_Game extends cc.Component {
      */
     _cdTime: number = 0;
 
-    /**
-     * canvas脚本
-     * 
-     * @type {MJCanvas}
-     * @memberof MJ_Play
-     */
-    _canvasTarget: MJCanvas = null;
-
     onLoad() {
-        this._canvasTarget = dd.ui_manager.getCanvasNode().getComponent('MJCanvas');
     }
 
     /**
@@ -198,8 +188,8 @@ export default class MJ_Game extends cc.Component {
         let pIndex = -1;
         //大于定缺的时候，显示游戏信息
         if (dd.gm_manager.mjGameData.tableBaseVo.gameState > MJ_GameState.STATE_TABLE_DINGQUE
-        && dd.gm_manager.mjGameData.tableBaseVo.gameState !== MJ_GameState.STATE_TABLE_PIAOPAI
-        && dd.gm_manager.mjGameData.tableBaseVo.gameState !== MJ_GameState.STATE_TABLE_BAOJIAO) {
+            && dd.gm_manager.mjGameData.tableBaseVo.gameState !== MJ_GameState.STATE_TABLE_PIAOPAI
+            && dd.gm_manager.mjGameData.tableBaseVo.gameState !== MJ_GameState.STATE_TABLE_BAOJIAO) {
             this.lblGameInfo.node.parent.active = true;
             this.lblGameInfo.string = '<color=#4ecab1>剩余 </c><color=#ffc600>' + dd.gm_manager.mjGameData.tableBaseVo.tableCardNum
                 + '</c><color=#4ecab1> 张</c><color=#4ecab1>   第 </c><color=#ffc600>'
@@ -276,9 +266,6 @@ export default class MJ_Game extends cc.Component {
      * @memberof MJ_Game
      */
     showGameInfo() {
-        if (!this._canvasTarget) {
-            this._canvasTarget = dd.ui_manager.getCanvasNode().getComponent('MJCanvas');
-        }
         //如果在准备阶段，就初始化数据
         if (dd.gm_manager.mjGameData.tableBaseVo.gameState <= MJ_GameState.STATE_TABLE_READY) {
             this.initData();
@@ -318,7 +305,6 @@ export default class MJ_Game extends cc.Component {
      * @memberof MJ_Game
      */
     showTableSelectCard(cardId: number) {
-        let card: CardAttrib = dd.gm_manager.getCardById(cardId);
         let node_out_list = [];
         for (let sId = 0; sId < this.node_playOut_list.length; sId++) {
             let node_playOut = this.node_playOut_list[sId];
@@ -326,11 +312,12 @@ export default class MJ_Game extends cc.Component {
                 node_out_list = node_out_list.concat(node_playOut.children);
             }
         }
+        let card = Math.floor(cardId / 10);
         for (var i = 0; i < node_out_list.length; i++) {
             let outCard: cc.Node = node_out_list[i];
-            let oCard = dd.gm_manager.getCardById(outCard.tag);
+            let oCard = Math.floor(outCard.tag / 10);
             let ocs = outCard.getComponent('MJ_Card');
-            if (oCard.suit === card.suit && oCard.point === card.point) {
+            if (oCard === card) {
                 ocs.showLight(true);
             } else {
                 ocs.showLight(false);
@@ -384,22 +371,22 @@ export default class MJ_Game extends cc.Component {
                 node_group.removeAllChildren();
                 if (seatInfo.pengCards) {
                     for (var i = 0; i < seatInfo.pengCards.length; i++) {
-                        this._canvasTarget.showGroupCard(0, seatInfo.pengCards[i], sId, node_group);
+                        dd.gm_manager._gmScript.showGroupCard(0, seatInfo.pengCards[i], sId, node_group);
                     }
                 }
                 if (seatInfo.baGangCards) {
                     for (var i = 0; i < seatInfo.baGangCards.length; i++) {
-                        this._canvasTarget.showGroupCard(1, seatInfo.baGangCards[i], sId, node_group);
+                        dd.gm_manager._gmScript.showGroupCard(1, seatInfo.baGangCards[i], sId, node_group);
                     }
                 }
                 if (seatInfo.anGangCards) {
                     for (var i = 0; i < seatInfo.anGangCards.length; i++) {
-                        this._canvasTarget.showGroupCard(2, seatInfo.anGangCards[i], sId, node_group);
+                        dd.gm_manager._gmScript.showGroupCard(2, seatInfo.anGangCards[i], sId, node_group);
                     }
                 }
                 if (seatInfo.dianGangCards) {
                     for (var i = 0; i < seatInfo.dianGangCards.length; i++) {
-                        this._canvasTarget.showGroupCard(3, seatInfo.dianGangCards[i], sId, node_group);
+                        dd.gm_manager._gmScript.showGroupCard(3, seatInfo.dianGangCards[i], sId, node_group);
                     }
                 }
             }
@@ -416,7 +403,7 @@ export default class MJ_Game extends cc.Component {
      * @memberof MJ_Game
      */
     createOutCard(index: number, node_playOut: cc.Node, sId: number, seatInfo: SeatVo, cardConfig: CardConfig) {
-        this._canvasTarget.showPlayOutCard(sId, seatInfo.outUnUseCards[index], node_playOut, (cardNode: cc.Node) => {
+        dd.gm_manager._gmScript.showPlayOutCard(sId, seatInfo.outUnUseCards[index], node_playOut, (cardNode: cc.Node) => {
             let cSize = cc.v2(cardNode.width * cardConfig.cScale, cardNode.height * cardConfig.cScale);
             cardNode.width = cardNode.width * cardConfig.cScale;
             cardNode.height = cardNode.height * cardConfig.cScale;
@@ -434,7 +421,8 @@ export default class MJ_Game extends cc.Component {
 
             //如果刚刚是这个玩家表态，最后一张牌亮(显示刚刚打出的牌亮起来)
             if (seatInfo.outCard && index === seatInfo.outUnUseCards.length - 1
-                && seatInfo.seatIndex === dd.gm_manager.mjGameData.tableBaseVo.prevBtIndex) {
+                && seatInfo.seatIndex === dd.gm_manager.mjGameData.tableBaseVo.prevBtIndex
+                && !dd.gm_manager.mjGameData.breakSeats) {
                 let ocs: MJ_Card = cardNode.getComponent('MJ_Card');
                 switch (sId) {
                     case 0:
@@ -521,7 +509,7 @@ export default class MJ_Game extends cc.Component {
                     if (seatInfo.seatIndex === dd.gm_manager.mjGameData.tableBaseVo.btIndex
                         && seatInfo.btState === MJ_Act_State.ACT_STATE_BT
                         && seatInfo.outCard) {
-                        this._canvasTarget.showOutActMJ(seatInfo.outCard, node_act, seatInfo);
+                        dd.gm_manager._gmScript.showOutActMJ(seatInfo.outCard, node_act, seatInfo);
                         dd.mp_manager.playOut();
                     }
                 }
@@ -544,7 +532,7 @@ export default class MJ_Game extends cc.Component {
             //如果玩家不在（未胡牌）的状态，表示胡牌了，并且 （胡牌）存在
             if (seatInfo.huPaiType !== 0 && seatInfo.huCards) {
                 for (var i = 0; i < seatInfo.huCards.length; i++) {
-                    this._canvasTarget.showPlayOutCard(sId, seatInfo.huCards[i], node_hu, (cardNode: cc.Node) => {
+                    dd.gm_manager._gmScript.showPlayOutCard(sId, seatInfo.huCards[i], node_hu, (cardNode: cc.Node) => {
                         let cs: MJ_Card = cardNode.getComponent('MJ_Card');
                         cs.showLight(true);
                     });
@@ -552,7 +540,7 @@ export default class MJ_Game extends cc.Component {
                 if (node_img_hu) {
                     //显示文字图片
                     node_img_hu.active = true;
-                    node_img_hu.getComponent(cc.Sprite).spriteFrame = seatInfo.huPaiType === 1 ? this._canvasTarget.mj_text_list[0] : this._canvasTarget.mj_text_list[1];
+                    node_img_hu.getComponent(cc.Sprite).spriteFrame = seatInfo.huPaiType === 1 ? dd.gm_manager._gmScript.mj_text_list[0] : dd.gm_manager._gmScript.mj_text_list[1];
                 }
             } else {
                 //不显示文字图片
@@ -610,26 +598,26 @@ export default class MJ_Game extends cc.Component {
                     }
                     break;
                 case MJ_Act_Type.ACT_INDEX_GANG:
-                    sf = this._canvasTarget.mj_text_list[7];
+                    sf = dd.gm_manager._gmScript.mj_text_list[7];
                     if (playIndex === 0) {
                         dd.mp_manager.playPokerSound(dd.mp_manager.audioSetting.language, 4, seatInfo.sex, 2);
                     }
                     switch (seatInfo.gangType) {
                         case 1://自摸巴杠
-                            this._canvasTarget.showGFAct(node_act);
+                            dd.gm_manager._gmScript.showGFAct(node_act);
                             break;
                         case 2://暗杠
-                            this._canvasTarget.showXYAct(node_act);
+                            dd.gm_manager._gmScript.showXYAct(node_act);
                             break;
                         case 3://点杠
-                            this._canvasTarget.showXYAct(node_act);
+                            dd.gm_manager._gmScript.showXYAct(node_act);
                             break;
                         default:
                             break;
                     }
                     break;
                 case MJ_Act_Type.ACT_INDEX_PENG:
-                    sf = this._canvasTarget.mj_text_list[6];
+                    sf = dd.gm_manager._gmScript.mj_text_list[6];
                     if (playIndex === 0) {
                         dd.mp_manager.playPokerSound(dd.mp_manager.audioSetting.language, 4, seatInfo.sex, 3);
                     }
@@ -640,7 +628,7 @@ export default class MJ_Game extends cc.Component {
                 default:
                     break;
             }
-            this._canvasTarget.showTxtAct(sf, node_act);
+            dd.gm_manager._gmScript.showTxtAct(sf, node_act);
         }
     }
 
@@ -656,29 +644,29 @@ export default class MJ_Game extends cc.Component {
         //胡牌方式(0=未胡牌,1=自摸 ,2=点炮,3=抢杠胡,4=自摸杠上花,5=点杠上花胡,6=点杠上炮,7=查叫) 
         let huPaiSF = null;
         if (dd.gm_manager.mjGameData.breakSeats.length > 1) {
-            huPaiSF = huPaiSF = this._canvasTarget.mj_text_list[10];
+            huPaiSF = dd.gm_manager._gmScript.mj_text_list[10];
         } else {
             switch (seatInfo.huPaiType) {
                 case 0:
                     huPaiSF = null;
                     break;
                 case 1:
-                    huPaiSF = this._canvasTarget.mj_text_list[0];
+                    huPaiSF = dd.gm_manager._gmScript.mj_text_list[0];
                     break;
                 case 2:
-                    huPaiSF = this._canvasTarget.mj_text_list[9];
+                    huPaiSF = dd.gm_manager._gmScript.mj_text_list[9];
                     break;
                 case 3:
-                    huPaiSF = this._canvasTarget.mj_text_list[8];
+                    huPaiSF = dd.gm_manager._gmScript.mj_text_list[8];
                     break;
                 case 4:
-                    huPaiSF = this._canvasTarget.mj_text_list[4];
+                    huPaiSF = dd.gm_manager._gmScript.mj_text_list[4];
                     break;
                 case 5:
-                    huPaiSF = this._canvasTarget.mj_text_list[4];
+                    huPaiSF = dd.gm_manager._gmScript.mj_text_list[4];
                     break;
                 case 6:
-                    huPaiSF = this._canvasTarget.mj_text_list[5];
+                    huPaiSF = dd.gm_manager._gmScript.mj_text_list[5];
                     break;
                 default:
                     break;
