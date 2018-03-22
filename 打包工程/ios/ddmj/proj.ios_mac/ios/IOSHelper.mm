@@ -131,7 +131,8 @@ static id _instace;
             }
             case ErrorPaymentCancelled:{
                 self.receipt = nil;
-                NSLog(@"user cancel！");
+                NSString *suc_func = [NSString stringWithFormat:@"dd.native_call_js.iapBack(-1)"];
+                [self callToJS:suc_func];
                 break;
             }
             default:

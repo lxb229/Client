@@ -36,97 +36,100 @@ export default class ChildClass extends cc.Component {
 
 
 
-        let objs = [];
-        for (let i = 0; i < 10000; i++) {
-            let wan = [];
-            let tong = [];
-            let tiao = [];
+        // let objs = [];
+        // for (let i = 0; i < 10000; i++) {
+        //     let wan = [];
+        //     let tong = [];
+        //     let tiao = [];
 
-            let arrs = [wan, tong, tiao];
-            for (let i = 1; i < 4; i++) {
-                for (let j = 1; j < 10; j++) {
-                    let card = new MJCard(j, i);
-                    switch (i) {
-                        case 1: wan.push([card, card, card, card]); break;
-                        case 2: tong.push([card, card, card, card]); break;
-                        case 3: tiao.push([card, card, card, card]); break;
-                        default: break;
-                    }
-                }
-            }
-            let obj = {
-                arr: [],
-                hu: false,
-                gui: Math.floor(Math.random() * 1000) % 4
-            }
-            let guiCount = obj.gui;
-            while (guiCount > 0) {
-                guiCount--;
-                obj.arr.push(new MJCard(1, 3));
-            }
-            let tt = [2, 5, 8, 11, 14];
-            let index = Math.floor(Math.random() * 1000) % 5;
-            let lastCount = tt[index] - obj.arr.length;
-            if (lastCount < 0) {
-                lastCount += 3;
-            }
-            while (lastCount > 0) {
-                let suit = Math.floor(Math.random() * 1000) % 3 + 1;
-                let point = Math.floor(Math.random() * 1000) % 9 + 1;
-                if (suit === 3 && point === 1) {
-                    point = Math.floor(Math.random() * 1000) % 8 + 2;
-                }
-                if (arrs[suit - 1][point - 1].length > 0) {
-                    obj.arr.push(arrs[suit - 1][point - 1].pop());
-                    lastCount--;
-                }
-            }
-            objs.push(obj);
-        }
+        //     let arrs = [wan, tong, tiao];
+        //     for (let i = 1; i < 4; i++) {
+        //         for (let j = 1; j < 10; j++) {
+        //             let card = new MJCard(j, i);
+        //             switch (i) {
+        //                 case 1: wan.push([card, card, card, card]); break;
+        //                 case 2: tong.push([card, card, card, card]); break;
+        //                 case 3: tiao.push([card, card, card, card]); break;
+        //                 default: break;
+        //             }
+        //         }
+        //     }
+        //     let obj = {
+        //         arr: [],
+        //         hu: false,
+        //         gui: Math.floor(Math.random() * 1000) % 4
+        //     }
+        //     let guiCount = obj.gui;
+        //     while (guiCount > 0) {
+        //         guiCount--;
+        //         obj.arr.push(new MJCard(1, 3));
+        //     }
+        //     let tt = [2, 5, 8, 11, 14];
+        //     let index = Math.floor(Math.random() * 1000) % 5;
+        //     let lastCount = tt[index] - obj.arr.length;
+        //     if (lastCount < 0) {
+        //         lastCount += 3;
+        //     }
+        //     while (lastCount > 0) {
+        //         let suit = Math.floor(Math.random() * 1000) % 3 + 1;
+        //         let point = Math.floor(Math.random() * 1000) % 9 + 1;
+        //         if (suit === 3 && point === 1) {
+        //             point = Math.floor(Math.random() * 1000) % 8 + 2;
+        //         }
+        //         if (arrs[suit - 1][point - 1].length > 0) {
+        //             obj.arr.push(arrs[suit - 1][point - 1].pop());
+        //             lastCount--;
+        //         }
+        //     }
+        //     objs.push(obj);
+        // }
 
-        // let arr = [
-        //     new MJCard(1, 2),
-        //     new MJCard(2, 2),
-        //     new MJCard(4, 2),
-        //     new MJCard(5, 2),
-        //     new MJCard(1, 3),
-        //     new MJCard(3, 3),
-        //     new MJCard(5, 3),
-        //     new MJCard(5, 3),
-        //     new MJCard(6, 3),
-        //     new MJCard(7, 3),
-        //     new MJCard(7, 3),
-        //     new MJCard(9, 3),
-        //     new MJCard(9, 3),
-        //     new MJCard(9, 3)
-        // ];
+        let arr = [
+            new MJCard(3, 2),
+            new MJCard(4, 2),
+            new MJCard(4, 2),
+            new MJCard(4, 2),
+            new MJCard(5, 2),
+            new MJCard(6, 2),
+            new MJCard(7, 2),
+            new MJCard(7, 2),
+            new MJCard(8, 2),
+            new MJCard(9, 2)
+        ];
 
         let start = Date.now();
 
-        let ture_count = 0;
-        let rights = [];
-        let errors = [];
-        objs.forEach((obj) => {
-            obj.hu = this.canHuPaiByGui(obj.arr, new MJCard(1, 3));
-            if (obj.hu) {
-                ture_count++;
-                rights.push(obj);
-            } else {
-                errors.push(obj);
-            }
-        }, this);
+
+        let cards = this.getTingByTang(arr,
+            [new MJCard(7, 2),
+            new MJCard(9, 2)]);
+
+        cc.log(cards);
+
+        // let ture_count = 0;
+        // let rights = [];
+        // let errors = [];
+        // objs.forEach((obj) => {
+        //     obj.hu = this.canHuPaiByGui(obj.arr, new MJCard(1, 3));
+        //     if (obj.hu) {
+        //         ture_count++;
+        //         rights.push(obj);
+        //     } else {
+        //         errors.push(obj);
+        //     }
+        // }, this);
 
         // let hu = this.canHuPaiByGui(arr, new MJCard(1, 3));
         // let tings = this.getTingPaiByGui(arr, new MJCard(1, 3), 2);
 
         let diff = Date.now() - start;
-        this.lbl.string = diff + '|' + ture_count;
+        // this.lbl.string = diff + '|' + ture_count;
 
-        cc.log(errors);
-        cc.log('-------------------');
-        cc.log(rights.sort((a, b) => {
-            return a.gui - b.gui;
-        }));
+        // cc.log(errors);
+        // cc.log('-------------------');
+        // cc.log(rights.sort((a, b) => {
+        //     return a.gui - b.gui;
+        // }));
 
         // let tings = this.getTingPai(arr);
         // let list = this.getTingPai(arr);
@@ -535,7 +538,17 @@ export default class ChildClass extends cc.Component {
                     let temp = outs.slice(0);
                     temp.push(card);
                     if (this.canHuPai(temp)) {
-                        result.push(card);
+                        let newCards = cards.slice(0);
+                        outs.forEach((card) => {
+                            this.removeCard(newCards, card);
+                        }, this);
+                        let nums = newCards.map((card) => {
+                            return card.suit * 10 + card.point;
+                        }, this);
+                        nums.sort();
+                        if (this.checkRemaining(nums)) {
+                            result.push(card);
+                        }
                     }
                 }, this);
                 //校验是否选择了多余项
@@ -556,7 +569,13 @@ export default class ChildClass extends cc.Component {
                 }, this);
                 nums.sort();
                 if (this.checkRemaining(nums)) {
-                    result.push(card);
+                    let newCards = cards.slice(0);
+                    outs.forEach((card) => {
+                        this.removeCard(newCards, card);
+                    }, this);
+                    if (this.canHuPai(newCards)) {
+                        result.push(card);
+                    }
                 }
             }, this);
             if (outs.length === 2) {
@@ -575,7 +594,6 @@ export default class ChildClass extends cc.Component {
             }
         }
     }
-    
     /**
      * 移除所有两张相同的牌
      * 

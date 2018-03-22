@@ -22,8 +22,6 @@
 		509D4ABC17EBB2AB00697056 /* AppController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 509D4AAC17EBB2AB00697056 /* AppController.mm */; };
 		509D4AC817EBB2AB00697056 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 509D4AB817EBB2AB00697056 /* main.m */; };
 		509D4AC917EBB2AB00697056 /* RootViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 509D4ABB17EBB2AB00697056 /* RootViewController.mm */; };
-		A00F22741FFB543A00C904D1 /* libjs_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D697BD91CBD301C00A5AF29 /* libjs_static.a */; };
-		A00F22781FFB544000C904D1 /* libmozglue.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A00F22771FFB544000C904D1 /* libmozglue.a */; };
 		A0A6C76E1FF4A0BA006FEDF1 /* IAPApi.mm in Sources */ = {isa = PBXBuildFile; fileRef = A0A6C7671FF4A0BA006FEDF1 /* IAPApi.mm */; };
 		A0A6C76F1FF4A0BA006FEDF1 /* InAppPurchase_oc.m in Sources */ = {isa = PBXBuildFile; fileRef = A0A6C7681FF4A0BA006FEDF1 /* InAppPurchase_oc.m */; };
 		A0A6C7711FF4A1CB006FEDF1 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0A6C7701FF4A1CB006FEDF1 /* StoreKit.framework */; };
@@ -224,8 +222,6 @@
 				A922754C1517C094001B78AA /* UIKit.framework in Frameworks */,
 				A922754E1517C094001B78AA /* Foundation.framework in Frameworks */,
 				A92275501517C094001B78AA /* CoreGraphics.framework in Frameworks */,
-				A00F22741FFB543A00C904D1 /* libjs_static.a in Frameworks */,
-				A00F22781FFB544000C904D1 /* libmozglue.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -3,6 +3,7 @@ let MIN_VER = '1.0.0';
 let MAX_VER = '1.0.0';
 let APK_URL = '';
 let IPA_URL = '';
+let APP_URL = '';
 fs.readFile('./setting.json', { encoding: 'utf8' },
     (err, data) => {
         if (err) {
@@ -13,13 +14,14 @@ fs.readFile('./setting.json', { encoding: 'utf8' },
             MAX_VER = data.MAX_VER;
             APK_URL = data.APK_URL;
             IPA_URL = data.IPA_URL;
+            APP_URL = data.APP_URL;
             console.log('初始化配置完毕!');
         }
     });
 let path = require('path');
 let express = require('express');
 let app = express();
-let PORT = 8080;
+let PORT = 8686;
 let bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -76,7 +78,8 @@ app.get('/checkVer', function (req, res) {
     let data = {
         type: type,
         apkUrl: APK_URL,
-        ipaUrl: IPA_URL
+        ipaUrl: IPA_URL,
+        appUrl: APP_URL
     };
     switch (type) {
         case 2: data.msg = '当前已经是最新客户端!'; break;
@@ -150,12 +153,17 @@ app.post('/setting', function (req, res) {
         ischange = true;
         IPA_URL = req.body.ipa_url;
     }
+    if (req.body.app_url) {
+        ischange = true;
+        APP_URL = req.body.app_url;
+    }
     if (ischange) {
         let obj = {
             "MIN_VER": MIN_VER,
             "MAX_VER": MAX_VER,
             "APK_URL": APK_URL,
-            "IPA_URL": IPA_URL
+            "IPA_URL": IPA_URL,
+            "APP_URL": APP_URL
         }
         fs.writeFile('./setting.json', JSON.stringify(obj), { encoding: 'utf8' },
             (err, data) => {

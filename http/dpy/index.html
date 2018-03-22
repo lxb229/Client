@@ -49,6 +49,11 @@
         <input type="text" name="ipa_url" value="" style="width:400px;margin-left:24px">
         <input type="submit" value="提交">
     </form>
+    <form action="/setting" method="post" onsubmit="return validateForm(this['app_url'].value,'url')" enctype='application/json'>
+        分享下载地址:
+        <input type="text" name="app_url" value="" style="width:400px;margin-left:24px">
+        <input type="submit" value="提交">
+    </form>
 </body>
 
 </html>
