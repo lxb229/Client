@@ -20,7 +20,7 @@ export default class MJ_ActionSwap extends cc.Component {
      */
     showSwapCard(data: MJGameData, cfgId: number) {
         let isAct = true;
-        let sNode = this.node_card_list;
+        let sNode = [];
         switch (cfgId) {
             case MJ_Game_Type.GAME_TYPE_SRLF:
             case MJ_Game_Type.GAME_TYPE_SRSF:
@@ -42,6 +42,8 @@ export default class MJ_ActionSwap extends cc.Component {
                 });
                 break;
             default:
+                sNode = this.node_card_list;
+                break;
         }
 
         for (var i = 0; i < data.seats.length; i++) {

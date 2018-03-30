@@ -371,22 +371,22 @@ export default class MJ_Game extends cc.Component {
                 node_group.removeAllChildren();
                 if (seatInfo.pengCards) {
                     for (var i = 0; i < seatInfo.pengCards.length; i++) {
-                        dd.gm_manager._gmScript.showGroupCard(0, seatInfo.pengCards[i], sId, node_group);
+                        dd.gm_manager.getGMTarget().showGroupCard(0, seatInfo.pengCards[i], sId, node_group);
                     }
                 }
                 if (seatInfo.baGangCards) {
                     for (var i = 0; i < seatInfo.baGangCards.length; i++) {
-                        dd.gm_manager._gmScript.showGroupCard(1, seatInfo.baGangCards[i], sId, node_group);
+                        dd.gm_manager.getGMTarget().showGroupCard(1, seatInfo.baGangCards[i], sId, node_group);
                     }
                 }
                 if (seatInfo.anGangCards) {
                     for (var i = 0; i < seatInfo.anGangCards.length; i++) {
-                        dd.gm_manager._gmScript.showGroupCard(2, seatInfo.anGangCards[i], sId, node_group);
+                        dd.gm_manager.getGMTarget().showGroupCard(2, seatInfo.anGangCards[i], sId, node_group);
                     }
                 }
                 if (seatInfo.dianGangCards) {
                     for (var i = 0; i < seatInfo.dianGangCards.length; i++) {
-                        dd.gm_manager._gmScript.showGroupCard(3, seatInfo.dianGangCards[i], sId, node_group);
+                        dd.gm_manager.getGMTarget().showGroupCard(3, seatInfo.dianGangCards[i], sId, node_group);
                     }
                 }
             }
@@ -403,7 +403,7 @@ export default class MJ_Game extends cc.Component {
      * @memberof MJ_Game
      */
     createOutCard(index: number, node_playOut: cc.Node, sId: number, seatInfo: SeatVo, cardConfig: CardConfig) {
-        dd.gm_manager._gmScript.showPlayOutCard(sId, seatInfo.outUnUseCards[index], node_playOut, (cardNode: cc.Node) => {
+        dd.gm_manager.getGMTarget().showPlayOutCard(sId, seatInfo.outUnUseCards[index], node_playOut, (cardNode: cc.Node) => {
             let cSize = cc.v2(cardNode.width * cardConfig.cScale, cardNode.height * cardConfig.cScale);
             cardNode.width = cardNode.width * cardConfig.cScale;
             cardNode.height = cardNode.height * cardConfig.cScale;
@@ -509,7 +509,7 @@ export default class MJ_Game extends cc.Component {
                     if (seatInfo.seatIndex === dd.gm_manager.mjGameData.tableBaseVo.btIndex
                         && seatInfo.btState === MJ_Act_State.ACT_STATE_BT
                         && seatInfo.outCard) {
-                        dd.gm_manager._gmScript.showOutActMJ(seatInfo.outCard, node_act, seatInfo);
+                        dd.gm_manager.getGMTarget().showOutActMJ(seatInfo.outCard, node_act, seatInfo);
                         dd.mp_manager.playOut();
                     }
                 }
@@ -532,7 +532,7 @@ export default class MJ_Game extends cc.Component {
             //如果玩家不在（未胡牌）的状态，表示胡牌了，并且 （胡牌）存在
             if (seatInfo.huPaiType !== 0 && seatInfo.huCards) {
                 for (var i = 0; i < seatInfo.huCards.length; i++) {
-                    dd.gm_manager._gmScript.showPlayOutCard(sId, seatInfo.huCards[i], node_hu, (cardNode: cc.Node) => {
+                    dd.gm_manager.getGMTarget().showPlayOutCard(sId, seatInfo.huCards[i], node_hu, (cardNode: cc.Node) => {
                         let cs: MJ_Card = cardNode.getComponent('MJ_Card');
                         cs.showLight(true);
                     });
@@ -540,7 +540,7 @@ export default class MJ_Game extends cc.Component {
                 if (node_img_hu) {
                     //显示文字图片
                     node_img_hu.active = true;
-                    node_img_hu.getComponent(cc.Sprite).spriteFrame = seatInfo.huPaiType === 1 ? dd.gm_manager._gmScript.mj_text_list[0] : dd.gm_manager._gmScript.mj_text_list[1];
+                    node_img_hu.getComponent(cc.Sprite).spriteFrame = seatInfo.huPaiType === 1 ? dd.gm_manager.getGMTarget().mj_text_list[0] : dd.gm_manager.getGMTarget().mj_text_list[1];
                 }
             } else {
                 //不显示文字图片
@@ -598,26 +598,26 @@ export default class MJ_Game extends cc.Component {
                     }
                     break;
                 case MJ_Act_Type.ACT_INDEX_GANG:
-                    sf = dd.gm_manager._gmScript.mj_text_list[7];
+                    sf = dd.gm_manager.getGMTarget().mj_text_list[7];
                     if (playIndex === 0) {
                         dd.mp_manager.playPokerSound(dd.mp_manager.audioSetting.language, 4, seatInfo.sex, 2);
                     }
                     switch (seatInfo.gangType) {
                         case 1://自摸巴杠
-                            dd.gm_manager._gmScript.showGFAct(node_act);
+                            dd.gm_manager.getGMTarget().showGFAct(node_act);
                             break;
                         case 2://暗杠
-                            dd.gm_manager._gmScript.showXYAct(node_act);
+                            dd.gm_manager.getGMTarget().showXYAct(node_act);
                             break;
                         case 3://点杠
-                            dd.gm_manager._gmScript.showXYAct(node_act);
+                            dd.gm_manager.getGMTarget().showXYAct(node_act);
                             break;
                         default:
                             break;
                     }
                     break;
                 case MJ_Act_Type.ACT_INDEX_PENG:
-                    sf = dd.gm_manager._gmScript.mj_text_list[6];
+                    sf = dd.gm_manager.getGMTarget().mj_text_list[6];
                     if (playIndex === 0) {
                         dd.mp_manager.playPokerSound(dd.mp_manager.audioSetting.language, 4, seatInfo.sex, 3);
                     }
@@ -628,7 +628,7 @@ export default class MJ_Game extends cc.Component {
                 default:
                     break;
             }
-            dd.gm_manager._gmScript.showTxtAct(sf, node_act);
+            dd.gm_manager.getGMTarget().showTxtAct(sf, node_act);
         }
     }
 
@@ -644,29 +644,29 @@ export default class MJ_Game extends cc.Component {
         //胡牌方式(0=未胡牌,1=自摸 ,2=点炮,3=抢杠胡,4=自摸杠上花,5=点杠上花胡,6=点杠上炮,7=查叫) 
         let huPaiSF = null;
         if (dd.gm_manager.mjGameData.breakSeats.length > 1) {
-            huPaiSF = dd.gm_manager._gmScript.mj_text_list[10];
+            huPaiSF = dd.gm_manager.getGMTarget().mj_text_list[10];
         } else {
             switch (seatInfo.huPaiType) {
                 case 0:
                     huPaiSF = null;
                     break;
                 case 1:
-                    huPaiSF = dd.gm_manager._gmScript.mj_text_list[0];
+                    huPaiSF = dd.gm_manager.getGMTarget().mj_text_list[0];
                     break;
                 case 2:
-                    huPaiSF = dd.gm_manager._gmScript.mj_text_list[9];
+                    huPaiSF = dd.gm_manager.getGMTarget().mj_text_list[9];
                     break;
                 case 3:
-                    huPaiSF = dd.gm_manager._gmScript.mj_text_list[8];
+                    huPaiSF = dd.gm_manager.getGMTarget().mj_text_list[8];
                     break;
                 case 4:
-                    huPaiSF = dd.gm_manager._gmScript.mj_text_list[4];
+                    huPaiSF = dd.gm_manager.getGMTarget().mj_text_list[4];
                     break;
                 case 5:
-                    huPaiSF = dd.gm_manager._gmScript.mj_text_list[4];
+                    huPaiSF = dd.gm_manager.getGMTarget().mj_text_list[4];
                     break;
                 case 6:
-                    huPaiSF = dd.gm_manager._gmScript.mj_text_list[5];
+                    huPaiSF = dd.gm_manager.getGMTarget().mj_text_list[5];
                     break;
                 default:
                     break;

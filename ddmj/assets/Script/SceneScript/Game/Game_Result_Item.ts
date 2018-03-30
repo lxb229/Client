@@ -132,7 +132,7 @@ export default class Game_Result_Item extends cc.Component {
         this.lblCJ.string = data.chajiao + '';
         this.lblDP.string = data.dianPao + '';
         this.lblJP.string = data.otherHuPai + '';
-        this.lblMG.string = data.mimang + '';
+        this.lblMG.string = data.bagang + '';
 
         // if (data.accountId === dd.ud_manager.mineData.accountId) {
         //     this.node_mine.active = true;

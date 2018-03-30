@@ -64,7 +64,7 @@ export default class MJ_Ting extends cc.Component {
         let cardImg = CardNode.getChildByName('cardImg');
         let mask = CardNode.getChildByName('mask');
         if (cardImg) {
-            let csf: cc.SpriteFrame = dd.gm_manager._gmScript.getMJCardSF(card);
+            let csf: cc.SpriteFrame = dd.gm_manager.getGMTarget().getMJCardSF(card);
             cardImg.getComponent(cc.Sprite).spriteFrame = csf;
         }
         if (mask) {

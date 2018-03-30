@@ -63,10 +63,10 @@ export default class MJ_Gang extends cc.Component {
     sendGangInfo(tag: number) {
         switch (dd.gm_manager.mjGameData.tableBaseVo.cfgId) {
             case MJ_Game_Type.GAME_TYPE_LSMJ://乐山麻将
-                dd.gm_manager._gmScript.sendLSGangBreakCard(MJ_Act_Type.ACT_INDEX_GANG, this._gangList[tag], null);
+                dd.gm_manager.getGMTarget().sendLSGangBreakCard(MJ_Act_Type.ACT_INDEX_GANG, this._gangList[tag], null);
                 break;
             default:
-                dd.gm_manager._gmScript.sendOtherBreakCard(MJ_Act_Type.ACT_INDEX_GANG, this._gangList[tag].cardId, null);
+                dd.gm_manager.getGMTarget().sendOtherBreakCard(MJ_Act_Type.ACT_INDEX_GANG, this._gangList[tag].cardId, null);
                 break;
         }
     }
@@ -148,7 +148,7 @@ export default class MJ_Gang extends cc.Component {
         let icon_gang = cardNode.getChildByName('icon_gang');
         cardNode.tag = index;
         if (cardImg) {
-            let csf: cc.SpriteFrame = dd.gm_manager._gmScript.getMJCardSF(gangData.cardId);
+            let csf: cc.SpriteFrame = dd.gm_manager.getGMTarget().getMJCardSF(gangData.cardId);
             cardImg.getComponent(cc.Sprite).spriteFrame = csf;
         }
 

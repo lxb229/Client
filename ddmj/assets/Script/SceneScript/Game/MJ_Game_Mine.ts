@@ -407,17 +407,17 @@ export default class MJ_Play extends cc.Component {
         switch (type) {
             case '0': {//万
                 cc.log('万');
-                dd.gm_manager._gmScript.sendDinQue(MJ_Suit.SUIT_TYPE_WAN);
+                dd.gm_manager.getGMTarget().sendDinQue(MJ_Suit.SUIT_TYPE_WAN);
                 break;
             }
             case '1': {//筒
                 cc.log('筒');
-                dd.gm_manager._gmScript.sendDinQue(MJ_Suit.SUIT_TYPE_TONG);
+                dd.gm_manager.getGMTarget().sendDinQue(MJ_Suit.SUIT_TYPE_TONG);
                 break;
             }
             case '2': {//条
                 cc.log('条');
-                dd.gm_manager._gmScript.sendDinQue(MJ_Suit.SUIT_TYPE_TIAO);
+                dd.gm_manager.getGMTarget().sendDinQue(MJ_Suit.SUIT_TYPE_TIAO);
                 break;
             }
             default:
@@ -438,11 +438,11 @@ export default class MJ_Play extends cc.Component {
             return;
         }
         let isAllSame = true;
-        let card1 = Math.floor(this._swapCardList[0] / 10);
-        let card2 = Math.floor(this._swapCardList[1] / 10);
-        let card3 = Math.floor(this._swapCardList[2] / 10);
+        let card1 = Math.floor(this._swapCardList[0] / 100);
+        let card2 = Math.floor(this._swapCardList[1] / 100);
+        let card3 = Math.floor(this._swapCardList[2] / 100);
         if (card1 === card2 && card2 === card3) {
-            dd.gm_manager._gmScript.sendSwap(this._swapCardList);
+            dd.gm_manager.getGMTarget().sendSwap(this._swapCardList);
         } else {
             dd.ui_manager.showTip('请选择花色一样的三张牌交换');
         }
@@ -497,10 +497,10 @@ export default class MJ_Play extends cc.Component {
                     isAnGang: 1,
                     isUseYaoJi: false,
                 };
-                dd.gm_manager._gmScript.sendLSGangBreakCard(actType, obj, this.node_state);
+                dd.gm_manager.getGMTarget().sendLSGangBreakCard(actType, obj, this.node_state);
                 break;
             default:
-                dd.gm_manager._gmScript.sendOtherBreakCard(actType, cardId, this.node_state);
+                dd.gm_manager.getGMTarget().sendOtherBreakCard(actType, cardId, this.node_state);
                 break;
         }
     }
@@ -513,7 +513,7 @@ export default class MJ_Play extends cc.Component {
             case MJ_Game_Type.GAME_TYPE_MYMJ://绵阳麻将
                 //绵阳麻将，如果已经躺牌的话,就只能杠摸的那张牌
                 if (this._seatInfo.tangCardState === 1) {
-                    dd.gm_manager._gmScript.sendOtherBreakCard(MJ_Act_Type.ACT_INDEX_GANG, this._seatInfo.breakCard, this.node_state);
+                    dd.gm_manager.getGMTarget().sendOtherBreakCard(MJ_Act_Type.ACT_INDEX_GANG, this._seatInfo.breakCard, this.node_state);
                     break;
                 }
                 this.baseGang();
@@ -543,16 +543,16 @@ export default class MJ_Play extends cc.Component {
             if (gList.length > 0) {//如果自己有杠牌,表示是自己 摸牌摸到的杠(摸到的暗杠 + 摸到的巴杠)
                 //如果自己手中有多张杠牌,就显示 选择杠牌界面
                 if (gList.length > 1) {
-                    dd.gm_manager._gmScript.showMoreGang(gList, this);
+                    dd.gm_manager.getGMTarget().showMoreGang(gList, this);
                     this.node_state.active = false;
                 } else {//如果只有一个杠，就直接杠这张牌
-                    dd.gm_manager._gmScript.sendOtherBreakCard(MJ_Act_Type.ACT_INDEX_GANG, gList[0].cardId, this.node_state);
+                    dd.gm_manager.getGMTarget().sendOtherBreakCard(MJ_Act_Type.ACT_INDEX_GANG, gList[0].cardId, this.node_state);
                 }
             } else {//如果自己手中没有杠，就直接 杠别人打出来的那张牌
-                dd.gm_manager._gmScript.sendOtherBreakCard(MJ_Act_Type.ACT_INDEX_GANG, this._seatInfo.breakCard, this.node_state);
+                dd.gm_manager.getGMTarget().sendOtherBreakCard(MJ_Act_Type.ACT_INDEX_GANG, this._seatInfo.breakCard, this.node_state);
             }
         } else {//如果没有轮到自己摸牌时的表态，是杠别人打出来的那张牌
-            dd.gm_manager._gmScript.sendOtherBreakCard(MJ_Act_Type.ACT_INDEX_GANG, this._seatInfo.breakCard, this.node_state);
+            dd.gm_manager.getGMTarget().sendOtherBreakCard(MJ_Act_Type.ACT_INDEX_GANG, this._seatInfo.breakCard, this.node_state);
         }
     }
     /**
@@ -571,10 +571,10 @@ export default class MJ_Play extends cc.Component {
             if (gList.length > 0) {//如果自己有杠牌,表示是自己 摸牌摸到的杠(摸到的暗杠 + 摸到的巴杠)
                 //如果自己手中有多张杠牌,就显示 选择杠牌界面
                 if (gList.length > 1) {
-                    dd.gm_manager._gmScript.showMoreGang(gList, this);
+                    dd.gm_manager.getGMTarget().showMoreGang(gList, this);
                     this.node_state.active = false;
                 } else {//如果只有一个杠，就直接杠这张牌
-                    dd.gm_manager._gmScript.sendLSGangBreakCard(MJ_Act_Type.ACT_INDEX_GANG, gList[0], this.node_state);
+                    dd.gm_manager.getGMTarget().sendLSGangBreakCard(MJ_Act_Type.ACT_INDEX_GANG, gList[0], this.node_state);
                 }
             } else {//如果自己手中没有杠，就直接 杠摸的那张牌
                 let obj: GangData = {
@@ -582,7 +582,7 @@ export default class MJ_Play extends cc.Component {
                     isAnGang: 2,
                     isUseYaoJi: false,
                 };
-                dd.gm_manager._gmScript.sendLSGangBreakCard(MJ_Act_Type.ACT_INDEX_GANG, obj, this.node_state);
+                dd.gm_manager.getGMTarget().sendLSGangBreakCard(MJ_Act_Type.ACT_INDEX_GANG, obj, this.node_state);
             }
         } else {//如果没有轮到自己摸牌时的表态，是杠别人打出来的那张牌
             let obj: GangData = {
@@ -590,7 +590,7 @@ export default class MJ_Play extends cc.Component {
                 isAnGang: 1,
                 isUseYaoJi: false,
             };
-            dd.gm_manager._gmScript.sendLSGangBreakCard(MJ_Act_Type.ACT_INDEX_GANG, obj, this.node_state);
+            dd.gm_manager.getGMTarget().sendLSGangBreakCard(MJ_Act_Type.ACT_INDEX_GANG, obj, this.node_state);
         }
     }
     /**

@@ -646,7 +646,7 @@ declare interface SettlementAllVo {
      * @type {number}
      * @memberof SettlementAllVo
      */
-    mimang: number;
+    bagang: number;
     /**
      * 查叫次数
      * @type {number}

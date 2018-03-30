@@ -240,7 +240,7 @@ export default class Game_Disband extends cc.Component {
             if (flag === 0) {//成功
             } else if (flag === -1) {//超时
             } else {//失败,content是一个字符串
-                dd.gm_manager._gmScript.quitGame();
+                dd.gm_manager.getGMTarget().quitGame();
             }
         });
     }

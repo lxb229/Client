@@ -74,9 +74,9 @@ export default class MJ_Replay extends cc.Component {
                     lbl_name: '确定',
                     callback: () => {
                         //移除结算面板
-                        if (dd.gm_manager._gmScript._game_over && dd.gm_manager._gmScript._game_over.isValid) {
-                            dd.gm_manager._gmScript._game_over.removeFromParent(true);
-                            dd.gm_manager._gmScript._game_over.destroy();
+                        if (dd.gm_manager.getGMTarget()._game_over && dd.gm_manager.getGMTarget()._game_over.isValid) {
+                            dd.gm_manager.getGMTarget()._game_over.removeFromParent(true);
+                            dd.gm_manager.getGMTarget()._game_over.destroy();
                         }
                         this._replayIndex = 0;
                         this.showReplayInfo();

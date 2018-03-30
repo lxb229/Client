@@ -107,7 +107,7 @@ export default class MJ_HandList extends cc.Component {
      * @memberof MJ_HandList
      */
     setSelectCard(cardNode: cc.Node) {
-        dd.gm_manager._gmScript.showTingPai(false);
+        dd.gm_manager.getGMTarget().showTingPai(false);
         if (cardNode && cardNode.isValid) {
             cardNode.color = cc.Color.WHITE;
             let hcs: MJ_Card = cardNode.getComponent('MJ_Card');
@@ -135,7 +135,7 @@ export default class MJ_HandList extends cc.Component {
                             if (d > 150 && dy > 80) {
                                 cc.log('打出这张牌,拖动距离：' + d + ';拖动高度：' + dy);
                                 if (this._seatInfo.seatIndex === dd.gm_manager.mjGameData.tableBaseVo.btIndex) {
-                                    dd.gm_manager._gmScript.sendOutCard(hcs._cardId);
+                                    dd.gm_manager.getGMTarget().sendOutCard(hcs._cardId);
                                     //移除节点
                                     cardNode.removeFromParent(true);
                                     cardNode.destroy();
@@ -143,12 +143,12 @@ export default class MJ_HandList extends cc.Component {
                             } else {
                                 cc.log('选中这张牌');
                                 this.selectCardByCardId(hcs._cardId);
-                                dd.gm_manager._gmScript.showTSCard(hcs._cardId);
+                                dd.gm_manager.getGMTarget().showTSCard(hcs._cardId);
                             }
                         } else {
                             cc.log('打出这张牌');
                             if (this._seatInfo.seatIndex === dd.gm_manager.mjGameData.tableBaseVo.btIndex) {
-                                dd.gm_manager._gmScript.sendOutCard(hcs._cardId);
+                                dd.gm_manager.getGMTarget().sendOutCard(hcs._cardId);
                                 //移除节点
                                 cardNode.removeFromParent(true);
                                 cardNode.destroy();
@@ -163,7 +163,7 @@ export default class MJ_HandList extends cc.Component {
                         if (d > 200 && dy > 80) {
                             cc.log('打出这张牌,拖动距离：' + d + ';拖动高度：' + dy);
                             if (this._seatInfo.seatIndex === dd.gm_manager.mjGameData.tableBaseVo.btIndex) {
-                                dd.gm_manager._gmScript.sendOutCard(hcs._cardId);
+                                dd.gm_manager.getGMTarget().sendOutCard(hcs._cardId);
                                 //移除节点
                                 cardNode.removeFromParent(true);
                                 cardNode.destroy();
@@ -171,7 +171,7 @@ export default class MJ_HandList extends cc.Component {
                         } else {
                             cc.log('选中这张牌');
                             this.selectCardByCardId(hcs._cardId);
-                            dd.gm_manager._gmScript.showTSCard(hcs._cardId);
+                            dd.gm_manager.getGMTarget().showTSCard(hcs._cardId);
                         }
                     }
                 }
@@ -390,7 +390,7 @@ export default class MJ_HandList extends cc.Component {
         } else {
             //如果不是出牌阶段,移除
             if (dd.gm_manager.mjGameData.tableBaseVo.gameState !== MJ_GameState.STATE_TABLE_OUTCARD) {
-                dd.gm_manager._gmScript.showTingPai(false);
+                dd.gm_manager.getGMTarget().showTingPai(false);
             }
             this.showHandCard(handCards, this._moPaiCardId, isUnSuit);
             this.deleteNotCard(handCards);
@@ -478,12 +478,12 @@ export default class MJ_HandList extends cc.Component {
             //如果是摸牌,并且轮到自己表态，摸牌存在,就在摸牌位置创建摸牌
             if (cardId === this._seatInfo.moPaiCard
                 && dd.gm_manager.mjGameData.tableBaseVo.btIndex === this._seatInfo.seatIndex) {
-                dd.gm_manager._gmScript.showMineCard(this._seatInfo.moPaiCard, this.node_hand, false, (cardNode: cc.Node) => {
+                dd.gm_manager.getGMTarget().showMineCard(this._seatInfo.moPaiCard, this.node_hand, false, (cardNode: cc.Node) => {
                     cardNode.setPosition(cardNode.width, 0);
                     this.showUnSuit(cardNode, isUnSuit);
                 });
             } else {
-                dd.gm_manager._gmScript.showMineCard(cardId, this.node_hand, false, (cardNode: cc.Node) => {
+                dd.gm_manager.getGMTarget().showMineCard(cardId, this.node_hand, false, (cardNode: cc.Node) => {
                     let ePos = cc.p((index * (-cardNode.width) - cardNode.width / 2), 0);
                     cardNode.setPosition(ePos);
                     this.showUnSuit(cardNode, isUnSuit);
@@ -523,7 +523,7 @@ export default class MJ_HandList extends cc.Component {
                     //如果拍存在，修正牌的数据
                     this.fixCardNode(hnc, index, isMyBreakState, isAllSwap, isUnSuit);
                 } else {
-                    dd.gm_manager._gmScript.showMineCard(cardId, this.node_hand, false, (cardNode: cc.Node) => {
+                    dd.gm_manager.getGMTarget().showMineCard(cardId, this.node_hand, false, (cardNode: cc.Node) => {
                         let ePos = cc.p((index * (-cardNode.width) - cardNode.width / 2), 0);
                         cardNode.setPosition(ePos);
                         this._hand_card_list.push(cardNode);
@@ -643,7 +643,7 @@ export default class MJ_HandList extends cc.Component {
                     //如果存在，就刷新位置
                     mpCard.setPosition(mpCard.width, 0);
                 } else {//如果不存在，就创建
-                    dd.gm_manager._gmScript.showMineCard(this._seatInfo.moPaiCard, this.node_hand, false, (cardNode: cc.Node) => {
+                    dd.gm_manager.getGMTarget().showMineCard(this._seatInfo.moPaiCard, this.node_hand, false, (cardNode: cc.Node) => {
                         cardNode.setPosition(cardNode.width, 0);
                         this._hand_card_list.push(cardNode);
                         this.showUnSuit(cardNode, isUnSuit);
@@ -808,7 +808,7 @@ export default class MJ_HandList extends cc.Component {
                     if (index !== -1) {
                         //显示听牌的界面
                         cc.log('显示胡牌');
-                        dd.gm_manager._gmScript.showTingPai(true, this._huList[index]);
+                        dd.gm_manager.getGMTarget().showTingPai(true, this._huList[index]);
                     }
                 }
             } else {

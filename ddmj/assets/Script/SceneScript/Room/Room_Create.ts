@@ -165,19 +165,10 @@ export default class Room_Create extends cc.Component {
     showCreateMode(corpsId: string = '0') {
         this._sendRuleCfg.corpsId = corpsId;
         //获取游戏房间的配置
-        this.getRoomConfig();
-    }
-
-    /**
-     * 获取房间配置
-     * 
-     * @memberof Room_Create
-     */
-    getRoomConfig() {
         if (dd.ui_manager.showLoading('正在获取配置，请稍后')) {
-            let obj = {};
+            let obj = { corpsId: corpsId };
             let msg = JSON.stringify(obj);
-            dd.ws_manager.sendMsg(dd.protocol.MAJIANG_GET_RULECFG, '', (flag: number, content?: any) => {
+            dd.ws_manager.sendMsg(dd.protocol.MAJIANG_GET_RULECFG, msg, (flag: number, content?: any) => {
                 if (flag === 0) {//成功
                     this._ruleCfgVo = content as RuleCfgVo[];
                     this.showConfigInfo();
@@ -189,7 +180,6 @@ export default class Room_Create extends cc.Component {
             });
         }
     }
-
     /**
      * 发送消息创建房间
      * 

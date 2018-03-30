@@ -283,7 +283,7 @@ export default class MJ_Table extends cc.Component {
             dd.ws_manager.sendMsg(dd.protocol.MAJIANG_ROOM_LEAV, msg, (flag: number, content?: any) => {
                 dd.ui_manager.hideLoading();
                 if (flag === 0) {//成功
-                    dd.gm_manager._gmScript.quitGame();
+                    dd.gm_manager.getGMTarget().quitGame();
                 } else if (flag === -1) {//超时
                     cc.log(content);
                 } else {//失败,content是一个字符串
@@ -358,7 +358,7 @@ export default class MJ_Table extends cc.Component {
     click_btn_chat() {
         if (dd.gm_manager.touchTarget) return;
         dd.mp_manager.playButton();
-        dd.gm_manager._gmScript.showChat();
+        dd.gm_manager.getGMTarget().showChat();
     }
     /**
      * 设置
@@ -368,7 +368,7 @@ export default class MJ_Table extends cc.Component {
     click_btn_setting() {
         if (dd.gm_manager.touchTarget) return;
         dd.mp_manager.playButton();
-        dd.gm_manager._gmScript.showSetting();
+        dd.gm_manager.getGMTarget().showSetting();
     }
     /**
      * 语音

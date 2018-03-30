@@ -106,7 +106,25 @@ export default class GMManager {
      * @memberof GMManager
      */
     _gmScript: MJCanvas = null;
-
+    /**
+     * 设置
+     * @param {any} target 
+     * @memberof GMManager
+     */
+    setGMTarget(target) {
+        this._gmScript = target;
+    }
+    /**
+     * 获取游戏场景的脚本
+     * @returns 
+     * @memberof GMManager
+     */
+    getGMTarget() {
+        if (!this._gmScript) {
+            this._gmScript = cc.director.getScene().getChildByName('Canvas').getComponent('MJCanvas');
+        }
+        return this._gmScript;
+    }
     /**
      * 刷新游戏数据
      * @param {MJGameData} tableData 
@@ -220,7 +238,7 @@ export default class GMManager {
                 });
                 break;
             case MJ_GameState.STATE_TABLE_OVER_ONCE://单局阶段阶段，刷新单局结算数据
-                tableData.tableBaseVo.nextGame = data.nextGame;
+                tableData.tableBaseVo.nextGame = stateData.nextGame;
                 tableData.settlementOnce = stateData.settlementOnce;
                 break;
             case MJ_GameState.STATE_TABLE_OVER_ALL://总阶段阶段，刷新总结算数据
@@ -293,12 +311,15 @@ export default class GMManager {
      * @memberof GMManager
      */
     setSwapCardData(data: any) {
+        cc.log('------换牌推送------');
+        cc.log(data);
         if (!this.mjGameData || !this.mjGameData.seats) return;
         this.mjGameData.tableBaseVo.swapCardType = data.swapCardType;
         let seats = this.mjGameData.seats;
         data.seats.forEach((seatInfo) => {
             for (let i = 0; i < seats.length; i++) {
                 if (seats[i].seatIndex === seatInfo.seatIndex) {
+                    seats[i].btState = seatInfo.btState;
                     seats[i].handCardsLen = seatInfo.handCardsLen;
                     seats[i].handCards = seatInfo.handCards;
                     seats[i].swapCards = seatInfo.swapCards;

@@ -111,7 +111,7 @@ export default class MJ_Tang extends cc.Component {
         cardNode.tag = cardId;
         let cardImg = cardNode.getChildByName('cardImg');
         if (cardImg) {
-            let csf: cc.SpriteFrame = dd.gm_manager._gmScript.getMJCardSF(cardId);
+            let csf: cc.SpriteFrame = dd.gm_manager.getGMTarget().getMJCardSF(cardId);
             cardImg.getComponent(cc.Sprite).spriteFrame = csf;
         }
         let toggle = cardNode.getChildByName('toggle').getComponent(cc.Toggle);
