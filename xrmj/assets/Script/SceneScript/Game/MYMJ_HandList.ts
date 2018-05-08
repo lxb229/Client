@@ -475,13 +475,20 @@ export default class MJ_HandList extends cc.Component {
         this._huList.length = 0;
         let isShow = false;
 
-        //只有在 （自己表态）、（游戏出牌）的条件下，才会显示听牌
-        if (dd.gm_manager.mjGameData.tableBaseVo.btIndex === this._seatInfo.seatIndex
-            && this._seatInfo.btState === MJ_Act_State.ACT_STATE_WAIT) {
-            if (dd.gm_manager.mjGameData.tableBaseVo.gameState === MJ_GameState.STATE_TABLE_OUTCARD
-                || dd.gm_manager.mjGameData.tableBaseVo.gameState === MJ_GameState.STATE_TABLE_BREAKCARD) {
-                isShow = true;
-            }
+        switch (dd.gm_manager.mjGameData.tableBaseVo.gameState) {
+            case MJ_GameState.STATE_TABLE_OUTCARD://出牌
+                if (dd.gm_manager.mjGameData.tableBaseVo.btIndex === this._seatInfo.seatIndex
+                    && this._seatInfo.btState === MJ_Act_State.ACT_STATE_WAIT) {
+                    isShow = true;
+                }
+                break;
+            case MJ_GameState.STATE_TABLE_BREAKCARD://胡碰杠
+                //如果自己有（胡杠碰吃过的状态）
+                let isBreakCS = dd.gm_manager.getIsBreakCardState(this._seatInfo);
+                if (isBreakCS) isShow = true;
+                break;
+            default:
+                break;
         }
 
         for (var i = 0; i < this._hand_card_list.length; i++) {

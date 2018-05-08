@@ -454,7 +454,24 @@ export default class GMManager {
         }
         return -1;
     }
-
+    /**
+     * 获取是否在胡杠碰的状态
+     * 
+     * @returns 
+     * @memberof MJ_Play
+     */
+    getIsBreakCardState(seatInfo: SeatVo): boolean {
+        let isBreakCS = false;
+        if (seatInfo.breakCard > 0 && seatInfo.breakCardState && seatInfo.breakCardState.length > 0) {
+            for (var i = 0; i < seatInfo.breakCardState.length; i++) {
+                if (seatInfo.breakCardState[i] === 1) {
+                    isBreakCS = true;
+                    break;
+                }
+            }
+        }
+        return isBreakCS;
+    }
     /**
      * 对服务器传过来的三位cardId（花色，点数，索引） 转换为两位的cardId(花色 ，点数),以便于进行计算
      * @param {number[]} cardIds 

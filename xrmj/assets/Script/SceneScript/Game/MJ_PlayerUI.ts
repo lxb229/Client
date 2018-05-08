@@ -116,7 +116,9 @@ export default class MJ_PlayerUI extends cc.Component {
                     this.unSuit.node.active = true;
                     this.unSuit.spriteFrame = dd.gm_manager.getGMTarget().unSuit_list[3];
                     let lblPiao = this.unSuit.node.getChildByName('lblPiao');
-                    if (lblPiao) lblPiao.getComponent(cc.Label).string = 'x' + this._seatInfo.piaoNum;
+                    if (lblPiao) {
+                        lblPiao.getComponent(cc.Label).string = lblPiao.x >= 0 ? 'x' + this._seatInfo.piaoNum : this._seatInfo.piaoNum + 'x';
+                    }
                 } else {
                     this.unSuit.node.active = false;
                 }

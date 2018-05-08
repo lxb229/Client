@@ -329,7 +329,7 @@ export default class MJ_Play extends cc.Component {
      */
     showBreakState() {
         //如果自己有（胡杠碰吃过的状态）
-        let isBreakCS = this.getIsBreakCardState();
+        let isBreakCS = dd.gm_manager.getIsBreakCardState(this._seatInfo);
         if (isBreakCS) {
             //如果自己在(等待表态)
             if (this._seatInfo.btState === MJ_Act_State.ACT_STATE_WAIT) {
@@ -379,24 +379,6 @@ export default class MJ_Play extends cc.Component {
             this.node_state.active = false;
         }
     }
-
-    /**
-     * 获取是否在胡杠碰的状态
-     * 
-     * @returns 
-     * @memberof MJ_Play
-     */
-    getIsBreakCardState() {
-        let isBreakCS = false;
-        for (var i = 0; i < this._seatInfo.breakCardState.length; i++) {
-            if (this._seatInfo.breakCardState[i] === 1) {
-                isBreakCS = true;
-                break;
-            }
-        }
-        return isBreakCS;
-    }
-
     /**
      * 自己定缺按钮的点击事件
      * 
