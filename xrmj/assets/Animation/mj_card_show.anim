@@ -1,0 +1,75 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "mj_card_show",
+  "_objFlags": 0,
+  "_rawFiles": null,
+  "_duration": 1.5666666666666667,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 1,
+  "curveData": {
+    "props": {
+      "scaleX": [
+        {
+          "frame": 0,
+          "value": 0.2
+        },
+        {
+          "frame": 0.16666666666666666,
+          "value": 1
+        },
+        {
+          "frame": 1.3333333333333333,
+          "value": 1
+        },
+        {
+          "frame": 1.4833333333333334,
+          "value": 0.8
+        }
+      ],
+      "scaleY": [
+        {
+          "frame": 0,
+          "value": 0.2
+        },
+        {
+          "frame": 0.16666666666666666,
+          "value": 1
+        },
+        {
+          "frame": 1.3333333333333333,
+          "value": 1
+        },
+        {
+          "frame": 1.4833333333333334,
+          "value": 0.8
+        }
+      ],
+      "opacity": [
+        {
+          "frame": 0,
+          "value": 10
+        },
+        {
+          "frame": 0.16666666666666666,
+          "value": 255
+        },
+        {
+          "frame": 1.3333333333333333,
+          "value": 255
+        },
+        {
+          "frame": 1.4833333333333334,
+          "value": 0
+        }
+      ]
+    }
+  },
+  "events": [
+    {
+      "frame": 1.5666666666666667,
+      "func": "outMJActEnd",
+      "params": []
+    }
+  ]
+}

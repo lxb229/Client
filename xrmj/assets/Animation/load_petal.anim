@@ -1,0 +1,49 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "load_petal",
+  "_objFlags": 0,
+  "_rawFiles": null,
+  "_duration": 1.35,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "fafd2123-aa71-4734-93c9-1293e77f03c1"
+            }
+          },
+          {
+            "frame": 0.3333333333333333,
+            "value": {
+              "__uuid__": "113f66a9-8512-4d22-9d7b-2d9f2f35a8f7"
+            }
+          },
+          {
+            "frame": 0.6666666666666666,
+            "value": {
+              "__uuid__": "829ee6eb-c867-49ef-825d-6392cf9f4caa"
+            }
+          },
+          {
+            "frame": 1,
+            "value": {
+              "__uuid__": "cd99367e-483b-454a-86de-2dde7296d090"
+            }
+          },
+          {
+            "frame": 1.3333333333333333,
+            "value": {
+              "__uuid__": "fafd2123-aa71-4734-93c9-1293e77f03c1"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

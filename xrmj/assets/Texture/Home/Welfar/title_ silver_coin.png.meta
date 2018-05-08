@@ -1,0 +1,30 @@
+{
+  "ver": "1.0.0",
+  "uuid": "cfa5d707-1d86-442b-8c9a-976bed81ea09",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "subMetas": {
+    "title_ silver_coin": {
+      "ver": "1.0.3",
+      "uuid": "4759bafe-cfeb-4e3b-b40d-4afb042bfcc2",
+      "rawTextureUuid": "cfa5d707-1d86-442b-8c9a-976bed81ea09",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 134,
+      "height": 32,
+      "rawWidth": 134,
+      "rawHeight": 32,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

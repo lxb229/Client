@@ -1,0 +1,30 @@
+{
+  "ver": "1.0.0",
+  "uuid": "5c656ed7-d83c-4000-9a4c-46747dff5521",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "subMetas": {
+    "lobby_ic_room_card1": {
+      "ver": "1.0.3",
+      "uuid": "2c8bd87b-c869-4509-9861-1562e77e3386",
+      "rawTextureUuid": "5c656ed7-d83c-4000-9a4c-46747dff5521",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 37,
+      "height": 45,
+      "rawWidth": 37,
+      "rawHeight": 45,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

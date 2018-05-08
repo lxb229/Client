@@ -1,0 +1,30 @@
+{
+  "ver": "1.0.0",
+  "uuid": "9e78f71b-dfe6-4f09-8f9d-5ef082752339",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "subMetas": {
+    "walfar_btn_go_store": {
+      "ver": "1.0.3",
+      "uuid": "a7f8506a-af50-4940-ae1b-69b9ed5bb32d",
+      "rawTextureUuid": "9e78f71b-dfe6-4f09-8f9d-5ef082752339",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0.5,
+      "trimX": 1,
+      "trimY": 0,
+      "width": 162,
+      "height": 73,
+      "rawWidth": 164,
+      "rawHeight": 74,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}
