@@ -59,10 +59,10 @@ export default class JoinCanvas extends cc.Component {
     }
     /**
      * 显示加入房间输入密码界面
-     * @param {string} tableId 
+     * @param {number} tableId 
      * @memberof JoinCanvas
      */
-    showJoinPwd(tableId: string) {
+    showJoinPwd(tableId: number) {
         if (!this._join_pwd || !this._join_pwd.isValid) {
             this._join_pwd = cc.instantiate(this.join_pwd_prefab);
             let jPwdScript = this._join_pwd.getComponent('Room_Join_Pwd');

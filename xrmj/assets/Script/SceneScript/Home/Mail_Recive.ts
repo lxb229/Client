@@ -81,10 +81,10 @@ export default class Mail_Recive extends cc.Component {
 
                     break;
                 case Reward_Type.VIP_AIQIYI://爱奇艺会员
-                    this.edit_aqyNo.node.parent.active = false;
+                    this.edit_aqyNo.node.parent.active = true;
                     break;
                 case Reward_Type.VIP_YOUKU://优酷会员
-                    this.edit_ykNo.node.parent.active = false;
+                    this.edit_ykNo.node.parent.active = true;
                     break;
                 default:
                     break;
@@ -122,33 +122,46 @@ export default class Mail_Recive extends cc.Component {
      */
     click_btn_ok() {
         dd.mp_manager.playButton();
-        let type = 0;
-        let sendStr = '';
-        switch (type) {
-            case 0://手机号
-                sendStr = this.edit_phone.string.trim();
-                if (!dd.utils.checkMobile(sendStr))
-                    return dd.ui_manager.showTip('*请输入有效手机号');
-                break;
-            case 1://微信号
-                sendStr = this.edit_wxNo.string.trim();
-                if (sendStr === '' || sendStr.length === 0)
-                    return dd.ui_manager.showTip('*微信号不能为空,请输入微信号');
-                break;
-            case 0://手机号
-                sendStr = this.edit_ykNo.string.trim();
-                if (sendStr === '' || sendStr.length === 0)
-                    return dd.ui_manager.showTip('*优酷账号不能为空,请输入优酷账号');
-                break;
-            case 0://手机号
-                sendStr = this.edit_aqyNo.string.trim();
-                if (!dd.utils.checkMobile(sendStr))
-                    return dd.ui_manager.showTip('*爱奇艺账号不能为空,请输入爱奇艺账号');
-                break;
-            default:
-                break;
+        if (this._reciveData && this._reciveData.attachment.length > 0) {
+            let sendStr = '';
+            switch (this._reciveData.attachment[0].code) {
+                case Reward_Type.ENTITY://实物
+
+                    break;
+                case Reward_Type.CHARGECARD://话费
+                    sendStr = this.edit_phone.string.trim();
+                    if (!dd.utils.checkMobile(sendStr))
+                        return dd.ui_manager.showTip('*请输入有效手机号');
+                    break;
+                case Reward_Type.WXREWARD://微信红包
+                    sendStr = this.edit_wxNo.string.trim();
+                    if (sendStr === '' || sendStr.length === 0)
+                        return dd.ui_manager.showTip('*微信号不能为空,请输入微信号');
+                    break;
+                case Reward_Type.QQREWARD://QQ红包
+
+                    break;
+                case Reward_Type.ZFBREWARD://支付宝红包
+
+                    break;
+                case Reward_Type.VIP_TENCENT://腾讯会员
+
+                    break;
+                case Reward_Type.VIP_AIQIYI://爱奇艺会员
+                    sendStr = this.edit_aqyNo.string.trim();
+                    if (sendStr === '' || sendStr.length === 0)
+                        return dd.ui_manager.showTip('*爱奇艺账号不能为空,请输入爱奇艺账号');
+                    break;
+                case Reward_Type.VIP_YOUKU://优酷会员
+                    sendStr = this.edit_ykNo.string.trim();
+                    if (sendStr === '' || sendStr.length === 0)
+                        return dd.ui_manager.showTip('*优酷账号不能为空,请输入优酷账号');
+                    break;
+                default:
+                    break;
+            }
+            this.sendReciveReward(sendStr);
         }
-        this.sendReciveReward(sendStr);
     }
 
     /**

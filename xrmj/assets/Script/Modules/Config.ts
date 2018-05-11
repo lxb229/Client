@@ -33,7 +33,7 @@ export let wxState: number = -1;
 /**
  * ios内购，商品id集合，用‘,’隔开
  */
-export let productids: string = 'p1,p2,p3';
+export let productids: string = 'x1,x2,x3';
 /**
  * node返回的信息
  */

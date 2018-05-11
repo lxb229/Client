@@ -5319,7 +5319,7 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": -109.5,
+      "x": 109.5,
       "y": -243.5
     },
     "_skewX": 0,
@@ -5365,9 +5365,9 @@
     "_enabled": true,
     "isAlignOnce": true,
     "_target": null,
-    "_alignFlags": 12,
+    "_alignFlags": 36,
     "_left": 260,
-    "_right": 0,
+    "_right": 260,
     "_top": 0,
     "_bottom": 50,
     "_verticalCenter": 0,
@@ -5507,7 +5507,7 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 109.5,
+      "x": -109.5,
       "y": -243.5
     },
     "_skewX": 0,
@@ -5553,8 +5553,8 @@
     "_enabled": true,
     "isAlignOnce": true,
     "_target": null,
-    "_alignFlags": 36,
-    "_left": 0,
+    "_alignFlags": 12,
+    "_left": 260,
     "_right": 260,
     "_top": 0,
     "_bottom": 50,

@@ -85,13 +85,19 @@ export default class StoreCanvas extends cc.Component {
         let state: number = event.detail;
         switch (state) {
             case 0://支付成功，校验成功
-                let obj = { 'num': parseInt(this._selectProduct.title) };
+                let time = Date.now().toString();
+                let obj = {
+                    'num': parseInt(this._selectProduct.title),
+                    'pay_price': this._selectProduct.price,
+                    'pay_time': time,
+                    'order_no': dd.ud_manager.mineData.accountId + '-' + time
+                };
                 let msg = JSON.stringify(obj);
                 dd.ws_manager.sendMsg(dd.protocol.MALL_ITEM_BUY_OK, msg, (flag: number, content?: any) => {
+                    dd.ui_manager.hideLoading();
                     if (flag === 0) {//成功
                         dd.ui_manager.showAlert('购买成功!', '温馨提示', null, null, 1);
                     } else if (flag === -1) {//超时
-                        dd.ui_manager.hideLoading();
                         dd.ui_manager.showTip('消息超时！');
                     } else {//失败,content是一个字符串
                         dd.ui_manager.showTip(content);
@@ -111,8 +117,6 @@ export default class StoreCanvas extends cc.Component {
             default:
                 break;
         }
-        this.node.removeFromParent(true);
-        this.node.destroy();
     };
 
     qyiap() {
@@ -213,8 +217,8 @@ export default class StoreCanvas extends cc.Component {
             this._products.forEach((product: Product, i: number) => {
                 let productNode = cc.instantiate(this.store_item_prefab);
                 let lblCost = productNode.getChildByName('lblCost');
-                if (lblCost) lblCost.getComponent(cc.Label).string = product.price + '元';
-                let lblNum = productNode.getChildByName('layout/lblNum');
+                if (lblCost) lblCost.getComponent(cc.Label).string = parseInt(product.price) + '元';
+                let lblNum = cc.find('lblNum', productNode);
                 if (lblNum) lblNum.getComponent(cc.Label).string = product.title;
                 let goods_icon = productNode.getChildByName('goods_icon');
                 if (goods_icon) goods_icon.getComponent(cc.Sprite).spriteFrame = this.imgGoodsList[i];
@@ -224,7 +228,7 @@ export default class StoreCanvas extends cc.Component {
                         this._selectProduct = product;
                         cc.log('正在向苹果请求交易');
                         dd.ui_manager.showLoading('正在向苹果请求交易，请稍后');
-                        dd.js_call_native.buyProduct(product.productid, dd.ud_manager.mineData.accountId + Date.now);
+                        dd.js_call_native.buyProduct(product.productid, dd.ud_manager.mineData.accountId + '-' + Date.now());
                     });
                 }
                 productNode.parent = this.svNode_ios.content;

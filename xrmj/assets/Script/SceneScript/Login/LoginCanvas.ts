@@ -129,6 +129,11 @@ export default class LoginCanvas extends cc.Component {
      * @memberof LoginCanvas
      */
     async aotuLogin(): Promise<void> {
+        if (dd.config.wxState !== 0) {
+            cc.log('未安装微信');
+            dd.ui_manager.hideLoading();
+            return;
+        }
         let db = cc.sys.localStorage;
         let tokenStr = db.getItem('TokenInfo');
         if (tokenStr) {//验证是否有授权过

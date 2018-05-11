@@ -145,6 +145,13 @@ export default class ClubTableLayer extends cc.Component {
                             break;
                         }
                     }
+                    for (let i = 0; i < this._clubMsgList.length; i++) {
+                        if (this._clubMsgList[i].tableId === data.table.tableId) {
+                            this._clubMsgList.splice(i, 1);
+                            break;
+                        }
+                    }
+                    this.showTableMsgList();
                     break;
                 default:
                     break;
@@ -171,6 +178,7 @@ export default class ClubTableLayer extends cc.Component {
     initData(corpsId: string) {
         this.btnAdmin.active = dd.ud_manager.openClubData.createPlayer === dd.ud_manager.mineData.accountId ? true : false;
         this.btnLayout.cellSize.width = dd.ud_manager.openClubData.createPlayer === dd.ud_manager.mineData.accountId ? Math.round(this.node.width / 4) : Math.round(this.node.width / 3);
+        this._clubMsgList.length = 0;
         this.showTableMsgList();
         this.sendGetClubTables(corpsId);
     }
@@ -210,7 +218,7 @@ export default class ClubTableLayer extends cc.Component {
      * 
      * @memberof Room_Join_Normal
      */
-    sendJoinRoom(tableId: string) {
+    sendJoinRoom(tableId: number) {
         if (dd.ui_manager.showLoading()) {
             let obj = { 'tableId': tableId, 'password': '0' };
             let msg = JSON.stringify(obj);
@@ -293,7 +301,9 @@ export default class ClubTableLayer extends cc.Component {
                 widget.left -= 1;
             }
         }
-        if (dd.ud_manager.hotTip && dd.ud_manager.hotTip[1] && dd.ud_manager.hotTip[1].hotVal > 0) {
+        //如果这个打开的俱乐部时自己创建的，并且有红点，就显示红点
+        if (dd.ud_manager.openClubData.createPlayer === dd.ud_manager.mineData.accountId
+            && dd.ud_manager.hotTip && dd.ud_manager.hotTip[1] && dd.ud_manager.hotTip[1].hotVal > 0) {
             this.node_hot.active = true;
         } else {
             this.node_hot.active = false;
@@ -313,10 +323,10 @@ export default class ClubTableLayer extends cc.Component {
     }
     /**
      * 显示加入房间输入密码界面
-     * @param {string} tableId 
+     * @param {number} tableId 
      * @memberof JoinCanvas
      */
-    showJoinPwd(tableId: string) {
+    showJoinPwd(tableId: number) {
         if (!this._join_pwd || !this._join_pwd.isValid) {
             this._join_pwd = cc.instantiate(this.join_pwd_prefab);
             let jPwdScript = this._join_pwd.getComponent('Room_Join_Pwd');

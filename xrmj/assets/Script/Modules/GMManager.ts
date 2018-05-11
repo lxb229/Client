@@ -855,8 +855,32 @@ export default class GMManager {
             let seats = this.mjGameData.seats;
             seats.forEach((seatInfo: SeatVo) => {
                 //如果有打出的牌
-                if (seatInfo.outCard) {
-                    tempList = tempList.concat(seatInfo.outCard);
+                if (seatInfo.outUnUseCards) {
+                    tempList = tempList.concat(seatInfo.outUnUseCards);
+                }
+                //如果有暗杠牌
+                if (seatInfo.anGangCards) {
+                    for (let i = 0; i < seatInfo.anGangCards.length; i++) {
+                        tempList = tempList.concat(seatInfo.anGangCards[i]);
+                    }
+                }
+                //如果有巴杠牌
+                if (seatInfo.baGangCards) {
+                    for (let i = 0; i < seatInfo.baGangCards.length; i++) {
+                        tempList = tempList.concat(seatInfo.baGangCards[i]);
+                    }
+                }
+                //如果有点杠牌
+                if (seatInfo.dianGangCards) {
+                    for (let i = 0; i < seatInfo.dianGangCards.length; i++) {
+                        tempList = tempList.concat(seatInfo.dianGangCards[i]);
+                    }
+                }
+                //如果有碰牌
+                if (seatInfo.pengCards) {
+                    for (let i = 0; i < seatInfo.pengCards.length; i++) {
+                        tempList = tempList.concat(seatInfo.pengCards[i]);
+                    }
                 }
                 //如果这个玩家是自己
                 if (seatInfo.accountId === UDManager.getInstance().mineData.accountId) {

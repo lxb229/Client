@@ -561,7 +561,7 @@ export default class MJ_Play extends cc.Component {
             } else {//如果自己手中没有杠，就直接 杠摸的那张牌
                 let obj: GangData = {
                     cardId: this._seatInfo.breakCard,
-                    isAnGang: 2,
+                    isAnGang: 1,
                     isUseYaoJi: false,
                 };
                 dd.gm_manager.getGMTarget().sendLSGangBreakCard(MJ_Act_Type.ACT_INDEX_GANG, obj, this.node_state);
@@ -569,7 +569,7 @@ export default class MJ_Play extends cc.Component {
         } else {//如果没有轮到自己摸牌时的表态，是杠别人打出来的那张牌
             let obj: GangData = {
                 cardId: this._seatInfo.breakCard,
-                isAnGang: 1,
+                isAnGang: 1,//服务器指定为 1
                 isUseYaoJi: false,
             };
             dd.gm_manager.getGMTarget().sendLSGangBreakCard(MJ_Act_Type.ACT_INDEX_GANG, obj, this.node_state);

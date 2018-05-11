@@ -370,7 +370,7 @@ export default class MJCanvas extends cc.Component {
         //如果在换牌阶段，并且换牌结束，播放动作的时候，不进行刷新游戏数据，需要动作结束
         if (dd.gm_manager.mjGameData.tableBaseVo.gameState === MJ_GameState.STATE_TABLE_SWAPCARD
             && dd.gm_manager.mjGameData.tableBaseVo.swapCardType >= 0) {
-            //两人麻将，就直接跳过
+            //两人麻将，就直接跳过,原因是：两人麻将没有定缺，换三张后直接进入了出牌阶段，没有时间来对牌进行整理
             if (dd.gm_manager.mjGameData.tableBaseVo.cfgId === MJ_Game_Type.GAME_TYPE_LRLF) {
                 this._mjGame.showGameInfo();
             }
@@ -416,7 +416,7 @@ export default class MJCanvas extends cc.Component {
         } else {
             if (this._act_swap && this._act_swap.isValid) {
                 let swapAct = this._act_swap.getComponent('MJ_ActionSwap');
-                if (swapAct._isAct) {
+                if (!swapAct._isAct) {
                     this._act_swap.removeFromParent(true);
                     this._act_swap.destroy();
                     this._act_swap = null;
@@ -908,6 +908,7 @@ export default class MJCanvas extends cc.Component {
                 this._game_over = cc.instantiate(this.game_over_prefab);
                 let go = this._game_over.getComponent('Game_Over');
                 go.initData(dd.gm_manager.mjGameData.settlementOnce);
+                this._game_over.zIndex = 8;
                 this._game_over.parent = dd.ui_manager.getRootNode();
             }
         }

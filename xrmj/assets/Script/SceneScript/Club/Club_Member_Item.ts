@@ -12,6 +12,9 @@ export default class Club_Member_Item extends cc.Component {
 
     @property(cc.Sprite)
     headImg: cc.Sprite = null;
+
+    @property(cc.Node)
+    node_creator: cc.Node = null;
     /**
      * 成员按钮节点
      * @type {cc.Node}
@@ -48,9 +51,18 @@ export default class Club_Member_Item extends cc.Component {
     updateItem(type: number, data: CorpsMemberVoItem, target: any) {
         this._itemData = data;
         this._parentTarget = target;
+        this.node_creator.active = data.isOwner === 1 ? true : false;
+
         this.btnNode_mc.active = type === 1 ? true : false;
         this.btnNode_apply.active = type === 2 ? true : false;
         this.btn_relieve.active = type === 3 ? true : false;
+        //如果是馆主，都不显示
+        if (data.isOwner === 1) {
+            this.btnNode_mc.active = false;
+            this.btnNode_apply.active = false;
+            this.btn_relieve.active = false;
+        }
+
         this.lblName.string = data.nick;
         let reson = data.reson === '' ? '空' : data.reson;
         this.lblReson.string = '理由:' + reson;

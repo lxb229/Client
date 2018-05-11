@@ -97,7 +97,7 @@ export default class Exchange_Gold extends cc.Component {
 
                 if (lblName) lblName.getComponent(cc.Label).string = rewareGold.itemName;
                 if (lblCost) lblCost.getComponent(cc.Label).string = rewareGold.goldMoney.toString();
-                this.loadGoodsIcon(img_goods, rewareGold.icon);
+                this.loadGoodsIcon(img_goods, rewareGold.icon, true);
                 goodsNode.parent = this.goods_svNode.content;
                 goodsNode.on(cc.Node.EventType.TOUCH_END, (event: cc.Event.EventTouch) => {
                     this.getGoodsInfoById(rewareGold.itemId);
@@ -112,7 +112,7 @@ export default class Exchange_Gold extends cc.Component {
      * @param {string} url 
      * @memberof Exchange_Gold
      */
-    async loadGoodsIcon(goods: cc.Node, url: string) {
+    async loadGoodsIcon(goods: cc.Node, url: string, isFixSize: boolean = false) {
         if (goods) {
             let imgSF = null;
             try {
@@ -121,6 +121,15 @@ export default class Exchange_Gold extends cc.Component {
                 cc.log('获取头像错误');
             }
             goods.getComponent(cc.Sprite).spriteFrame = imgSF;
+            if (isFixSize) {
+                //如果尺寸大了的话，就缩小尺寸
+                if (goods.width >= goods.parent.width || goods.height >= goods.parent.height) {
+                    goods.width = goods.parent.width;
+                    goods.height = goods.parent.height;
+                } else {
+                    goods.getComponent(cc.Sprite).sizeMode = cc.Sprite.SizeMode.TRIMMED;
+                }
+            }
         }
     }
     /**
@@ -154,7 +163,7 @@ export default class Exchange_Gold extends cc.Component {
             this.lbl_goods_sell.string = data.price.toString();
             this.lbl_goods_gold.string = data.goldMoney.toString();
             this.lbl_goods_num.string = data.num.toString();
-            this.loadGoodsIcon(this.img_goods.node, data.icon);
+            this.loadGoodsIcon(this.img_goods.node, data.icon, true);
             this.detail_svNode.content.removeAllChildren();
             let node_detail = new cc.Node();
             node_detail.width = this.detail_svNode.content.width;

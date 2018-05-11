@@ -93,7 +93,7 @@ export default class Auth_phone extends cc.Component {
                     this.node.destroy();
                 } else if (flag === -1) {//超时
                 } else {//失败,content是一个字符串
-                    this.lblMsg.string = content;
+                    dd.ui_manager.showTip(content);
                 }
             });
             dd.ui_manager.hideLoading();
@@ -118,7 +118,7 @@ export default class Auth_phone extends cc.Component {
                     dd.ud_manager.mineData.phone = content;
                 } else if (flag === -1) {//超时
                 } else {//失败,content是一个字符串
-                    this.lblMsg.string = content;
+                    dd.ui_manager.showTip(content);
                 }
             });
             dd.ui_manager.hideLoading();

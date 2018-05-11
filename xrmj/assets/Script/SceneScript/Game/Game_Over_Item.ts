@@ -148,71 +148,73 @@ export default class Game_Over_Item extends cc.Component {
                 this.lblHu.node.active = false;
                 data.seatScore.forEach((sScore, sIndex) => {
                     let str = '玩家<index>:  <color=#56000E><piao>  </c><bai>  <color><socre></c>';
-                    if (sIndex !== index) {
-                        str = str.replace('<index>', (sIndex + 1).toString());
-                        str = str.replace('<color>', (sScore.score > 0 ? '<color=#FF0000>' : '<color=#00FF00>'));
-                        str = str.replace('<socre>', (sScore.score > 0 ? ('+' + sScore.score) : ('' + sScore.score)));
-                        str = str.replace('<piao>', (sScore.winPiaoNum > 0 ? ('飘+' + sScore.winPiaoNum) : ('飘' + sScore.winPiaoNum)));
-                        switch (sScore.tangNum) {
-                            case 0:
-                                str = str.replace('<bai>', '(无摆)');
-                                break;
-                            case 1:
-                                str = str.replace('<bai>', '(单摆)');
-                                break;
-                            case 2:
-                                str = str.replace('<bai>', '(双摆)');
-                                break;
-                            default:
-                                str = str.replace('<br/><bai>', '');
-                                break;
-                        }
-                        pScore.push(str);
+                    // if (sIndex !== index) {
+                    let playerIndex = sIndex >= index ? (sIndex += 2) : (sIndex += 1);
+                    str = str.replace('<index>', playerIndex.toString());
+                    str = str.replace('<color>', (sScore.score > 0 ? '<color=#FF0000>' : '<color=#00FF00>'));
+                    str = str.replace('<socre>', (sScore.score > 0 ? ('+' + sScore.score) : ('' + sScore.score)));
+                    str = str.replace('<piao>', (sScore.winPiaoNum > 0 ? ('飘+' + sScore.winPiaoNum) : ('飘' + sScore.winPiaoNum)));
+                    switch (sScore.tangNum) {
+                        case 0:
+                            str = str.replace('<bai>', '(无摆)');
+                            break;
+                        case 1:
+                            str = str.replace('<bai>', '(单摆)');
+                            break;
+                        case 2:
+                            str = str.replace('<bai>', '(双摆)');
+                            break;
+                        default:
+                            str = str.replace('<br/><bai>', '');
+                            break;
                     }
+                    pScore.push(str);
+                    // }
                 });
             } else {
                 this.lblPiao.node.parent.active = false;
                 data.seatScore.forEach((sScore, sIndex) => {
                     let str = '玩家<index>:  <color=#56000E><number>番  </c><color><socre>  </c><tang><baojiao>';
-                    if (sIndex !== index) {
-                        str = str.replace('<index>', (sIndex + 1).toString());
-                        str = str.replace('<number>', sScore.totalFanNum.toString());
-                        str = str.replace('<color>', (sScore.score > 0 ? '<color=#FF0000>' : '<color=#00FF00>'));
-                        str = str.replace('<socre>', (sScore.score > 0 ? ('+' + sScore.score) : ('' + sScore.score)));
-                        switch (sScore.tangNum) {
-                            case 0:
-                                str = str.replace('<tang>', '(无躺)');
-                                break;
-                            case 1:
-                                str = str.replace('<tang>', '(单躺)');
-                                break;
-                            case 2:
-                                str = str.replace('<tang>', '(双躺)');
-                                break;
-                            default:
-                                str = str.replace('<br/><tang>', '');
-                                break;
-                        }
-                        switch (sScore.baoJiaoNum) {
-                            case 0:
-                                str = str.replace('<baojiao>', '(无叫)');
-                                break;
-                            case 1:
-                                str = str.replace('<baojiao>', '(单叫)');
-                                break;
-                            case 2:
-                                str = str.replace('<baojiao>', '(双叫)');
-                                break;
-                            default:
-                                str = str.replace('<br/><baojiao>', '');
-                                break;
-                        }
-                        pScore.push(str);
+                    // if (sIndex !== index) {
+                    let playerIndex = sIndex >= index ? (sIndex += 2) : (sIndex += 1);
+                    str = str.replace('<index>', playerIndex.toString());
+                    str = str.replace('<number>', sScore.totalFanNum.toString());
+                    str = str.replace('<color>', (sScore.score > 0 ? '<color=#FF0000>' : '<color=#00FF00>'));
+                    str = str.replace('<socre>', (sScore.score > 0 ? ('+' + sScore.score) : ('' + sScore.score)));
+                    switch (sScore.tangNum) {
+                        case 0:
+                            str = str.replace('<tang>', '(无躺)');
+                            break;
+                        case 1:
+                            str = str.replace('<tang>', '(单躺)');
+                            break;
+                        case 2:
+                            str = str.replace('<tang>', '(双躺)');
+                            break;
+                        default:
+                            str = str.replace('<br/><tang>', '');
+                            break;
                     }
+                    switch (sScore.baoJiaoNum) {
+                        case 0:
+                            str = str.replace('<baojiao>', '(无叫)');
+                            break;
+                        case 1:
+                            str = str.replace('<baojiao>', '(单叫)');
+                            break;
+                        case 2:
+                            str = str.replace('<baojiao>', '(双叫)');
+                            break;
+                        default:
+                            str = str.replace('<br/><baojiao>', '');
+                            break;
+                    }
+                    pScore.push(str);
+                    // }
                 });
             }
             for (let i = 0; i < this.lbl_player_list.length; i++) {
-                if (i < data.seatScore.length - 1 && pScore[i]) {
+                if (i < data.seatScore.length && pScore[i]) {
                     this.lbl_player_list[i].node.active = true;
                     this.lbl_player_list[i].string = pScore[i];
                 } else {

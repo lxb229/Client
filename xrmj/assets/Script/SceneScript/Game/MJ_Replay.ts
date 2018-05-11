@@ -102,6 +102,8 @@ export default class MJ_Replay extends cc.Component {
             let nextReplay = dd.gm_manager.replayDataList[this._replayIndex + 1];
             let ft = dd.gm_manager.getDiffTime(nowReplay.startTime, nextReplay.startTime);
             this._frameTime = (Number(nextReplay.startTime) - Number(nowReplay.startTime)) / 1000;
+        } else {
+            this._frameTime = 1.5;
         }
     }
 

@@ -48,6 +48,7 @@ export default class Game_Result extends cc.Component {
         } else {
             dd.ui_manager.showTip('战绩分享失败！');
         }
+        this._isTouch = false;
     };
     onLoad() {
         this.node.on("touchend", (event: cc.Event.EventTouch) => {
@@ -143,12 +144,12 @@ export default class Game_Result extends cc.Component {
         if (this._isTouch) {
             return;
         }
+        dd.ui_manager.showLoading();
         this._isTouch = true;
         dd.mp_manager.playButton();
         dd.utils.captureScreen(this.node, 'jt.png', (filePath) => {
             if (filePath) {
                 dd.js_call_native.wxShareRecord(filePath);
-                this._isTouch = false;
             } else {
                 dd.ui_manager.showTip('截图失败!');
                 this._isTouch = false;
