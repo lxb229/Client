@@ -21,6 +21,7 @@ fs.readFile('./setting.json', { encoding: 'utf8' },
 let path = require('path');
 let express = require('express');
 let app = express();
+app.use('/ppq', express.static('ppq'));
 let PORT = 8080;
 let bodyParser = require('body-parser');
 app.use(bodyParser.json());
@@ -131,7 +132,7 @@ app.get('/ddmj/*', function (req, res) {
     });
 });
 
-app.get('/', function (req, res) {
+app.get('/setting', function (req, res) {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 

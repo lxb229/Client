@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<script>
+    function validateForm(val, type) {
+        if (val == null || val === "") {
+            alert('不能提交空值');
+            return false;
+        }
+        if (type === 'ver') {//验证版本号
+            let list = val.split('.');
+            if (list.length !== 3) {
+                alert('请输入三段式版本号(如1.0.0)');
+                return false;
+            }
+            for (let i = 0; i < list.length; i++) {
+                if (list[i] === '' || isNaN(list[i])) {
+                    alert('请输入数字')
+                    return false;
+                }
+            }
+        } else {//验证url
+            let reg = /(http|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/;
+            if (!reg.test(val)) {
+                alert('URL格式错误');
+                return false;
+            }
+        }
+    }
+
+    var Ajax = {
+        get: function (url, fn) {
+            var xhr = new XMLHttpRequest();  // XMLHttpRequest对象用于在后台与服务器交换数据          
+            xhr.open('GET', url, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200 || xhr.status == 304) { // readyState == 4说明请求已完成
+                    fn.call(this, xhr.responseText);  //从服务器获得数据
+                }
+            };
+            xhr.send();
+        },
+        post: function (url, data, fn) {         // datat应为'a=a1&b=b1'这种字符串格式，在jq里如果data为对象会自动将对象转成这种字符串格式
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");  // 添加http头，发送信息至服务器时内容编码类型
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 304)) {  // 304未修改
+                    fn.call(this, xhr.responseText);
+                }
+            };
+            xhr.send(data);
+        }
+    }
+    window.onload = function () {
+        Ajax.get('/data', function (data) {
+            let obj = JSON.parse(data);
+            document.getElementsByName('min_ver')[0].setAttribute('value', obj.MIN_VER);
+            document.getElementsByName('max_ver')[0].setAttribute('value', obj.MAX_VER);
+            document.getElementsByName('apk_url')[0].setAttribute('value', obj.APK_URL);
+            document.getElementsByName('ipa_url')[0].setAttribute('value', obj.IPA_URL);
+            document.getElementsByName('dd_url')[0].setAttribute('value', obj.DD_URL);
+        });
+    }
+</script>
+
+<body>
+    <form action="/setting" method="post" onsubmit="return validateForm(this['min_ver'].value,'ver')" enctype='application/json'>
+        最低版本号:
+        <input type="text" name="min_ver" value="123" style="width:400px;margin-left:40px">
+        <input type="submit" value="提交">
+    </form>
+    <form action="/setting" method="post" onsubmit="return validateForm(this['max_ver'].value,'ver')" enctype='application/json'>
+        最高版本号:
+        <input type="text" name="max_ver" value="" style="width:400px;margin-left:40px">
+        <input type="submit" value="提交">
+    </form>
+    <form action="/setting" method="post" onsubmit="return validateForm(this['apk_url'].value,'url')" enctype='application/json'>
+        安卓下载地址:
+        <input type="text" name="apk_url" value="" style="width:400px;margin-left:24px">
+        <input type="submit" value="提交">
+    </form>
+    <form action="/setting" method="post" onsubmit="return validateForm(this['ipa_url'].value,'url')" enctype='application/json'>
+        苹果下载地址:
+        <input type="text" name="ipa_url" value="" style="width:400px;margin-left:24px">
+        <input type="submit" value="提交">
+    </form>
+    <form action="/setting" method="post" onsubmit="return validateForm(this['dd_url'].value,'url')" enctype='application/json'>
+        官网地址:
+        <input type="text" name="dd_url" value="" style="width:400px;margin-left:24px">
+        <input type="submit" value="提交">
+    </form>
+</body>
+
+</html>
