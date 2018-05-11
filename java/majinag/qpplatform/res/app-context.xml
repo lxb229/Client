@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:memcache="http://nina.treediagram.io/schema/memcache"
+	xmlns:network="http://nina.treediagram.io/schema/network" xmlns:resource="http://nina.treediagram.io/schema/resource" 
+	xmlns="http://www.springframework.org/schema/beans"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd  
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd
+http://nina.treediagram.io/schema/memcache http://nina.treediagram.io/schema/memcache/memcache.xsd
+http://nina.treediagram.io/schema/network http://nina.treediagram.io/schema/network/network.xsd
+http://nina.treediagram.io/schema/resource http://nina.treediagram.io/schema/resource/resource.xsd">
+	
+	<!-- ########################################### -->
+	<!-- spring -->
+
+	<!-- 启动拦截自动代理 -->
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+	
+	<!-- 读取配置 -->
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>file:res/jdbc.properties</value>
+				<value>file:res/app.properties</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 转换服务 -->
+	<bean class="org.springframework.context.support.ConversionServiceFactoryBean">
+		<property name="converters">
+			<list>
+				<bean class="org.treediagram.nina.resource.support.StringToDateConverter" />
+				<bean class="org.treediagram.nina.resource.support.StringToClassConverter" />
+				<bean class="org.treediagram.nina.resource.support.JsonToMapConverter" />
+				<bean class="org.treediagram.nina.resource.support.JsonToArrayConverter" />
+				<bean class="org.treediagram.nina.resource.support.JsonToCollectionConverter" />
+				<bean class="org.treediagram.nina.resource.support.JsonToObjectConverter" />
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 注解注入支持，可以省略 -->
+	<context:annotation-config />
+	
+	<!-- 扫描包 -->
+	<context:component-scan base-package="org.treediagram.nina, com.palmjoys.yf1b.act" />
+	
+	<!-- ########################################### -->
+	<!-- 统计服务 -->
+	
+		<!-- 启动统计服务 -->
+	<bean id="statService" class="org.treediagram.nina.stat.StatService">
+		<property name="sampleSaveCron" value="0 * * * * *" />
+	</bean>
+
+	<!-- ########################################### -->
+	<!-- 事件驱动 -->
+	<!--bean id="test1" class="com.palmjoys.yf1b.act.Test1" /-->
+    <!--bean id="test" class="com.palmjoys.yf1b.act.Test" /-->
+	<!-- 事件通知器 -->
+	<bean id="eventNotifier" class="org.treediagram.nina.event.EventNotifierImpl">
+		<property name="queueSize" value="1000000" />
+		<property name="poolSize" value="8" />
+		<property name="poolMaxSize" value="32" />
+	</bean>
+
+
+	<!-- idGenerator -->
+	<bean id="multiServerIdGeneratorManager" class="org.treediagram.nina.memcache.id.MultiServerIdGeneratorManager" />
+
+	<!-- ########################################### -->
+	<!-- 数据库 -->
+	
+	<!-- data source -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="validationQuery" value="select ''" />
+		<property name="timeBetweenEvictionRunsMillis" value="5000" />
+		<property name="numTestsPerEvictionRun" value="10" />
+		<property name="testOnBorrow" value="false" />
+		<property name="testWhileIdle" value="false" />
+		<property name="initialSize" value="10" />
+		<property name="maxActive" value="50000" />
+		<property name="maxIdle" value="5" />
+		<property name="minIdle" value="1" />
+	</bean>
+	
+	<!-- hibernate session factory -->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="packagesToScan" value="com.palmjoys.yf1b.act" />
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.current_session_context_class">thread</prop>
+				<prop key="hibernate.cache.provider_class">org.hibernate.cache.NoCacheProvider</prop>
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+				<prop key="hibernate.cache.use_second_level_cache">false</prop>
+				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+				<prop key="hibernate.format_sql">false</prop>
+				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+
+				<!-- 使用MySQL要加的配置 -->
+				<prop key="hibernate.connection.autoReconnect">true</prop>
+				<prop key="hibernate.connection.autoReconnectForPools">true</prop>
+				<prop key="hibernate.connection.is-connection-validation-required">true</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<!-- transaction manager -->
+	<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	
+	<!-- transaction annotation support -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	
+	<!-- Object/Relation Mapping -->
+	<bean id="accessor" class="org.treediagram.nina.memcache.orm.hibernate.HibernateAccessor">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="querier" class="org.treediagram.nina.memcache.orm.hibernate.HibernateQuerier">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
+	<!-- 实体数 -->
+	<util:map id="constants">
+		<entry key="default" value="30000" />
+		<entry key="x1" value="30000" />
+		<entry key="x2" value="60000" />
+		<entry key="x3" value="90000" />
+		<entry key="x4" value="120000" />
+		<entry key="x5" value="150000" />
+		<entry key="x6" value="180000" />
+		<entry key="x7" value="210000" />
+		<entry key="x8" value="240000" />
+		<entry key="x9" value="270000" />
+		<entry key="x10" value="300000" />
+		<entry key="max" value="1000000" />
+	</util:map>
+	
+	<!-- 内存缓存 -->
+	<memcache:config id="cacheService">
+		<memcache:accessor ref="accessor" />
+		<memcache:querier ref="querier" />
+		<memcache:constants ref="constants" />
+		<memcache:writebackPolicy config="-1:true" type="QUEUE">
+			<memcache:writer name="per_minute" config="0 0/1 * * * *" type="TIMING" />
+			<memcache:writer name="per_5_minute" config="5 0/5 * * * *" type="TIMING" />
+			<memcache:writer name="per_10_minute" config="10 0/10 * * * *" type="TIMING" />
+			<memcache:writer name="per_30_minute" config="15 0/30 * * * *" type="TIMING" />
+			<memcache:writer name="per_60_minute" config="20 0 0/1 * * *" type="TIMING" />
+			<memcache:writer name="logs" config="0 0/1 * * * *" type="TIMING" />
+		</memcache:writebackPolicy>
+		<memcache:entity>
+			<memcache:package name="com.palmjoys.yf1b.act.**.model" />
+			<memcache:package name="com.palmjoys.yf1b.act.**.entity" />
+			<memcache:package name="com.palmjoys.yf1b.act.**.manager" />
+			<memcache:package name="com.palmjoys.yf1b.act.**.service" />
+		</memcache:entity>
+	</memcache:config>
+	
+	<!-- ########################################### -->
+	<!-- 服务器 -->
+
+	<!-- 游戏服务器配置 -->
+	<bean id="serverConfig" class="org.treediagram.nina.network.server.ServerConfig">
+		<property name="location" value="file:res/app.properties" />
+	</bean>
+
+	<!-- 接收器 -->
+	<bean id="serverAcceptor" class="org.apache.mina.transport.socket.nio.NioSocketAcceptor" />
+
+	<!-- 日志过滤器 -->
+	<bean id="serverLoggingFilter" class="org.treediagram.nina.network.filter.LoggingFilter" />
+
+	<!-- 帐号断开过滤器 -->
+	<bean id="accountCloseFilter" class="com.palmjoys.yf1b.act.framework.account.service.AccountSessionCloseFilter" />
+	
+	<!-- 清理空闲会话过滤器 -->
+	<bean id="serverIdleFilter" class="org.treediagram.nina.network.filter.CleanIdleSessionFilter">
+		<property name="idleSeconds" value="${server.session.idle}" />
+	</bean>
+
+	<!-- 会话管理过滤器 -->
+	<bean id="sessionManager" class="org.treediagram.nina.network.filter.session.SessionManagerFilter">
+		<property name="delayTimes" value="60" />
+	</bean>
+
+	<!-- 后台管理器过滤器 -->
+	<bean id="managerFilter" class="org.treediagram.nina.network.filter.ManagerFilter">
+		<property name="allowIpConfig" value="${server.socket.filter.manager.ips}" />
+	</bean>
+	
+	<!-- 防火墙 -->
+	<bean id="serverFirewall" class="org.treediagram.nina.network.filter.firewall.FirewallFilter">
+		<property name="blockAllState" value="${server.socket.firewall.block.autostart}" />
+		<property name="allows" value="${server.socket.firewall.allows}" />
+		<property name="blocks" value="${server.socket.firewall.blocks}" />
+		<property name="defaultBlockSeconds" value="${server.socket.firewall.block.defaultBlockSeconds}" />
+		<property name="maxClientCount" value="${server.socket.firewall.client.max}" />
+		<property name="bytesInSecondLimit" value="${server.socket.firewall.client.bytes}" />
+		<property name="timesInSecondLimit" value="${server.socket.firewall.client.packages}" />
+		<property name="maxViolateTimes" value="${server.socket.firewall.client.times}" />
+	</bean>
+	
+	<!-- 游戏服务器 -->
+	<network:server id="server">
+		<network:config ref="serverConfig" />
+		<network:acceptor ref="serverAcceptor" />
+		<network:coders>
+			<network:coder name="0" class="org.treediagram.nina.network.codec.JsonCoder" />
+			<network:coder name="1" class="com.palmjoys.yf1b.act.framework.socket.JsonBase64Coder" />
+		</network:coders>
+		<network:filters>
+			<network:filter name="accountSessionClose" ref="accountCloseFilter" />
+			<network:filter name="logging" ref="serverLoggingFilter" />
+			<network:filter name="idle" ref="serverIdleFilter" />
+			<network:filter name="firewall" ref="serverFirewall" />
+			<network:filter name="session" ref="sessionManager" />
+			<network:filter name="manager" ref="managerFilter" />
+		</network:filters>
+	</network:server>
+	
+	<!-- ########################################### -->
+	<!-- 资源 -->
+
+	<!-- 资源管理器 -->
+	<resource:config id="resourceManager">
+		<resource:format location="file:res/resources" type="excel" suffix="xlsx" />
+		<resource:package name="com.palmjoys.yf1b.act.**.resource" />
+	</resource:config>
+</beans>

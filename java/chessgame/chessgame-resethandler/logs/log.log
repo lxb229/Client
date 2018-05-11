@@ -1,0 +1,136 @@
+[2017-08-08 18:05:11,684][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-08 18:05:11,896][INFO, (NettyServer.java:45).run] websocket_text server started at port 8080.
+[2017-08-08 18:06:57,098][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-08 18:06:57,280][INFO, (NettyServer.java:45).run] websocket_text server started at port 8080.
+[2017-08-08 18:07:09,473][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-08 18:07:09,657][INFO, (NettyServer.java:45).run] websocket_text server started at port 8080.
+[2017-08-08 18:08:28,615][ERROR, (InitHandler.java:22).execute] Are you ok?
+[2017-08-08 18:09:36,136][ERROR, (InitHandler.java:22).execute] are you ok?
+[2017-08-08 18:09:51,676][WARN, (HandlerDispatcher.java:143).handMessageQueue] 指令 [111]找不到
+[2017-08-08 18:10:01,312][ERROR, (InitHandler.java:22).execute] are you ok?
+[2017-08-08 18:10:32,953][ERROR, (InitHandler.java:22).execute] 尬聊
+[2017-08-08 18:10:57,035][ERROR, (InitHandler.java:22).execute] 尬聊
+[2017-08-08 18:15:28,891][ERROR, (InitHandler.java:22).execute] 尬聊
+[2017-08-08 18:26:24,249][WARN, (HandlerDispatcher.java:143).handMessageQueue] 指令 [111]找不到
+[2017-08-08 18:33:40,496][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-08 18:33:40,668][INFO, (NettyServer.java:45).run] websocket_text server started at port 8080.
+[2017-08-08 18:35:01,798][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-08 18:35:01,963][INFO, (NettyServer.java:45).run] websocket_text server started at port 8080.
+[2017-08-08 18:35:23,837][ERROR, (InitHandler.java:22).execute] are you ok?
+[2017-08-08 18:35:52,769][ERROR, (InitHandler.java:22).execute] are you ok?
+[2017-08-08 18:45:17,824][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-08 18:45:18,002][INFO, (NettyServer.java:45).run] websocket_text server started at port 8080.
+[2017-08-08 18:50:19,281][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-08 18:50:19,438][INFO, (NettyServer.java:45).run] websocket_text server started at port 8080.
+[2017-08-08 18:50:56,315][ERROR, (InitHandler.java:22).execute] are you ok?
+[2017-08-08 18:51:01,980][ERROR, (InitHandler.java:22).execute] are you ok?
+[2017-08-08 18:51:07,268][ERROR, (InitHandler.java:22).execute] are you ok?
+[2017-08-08 18:51:36,962][ERROR, (InitHandler.java:22).execute] Are you ok?
+[2017-08-08 19:00:49,705][ERROR, (InitHandler.java:22).execute] Are you ok?
+[2017-08-08 19:05:24,871][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-08 19:05:53,660][INFO, (NettyServer.java:45).run] websocket_text server started at port 8080.
+[2017-08-09 11:03:47,766][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-09 11:03:59,441][INFO, (NettyServer.java:45).run] websocket_text server started at port 8080.
+[2017-08-09 11:05:51,983][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-09 11:05:52,137][INFO, (NettyServer.java:45).run] websocket_text server started at port 8080.
+[2017-08-09 11:18:16,380][ERROR, (InitHandler.java:22).execute] Are you ok?
+[2017-08-09 11:32:35,587][ERROR, (InitHandler.java:22).execute] are you ok?
+[2017-08-09 11:32:36,995][ERROR, (InitHandler.java:22).execute] are you ok?
+[2017-08-09 11:32:37,779][ERROR, (InitHandler.java:22).execute] are you ok?
+[2017-08-09 11:32:38,031][ERROR, (InitHandler.java:22).execute] are you ok?
+[2017-08-09 11:32:38,279][ERROR, (InitHandler.java:22).execute] are you ok?
+[2017-08-09 11:32:38,487][ERROR, (InitHandler.java:22).execute] are you ok?
+[2017-08-09 11:32:38,686][ERROR, (InitHandler.java:22).execute] are you ok?
+[2017-08-09 11:32:38,880][ERROR, (InitHandler.java:22).execute] are you ok?
+[2017-08-09 11:32:39,360][ERROR, (InitHandler.java:22).execute] are you ok?
+[2017-08-09 14:09:07,628][ERROR, (InitHandler.java:22).execute] Are you ok?
+[2017-08-09 14:09:14,839][ERROR, (InitHandler.java:22).execute] Are you ok?
+[2017-08-09 14:18:09,130][ERROR, (InitHandler.java:22).execute] are yook?
+[2017-08-09 14:18:10,380][ERROR, (InitHandler.java:22).execute] are yook?
+[2017-08-09 14:18:11,308][ERROR, (InitHandler.java:22).execute] are yook?
+[2017-08-09 14:18:12,038][ERROR, (InitHandler.java:22).execute] are yook?
+[2017-08-09 14:26:12,545][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-09 14:26:16,218][INFO, (NettyServer.java:52).run] websocket_text server started at port 8080.
+[2017-08-09 14:27:28,042][ERROR, (InitHandler.java:22).execute] are you ok?
+[2017-08-09 14:28:45,932][ERROR, (InitHandler.java:22).execute] are you ok?
+[2017-08-09 14:30:20,466][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-09 14:30:20,624][INFO, (NettyServer.java:52).run] websocket_text server started at port 8080.
+[2017-08-09 14:31:01,937][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-09 14:31:02,129][INFO, (NettyServer.java:52).run] websocket_text server started at port 8080.
+[2017-08-09 14:31:57,541][ERROR, (InitHandler.java:22).execute] are you ok?
+[2017-08-09 14:32:05,369][ERROR, (InitHandler.java:22).execute] are you ok?
+[2017-08-09 14:32:09,127][ERROR, (InitHandler.java:22).execute] are you ok?
+[2017-08-09 14:37:50,941][ERROR, (InitHandler.java:22).execute] Are you ok?
+[2017-08-09 14:41:01,071][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-09 14:41:01,266][INFO, (NettyServer.java:52).run] websocket_text server started at port 8080.
+[2017-08-09 14:43:20,828][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-09 14:43:21,013][INFO, (NettyServer.java:52).run] websocket_text server started at port 8080.
+[2017-08-09 14:44:58,761][ERROR, (InitHandler.java:22).execute] are you ok?
+[2017-08-09 14:45:05,756][ERROR, (InitHandler.java:22).execute] are you ok?
+[2017-08-09 14:47:22,943][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-09 14:47:30,793][INFO, (NettyServer.java:52).run] websocket_text server started at port 8080.
+[2017-08-09 14:52:54,175][ERROR, (InitHandler.java:22).execute] are you ok?
+[2017-08-09 14:53:38,827][ERROR, (InitHandler.java:22).execute] Are you ok?
+[2017-08-09 15:07:11,027][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-09 15:07:11,180][INFO, (NettyServer.java:52).run] websocket_text server started at port 8080.
+[2017-08-09 15:07:39,178][ERROR, (InitHandler.java:22).execute] are you ok?
+[2017-08-09 15:10:24,899][ERROR, (InitHandler.java:22).execute] Are you ok?
+[2017-08-09 15:12:27,122][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-09 15:12:27,294][INFO, (NettyServer.java:52).run] websocket_text server started at port 8080.
+[2017-08-09 15:17:43,360][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-09 15:17:43,531][INFO, (NettyServer.java:52).run] websocket_text server started at port 8080.
+[2017-08-09 15:52:25,730][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-09 15:52:25,882][INFO, (NettyServer.java:52).run] websocket_text server started at port 8080.
+[2017-08-09 15:57:08,358][INFO, (InitHandler.java:22).execute] are you ok?
+[2017-08-09 15:57:09,103][INFO, (InitHandler.java:22).execute] are you ok?
+[2017-08-09 16:00:08,905][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-09 16:00:09,118][INFO, (NettyServer.java:52).run] websocket_text server started at port 8080.
+[2017-08-09 16:00:47,552][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-09 16:00:47,745][INFO, (NettyServer.java:52).run] websocket_text server started at port 8080.
+[2017-08-09 16:57:22,274][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-09 16:57:22,454][INFO, (NettyServer.java:60).run] websocket_text server started at port 8080.
+[2017-08-09 17:01:12,671][INFO, (InitHandler.java:22).execute] are you ok?
+[2017-08-09 17:04:24,019][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-09 17:04:24,204][INFO, (NettyServer.java:60).run] websocket_text server started at port 8080.
+[2017-08-09 17:27:29,285][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-09 17:27:29,477][INFO, (NettyServer.java:60).run] websocket_text server started at port 8080.
+[2017-08-09 17:30:46,995][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-09 17:30:47,213][INFO, (NettyServer.java:60).run] websocket_text server started at port 8080.
+[2017-08-09 18:04:24,616][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-09 19:07:07,851][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-09 19:07:08,049][INFO, (NettyServer.java:60).run] websocket_text server started at port 8080.
+[2017-08-09 19:11:01,058][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-09 19:11:01,234][INFO, (NettyServer.java:60).run] websocket_text server started at port 8080.
+[2017-08-09 19:31:25,893][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-09 19:31:26,093][INFO, (NettyServer.java:60).run] websocket_text server started at port 8080.
+[2017-08-09 19:36:53,853][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-09 19:36:54,011][INFO, (NettyServer.java:60).run] websocket_text server started at port 8080.
+[2017-08-09 19:42:56,351][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-09 19:42:56,534][INFO, (NettyServer.java:60).run] websocket_text server started at port 8080.
+[2017-08-09 19:46:06,802][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-09 19:46:07,001][INFO, (NettyServer.java:60).run] websocket_text server started at port 8080.
+[2017-08-10 11:31:51,031][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-10 11:31:51,120][INFO, (NettyServer.java:60).run] websocket_text server started at port 8080.
+[2017-08-10 14:06:57,124][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-10 14:06:57,244][INFO, (NettyServer.java:61).run] websocket_text server started at port 8080.
+[2017-08-10 14:08:32,514][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-10 14:08:32,617][INFO, (NettyServer.java:61).run] websocket_text server started at port 8080.
+[2017-08-10 14:11:24,390][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-10 14:11:24,498][INFO, (NettyServer.java:61).run] websocket_text server started at port 8080.
+[2017-08-10 14:21:31,878][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-10 14:22:41,801][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-10 14:22:41,900][INFO, (NettyServer.java:61).run]  server started at port 8080.
+[2017-08-10 14:23:15,234][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-10 14:23:15,314][INFO, (NettyServer.java:61).run]  server started at port 8080.
+[2017-08-10 14:29:30,044][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-10 14:29:30,136][INFO, (NettyServer.java:61).run]  server started at port 8080.
+[2017-08-10 14:30:04,150][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-10 14:30:04,233][INFO, (NettyServer.java:61).run]  server started at port 8080.
+[2017-08-10 14:32:01,974][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-10 14:32:02,092][INFO, (NettyServer.java:61).run]  server started at port 8080.
+[2017-08-10 14:32:06,577][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-10 14:32:06,662][INFO, (NettyServer.java:61).run]  server started at port 8080.
+[2017-08-10 14:33:09,150][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-10 14:33:09,255][INFO, (NettyServer.java:61).run]  server started at port 8080.
+[2017-08-10 14:39:47,100][INFO, (Slf4JLogger.java:101).info] Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+[2017-08-10 14:39:47,237][INFO, (NettyServer.java:61).run]  server started at port 8080.

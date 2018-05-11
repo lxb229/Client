@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.myscjh.com/framework/socket"
+	xmlns="http://www.myscjh.com/framework/socket" elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+	<!-- 请求器 -->
+	<xsd:element name="client">
+		<xsd:complexType>
+			<!-- 元素 -->
+			<xsd:sequence>
+				<xsd:element name="config" type="config" />
+			</xsd:sequence>
+			<xsd:attribute name="id" type="xsd:string" use="required" />
+			<xsd:attribute name="sendAspect" type="xsd:boolean" use="required" />
+		</xsd:complexType>
+	</xsd:element>
+
+	<!-- 服务器 -->
+	<xsd:element name="server">
+		<xsd:complexType>
+			<!-- 元素 -->
+			<xsd:sequence>
+				<xsd:element name="config" type="config" />
+				<xsd:element name="acceptor" type="acceptor" />
+				<xsd:choice minOccurs="0" maxOccurs="1">
+					<xsd:element name="coders" type="coders" />
+				</xsd:choice>
+				<xsd:choice minOccurs="0" maxOccurs="1">
+					<xsd:element name="filters" type="filters" />
+				</xsd:choice>
+			</xsd:sequence>
+			<!-- 属性 -->
+			<xsd:attribute name="id" type="xsd:ID" use="required" />
+		</xsd:complexType>
+	</xsd:element>
+
+	<!-- 配置 -->
+	<xsd:complexType name="config">
+		<xsd:attribute name="ref" type="xsd:string" use="optional" />
+		<xsd:attribute name="class" type="xsd:string" use="optional" />
+	</xsd:complexType>
+
+	<!-- 接收器 -->
+	<xsd:complexType name="acceptor">
+		<xsd:attribute name="ref" type="xsd:string" use="optional" />
+		<xsd:attribute name="class" type="xsd:string" use="optional" />
+	</xsd:complexType>
+
+	<!-- 编码解码器集合 -->
+	<xsd:complexType name="coders">
+		<xsd:sequence minOccurs="0" maxOccurs="unbounded">
+			<xsd:element name="coder" type="coder" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<!-- 过滤器 -->
+	<xsd:complexType name="coder">
+		<xsd:attribute name="name" type="xsd:string" use="required" />
+		<xsd:attribute name="ref" type="xsd:string" use="optional" />
+		<xsd:attribute name="class" type="xsd:string" use="optional" />
+	</xsd:complexType>
+
+	<!-- 过滤器集合 -->
+	<xsd:complexType name="filters">
+		<xsd:sequence minOccurs="0" maxOccurs="unbounded">
+			<xsd:element name="filter" type="filter" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<!-- 过滤器 -->
+	<xsd:complexType name="filter">
+		<xsd:attribute name="name" type="xsd:string" use="required" />
+		<xsd:attribute name="ref" type="xsd:string" use="optional" />
+		<xsd:attribute name="class" type="xsd:string" use="optional" />
+	</xsd:complexType>
+</xsd:schema>

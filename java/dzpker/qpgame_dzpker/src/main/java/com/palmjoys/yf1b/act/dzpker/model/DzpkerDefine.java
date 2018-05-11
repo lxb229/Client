@@ -1,0 +1,111 @@
+package com.palmjoys.yf1b.act.dzpker.model;
+
+import com.palmjoys.yf1b.act.framework.annotation.SocketCode;
+import com.palmjoys.yf1b.act.framework.annotation.SocketDefine;
+import com.palmjoys.yf1b.act.framework.annotation.SocketModule;
+
+@SocketDefine(value = "德州扑克游戏模块")
+public interface DzpkerDefine {
+	// module
+	@SocketModule("德州扑克游戏模块")
+	int DZPKER = 12;
+	
+	static final int DZPKER_COMMAND_BASE = DZPKER*100;
+	static final int DZPKER_ERROR_BASE = (0-DZPKER)*1000;
+	static final int DZPKER_COMMAND_BASE_NOTIFY = DZPKER*10000;
+	
+	//command id
+	//获取桌子创建配置
+	int DZPKER_COMMAND_TABLE_GET_CFG = DZPKER_COMMAND_BASE + 1;
+	//创建桌子
+	int DZPKER_COMMAND_TABLE_CREATE = DZPKER_COMMAND_BASE + 2;
+	//房主点击开始运行桌子
+	int DZPKER_COMMAND_TABLE_RUN = DZPKER_COMMAND_BASE + 3;
+	//加入桌子
+	int DZPKER_COMMAND_TABLE_JOIN = DZPKER_COMMAND_BASE + 4;
+	//离开桌子
+	int DZPKER_COMMAND_TABLE_LEAVE = DZPKER_COMMAND_BASE + 5;
+	//座位座下
+	int DZPKER_COMMAND_SEAT_DOWN = DZPKER_COMMAND_BASE + 6;
+	//座位站起
+	int DZPKER_COMMAND_SEAT_UP = DZPKER_COMMAND_BASE + 7;
+	//玩家申请购买筹码
+	int DZPKER_COMMAND_BUY_CHIP = DZPKER_COMMAND_BASE + 8;
+	//游戏表态
+	int DZPKER_COMMAND_TABLE_BT = DZPKER_COMMAND_BASE + 9;
+	//房主获取购买筹码申请列表
+	int DZPKER_COMMAND_QUERY_BUYCHIP_LIST = DZPKER_COMMAND_BASE + 10;
+	//房主处理购买筹码记录
+	int DZPKER_COMMAND_TRANS_BUYCHIP_ITEM = DZPKER_COMMAND_BASE + 11;
+	//闭眼盲注表态
+	int DZPKER_COMMAND_TABLE_STRADDL_BT = DZPKER_COMMAND_BASE + 12;
+	//获取参与过的还未解散的桌子信息
+	int DZPKER_COMMAND_FIGHTED_TABLE_LIST = DZPKER_COMMAND_BASE + 13;
+	//获取桌子上一局战斗信息
+	int DZPKER_COMMAND_TABLE_PREV_FIGHT_RECOED = DZPKER_COMMAND_BASE + 14;
+	//获取桌子上所有玩家信息列表
+	int DZPKER_COMMAND_TABLE_GET_PLAYER_LIST = DZPKER_COMMAND_BASE + 15;
+	//获取个人赢亏数据
+	int DZPKER_COMMAND_TABLE_ONCE_PLAYER_WINSCORE = DZPKER_COMMAND_BASE + 16;
+	//购买保险
+	int DZPKER_COMMAND_TABLE_BUY_INSURANCE = DZPKER_COMMAND_BASE + 17;
+	//获取生涯统计数据
+	int DZPKER_COMMAND_GET_CAREER_INFO = DZPKER_COMMAND_BASE + 18;
+	//结算后亮牌表态
+	int DZPKER_COMMAND_SHOW_CARD_BT = DZPKER_COMMAND_BASE + 19;
+	//获取指定桌子信息
+	int DZPKER_COMMAND_TABLE_GET_INFO = DZPKER_COMMAND_BASE + 20;
+	//获取指定桌子所有参与过游戏的玩家输赢明细
+	int DZPKER_COMMAND_TABLE_ALL_WIN_SCORE_INFO = DZPKER_COMMAND_BASE + 21;
+	
+	//推送消息(桌子状态变化)
+	int DZPKER_COMMAND_TABLE_STATE_NOTIFY = DZPKER_COMMAND_BASE_NOTIFY + 1;
+	//推送消息(座位数据变化)
+	int DZPKER_COMMAND_SEAT_STATE_NOTIFY = DZPKER_COMMAND_BASE_NOTIFY + 2;
+	//推送消息(下注表态数据)
+	int DZPKER_COMMAND_BET_STATE_NOTIFY = DZPKER_COMMAND_BASE_NOTIFY + 3;
+	//推送消息(游戏总结算数据)
+	int DZPKER_COMMAND_OVER_SETTLEMENT_NOTIFY = DZPKER_COMMAND_BASE_NOTIFY + 4;
+	//推送消息(保险结算数据)
+	int DZPKER_COMMAND_INSURANCE_SETTLEMENT_NOTIFY = DZPKER_COMMAND_BASE_NOTIFY + 5;
+	//推送消息(筹码购买成功)
+	int DZPKER_COMMAND_BUY_CHIP_SUCESS_NOTIFY = DZPKER_COMMAND_BASE_NOTIFY + 6;
+	//推送消息(玩家亮牌通知)
+	int DZPKER_COMMAND_SHOW_CARD_NOTIFY = DZPKER_COMMAND_BASE_NOTIFY + 7;
+	//推送消息(闭眼盲注表态通知)
+	int DZPKER_COMMAND_STRADDL_BT_NOTIFY = DZPKER_COMMAND_BASE_NOTIFY + 8;
+	//推送消息(玩家从座位上被踢起通知)
+	int DZPKER_COMMAND_SEAT_KICK_NOTIFY = DZPKER_COMMAND_BASE_NOTIFY + 9;
+	
+	
+	//error id
+	@SocketCode("房间不存在")
+	int DZPKER_ERROR_UNEXIST = DZPKER_ERROR_BASE - 1;
+	@SocketCode("服务器无桌子资源可用")
+	int DZPKER_ERROR_EMPTY_TABLENO = DZPKER_ERROR_BASE - 2;
+	@SocketCode("房间名称已被使用")
+	int DZPKER_ERROR_TABLE_NAME = DZPKER_ERROR_BASE - 3;
+	@SocketCode("无权限动行桌子")
+	int DZPKER_ERROR_TABLE_RUN = DZPKER_ERROR_BASE - 4;
+	@SocketCode("座位上已经有人了")
+	int DZPKER_ERROR_SEAT_UNEMPTY = DZPKER_ERROR_BASE - 5;
+	@SocketCode("座位座下筹码不足")
+	int DZPKER_ERROR_SEAT_DOWN = DZPKER_ERROR_BASE - 6;
+	@SocketCode("玩家未在座位上")
+	int DZPKER_ERROR_SEAT_EMPTY = DZPKER_ERROR_BASE - 7;
+	@SocketCode("命令参数错误")
+	int DZPKER_ERROR_PARAM = DZPKER_ERROR_BASE - 8;
+	@SocketCode("等待房主处理购买记录后再提交")
+	int DZPKER_ERROR_ORDER = DZPKER_ERROR_BASE - 9;
+	@SocketCode("未轮到玩家表态")
+	int DZPKER_ERROR_TABLE_BT = DZPKER_ERROR_BASE - 10;
+	@SocketCode("玩家表态金额错误")
+	int DZPKER_ERROR_TABLE_BT_MONEY = DZPKER_ERROR_BASE - 11;
+	@SocketCode("游戏房间已解散,不能在此桌子上购买筹码")
+	int DZPKER_ERROR_ORDER_ITEM = DZPKER_ERROR_BASE - 12;
+	@SocketCode("玩家已在座位上")
+	int DZPKER_ERROR_SEAT_EXIST = DZPKER_ERROR_BASE - 13;
+	@SocketCode("桌子人数不足无法开启桌子")
+	int DZPKER_ERROR_TABLE_RUN_PLAYERNUM = DZPKER_ERROR_BASE - 14;
+	
+}

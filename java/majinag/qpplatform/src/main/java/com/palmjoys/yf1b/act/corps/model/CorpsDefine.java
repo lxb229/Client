@@ -1,0 +1,75 @@
+package com.palmjoys.yf1b.act.corps.model;
+
+import com.palmjoys.yf1b.act.framework.annotation.SocketDefine;
+import com.palmjoys.yf1b.act.framework.annotation.SocketModule;
+
+@SocketDefine(value = "帮会模块")
+public interface CorpsDefine {
+	@SocketModule("帮会模块")
+	int CORPS = 4;
+
+	static final int CORPS_COMMAND_BASE = CORPS * 100;
+	static final int CORPS_ERROR_BASE = (0 - CORPS) * 1000;
+	static final int CORPS_COMMAND_BASE_NOTIFY = CORPS * 10000;
+
+	// command id
+	//获取帮会列表信息
+	int CORPS_COMMAND_CORPS_LIST = CORPS_COMMAND_BASE + 1;
+	//创建帮会(有最大创建数限制)
+	int CORPS_COMMAND_CORPS_CREATE = CORPS_COMMAND_BASE + 2;
+	//搜索帮会
+	int CORPS_COMMAND_CORPS_SEARCH = CORPS_COMMAND_BASE + 3;
+	//申请加入帮会
+	int CORPS_COMMAND_JOIN_QUEST = CORPS_COMMAND_BASE + 4;
+	//捐赠房卡
+	int CORPS_COMMAND_CORPS_GIVE_CARD = CORPS_COMMAND_BASE + 5;
+	//获取指定帮会所有等待房间
+	int CORPS_COMMAND_CORPS_TABLE_LIST = CORPS_COMMAND_BASE + 6;
+	//获取群成员信息
+	int CORPS_COMMAND_CORPS_MEMBER_LIST = CORPS_COMMAND_BASE + 7;
+	//踢出帮会成员
+	int CORPS_COMMAND_KICK_MEMBER = CORPS_COMMAND_BASE + 8;
+	//帮会同意或拒绝玩家加入帮会
+	int CORPS_COMMAND_JOIN_BT = CORPS_COMMAND_BASE + 9;
+	//解锁黑名单玩家
+	int CORPS_COMMAND_BLACKLIST_UNLOCK = CORPS_COMMAND_BASE + 10;
+	//馆主设置房卡使用状态
+	int CORPS_COMMAND_SET_ROOMCARD_STATE = CORPS_COMMAND_BASE + 11;
+	//转让帮会
+	int CORPS_COMMAND_CORPS_ZHUANRANG = CORPS_COMMAND_BASE + 12;
+	//解散帮会
+	int CORPS_COMMAND_DESTORY = CORPS_COMMAND_BASE + 13;
+	//退出帮会
+	int CORPS_COMMAND_EXIT = CORPS_COMMAND_BASE + 14;
+	//修改帮会公告
+	int CORPS_COMMAND_MODFIY_NOTICE = CORPS_COMMAND_BASE + 15;
+	//修改帮会群号
+	int CORPS_COMMAND_MODFIY_WXNO = CORPS_COMMAND_BASE + 16;
+	//修改帮会公开状态
+	int CORPS_COMMAND_MODFIY_HIDDE = CORPS_COMMAND_BASE + 17;
+	//获取帮会成员排行榜
+	int CORPS_COMMAND_RANK_AINFO = CORPS_COMMAND_BASE + 18;
+	//获取帮会详细信息
+	int CORPS_COMMAND_DETAILED = CORPS_COMMAND_BASE + 19;
+	//离开帮会场景
+	int CORPS_COMMAND_LEAVE_SENCE = CORPS_COMMAND_BASE + 20;
+	//帮主直接邀请入帮会
+	int CORPS_COMMAND_YAOQING = CORPS_COMMAND_BASE + 21;
+	
+	//推送消息(麻将馆解散)
+	int CORPS_COMMAND_DESTORY_NOTIFY = CORPS_COMMAND_BASE_NOTIFY + 1;
+	//推送消息(添加麻将馆成员)
+	int CORPS_COMMAND_ADDMEMBER_NOTIFY = CORPS_COMMAND_BASE_NOTIFY + 2;
+	//推送消息(踢出麻将馆成员)
+	int CORPS_COMMAND_KICKMEMBER_NOTIFY = CORPS_COMMAND_BASE_NOTIFY + 3;
+	//推送消息(帮会房间创建)
+	int CORPS_COMMAND_TABLE_CREATE_NOTIFY = CORPS_COMMAND_BASE_NOTIFY + 4;
+	//推送消息(帮会房间数据变化)
+	int CORPS_COMMAND_TABLE_DATA_CHANAGE_NOTIFY = CORPS_COMMAND_BASE_NOTIFY + 5;
+	//推送消息(帮会转让通知)
+	int CORPS_COMMAND_ZHUANRANG_NOTIFY = CORPS_COMMAND_BASE_NOTIFY + 6;
+	//推送消息(帮会微信,公告修改通知)
+	int CORPS_COMMAND_NOTICE_MODFIY_NOTIFY = CORPS_COMMAND_BASE_NOTIFY + 7;
+	//推送消息(帮会钱包变化通知)
+	int CORPS_COMMAND_CORPS_WALLET_NOTIFY = CORPS_COMMAND_BASE_NOTIFY + 8;
+}

@@ -1,0 +1,60 @@
+/*
+ * Copyright 2014-2015 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.treediagram.nina.memcache.enhance;
+
+/**
+ * 增强器常量
+ * 
+ * @author kidal
+ * 
+ */
+public interface EnhancerConstants {
+	/**
+	 * 类后缀
+	 */
+	public static final String CLASS_SUFFIX = "$ENHANCED";
+
+	/**
+	 * 实体域
+	 */
+	public static final String FIELD_ENTITY = "entity";
+
+	/**
+	 * 缓存域
+	 */
+	public static final String FIELD_SERVICE = "service";
+
+	/**
+	 * 获取主键
+	 */
+	public static final String METHOD_GET_ID = "getId";
+
+	/**
+	 * 获取实体方法
+	 */
+	public static final String METHOD_GET_ENTITY = "getEntity";
+
+	/**
+	 * 类型:缓存实体配置类
+	 */
+	public static final String TYPE_CACHED_ENTITY_CONFIG = "org.treediagram.nina.memcache.model.MemcachedConfiguration";
+
+	/**
+	 * 类型:锁
+	 */
+	public static final String TYPE_LOCK = "java.util.concurrent.locks.Lock";
+}

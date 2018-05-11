@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:memcache="http://www.palmjoys.yf1b.com/framework/memcache" xmlns:socket="http://www.palmjoys.yf1b.com/framework/socket"
+	xsi:schemaLocation="
+http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+http://www.palmjoys.yf1b.com/framework/memcache http://www.palmjoys.yf1b.com/framework/memcache/memcache-1.0.xsd
+http://www.palmjoys.yf1b.com/framework/socket http://www.palmjoys.yf1b.com/framework/socket/socket-1.0.xsd">
+	<!-- aspect-oriented programming -->
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+
+	<!-- property configurer -->
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>file:res/console.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 转换服务 -->
+	<bean class="org.springframework.context.support.ConversionServiceFactoryBean">
+		<property name="converters">
+			<list>
+				<bean class="com.palmjoys.yf1b.framework.resource.support.StringToDateConverter" />
+				<bean class="com.palmjoys.yf1b.framework.resource.support.StringToClassConverter" />
+				<bean class="com.palmjoys.yf1b.framework.resource.support.JsonToMapConverter" />
+				<bean class="com.palmjoys.yf1b.framework.resource.support.JsonToArrayConverter" />
+				<bean class="com.palmjoys.yf1b.framework.resource.support.JsonToCollectionConverter" />
+				<bean class="com.palmjoys.yf1b.framework.resource.support.JsonToObjectConverter" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- config -->
+	<bean class="com.palmjoys.yf1b.act.framework.console.command.ConsoleConfig" />
+
+	<!-- annotation support -->
+	<context:annotation-config />
+
+	<!-- scan package -->
+	<context:component-scan base-package="com.palmjoys.yf1b.act.framework.console.command" />
+
+	<!-- 客户端配置 -->
+	<bean id="clientConfig" class="com.palmjoys.yf1b.framework.socket.client.ClientConfig">
+		<property name="location" value="file:res/console.properties" />
+	</bean>
+
+	<!-- 客户端 -->
+	<socket:client id="client" sendAspect="true">
+		<socket:config ref="clientConfig" />
+	</socket:client>
+</beans>
