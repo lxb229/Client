@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta name="viewport" content="width=device-width">
+	<title>金币流水</title>
+	<meta charset="UTF-8">
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="format-detection" content="telephone=no">
+	<link href="/lztb/static/plugs/layui/css/layui.css" rel="stylesheet">
+</head>
+
+<body>
+
+
+	<div class="layui-form" style='padding:20px 30px 20px 30px' >
+		<div class="layui-inline">
+	       <label class="layui-form-label">流水类型</label>
+	       <div class="layui-input-inline">
+	         <select name="modules" lay-verify="required" lay-filter="goldType">
+	           <!--  <option value="">请选择类型</option> -->
+                <!-- <option value="1">所有类型</option> -->
+                <option value="20">龙珠探宝投注</option>
+                <option value="21">糖果派对投注</option>
+                <option value="22">ATT押注</option>
+                <option value="23">水浒传押注</option>
+                <option value="24">德州扑克</option>
+                <option value="25">深海捕鱼</option>
+                <option value="26">疯狂宝石</option>
+                <option value="1">新用户注册时发放金币</option>
+                <option value="2">签到发放金币</option>
+                <option value="3">破产发放金币</option>
+                <option value="4">绑定手机发放金币</option>
+                <option value="5">后台发放金币</option>
+                <option value="6">活动获得金币</option>
+                <option value="7">分享获得的金币</option>
+                <option value="8">其他金币获得途径</option>
+                 <option value="-1">活动消耗金币</option>
+                 <option value="-2">其他消耗金币行为</option>
+	         </select>
+	       </div>
+	     </div>
+	</div>
+
+	<div id="app" class="layui-form" style='padding:20px 30px 20px 30px' method="post">
+			
+		<table class="layui-table" id="goldWater">
+            <thead>
+            <tr >
+                <th v-for="(item, index) in grid.title">{{item}}</th>
+            </tr>
+            </thead>
+            <tbody align="center">
+
+            <tr v-if="goldType==20" v-for="(item, index) in grid.data">
+	            <td>{{item.obuUserid}}</td>
+	            <td>{{item.obuUserNick}}</td>
+	            <td>{{item.glgdPlayerGold}}</td>
+	            <td>{{item.glgdInningsGold}}</td>
+	            <td>{{item.glgdBetLineNum}}</td>
+	            <td>{{item.glgdBetSingleGold}}</td>
+	            <td>{{item.glgdTatolMultiple}}</td>
+	            <td>{{item.glgdWinLoseGold}}</td>
+	            <td>{{item.glgdRecoveryGold}}</td>
+	            <td>{{item.glgdDetailTime}}</td>
+        	</tr>
+
+        	<tr v-if="goldType==21" v-for="(item, index) in grid.data">
+	            <td>{{item.obuUserid}}</td>
+	            <td>{{item.obuUserNick}}</td>
+	            <td>{{item.gtgdBeforeGold}}</td>
+	            <td>{{item.gtgdInningsGold}}</td>
+	            <td>{{item.gtgdBetType}}</td>
+	            <td>{{item.gtgdBetLines}}</td>
+	            <td>{{item.gtgdBetGold}}</td>
+	            <td>{{item.gtgdTatolMultiple}}</td>
+	            <td>{{item.gtgdWinLoseGold}}</td>
+	            <td>{{item.gtgdRecoveryGold}}</td>
+	            <td>{{item.gtgdTime}}</td>
+        	</tr>
+
+        	<tr v-if="goldType==22" v-for="(item, index) in grid.data">
+	            <td>{{item.obuUserid}}</td>
+				<td>{{item.obuUserNick}}</td>
+				<td>{{item.gagdPlayerGold}}</td>
+				<td>{{item.gagdPokerTypeCode}}</td>
+				<td>{{item.gagdBetGold}}</td>
+				<td>{{item.gagdDiceCount}}</td>
+				<td>{{item.gagdRatioPoolGold}}</td>
+				<td>{{item.gagdTatolPoolGold}}</td>
+				<td>{{item.gagdWinLoseGold}}</td>
+				<td>{{item.gagdRecoveryGold}}</td>
+				<td>{{item.gagdDetailTime}}</td>
+        	</tr>
+
+        	<tr v-if="goldType==23" v-for="(item, index) in grid.data">
+				<td>{{item.obuUserid}}</td>
+				<td>{{item.obuUserNick}}</td>
+				<td>{{item.gsgdBeforeTatolGold}}</td>
+				<td>
+					<span v-if="item.gsgdType == 1">押注的金币</span>
+					<span v-if="item.gsgdType == 2">水浒传发放的金币</span>
+					<span v-if="item.gsgdType == 3">比倍获取的金币</span>
+					<span v-if="item.gsgdType == 4">小玛丽获得的金币</span>
+					<span v-if="item.gsgdType == 5">美人助威获得的金币</span>
+					<span v-if="item.gsgdType == 6">累积奖获得的金币</span>
+					<span v-if="item.gsgdType == 7">卡片兑换</span>
+					<span v-if="item.gsgdType == 8">其他</span>
+				</td>
+				<td>{{item.gsgdWinLoseGold}}</td>
+				<td>{{item.gsgdAfterTatolGold}}</td>
+				<td>{{item.gsgdRoomType}}</td>
+				<td>{{item.gsgdAmount}}</td>
+				<td>{{item.gsgdRecoveryGold}}</td>
+				<td>{{item.gsgdWinMultiple}}</td>
+				<td>{{item.gsgdDatailTime}}</td>
+				<!--<td>{{item.obuIsGoBroke}}</td>-->
+			</tr>
+
+			<tr  v-if="goldType==24" v-for="(item, index) in grid.data">
+				<td>{{item.obuUserid}}</td>
+				<td>{{item.obuUserNick}}</td>
+				<td>{{item.gdgdPlayerState}}</td>
+				<td>{{item.gdgdPlayerGold}}</td>
+				<td>{{item.gdgdTableGold}}</td>
+				<td>{{item.gdgdPlayerSpendGold}}</td>
+				<td>{{item.gdgdInningsIndex}}</td>
+				<td>{{item.gdgdRoomType}}</td>
+				<td>{{item.gdgdBlindBetGold}}</td>
+				<td>{{item.gdgdInteractType}}</td>
+				<td>{{item.gdgdPlayerType}}</td>
+				<td>{{item.gdgdOpType}}</td>
+				<td>{{item.gdgdWinLoseGold}}</td>
+				<td>{{item.gdgdRecoveryGold}}</td>
+				<td>{{item.gdgdPublicePoker}}</td>
+				<td>{{item.gdgdPlayerPoker}}</td>
+				<td>{{item.gdgdDetailTime}}</td>
+				<!--<td>{{item.obuIsGoBroke}}</td>-->
+			</tr>
+
+			<tr v-if="goldType==25" v-for="(item, index) in grid.data">
+				<td>{{item.obuUserid}}</td>
+				<td>{{item.obuUserNick}}</td>
+				<td>{{item.gbgdRoomType}}</td>
+				<td>{{item.gbgdRoomNum}}</td>
+				<td>{{item.gbgdType}}</td>
+				<td>{{item.gbgdPlayerGold}}</td>
+				<td>{{item.gbgdRecoveryGold}}</td>
+				<td>{{item.gbgdWinLoseGold}}</td>
+				<td>{{item.gbgdTime}}</td>
+				<!--<td>{{item.obuIsGoBroke}}</td>-->
+			</tr>
+
+			<tr v-if="goldType==26" v-for="(item, index) in grid.data">
+				<td>{{item.obuUserid}}</td>
+				<td>{{item.obuUserNick}}</td>
+				<td>{{item.gfgdPlayerGold}}</td>
+				<td>{{item.gfgdInningsGold}}</td>
+				<td>{{item.gfgdBetLineNum}}</td>
+				<td>{{item.gfgdBetSingleGold}}</td>
+				<td>{{item.gfgdBetFive}}</td>
+				<td>{{item.gfgdBetSix}}</td>
+				<td>{{item.gfgdBetSeven}}</td>
+				<td>{{item.gfgdBetEight}}</td>
+				<td>{{item.gfgdBetRed}}</td>
+				<td>{{item.gfgdBetOrange}}</td>
+				<td>{{item.gfgdBetYellow}}</td>
+				<td>{{item.gfgdBetGreen}}</td>
+				<td>{{item.gfgdBetDiamond}}</td>
+				<td>{{item.gfgdNumberPrizeLatticeIndex}}</td>
+				<td>{{item.gfgdTypePrizeLatticeIndex}}</td>
+				<td>{{item.gfgdLatticeIndex}}</td>
+				<td>{{item.gfgdWinLoseGold}}</td>
+				<td>{{item.gfgdRecoveryGold}}</td>
+				<td>{{item.gfgdDetailTime}}</td>
+				<!--<td>{{item.obuIsGoBroke}}</td>-->
+			</tr>
+
+			<tr v-if="goldType<20" v-for="(item, index) in grid.data">
+				<td>{{item.obuUserid}}</td>
+				<td>{{item.obuUserNick}}</td>
+				<!-- 1新用户注册时发放金币
+		        2签到发放金币
+		        3破产发放金币
+		        4绑定手机发放金币
+		        5后台发放金币
+		        6活动获得金币
+		        7分享获得的金币
+		        8其他金币获得途径
+		        -1活动消耗金币
+		        -2其他消耗金币行为  -->
+				<td>
+					<span v-if="item.gogdChangeType == 1">新用户注册时发放金币</span>
+					<span v-if="item.gogdChangeType == 2">签到发放金币</span>
+					<span v-if="item.gogdChangeType == 3">破产发放金币</span>
+					<span v-if="item.gogdChangeType == 4">绑定手机发放金币</span>
+					<span v-if="item.gogdChangeType == 5">后台发放金币</span>
+					<span v-if="item.gogdChangeType == 6">活动获得金币</span>
+					<span v-if="item.gogdChangeType == 7">分享获得的金币</span>
+					<span v-if="item.gogdChangeType == 8">其他金币获得途径</span>
+					<span v-if="item.gogdChangeType == -1">活动消耗金币</span>
+					<span v-if="item.gogdChangeType == -2">其他消耗金币行为</span>
+				</td>
+				<td>{{item.gogdChangeNum}}</td>
+				<td>{{item.gogdBeforeNum}}</td>
+				<td>{{item.gogdAfterNum}}</td>
+				<td>{{item.gogdChangeTime}}</td>
+			</tr>
+
+            </tbody>
+        </table>
+         <div id="pager" class="laypager" style="float: right;"></div>
+	</div>
+
+
+	<script type="text/javascript" src="/lztb/static/plugs/jquery/jquery.min.js"></script>
+	<script type="text/javascript" src="/lztb/static/plugs/layui/layui.js"></script>
+	<script type="text/javascript" src="/lztb/static/plugs/vue/vue.js"></script>
+	<script type="text/javascript" src="/lztb/static/model/site.js"></script>
+	<script type="text/javascript">
+		
+
+
+		var layuiForm;
+        layui.use(['layer', 'laypage', 'form', 'laydate'], function () {
+            layuiForm = layui.form();
+            layuiForm.render('select');
+            layuiForm.on('select(goldType)', function(data){
+			  console.log(data.elem); //得到select原始DOM对象
+			  console.log(data.value); //得到被选中的值
+			  console.log(data.othis); //得到美化后的DOM对象
+			  app.goldType = data.value;
+			  //app.loadTitle(data.value);
+			  app.grid.curr_page = 1;
+			  app.gridFristLoad();
+			});  
+        
+
+
+        var app = new Vue({
+			el: "#app",
+			data: {
+				uid:null,
+				goldType: 20,
+				grid: {
+                        curr_page: 1, //当前页码
+                        page_size: 10, //每页最大条数
+                        total: 0, //总数
+                        pageCount: 0,
+                        data: [], //当前页数据
+                        title:[]
+                    },
+                filter: {
+					
+				},
+			},
+			watch: {
+                    "grid.curr_page": function (val, oldVal) { //页码改变自动reload
+                        debugger;
+                        if (val === oldVal) {
+                            return;
+                        }
+                        this.gridReload();
+                    }
+                },
+			methods: {
+					loadTitle:function(){
+						app.grid.title = ["sss","sss"];
+					},
+				   gridFristLoad: function () { //表格首次加载(fetch data of first page -> set data -> initialize pager)
+					this.curr_page = 1;
+					this.fetchData(function (rs) {
+						//debugger;
+						console.log(rs);
+
+						//加载表头
+						app.grid.data = rs.data.list;
+						app.grid.total = rs.recordCount;
+						app.grid.pageCount = rs.pageCount;		
+						gLayPageIni('pager', app.grid.curr_page ,rs.data.pageCount , function (newPage) {
+							app.grid.curr_page = newPage;
+						});
+					 });
+					},
+				   gridReload: function () { //分页获取
+	                  this.fetchData(function (rs) {
+						app.grid.data = rs.data.list;
+						app.grid.total = rs.recordCount;
+					});
+	               },
+		          search: function () {
+					
+				
+				  },
+				  fetchData: function (cb) {
+					var options = this.filter;
+					options.pageNo = this.grid.curr_page;
+					options.pageSize = this.grid.page_size;
+					options.startAt = this.grid.startAt;
+					options.endAt = this.grid.endAt;
+					options.uid = this.uid;
+					options.type = this.goldType;
+					$.post("/gm/player/gold", options, function (rs) {
+						app.getTitle(options.type);
+						//app.grid.title = ["sss","sss"];
+						console.log(rs);
+						cb(rs);
+					}, "json");
+				},
+				getTitle: function (type) {
+					if(type==20){
+						//龙珠探宝
+						app.grid.title = ["游戏ID","游戏昵称","玩家当前金币","玩家本局金币","押注线数","单线押注金币","总倍数","赢得的金币","回收金币数","流水时间"];	
+					}else if(type==21){
+						//糖果派对
+						app.grid.title = ["游戏ID","游戏昵称","玩家当前金币","玩家本局金币","下注类型","下注线数","下注金币","总倍数","赢得的金币","回收金币数","流水时间"];	
+					}else if(type==22){
+						//ATT
+						app.grid.title = ["游戏ID","游戏昵称","玩家当前金币","牌型编号","押注金币","投骰子次数","比倍池金币","总池金币","赢得的金币","回收金币数","流水时间"];	
+					}else if(type==23){
+						//水浒
+						app.grid.title = ["游戏ID","游戏昵称","之前总金币","类型","赢得的金币","当前总金币","房间类型","押注金额","赢得倍数","回收金币数","流水时间"];	
+					}else if(type==24){
+						//德州扑克
+						app.grid.title = ["游戏ID","游戏昵称","玩家状态","玩家身上金币","牌桌金币","玩家此局花费金额","局数编号","房间类型","盲注金额","互动类型","玩家类型","操作类型","交易数","回收金币数","公共牌","玩家牌","流水时间"];	
+					}else if(type==25){
+						//深海捕鱼
+						app.grid.title = ["游戏ID","游戏昵称","房间类型","房间编号","记录类型","玩家当前金币","游戏回收金币","交易数","流水时间"];	
+					}else if(type==26){
+						//深海宝石
+						app.grid.title = ["游戏ID","游戏昵称","玩家当前总金币","玩家本局金币","押注线数","单线押注金币","数量押注5","数量押注6","数量押注7","数量押注8","种类押注红","种类押注橙","种类押注黄","种类押注绿","种类押注钻","数量中奖格子号","种类中奖格子号","押注格子编号","赢得的金币","回收金币数","流水数据时间"];
+					}else{
+						app.grid.title = ["游戏ID","游戏昵称","类型","金币变更数量","玩家之前金币数","玩家之后金币数量","金币变更时间"];	
+					}
+					
+				}
+			},
+			created:function() {
+				var userId = localStorage.getItem("gm_userid_data");
+				this.uid = userId;
+				console.log(userId);
+				this.gridFristLoad();
+			}
+		});
+});
+	</script>
+</body>
+
+</html>

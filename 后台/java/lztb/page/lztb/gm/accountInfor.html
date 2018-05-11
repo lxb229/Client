@@ -1,0 +1,284 @@
+<!--账号信息-->
+<div class="ibox" style="width: 2057px">
+    <!--主页内容-->
+    <div id="userListBox" class="ibox-content fadeInUp animated">
+        <div class="layui-form-item" >
+            <div class="layui-input-inline">
+                <input class="layui-input"  placeholder="游戏ID" id="LAY_demorange_s" v-model="filter.uid"/>
+            </div>
+            <div class="layui-input-inline">
+                <input class="layui-input" placeholder="游戏昵称" id="LAY_demorange_e" v-model="filter.nick"/>
+            </div>
+            <div class="layui-input-inline">
+                <input class="layui-input" placeholder="游戏账号" id="LAY_demorange_s1" v-model="filter.account_name"/>
+            </div>
+            <div class="layui-input-inline">
+                <input class="layui-input" placeholder="绑定手机号" id="LAY_demorange_e1" v-model="filter.tel"/>
+            </div>
+            <div class="layui-input-inline">
+                <input class="layui-input" placeholder="IP地址" id="LAY_demorange_s2" v-model="filter.ip"/>
+            </div>
+            <div class="layui-input-inline">
+                <input class="layui-input" placeholder="机器码" id="LAY_demorange_e2" v-model="filter.imel"/>
+            </div>
+            <button class="layui-btn " @click="onSearch">查询</button>
+        </div>
+        <table class="layui-table" id="list">
+            <thead>
+            <tr>
+                <th>选择</th>
+                <th>游戏ID</th>
+                <th>游戏昵称</th>
+                <th>游戏账号</th>
+                <th>手机号码</th>
+                <th>注册时间</th>
+                <th>注册渠道</th>
+                <th>最后一次登陆时间</th>
+                <th>最后一次登录IP</th>
+                <th>机器码</th>
+                <th>最后一次登录地域</th>
+                <th>历史总充值</th>
+                <th>账号状态</th>
+                <th>是否在线</th>
+                <th>等级</th>
+                <th>VIP</th>
+                <th>钻石</th>
+                <th>金币</th>
+                <th style="width: 136px;">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(item,index) in userList">
+                    <td><input type="checkbox" name="userCheck" class="checkbox-item" :value="item.uid" lay-skin="primary" v-model="checkedItem">&ensp;</td>
+                    <td>{{item.uid}}</td>
+                    <td>{{item.nick}}</td>
+                    <td>{{item.account_name}}</td>
+                    <td>{{item.tel}}</td>
+                    <td>{{item.reg_time}}</td>
+                    <td>{{item.reg_channel}}</td>
+                    <td>{{item.last_login_time}}</td>
+                    <td>{{item.last_ip}}</td>
+                    <td>{{item.imel}}</th>
+                    <td>{{item.reg_address}}</td>
+                    <td>{{item.total_pay_rmb}}</td>
+                    <td v-if="item.user_state == 0">正常</td>
+                    <td v-else>冻结</td>
+                    <td v-if="item.is_online == 1">在线</td>
+                    <td v-else>离线</td>
+                    <td>{{item.lvl}}</td>
+                    <td>{{item.vip}}</td>
+                    <td>{{item.diamond}}</td>
+                    <td>{{item.gold}}</td>
+                    <td>
+                    <a href="javascript:void(0)" @click="frozen(item.uid,item.user_state)">{{item.user_state == 0 ? '冻结':'解冻'}}</a>
+                     <span class="text-explode">|</span>
+                    <a href="javascript:void(0)"  @click="goldDetail(item.uid)">金币流水</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="layui-form-item">
+            <button  class="layui-btn layui-btn-primary layui-btn-radius" id="selectAll">全选</button>
+            <button class="layui-btn layui-btn-primary layui-btn-radius" id="reverse">反选</button>
+            <button class="layui-btn layui-btn-primary layui-btn-radius " @click="frozenBatch(1)">批量冻结</button>
+            <button class="layui-btn layui-btn-primary layui-btn-radius"  @click="frozenBatch(0)">批量解冻</button>
+        </div>
+        <div id="demo2"></div>
+    </div>
+
+
+
+    <script>
+    require(['vue', 'layui'], function (Vue) {
+        var vmUsers = new Vue({
+            el: "#userListBox",
+            data: {
+                filter:{},
+                userList: [],
+                checkedItem:[]
+            },
+            methods: {
+                onSearch: function (event) {
+                        loadUsersList(this);
+                    },
+                
+                 frozen:function(uid,state) {
+                    if(state==0){
+                         ConfirmBox("您确定要冻结该玩家吗？", function(){
+                            vmUsers.frozenExcute(uid,state);
+                         });
+                    }else{
+                        ConfirmBox("您确定要解冻该角色吗？", function(){
+                             vmUsers.frozenExcute(uid,state);
+                        })
+                    }
+                     
+                 },
+                 frozenBatch:function(state) {
+                     $('input:checkbox[name=userCheck]:checked').each(function(i){
+                           vmUsers.checkedItem.push($(this).val()) ;
+                      });
+                    // console.log(vmUsers.checkedItem);
+                    // alert(vmUsers.checkedItem.length);
+                      if(vmUsers.checkedItem.length < 1){
+                            AlertMsg('请选择需要修改的用户');
+                            return;
+                        }
+                    if(state==0){
+                         ConfirmBox("您确定要批量冻结这些玩家吗？", function(){
+                            vmUsers.frozenBatchExcute(0);
+                         });
+                    }else{
+                        ConfirmBox("您确定要批量解冻这些角色吗？", function(){
+                             vmUsers.frozenBatchExcute(1);
+                        })
+                    }
+                 },
+                 frozenExcute(uid,state){
+                     $.ajax({
+                        url: '/gm/player/frozen',
+                        type: 'POST',
+                        data: {'uid':uid,'state':state},
+                        dataType: 'json',
+                        timeout: 100000,
+                        success: function (rs) {
+                            if (rs.code == '00000') {
+                                if(state==1){
+                                    state=0;
+                                }else{
+                                    state=1;
+                                }
+
+                                for (var i = 0; i < vmUsers.userList.length; i++) {
+                                        if (vmUsers.userList[i].uid == uid) {
+                                            vmUsers.userList[i].user_state = state;
+                                            break;
+                                        }
+                                    }
+
+                                SuccessBox("修改成功!", "提示", 2000);
+                            }else{
+                                AlertMsg("修改失败");
+                            }
+
+                        },
+                        error: function (xhr, status, ex) {
+                            AlertMsg("请求失败：" + xhr.statusText);
+                            console.error(ex);
+                        }
+                    });
+                 },
+
+               frozenBatchExcute(state){
+                console.log(vmUsers.checkedItem);
+                console.log(state);
+                var uids = '';
+                for (var i = 0; i < vmUsers.checkedItem.length; i++) {
+                       uids = uids + vmUsers.checkedItem[i]+",";
+                }
+                 console.log(uids);
+                 $.ajax({
+                    url: '/gm/player/frozenBatch',
+                    type: 'POST',
+                    data: {'uids':uids,'state':state},
+                    dataType: 'json',
+                    timeout: 100000,
+                    traditional: true,
+                    success: function (rs) {
+                        console.log(rs);
+                        if (rs.code == '00000') {
+                            loadUsersList(vmUsers);
+                            SuccessBox("修改状态成功!", "提示", 2000);
+                        }else{
+                             console.error(rs);
+                             AlertMsg(rs.msg);
+                        }
+                    },
+                    error: function (xhr, status, ex) {
+                        AlertMsg("请求失败：" + xhr.statusText);
+                        console.error(ex);
+                    }
+                });
+             },
+
+             goldDetail: function (uid) {
+                    localStorage.setItem("gm_userid_data", uid);
+                    gOpenModalWindow("金币流水", "lztb/gm/goldDetail.html", 1400, 800, true, null, null, function () {
+                        //localStorage.removeItem("gm_userid_data");
+                        //loadUsersList(this);
+                    });
+                },
+            },
+            created: function () {
+               loadUsersList(this);
+
+            }
+        });
+           //全选，反选
+          $("#selectAll").click(function(){
+                $("#list :checkbox").prop("checked", true);
+            });
+
+            $("#reverse").click(function () {
+                $("#list :checkbox").each(function () {
+                    $(this).prop("checked", !$(this).prop("checked"));
+                });
+            });
+      });
+
+
+    function loadUsersList(vm){
+        console.log(vm.filter);
+         $.ajax({
+            url: '/gm/player/users',
+            type: 'POST',
+            data: vm.filter,
+            dataType: 'json',
+            timeout: 10000,
+            success: function (rs) {
+                console.log(rs);
+                if(rs.code=='00000'){
+                    vm.userList = eval('('+rs.data+')');
+                    vm.checkedItem = [];
+                }
+               
+            },
+            error: function (xhr, status, ex) {
+                AlertMsg("请求失败：" + xhr.statusText);
+                console.error(ex);
+            }
+        });
+     }
+
+
+
+          
+
+        // var layuiForm;
+        //     layui.config({ dir: baseUrl + '../plugs/layui/' });
+        //     layui.use(['layer', 'laypage', 'form', 'laydate'], function () {
+        //         layuiForm = layui.form();
+        //         //layuiForm.render('select');
+        //         //layuiForm.render('checkbox');
+        //        // layuiForm.render('radio');
+
+        //         $("#selectAll").click(function(){
+        //             $("#list :checkbox,#all").prop("checked", true);
+        //         });
+
+        //         $("#reverse").click(function () {
+        //             $("#list :checkbox").each(function () {
+        //                 $(this).prop("checked", !$(this).prop("checked"));
+        //             });
+
+        //             /*layuiForm.on('checkbox(xz)', function(data){
+        //               console.log(data.elem); //得到checkbox原始DOM对象
+        //               console.log(data.elem.checked); //是否被选中，true或者false
+        //               console.log(data.value); //复选框value值，也可以通过data.elem.value得到
+        //               console.log(data.othis); //得到美化后的DOM对象
+        //             });  */      
+        //         });
+        //     });
+
+    </script>
+</div>

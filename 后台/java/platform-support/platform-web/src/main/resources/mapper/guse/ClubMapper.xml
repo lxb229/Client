@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.guse.platform.dao.doudou.ClubMapper">
+
+    <resultMap id="Club" type="com.guse.platform.entity.doudou.Club">
+        <result property="cid" column="c_id"/>
+        <result property="cno" column="c_no"/>
+        <result property="name" column="name"/>
+        <result property="cuserId" column="c_user_id"/>
+        <result property="ccreateTime" column="c_create_time"/>
+        <result property="cstate" column="c_state"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+        club.c_id ,club.c_no, club.name ,club.c_user_id ,club.c_create_time ,club.c_state 
+	    ]]>
+	</sql>
+	<!-- 用于分页查询 -->
+	<sql id="sql_of_where">
+	 	WHERE (c_state=1 or c_state=0 )
+    	<if test="bParam != null" >	
+		 	
+		 	<if test="bParam.name != null and bParam.name != '' ">
+	      	 AND (club.name like concat(concat('%',#{bParam.name,jdbcType=VARCHAR}),'%') 
+	      	 or club.c_no like concat(concat('%',#{bParam.name,jdbcType=VARCHAR}),'%') 
+	      	 or system_users.star_no like concat(concat('%',#{bParam.name,jdbcType=VARCHAR}),'%') 
+	      	 or system_users.nick like concat(concat('%',#{bParam.name,jdbcType=VARCHAR}),'%') 
+	      	 ) 
+		 	</if>
+		 	<if test="bParam.ccreateTime != null">
+	      	 AND c_create_time = #{bParam.ccreateTime, jdbcType=TIMESTAMP}
+		 	</if>
+		 	<if test="bParam.cstate != null">
+	      	 AND c_state = #{bParam.cstate, jdbcType=INTEGER}
+		 	</if>
+	    </if>   
+    </sql>
+    <sql id="sql_user_join">
+		LEFT JOIN system_users ON club.c_user_id = system_users.user_id
+		LEFT JOIN city ON system_users.area = city.id
+		LEFT JOIN system_agency ON city.id = system_agency.sa_city_id
+    </sql>
+    <sql id="sql_user_role">
+    	<if test="user != null">
+    		<if test="user.roleId == 1 or user.roleId == 11">
+    			and 1=1 
+    		</if>
+    		<if test="user.roleId == 12">
+    			and (system_agency.sa_user_id = #{user.userId } OR club.c_user_id = #{user.userId })  
+    		</if>
+    		<if test="user.roleId == 14">
+    			and  club.c_user_id = #{user.userId }  
+    		</if>
+    		<if test="user.roleId != 1 and user.roleId != 11 and user.roleId != 12 and user.roleId != 14">
+    			and 1=2 
+    		</if>
+    	</if>
+    </sql>
+    
+    <!-- 通用查询 -->
+    <select id="select" parameterType="java.util.Map" resultMap="Club">
+        select 
+        <include refid="Base_Column_List" />
+        from club 
+        <include refid="sql_of_where" /> order by create_time desc
+    </select>
+    
+    <!-- 通用分页查询 -->
+    <select id="selectPageByParam" parameterType="java.util.Map" resultMap="Club">
+        select 
+        <include refid="Base_Column_List" />
+        from club 
+        <include refid="sql_user_join" />
+        <include refid="sql_of_where" />
+        <include refid="sql_user_role" />
+        <if test="pParam != null">
+            <if test="pParam.orderByClause != null" > order by ${pParam.orderByClause} </if>
+            <if test="pParam.orderByClause == null" >
+            		order by c_id  desc 
+            </if>
+            <if test="pParam.startIndex != null and pParam.pageSize != null" >
+              limit ${pParam.startIndex} , ${pParam.pageSize}
+            </if>
+        </if>
+          <if test="pParam == null">
+             order by create_date desc
+        </if>
+    </select>
+    
+    <!-- 通用分页查询记录总数 -->
+    <select id="countByParam" parameterType="java.util.Map" resultType="java.lang.Long">
+        select count(*) from club 
+        <include refid="sql_user_join" />
+        <include refid="sql_of_where" />
+        <include refid="sql_user_role" />
+    </select>
+    <!-- 查询俱乐部下一个主键编号 -->
+    <select id="getNextClubId" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT auto_increment FROM information_schema.TABLES WHERE table_schema='chess' AND TABLE_name = 'club'
+    </select>
+    
+    
+    
+    <insert id="insert" parameterType="com.guse.platform.entity.doudou.Club">
+    <![CDATA[
+        INSERT INTO club (
+	        c_id  ,
+	        c_no  ,
+	        name ,
+	        c_user_id  ,
+	        c_create_time  ,
+	        c_state  
+        ) VALUES (
+        	#{cid, jdbcType=INTEGER} ,
+        	#{cno, jdbcType=VARCHAR} ,
+        	#{name, jdbcType=VARCHAR} ,
+        	#{cuserId, jdbcType=INTEGER} ,
+        	#{ccreateTime, jdbcType=TIMESTAMP} ,
+        	#{cstate, jdbcType=INTEGER} 
+        )
+    ]]>
+    </insert>
+    
+    <delete id="deleteById">
+    <![CDATA[
+        DELETE FROM club WHERE
+        c_id = #{cid} 
+    ]]>
+    </delete>
+    
+    <select id="selectById" resultMap="Club">
+	    SELECT <include refid="Base_Column_List"/>
+	    <![CDATA[
+	        FROM club 
+	        WHERE 
+		        c_id = #{cid} 
+	    ]]>
+    </select>
+    
+    <update id="updateByIdSelective" parameterType="com.guse.platform.entity.doudou.Club">
+		UPDATE club
+		<set>
+		 	<if test="cno != null">
+	      	  c_no = #{cno, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="name != null">
+	      	  name = #{name, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="cuserId != null">
+	      	  c_user_id = #{cuserId, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="ccreateTime != null">
+	      	  c_create_time = #{ccreateTime, jdbcType=TIMESTAMP} ,
+		 	</if>
+		 	<if test="cstate != null">
+	      	  c_state = #{cstate, jdbcType=INTEGER} ,
+		 	</if>
+		</set>
+		WHERE
+	       	c_id = #{cid} 
+    </update>
+    
+    <select id="getClubByAccount" resultMap="Club">
+	    SELECT <include refid="Base_Column_List"/>
+	    <![CDATA[
+	        FROM club 
+	        WHERE 
+		       c_no = #{accountId} 
+		     limit 1
+	    ]]>
+    </select>
+    
+    <select id="selectClubOut" resultMap="Club">
+	    SELECT <include refid="Base_Column_List"/>
+	        FROM club 
+	        
+	        WHERE 1=1
+	        <if test="cuserId != null">
+	      	 	and c_user_id = #{cuserId} 
+		 	</if>
+		 	<if test="cid != null">
+	      	 	and c_id != #{cid} 
+		 	</if>
+    </select>
+    
+	
+</mapper>
+

@@ -1,0 +1,47 @@
+
+<!--糖果派对房间信息-->
+<div class="ibox">
+    <!--主页内容-->
+    <div class="ibox-content fadeInUp animated">
+		<div id="app">
+			<div class="layui-form">
+				<div class="layui-tab-item layui-show">
+					<div class="layui-form-item">
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="开始日" name="startDate" :value="filter.startDate" id="startAt" >
+						</div>
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="截止日" name="endDate" :value="filter.endDate" id="endAt">
+						</div>
+						<button class="layui-btn layui-btn-primary layui-btn-radius" lay-submit>查询</button>
+						<a style="text-decoration:none;" class="layui-btn layui-btn-primary layui-btn-radius" href="/lztb/page/adm1.html#./lztb/game/gameTgpd.html?spm=m-2-4-4">返回糖果派对游戏概况</a>
+					</div>
+					<table class="layui-table" lay-even="" lay-skin="row">
+						<thead>
+						<tr>
+							<th>时间</th>
+							<th>总押注</th>
+							<th>人数</th>
+							<th>人数比</th>
+							<th>总局数</th>
+							<th>回收</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr v-for="(item, index) in grid.data">
+							<td>{{formatDate(item.gtdDate)}}</td>
+							<td>{{item.gtdTatolBet}}</td>
+							<td>{{item.gtdPalyerNum}}</td>
+							<td>{{item.gtdPalyerRete}}</td>
+							<td>{{item.gtdTatolInningsNum}}</td>
+							<td>{{item.gtdRecoveryGold}}</td>
+						</tr>
+						</tbody>
+					</table>
+					<div id="pager" class="laypager" style="float: right;"></div>
+				</div>
+			</div>
+		</div>
+    </div>
+	<script src="../static/lztb/game/room/tgpd.js"></script>
+</div>

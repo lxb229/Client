@@ -1,0 +1,50 @@
+<!--流失回流分析-->
+<div class="ibox">
+    <div class="ibox-title">
+        <h5>流失回流分析</h5>
+    </div>
+    <div class="ibox-content fadeInUp animated">
+        <!--流失与回流玩家统计图-->
+        <div id="lossBack_echart" class="container" style="height: 450px;"></div>
+        <!--选择日期和导出-->
+        <div id="lossBack_div">
+        <form id="lossBack_form" class="layui-form">
+            <div class="layui-form-item" style="float: right;">
+                <div class="layui-input-inline">
+                    <input class="layui-input" placeholder="开始时间"  name="startDate" :value="filter.startDate" id="lossBackStartDate" />
+                </div>
+                <div class="layui-input-inline">
+                    <input class="layui-input" placeholder="结束时间" name="endDate" :value="filter.endDate" id="lossBackEndDate" />
+                </div>
+                <button class="layui-btn" lay-submit lay-filter="lossBack_form">查询</button>
+                <button class="layui-btn" v-on:click="exportExcel">导出</button>
+            </div>
+            <!--表格-->
+            <table class="layui-table" lay-even>
+                <thead>
+                <tr>
+                    <th>日期</th>
+                    <th>流失玩家</th>
+                    <th>回流玩家</th>
+                    <th>流失率</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(item, index) in grid.data">
+                    <td>{{formatDate(item.oplbDate)}}</td>
+                    <td>{{item.oplbLoss}}</td>
+                    <td>{{item.oplbBack}}</td>
+                    <td v-if="item.oplbLossRate!=null">{{item.oplbLossRate}}%</td>
+                </tr>
+                </tbody>
+            </table>
+            <div id="pager" class="laypager" style="float: right;"></div>
+        </form>
+        </div>
+    </div>
+    <script src="../static/lztb/operator/playerLose.js"></script>
+</div>
+
+
+
+		

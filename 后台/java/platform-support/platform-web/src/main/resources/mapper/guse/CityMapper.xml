@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.guse.platform.dao.doudou.CityMapper">
+
+    <resultMap id="City" type="com.guse.platform.entity.doudou.City">
+        <result property="id" column="id"/>
+        <result property="pid" column="pid"/>
+        <result property="name" column="name"/>
+        <result property="level" column="level"/>
+        <result property="sort" column="sort"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+        id ,pid ,name ,level ,sort 
+	    ]]>
+	</sql>
+	<!-- 用于分页查询 -->
+	<sql id="sql_of_where">
+	 	WHERE 1=1 
+    	<if test="bParam != null" >	
+		 	<if test="bParam.pid != null">
+	      	 AND pid = #{bParam.pid, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.name != null">
+	      	 AND name = #{bParam.name, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="bParam.level != null">
+	      	 AND level = #{bParam.level, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.sort != null">
+	      	 AND sort = #{bParam.sort, jdbcType=INTEGER}
+		 	</if>
+	    </if>   
+    </sql>
+    
+    <!-- 通用查询 -->
+    <select id="select" parameterType="java.util.Map" resultMap="City">
+        select 
+        <include refid="Base_Column_List" />
+        from city 
+        <include refid="sql_of_where" /> order by create_time desc
+    </select>
+    
+    <!-- 通用分页查询 -->
+    <select id="selectPageByParam" parameterType="java.util.Map" resultMap="City">
+        select 
+        <include refid="Base_Column_List" />
+        from city 
+        <include refid="sql_of_where" />
+        <if test="pParam != null">
+            <if test="pParam.orderByClause != null" > order by ${pParam.orderByClause} </if>
+            <if test="pParam.orderByClause == null" >
+            		order by id  desc 
+            </if>
+            <if test="pParam.startIndex != null and pParam.pageSize != null" >
+              limit ${pParam.startIndex} , ${pParam.pageSize}
+            </if>
+        </if>
+          <if test="pParam == null">
+             order by create_date desc
+        </if>
+    </select>
+    
+    <!-- 通用分页查询记录总数 -->
+    <select id="countByParam" parameterType="java.util.Map" resultType="java.lang.Long">
+        select count(*) from city 
+        <include refid="sql_of_where" />
+    </select>
+    
+    
+    <insert id="insert" parameterType="com.guse.platform.entity.doudou.City">
+    <![CDATA[
+        INSERT INTO city (
+	        id  ,
+	        pid  ,
+	        name  ,
+	        level  ,
+	        sort  
+        ) VALUES (
+        	#{id, jdbcType=INTEGER} ,
+        	#{pid, jdbcType=INTEGER} ,
+        	#{name, jdbcType=VARCHAR} ,
+        	#{level, jdbcType=INTEGER} ,
+        	#{sort, jdbcType=INTEGER} 
+        )
+    ]]>
+    </insert>
+    
+    <delete id="deleteById">
+    <![CDATA[
+        DELETE FROM city WHERE
+        id = #{id} 
+    ]]>
+    </delete>
+    
+    <select id="selectById" resultMap="City">
+	    SELECT <include refid="Base_Column_List"/>
+	    <![CDATA[
+	        FROM city 
+	        WHERE 
+		        id = #{id} 
+	    ]]>
+    </select>
+    
+    <update id="updateByIdSelective" parameterType="com.guse.platform.entity.doudou.City">
+		UPDATE city
+		<set>
+		 	<if test="pid != null">
+	      	  pid = #{pid, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="name != null">
+	      	  name = #{name, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="level != null">
+	      	  level = #{level, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="sort != null">
+	      	  sort = #{sort, jdbcType=INTEGER} ,
+		 	</if>
+		</set>
+		WHERE
+	       	id = #{id} 
+    </update>
+    
+    <!-- 获得所有区域 -->
+	<select id="selectAllCityList" resultMap="City">
+		SELECT <include refid="Base_Column_List"/>
+	    <![CDATA[
+	        FROM city order by pid,level,sort
+	    ]]>
+	</select>
+	
+	<!-- 根据名称获取区域 -->
+	<select id="getCityByName" resultMap="City">
+		SELECT <include refid="Base_Column_List"/>
+	        FROM city 
+	        where 1=1 
+	        <if test="cityName != null">
+	      	 	and name like concat(concat('%',#{cityName}),'%') 
+		 	</if>
+	         
+	        order by pid,level,sort
+	        limit 1
+	</select>
+	
+	
+</mapper>
+

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangzhixuan.mapper.InvestmentMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="Investment" type="com.wangzhixuan.model.Investment">
+		<result column="id" property="id" />
+		<result column="amount" property="amount" />
+		<result column="user_id" property="userId" />
+		<result column="create_time" property="createTime" />
+	</resultMap>
+	
+	<select id="selectInvestmentVoPage"  resultType="InvestmentVo">
+		SELECT 
+			i.id,
+			i.amount,
+			i.user_id AS userId,
+			u.name,
+			i.create_time AS createTime
+		FROM investment i
+		LEFT JOIN `user` u ON i.user_id = u.id
+			<where>
+	        	1=1
+	            <if test=" name != null and name != '' ">
+	               and u.name like concat(concat('%',#{name}),'%') 
+	            </if>
+	        </where>
+		GROUP BY i.id
+    </select>
+
+</mapper>

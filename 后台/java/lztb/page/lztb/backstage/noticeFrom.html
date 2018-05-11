@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>新建公告</title> 
+    <link href="/lztb/static/plugs/layui/css/layui.css" rel="stylesheet">
+</head>
+<body>
+    <div id="noticeFrom" style="padding: 15px;">
+        <div class="layui-form">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">上架时间</label>
+                    <div class="layui-input-block">
+                        <input class="layui-input" placeholder="" v-model="ditem.start_time" id="start_time" />
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">下架时间</label>
+                    <div class="layui-input-block">
+                        <input class="layui-input" v-model="ditem.end_time" id="end_time" />
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <input class="layui-input" placeholder="优先级（优先级越高越牛逼）" v-model="ditem.priority" />
+            </div>
+            <div class="layui-form-item">
+                <input class="layui-input" placeholder="公告标题" v-model="ditem.title" />
+            </div>
+            <div class="layui-form-item">
+                <textarea placeholder="公告内容" class="layui-textarea" v-model="ditem.content"></textarea>
+            </div>
+            <div class="layui-form-item" style="text-align: center">
+                <button class="layui-btn" @click="saveData()"> 提 交 </button>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="/lztb/static/plugs/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/lztb/static/plugs/layui/layui.js"></script>
+    <script type="text/javascript" src="/lztb/static/plugs/vue/vue.js"></script>
+    <script type="text/javascript" src="/lztb/static/model/site.js"></script>
+    <script type="text/javascript">
+        window.baseUrl = window.parent.window.baseUrl;
+        var vmnf = new Vue({
+            el: "#noticeFrom",
+            data: {
+                ditem: {
+                    id:null,
+                    start_time: null,
+                    end_time: null,
+                    priority: null,
+                    title: null,
+                    content: null
+                }
+            },
+            methods: {
+                saveData: function () {
+                    $.ajax({
+                        url: '/config/hall/noticeSave',
+                        type: 'POST',
+                        data: vmnf.ditem,
+                        dataType: 'json',
+                        timeout: 10000,
+                        success: function (rs) {
+                            if (rs.code == '00000') {
+                                var rsdata = JSON.parse(rs.data);
+                                if(rsdata.code == 200) {
+                                    top.gCloseModalWindow();
+                                    top.SuccessBox(rsdata.info, "提示", 2000);
+                                } else {
+                                    top.AlertMsg(rsdata.info);
+                                }
+                            } else {
+                                top.AlertMsg("公告保存失败："+rs.msg);
+                                console.error(rs);
+                            }
+                        },
+                        error: function (xhr, status, ex) {
+                            top.AlertMsg("请求失败：" + xhr.statusText);
+                            console.error(ex);
+                        }
+                    });
+                }
+            },
+            created: function () {
+                var data = localStorage.getItem("config_hell_notice_edit");
+                if(!data) {
+                    return;
+                }
+                data = JSON.parse(data);
+                this.ditem.start_time = data.open_date;
+                this.ditem.end_time = data.end_date;
+                this.ditem.id= data.id;
+                this.ditem.priority = data.order;
+                this.ditem.title = data.title;
+                this.ditem.content = data.content;
+            },
+            mounted: function () {
+                layui.use(['layer', 'form', 'laydate'], function () {
+                    var layform = layui.form();
+                    var laydate = layui.laydate;
+                    var start = {
+                        min: laydate.now()
+                        , max: '2099-06-16 23:59:59'
+                        , istoday: false
+                        , type:'datetime'
+                        , format: 'YYYY-MM-DD hh:mm'
+                        , choose: function (datas) {
+                            end.min = datas; //开始日选好后，重置结束日的最小日期
+                            end.start = datas; //将结束日的初始值设定为开始日
+                            vmnf.ditem.start_time = datas;
+                        }
+                    };
+                    var end = {
+                        min: laydate.now()
+                        , max: '2099-06-16 23:59:59'
+                        , istoday: false
+                        , type:'datetime'
+                        , format: 'YYYY-MM-DD hh:mm'
+                        , choose: function (datas) {
+                            start.max = datas; //结束日选好后，重置开始日的最大日期
+                            vmnf.ditem.end_time = datas;
+                        }
+                    };
+                    document.getElementById('start_time').onclick = function () {
+                        start.elem = this;
+                        laydate(start);
+                    };
+                    document.getElementById('end_time').onclick = function () {
+                        end.elem = this;
+                        laydate(end);
+                    };
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangzhixuan.mapper.OperatingStatisticsMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.wangzhixuan.model.OperatingStatistics">
+		<id column="id" property="id" />
+		<result column="player_amount" property="playerAmount" />
+		<result column="sales_roomcard" property="salesRoomcard" />
+		<result column="use_roomcard" property="useRoomcard" />
+		<result column="roomcard_profit" property="roomcardProfit" />
+		<result column="roomcard_net_profit" property="roomcardNetProfit" />
+	</resultMap>
+
+</mapper>

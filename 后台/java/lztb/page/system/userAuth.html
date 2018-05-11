@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width">
+    <title>新增/编辑用户</title>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link href="/lztb/static/plugs/layui/css/layui.css" rel="stylesheet">
+</head>
+<body>
+    <div class="layui-form layui-box" id="userAuth" style='padding:25px 30px 20px 0'>
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户账号</label>
+            <div class="layui-input-block">
+                <input type="text" readonly="" disabled="" name="userName" :value="userName" required="required" class="layui-input disabled">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">角色权限</label>
+            <div class="layui-input-block">
+                <select name="userRoles" v-model="userRoleId">
+                    <option value="">请选择一个角色</option>
+                    <template v-for="(item,index) in roleList">
+                        <option v-bind:value="item.roleId">{{item.roleName}}</option>
+                    </template>
+                </select> 
+            </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+        <div class="layui-form-item layui-form-line">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-block">
+                <button @click="setRole()" class="layui-btn"> 保 存 </button>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="/lztb/static/plugs/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="/lztb/static/plugs/vue/vue.js"></script>
+<script type="text/javascript">
+    //加载角色列表
+    var app = new Vue({
+        el: "#userAuth",
+        data: {
+            userId:null,
+            userName:null,
+            userRoleId:null,
+            roleList: []
+        },
+        methods: {
+            setRole:function() {
+                var roleid = $("select[name='userRoles']").val();
+                app.userRoleId = roleid;
+                $.ajax({
+                    url: '/system/users/setRole',
+                    type: 'POST',
+                    data: {"userId":app.userId,"roleId":app.userRoleId},
+                    dataType: 'json',
+                    timeout: 10000,
+                    success: function (rs) {
+                        if (rs.code == '00000') {
+                            SuccessBox("用户授权成功!","成功",1500);
+                            gCloseModalWindow();
+                            window.parent.window.location.reload();
+                        } else {
+                            AlertMsg("设置用户角色权限失败："+rs.msg);
+                        }
+                    },
+                    error: function (xhr, status, ex) {
+                        AlertMsg("请求失败：" + xhr.statusText);
+                        console.error(ex);
+                    }
+                });
+            }
+        },
+        created:function () {
+            //获取角色列表
+            loadRoleList();
+        }
+    });
+    function loadRoleList() {
+        $.ajax({
+            url: '/system/roles/list',
+            type: 'POST',
+            data: {},
+            dataType: 'json',
+            timeout: 10000,
+            success: function (rs) {
+                if (rs.code == '00000') {
+                    if(rs.data) {
+                        app.roleList.length = 0;
+                        for(var i=0;i<rs.data.length;i++) {
+                            app.roleList.push(rs.data[i]);
+                        }
+                    }
+                } else {
+                    AlertMsg("加载角色列表失败："+rs.msg);
+                }
+            },
+            error: function (xhr, status, ex) {
+                AlertMsg("请求失败：" + xhr.statusText);
+                console.error(ex);
+            }
+        });
+    }
+</script>
+<script type="text/javascript" src="/lztb/static/plugs/layui/layui.js"></script>
+<script type="text/javascript" src="/lztb/static/model/site.js"></script>
+<script type="text/javascript">
+    if (window.parent.window.gCloseModalWindow) {
+        window.gCloseModalWindow = window.parent.window.gCloseModalWindow;
+    }
+    if (window.parent.window.SuccessBox) {
+        window.SuccessBox = window.parent.window.SuccessBox;
+    }
+    if (window.parent.window.AlertMsg) {
+        window.AlertMsg = window.parent.window.AlertMsg;
+    } else {
+        window.AlertMsg = alert;
+    }
+    window.location.reload = window.parent.window.location.reload;
+    window.baseUrl = window.parent.window.baseUrl;
+
+    var layuiForm;
+    layui.config({ dir: baseUrl + '../plugs/layui/' });
+    layui.use(['layer', 'form', 'element'], function () {
+
+        var userId = sessionStorage.getItem("sysytem_user_auth_userId");
+        var userName = sessionStorage.getItem("sysytem_user_auth_userName");
+        app.userId = userId;
+        app.userName = userName;
+        
+        
+    });
+</script>
+
+</html>

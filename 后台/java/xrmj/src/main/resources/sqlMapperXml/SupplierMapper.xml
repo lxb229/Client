@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangzhixuan.mapper.SupplierMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="Supplier" type="com.wangzhixuan.model.Supplier">
+		<result column="id" property="id" />
+		<result column="company_name" property="companyName" />
+		<result column="supplier_name" property="supplierName" />
+		<result column="supplier_sex" property="supplierSex" />
+		<result column="supplier_phone" property="supplierPhone" />
+		<result column="supplier_wechat" property="supplierWechat" />
+		<result column="supplier_qq" property="supplierQq" />
+		<result column="supplier_email" property="supplierEmail" />
+		<result column="supplier_url" property="supplierUrl" />
+		<result column="company_address" property="companyAddress" />
+		<result column="remark" property="remark" />
+		<result column="user_id" property="userId" />
+		<result column="create_time" property="createTime" />
+	</resultMap>
+	
+		<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+        id, company_name, supplier_name, supplier_sex, supplier_phone, supplier_wechat, supplier_qq, 
+        supplier_email, supplier_url, company_address, remark, user_id, create_time 
+	    ]]>
+	</sql>
+	
+	<select id="getAllSupplier"  resultMap="Supplier">
+		SELECT <include refid="Base_Column_List"/> 
+		FROM supplier 
+		order by id
+    </select>
+    
+	<select id="selectSupplierPage"  resultMap="Supplier">
+		SELECT <include refid="Base_Column_List"/> 
+		FROM supplier 
+			<where>
+	            <if test=" supplierName != null and supplierName != '' ">
+	               and supplier_name like concat(concat('%',#{supplierName}),'%') 
+	            </if>
+	        </where>
+    </select>
+
+</mapper>

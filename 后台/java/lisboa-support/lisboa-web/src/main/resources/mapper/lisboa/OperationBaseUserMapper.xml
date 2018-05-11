@@ -1,0 +1,652 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.guse.platform.dao.doudou.OperationBaseUserMapper">
+
+    <resultMap id="OperationBaseUser" type="com.guse.platform.entity.doudou.OperationBaseUser">
+        <result property="obuUserid" column="obu_userid"/>
+        <result property="obuPassword" column="obu_password"/>
+        <result property="obdDloadChannel" column="obd_dload_channel"/>
+        <result property="obaOsType" column="oba_os_type"/>
+        <result property="obaOsName" column="oba_os_name"/>
+        <result property="obaDeviceModel" column="oba_device_model"/>
+        <result property="obaDeviceId" column="oba_device_id"/>
+        <result property="obuRegisterIp" column="obu_register_ip"/>
+        <result property="obuRegisterTime" column="obu_register_time"/>
+        <result property="obuUsename" column="obu_usename"/>
+        <result property="obuUserNick" column="obu_user_nick"/>
+        <result property="obuLevel" column="obu_level"/>
+        <result property="obuSex" column="obu_sex"/>
+        <result property="obuCharm" column="obu_charm"/>
+        <result property="obuHead" column="obu_head"/>
+        <result property="obuState" column="obu_state"/>
+        <result property="obuBriskState" column="obu_brisk_state"/>
+        <result property="obuIsGoBroke" column="obu_is_go_broke"/>
+        <result property="obuSign" column="obu_sign"/>
+        <result property="obuVipDays" column="obu_vip_days"/>
+        <result property="obuDiamond" column="obu_diamond"/>
+        <result property="obuGold" column="obu_gold"/>
+        <result property="obuInningsNum" column="obu_innings_num"/>
+        <result property="obuFirstRechargeTime" column="obu_first_recharge_time"/>
+        <result property="obuRechargeCount" column="obu_recharge_count"/>
+        <result property="obuRechargeAmount" column="obu_recharge_amount"/>
+        <result property="obuLastLoginTime" column="obu_last_login_time"/>
+        <result property="obuLastLoginIp" column="obu_last_login_ip"/>
+        <result property="obuLastLoginRegion" column="obu_last_login_region"/>
+        <result property="obuIsRobots" column="obu_is_robots"/>
+        <result property="obuIsTourist" column="obu_is_tourist"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+        obu_userid ,obu_password ,obd_dload_channel ,oba_os_type ,oba_os_name ,oba_device_model ,oba_device_id ,obu_register_ip ,obu_register_time ,obu_usename ,obu_user_nick ,obu_level ,obu_sex ,obu_charm ,obu_head ,obu_state ,obu_brisk_state ,obu_is_go_broke ,obu_sign ,obu_vip_days ,obu_diamond ,obu_gold ,obu_innings_num ,obu_first_recharge_time ,obu_recharge_count ,obu_recharge_amount ,obu_last_login_time ,obu_last_login_ip ,obu_last_login_region ,obu_is_robots ,obu_is_tourist 
+	    ]]>
+	</sql>
+	<!-- 用于分页查询 -->
+	<sql id="sql_of_where">
+	 	WHERE 1=1 
+    	<if test="bParam != null" >	
+		 	<if test="bParam.obuPassword != null">
+	      	 AND obu_password = #{bParam.obuPassword, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="bParam.obdDloadChannel != null">
+	      	 AND obd_dload_channel = #{bParam.obdDloadChannel, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="bParam.obaOsType != null">
+	      	 AND oba_os_type = #{bParam.obaOsType, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="bParam.obaOsName != null">
+	      	 AND oba_os_name = #{bParam.obaOsName, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="bParam.obaDeviceModel != null">
+	      	 AND oba_device_model = #{bParam.obaDeviceModel, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="bParam.obaDeviceId != null">
+	      	 AND oba_device_id = #{bParam.obaDeviceId, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="bParam.obuRegisterIp != null">
+	      	 AND obu_register_ip = #{bParam.obuRegisterIp, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="bParam.obuRegisterTime != null">
+	      	 AND obu_register_time = #{bParam.obuRegisterTime, jdbcType=TIMESTAMP}
+		 	</if>
+		 	<if test="bParam.obuUsename != null">
+	      	 AND obu_usename = #{bParam.obuUsename, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="bParam.obuUserNick != null">
+	      	 AND obu_user_nick = #{bParam.obuUserNick, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="bParam.obuLevel != null">
+	      	 AND obu_level = #{bParam.obuLevel, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.obuSex != null">
+	      	 AND obu_sex = #{bParam.obuSex, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.obuCharm != null">
+	      	 AND obu_charm = #{bParam.obuCharm, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.obuHead != null">
+	      	 AND obu_head = #{bParam.obuHead, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="bParam.obuState != null">
+	      	 AND obu_state = #{bParam.obuState, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.obuBriskState != null">
+	      	 AND obu_brisk_state = #{bParam.obuBriskState, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.obuIsGoBroke != null">
+	      	 AND obu_is_go_broke = #{bParam.obuIsGoBroke, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.obuSign != null">
+	      	 AND obu_sign = #{bParam.obuSign, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="bParam.obuVipDays != null">
+	      	 AND obu_vip_days = #{bParam.obuVipDays, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.obuDiamond != null">
+	      	 AND obu_diamond = #{bParam.obuDiamond, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.obuGold != null">
+	      	 AND obu_gold = #{bParam.obuGold, jdbcType=BIGINT}
+		 	</if>
+		 	<if test="bParam.obuInningsNum != null">
+	      	 AND obu_innings_num = #{bParam.obuInningsNum, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.obuFirstRechargeTime != null">
+	      	 AND obu_first_recharge_time = #{bParam.obuFirstRechargeTime, jdbcType=TIMESTAMP}
+		 	</if>
+		 	<if test="bParam.obuRechargeCount != null">
+	      	 AND obu_recharge_count = #{bParam.obuRechargeCount, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.obuRechargeAmount != null">
+	      	 AND obu_recharge_amount = #{bParam.obuRechargeAmount, jdbcType=BIGINT}
+		 	</if>
+		 	<if test="bParam.obuLastLoginTime != null">
+	      	 AND obu_last_login_time = #{bParam.obuLastLoginTime, jdbcType=TIMESTAMP}
+		 	</if>
+		 	<if test="bParam.obuLastLoginIp != null">
+	      	 AND obu_last_login_ip = #{bParam.obuLastLoginIp, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="bParam.obuLastLoginRegion != null">
+	      	 AND obu_last_login_region = #{bParam.obuLastLoginRegion, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="bParam.obuIsRobots != null">
+	      	 AND obu_is_robots = #{bParam.obuIsRobots, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.obuIsTourist != null">
+	      	 AND obu_is_tourist = #{bParam.obuIsTourist, jdbcType=INTEGER}
+		 	</if>
+	    </if>   
+    </sql>
+    
+     <!-- 查询当天指定用户信息 -->
+    <select id="selectUsersByUserIds"  resultMap="OperationBaseUser">
+       select * from operation_base_user where 1=1
+       and obu_userid in  
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">  
+		 #{item}  
+		</foreach>  
+    </select>
+    
+    <!-- 通用查询 -->
+    <select id="select" parameterType="java.util.Map" resultMap="OperationBaseUser">
+        select 
+        <include refid="Base_Column_List" />
+        from operation_base_user 
+        <include refid="sql_of_where" /> order by obu_userid desc
+    </select>
+    
+    <!-- 通用分页查询 -->
+    <select id="selectPageByParam" parameterType="java.util.Map" resultMap="OperationBaseUser">
+        select 
+        <include refid="Base_Column_List" />
+        from operation_base_user 
+        <include refid="sql_of_where" />
+        <if test="pParam != null">
+            <if test="pParam.orderByClause != null" > order by ${pParam.orderByClause} </if>
+            <if test="pParam.orderByClause == null" >
+            		order by obu_userid  desc 
+            </if>
+            <if test="pParam.startIndex != null and pParam.pageSize != null" >
+              limit ${pParam.startIndex} , ${pParam.pageSize}
+            </if>
+        </if>
+          <if test="pParam == null">
+             order by obu_userid desc
+        </if>
+    </select>
+    
+    <!-- 通用分页查询记录总数 -->
+    <select id="countByParam" parameterType="java.util.Map" resultType="java.lang.Long">
+        select count(*) from operation_base_user 
+        <include refid="sql_of_where" />
+    </select>
+    
+    <!-- 历史排行条件 -->
+    <sql id="history_sql_where">
+	 	WHERE 1=1 
+    	<if test="bParam != null" >			 	
+		 	<if test="bParam.amountStart != null"> AND bu.obu_recharge_amount &gt;= #{bParam.amountStart, jdbcType=BIGINT}</if>
+		 	<if test="bParam.amountEnd != null"> AND bu.obu_recharge_amount &lt;= #{bParam.amountEnd, jdbcType=BIGINT}</if>
+		 
+		 	<if test="bParam.startDate != null"> AND bu.obu_register_time &gt;= #{bParam.startDate, jdbcType=TIMESTAMP}</if>
+		 	<if test="bParam.endDate != null"> AND bu.obu_register_time &lt;= #{bParam.endDate, jdbcType=TIMESTAMP}</if>
+		 	
+		 	<if test="bParam.longinTimeStart != null"> AND bu.obu_last_login_time &gt;= #{bParam.longinTimeStart, jdbcType=TIMESTAMP}</if>
+		 	<if test="bParam.longinTimeEnd != null"> AND bu.obu_last_login_time &lt;= #{bParam.longinTimeEnd, jdbcType=TIMESTAMP}</if>
+	    </if>   
+    </sql>
+    
+    <!-- 历史排行分页 -->
+    <select id="countHistoryByParam" parameterType="java.util.Map" resultType="java.lang.Long">
+       SELECT 
+		count(1)
+		FROM operation_base_user bu 
+		LEFT JOIN 
+		(
+			(SELECT SUM(br.`obr_amount`)AS today_mount , obu_userid  FROM operation_base_recharge br WHERE TO_DAYS(br.`obr_pay_time`) = TO_DAYS(NOW())  GROUP BY br.obu_userid ) b,
+			(SELECT SUM(br.`obr_amount`)AS seven_amount , obu_userid FROM operation_base_recharge br WHERE DATE_SUB(CURDATE(), INTERVAL 7 DAY) &lt;= DATE(br.`obr_pay_time`)  GROUP BY br.obu_userid ) c,
+			(SELECT TO_DAYS(NOW())- TO_DAYS(MAX(br.`obr_pay_time`)) AS not_login_days, obu_userid  FROM operation_base_recharge br GROUP BY br.obu_userid) d
+		)
+		on
+		(
+ 			bu.`obu_userid` = b.obu_userid and 
+ 			bu.`obu_userid` = c.obu_userid	and
+ 			bu.`obu_userid` = d.obu_userid
+		)
+        <include refid="history_sql_where" />
+    </select>
+    <select id="selectHistoryPageByParam" parameterType="java.util.Map" resultType="java.util.Map">	
+		SELECT 
+		bu.obu_userid AS obuUserid,
+		bu.obu_usename AS obuUsename,
+		bu.obu_recharge_amount AS obuRechargeAmount,
+		bu.obu_register_time AS obuRegisterTime,
+		bu.obu_last_login_time AS obuLastLoginTime,
+		bu.obu_first_recharge_time AS obuFirstRechargeTime,
+		bu.obu_level AS obuLevel,
+		b.today_mount AS todayRechargeAmount,
+		c.seven_amount AS sevenRechargeAmount,
+		d.not_login_days AS notRechargeDay
+		FROM operation_base_user bu 
+		LEFT JOIN 
+		(
+			(SELECT SUM(br.`obr_amount`)AS today_mount , obu_userid  FROM operation_base_recharge br WHERE TO_DAYS(br.`obr_pay_time`) = TO_DAYS(NOW())  GROUP BY br.obu_userid ) b,
+			(SELECT SUM(br.`obr_amount`)AS seven_amount , obu_userid FROM operation_base_recharge br WHERE DATE_SUB(CURDATE(), INTERVAL 7 DAY) &lt;= DATE(br.`obr_pay_time`)  GROUP BY br.obu_userid ) c,
+			(SELECT TO_DAYS(NOW())- TO_DAYS(MAX(br.`obr_pay_time`)) AS not_login_days, obu_userid  FROM operation_base_recharge br GROUP BY br.obu_userid) d
+		)
+		on
+		(
+ 			bu.`obu_userid` = b.obu_userid and 
+ 			bu.`obu_userid` = c.obu_userid	and
+ 			bu.`obu_userid` = d.obu_userid
+		)
+	 	<include refid="history_sql_where" />
+	 	<if test="pParam != null">
+           <if test="pParam.orderByClause != null" > order by ${pParam.orderByClause} desc</if>
+           <if test="pParam.orderByClause == null" >
+         		order by obu_recharge_amount  desc 
+           </if>
+           <if test="pParam.startIndex != null and pParam.pageSize != null" >
+                limit ${pParam.startIndex} , ${pParam.pageSize}
+           </if>
+        </if>
+        <if test="pParam == null">
+            order by obu_recharge_amount desc
+        </if>
+    </select>
+    <select id="selectHistory" parameterType="java.util.Map" resultType="java.util.Map">	
+       SELECT 
+		bu.obu_userid AS obuUserid,
+		bu.obu_usename AS obuUsename,
+		bu.obu_recharge_amount AS obuRechargeAmount,
+		bu.obu_register_time AS obuRegisterTime,
+		bu.obu_last_login_time AS obuLastLoginTime,
+		bu.obu_first_recharge_time AS obuFirstRechargeTime,
+		bu.obu_level AS obuLevel,
+		b.today_mount AS todayRechargeAmount,
+		c.seven_amount AS sevenRechargeAmount,
+		d.not_login_days AS notRechargeDay
+		FROM operation_base_user bu 
+		LEFT JOIN 
+		(
+			(SELECT SUM(br.`obr_amount`)AS today_mount , obu_userid  FROM operation_base_recharge br WHERE TO_DAYS(br.`obr_pay_time`) = TO_DAYS(NOW())  GROUP BY br.obu_userid ) b,
+			(SELECT SUM(br.`obr_amount`)AS seven_amount , obu_userid FROM operation_base_recharge br WHERE DATE_SUB(CURDATE(), INTERVAL 7 DAY) &lt;= DATE(br.`obr_pay_time`)  GROUP BY br.obu_userid ) c,
+			(SELECT TO_DAYS(NOW())- TO_DAYS(MAX(br.`obr_pay_time`)) AS not_login_days, obu_userid  FROM operation_base_recharge br GROUP BY br.obu_userid) d
+		)
+		on
+		(
+ 			bu.`obu_userid` = b.obu_userid and 
+ 			bu.`obu_userid` = c.obu_userid	and
+ 			bu.`obu_userid` = d.obu_userid
+		)
+	 	<include refid="history_sql_where" />
+	 	
+	 	order by obu_recharge_amount desc
+	 	
+    </select>
+    
+ 
+    <insert id="insert" parameterType="com.guse.platform.entity.doudou.OperationBaseUser">
+    <![CDATA[
+        INSERT INTO operation_base_user (
+	        obu_userid  ,
+	        obu_password  ,
+	        obd_dload_channel  ,
+	        oba_os_type  ,
+	        oba_os_name  ,
+	        oba_device_model  ,
+	        oba_device_id  ,
+	        obu_register_ip  ,
+	        obu_register_time  ,
+	        obu_usename  ,
+	        obu_user_nick  ,
+	        obu_level  ,
+	        obu_sex  ,
+	        obu_charm  ,
+	        obu_head  ,
+	        obu_state  ,
+	        obu_brisk_state  ,
+	        obu_is_go_broke  ,
+	        obu_sign  ,
+	        obu_vip_days  ,
+	        obu_diamond  ,
+	        obu_gold  ,
+	        obu_innings_num  ,
+	        obu_first_recharge_time  ,
+	        obu_recharge_count  ,
+	        obu_recharge_amount  ,
+	        obu_last_login_time  ,
+	        obu_last_login_ip  ,
+	        obu_last_login_region  ,
+	        obu_is_robots  ,
+	        obu_is_tourist  
+        ) VALUES (
+        	#{obuUserid, jdbcType=BIGINT} ,
+        	#{obuPassword, jdbcType=VARCHAR} ,
+        	#{obdDloadChannel, jdbcType=VARCHAR} ,
+        	#{obaOsType, jdbcType=VARCHAR} ,
+        	#{obaOsName, jdbcType=VARCHAR} ,
+        	#{obaDeviceModel, jdbcType=VARCHAR} ,
+        	#{obaDeviceId, jdbcType=VARCHAR} ,
+        	#{obuRegisterIp, jdbcType=VARCHAR} ,
+        	#{obuRegisterTime, jdbcType=TIMESTAMP} ,
+        	#{obuUsename, jdbcType=VARCHAR} ,
+        	#{obuUserNick, jdbcType=VARCHAR} ,
+        	#{obuLevel, jdbcType=INTEGER} ,
+        	#{obuSex, jdbcType=INTEGER} ,
+        	#{obuCharm, jdbcType=INTEGER} ,
+        	#{obuHead, jdbcType=VARCHAR} ,
+        	#{obuState, jdbcType=INTEGER} ,
+        	#{obuBriskState, jdbcType=INTEGER} ,
+        	#{obuIsGoBroke, jdbcType=INTEGER} ,
+        	#{obuSign, jdbcType=VARCHAR} ,
+        	#{obuVipDays, jdbcType=INTEGER} ,
+        	#{obuDiamond, jdbcType=INTEGER} ,
+        	#{obuGold, jdbcType=BIGINT} ,
+        	#{obuInningsNum, jdbcType=INTEGER} ,
+        	#{obuFirstRechargeTime, jdbcType=TIMESTAMP} ,
+        	#{obuRechargeCount, jdbcType=INTEGER} ,
+        	#{obuRechargeAmount, jdbcType=BIGINT} ,
+        	#{obuLastLoginTime, jdbcType=TIMESTAMP} ,
+        	#{obuLastLoginIp, jdbcType=VARCHAR} ,
+        	#{obuLastLoginRegion, jdbcType=VARCHAR} ,
+        	#{obuIsRobots, jdbcType=INTEGER} ,
+        	#{obuIsTourist, jdbcType=INTEGER} 
+        )
+    ]]>
+    </insert>
+    
+    <insert id="batchInsert" parameterType="java.util.List">
+		insert into operation_base_user(
+		    obu_userid  ,
+	        obu_password  ,
+	        obd_dload_channel  ,
+	        oba_os_type  ,
+	        oba_os_name  ,
+	        oba_device_model  ,
+	        oba_device_id  ,
+	        obu_register_ip  ,
+	        obu_register_time  ,
+	        obu_usename  ,
+	        obu_user_nick  ,
+	        obu_level  ,
+	        obu_sex  ,
+	        obu_charm  ,
+	        obu_head  ,
+	        obu_state  ,
+	        obu_brisk_state  ,
+	        obu_is_go_broke  ,
+	        obu_sign  ,
+	        obu_vip_days  ,
+	        obu_diamond  ,
+	        obu_gold  ,
+	        obu_innings_num  ,
+	        obu_first_recharge_time  ,
+	        obu_recharge_count  ,
+	        obu_recharge_amount  ,
+	        obu_last_login_time  ,
+	        obu_last_login_ip  ,
+	        obu_last_login_region  ,
+	        obu_is_robots  ,
+	        obu_is_tourist  
+		)
+		values
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.obuUserid, jdbcType=BIGINT} ,
+        	#{item.obuPassword, jdbcType=VARCHAR} ,
+        	#{item.obdDloadChannel, jdbcType=VARCHAR} ,
+        	#{item.obaOsType, jdbcType=VARCHAR} ,
+        	#{item.obaOsName, jdbcType=VARCHAR} ,
+        	#{item.obaDeviceModel, jdbcType=VARCHAR} ,
+        	#{item.obaDeviceId, jdbcType=VARCHAR} ,
+        	#{item.obuRegisterIp, jdbcType=VARCHAR} ,
+        	#{item.obuRegisterTime, jdbcType=TIMESTAMP} ,
+        	#{item.obuUsename, jdbcType=VARCHAR} ,
+        	#{item.obuUserNick, jdbcType=VARCHAR} ,
+        	#{item.obuLevel, jdbcType=INTEGER} ,
+        	#{item.obuSex, jdbcType=INTEGER} ,
+        	#{item.obuCharm, jdbcType=INTEGER} ,
+        	#{item.obuHead, jdbcType=VARCHAR} ,
+        	#{item.obuState, jdbcType=INTEGER} ,
+        	#{item.obuBriskState, jdbcType=INTEGER} ,
+        	#{item.obuIsGoBroke, jdbcType=INTEGER} ,
+        	#{item.obuSign, jdbcType=VARCHAR} ,
+        	#{item.obuVipDays, jdbcType=INTEGER} ,
+        	#{item.obuDiamond, jdbcType=INTEGER} ,
+        	#{item.obuGold, jdbcType=BIGINT} ,
+        	#{item.obuInningsNum, jdbcType=INTEGER} ,
+        	#{item.obuFirstRechargeTime, jdbcType=TIMESTAMP} ,
+        	#{item.obuRechargeCount, jdbcType=INTEGER} ,
+        	#{item.obuRechargeAmount, jdbcType=BIGINT} ,
+        	#{item.obuLastLoginTime, jdbcType=TIMESTAMP} ,
+        	#{item.obuLastLoginIp, jdbcType=VARCHAR} ,
+        	#{item.obuLastLoginRegion, jdbcType=VARCHAR} ,
+        	#{item.obuIsRobots, jdbcType=INTEGER} ,
+        	#{item.obuIsTourist, jdbcType=INTEGER} 
+			)
+		</foreach>
+	</insert>
+    
+    <delete id="deleteById">
+    <![CDATA[
+        DELETE FROM operation_base_user WHERE
+        obu_userid = #{obuUserid} 
+    ]]>
+    </delete>
+    
+    <select id="selectById" resultMap="OperationBaseUser">
+	    SELECT <include refid="Base_Column_List"/>
+	    <![CDATA[
+	        FROM operation_base_user 
+	        WHERE 
+		        obu_userid = #{obuUserid} 
+	    ]]>
+    </select>
+    
+    <update id="updateByIdSelective" parameterType="com.guse.platform.entity.doudou.OperationBaseUser">
+		UPDATE operation_base_user
+		<set>
+		 	<if test="obuPassword != null">
+	      	  obu_password = #{obuPassword, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="obdDloadChannel != null">
+	      	  obd_dload_channel = #{obdDloadChannel, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="obaOsType != null">
+	      	  oba_os_type = #{obaOsType, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="obaOsName != null">
+	      	  oba_os_name = #{obaOsName, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="obaDeviceModel != null">
+	      	  oba_device_model = #{obaDeviceModel, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="obaDeviceId != null">
+	      	  oba_device_id = #{obaDeviceId, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="obuRegisterIp != null">
+	      	  obu_register_ip = #{obuRegisterIp, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="obuRegisterTime != null">
+	      	  obu_register_time = #{obuRegisterTime, jdbcType=TIMESTAMP} ,
+		 	</if>
+		 	<if test="obuUsename != null">
+	      	  obu_usename = #{obuUsename, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="obuUserNick != null">
+	      	  obu_user_nick = #{obuUserNick, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="obuLevel != null">
+	      	  obu_level = #{obuLevel, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="obuSex != null">
+	      	  obu_sex = #{obuSex, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="obuCharm != null">
+	      	  obu_charm = #{obuCharm, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="obuHead != null">
+	      	  obu_head = #{obuHead, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="obuState != null">
+	      	  obu_state = #{obuState, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="obuBriskState != null">
+	      	  obu_brisk_state = #{obuBriskState, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="obuIsGoBroke != null">
+	      	  obu_is_go_broke = #{obuIsGoBroke, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="obuSign != null">
+	      	  obu_sign = #{obuSign, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="obuVipDays != null">
+	      	  obu_vip_days = #{obuVipDays, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="obuDiamond != null">
+	      	  obu_diamond = #{obuDiamond, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="obuGold != null">
+	      	  obu_gold = #{obuGold, jdbcType=BIGINT} ,
+		 	</if>
+		 	<if test="obuInningsNum != null">
+	      	  obu_innings_num = #{obuInningsNum, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="obuFirstRechargeTime != null">
+	      	  obu_first_recharge_time = #{obuFirstRechargeTime, jdbcType=TIMESTAMP} ,
+		 	</if>
+		 	<if test="obuRechargeCount != null">
+	      	  obu_recharge_count = #{obuRechargeCount, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="obuRechargeAmount != null">
+	      	  obu_recharge_amount = #{obuRechargeAmount, jdbcType=BIGINT} ,
+		 	</if>
+		 	<if test="obuLastLoginTime != null">
+	      	  obu_last_login_time = #{obuLastLoginTime, jdbcType=TIMESTAMP} ,
+		 	</if>
+		 	<if test="obuLastLoginIp != null">
+	      	  obu_last_login_ip = #{obuLastLoginIp, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="obuLastLoginRegion != null">
+	      	  obu_last_login_region = #{obuLastLoginRegion, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="obuIsRobots != null">
+	      	  obu_is_robots = #{obuIsRobots, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="obuIsTourist != null">
+	      	  obu_is_tourist = #{obuIsTourist, jdbcType=INTEGER} ,
+		 	</if>
+		</set>
+		WHERE
+	       	obu_userid = #{obuUserid} 
+    </update>
+    
+    <update id="batchUpdate" parameterType="java.util.List">
+		<foreach collection="list" item="item" index="index" open=""
+			close="" separator=";">
+			UPDATE operation_base_user
+		<set>
+		 	<if test="item.obuPassword != null">
+	      	  obu_password = #{item.obuPassword, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="item.obdDloadChannel != null">
+	      	  obd_dload_channel = #{item.obdDloadChannel, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="item.obaOsType != null">
+	      	  oba_os_type = #{item.obaOsType, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="item.obaOsName != null">
+	      	  oba_os_name = #{item.obaOsName, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="item.obaDeviceModel != null">
+	      	  oba_device_model = #{item.obaDeviceModel, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="item.obaDeviceId != null">
+	      	  oba_device_id = #{item.obaDeviceId, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="item.obuRegisterIp != null">
+	      	  obu_register_ip = #{item.obuRegisterIp, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="item.obuRegisterTime != null">
+	      	  obu_register_time = #{item.obuRegisterTime, jdbcType=TIMESTAMP} ,
+		 	</if>
+		 	<if test="item.obuUsename != null">
+	      	  obu_usename = #{item.obuUsename, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="item.obuUserNick != null">
+	      	  obu_user_nick = #{item.obuUserNick, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="item.obuLevel != null">
+	      	  obu_level = #{item.obuLevel, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="item.obuSex != null">
+	      	  obu_sex = #{item.obuSex, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="item.obuCharm != null">
+	      	  obu_charm = #{item.obuCharm, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="item.obuHead != null">
+	      	  obu_head = #{item.obuHead, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="item.obuState != null">
+	      	  obu_state = #{item.obuState, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="item.obuBriskState != null">
+	      	  obu_brisk_state = #{item.obuBriskState, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="item.obuIsGoBroke != null">
+	      	  obu_is_go_broke = #{item.obuIsGoBroke, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="item.obuSign != null">
+	      	  obu_sign = #{item.obuSign, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="item.obuVipDays != null">
+	      	  obu_vip_days = #{item.obuVipDays, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="item.obuDiamond != null">
+	      	  obu_diamond = #{item.obuDiamond, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="item.obuGold != null">
+	      	  obu_gold = #{item.obuGold, jdbcType=BIGINT} ,
+		 	</if>
+		 	<if test="item.obuInningsNum != null">
+	      	  obu_innings_num = #{item.obuInningsNum, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="item.obuFirstRechargeTime != null">
+	      	  obu_first_recharge_time = #{item.obuFirstRechargeTime, jdbcType=TIMESTAMP} ,
+		 	</if>
+		 	<if test="item.obuRechargeCount != null">
+	      	  obu_recharge_count = #{item.obuRechargeCount, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="item.obuRechargeAmount != null">
+	      	  obu_recharge_amount = #{item.obuRechargeAmount, jdbcType=BIGINT} ,
+		 	</if>
+		 	<if test="item.obuLastLoginTime != null">
+	      	  obu_last_login_time = #{item.obuLastLoginTime, jdbcType=TIMESTAMP} ,
+		 	</if>
+		 	<if test="item.obuLastLoginIp != null">
+	      	  obu_last_login_ip = #{item.obuLastLoginIp, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="item.obuLastLoginRegion != null">
+	      	  obu_last_login_region = #{item.obuLastLoginRegion, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="item.obuIsRobots != null">
+	      	  obu_is_robots = #{item.obuIsRobots, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="item.obuIsTourist != null">
+	      	  obu_is_tourist = #{item.obuIsTourist, jdbcType=INTEGER} ,
+		 	</if>
+		</set>
+		WHERE
+	       	obu_userid = #{item.obuUserid} 
+		</foreach>
+	</update>
+	
+</mapper>
+

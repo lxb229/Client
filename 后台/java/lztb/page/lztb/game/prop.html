@@ -1,0 +1,51 @@
+<!--概况总览-->
+<div class="ibox">
+    <!--主页内容-->
+    <div class="ibox-content fadeInUp animated">
+		<div id="app">
+			<div class="layui-form">
+				<div class="layui-tab-item layui-show">
+					<div class="layui-form-item">
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="开始日" name="startDate" :value="filter.startDate" id="startAt" >
+						</div>
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="截止日" name="endDate" :value="filter.endDate" id="endAt">
+						</div>
+						<button class="layui-btn layui-btn-primary layui-btn-radius" lay-submit>查询</button>
+					</div>
+					<table class="layui-table" lay-even="" lay-skin="row">
+						<thead>
+						<tr>
+							<th>日期</th>
+							<th>会员(周)</th>
+							<th>会员(月)</th>
+							<th>会员(季)</th>
+							<th>喇叭</th>
+							<th>幸运石</th>
+							<th>双倍石</th>
+							<th>总回收钻石</th>
+							<th>总回收金币</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr v-for="(item, index) in grid.data">
+							<td>{{formatDate(item.gpsDate)}}</td>
+							<td>{{item.gpsVipWeek}}</td>
+							<td>{{item.gpsVipMonth}}</td>
+							<td>{{item.gpsVipSeason}}</td>
+							<td>{{item.gpsHorn}}</td>
+							<td>{{item.gpsLuckyStone}}</td>
+							<td>{{item.gpsDoubleStone}}</td>
+							<td>{{item.gpsRecycledDiamond}}</td>
+							<td>{{item.gpsRecycledGold}}</td>
+						</tr>
+						</tbody>
+					</table>
+					<div id="pager" class="laypager" style="float: right;"></div>
+				</div>
+			</div>
+		</div>
+    </div>
+	<script src="../static/lztb/game/prop.js"></script>
+</div>

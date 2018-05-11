@@ -1,0 +1,216 @@
+﻿<!--内容-->
+<div>
+    <!--标题-->
+    <div class="ibox-title">
+        <h5>系统用户</h5>
+    </div>
+    <!--主页内容 -->
+    <div class="ibox-content fadeInUp animated">
+        <div style="margin: 8px;" id="addstudent">
+            <div id="app">
+                <div class="layui-form">
+                    <div class="layui-inline">
+                        <div class="layui-input-inline" style="width: 143px;">
+                            <input type="text" placeholder="登录账号" name="carNum" class="layui-input" v-model="filter.loginName" />
+                        </div>
+                    </div>
+
+                    <div class="layui-inline">
+                        <div class="layui-btn-group">
+                            <button lay-submit="" class="layui-btn" @click="onSearch">搜索</button>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline" style="float: right;">
+                        <div class="layui-btn-group">
+                            <button @click="addUser()" data-title="新增用户" class="layui-btn layui-btn-small">
+								<i class="fa fa-plus"></i> 新增用户
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="layui-form">
+                    <table class="layui-table">
+                        <thead>
+                            <tr>
+                                <th>用户ID</th>
+                                <th>登录账号</th>
+								<th>明星号</th>
+                                <th>角色ID</th>
+                                <th>状态</th>
+                                <th>创建日期</th>
+                                <th>更新日期</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(item, index) in grid.data">
+                                <td>{{item.userId}}</td>
+                                <td>{{item.loginName}}</td>
+								<td>{{item.starNo}}</td>
+                                <td>{{item.roleId}}</td>
+                                <td v-if="item.userStatus == 1">启用</td>
+                                <td v-else>禁用</td>
+                                <td>{{item.createTime}}</td>
+                                <td>{{item.updateTime}}</td>
+                                <td>
+                                    <div v-if="item.loginName != 'admin'">
+                                    <span class="text-explode">|</span>
+                                    <a @click="authUser(item.userId,item.loginName)" href="javascript:void(0)"> 权限</a>
+                                    <span class="text-explode">|</span>
+                                    <a v-if="item.userStatus == 0" href="javascript:void(0)" @click="enable(1,item.userId,item.loginName)">启用</a>
+                                    <a v-if="item.userStatus == 1" href="javascript:void(0)" @click="enable(0,item.userId,item.loginName)">禁用</a>
+                                    <span class="text-explode">|</span>
+                                    <a href="javascript:void(0)" @click="delUser(item.userId,item.loginName)">删除</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div id="pager" class="laypager" style="float: right;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- javascript -->
+<script type="text/javascript">
+    require(['vue', 'layui', 'site'], function (Vue) {
+
+        var layuiForm;
+        layui.config({ dir: baseUrl + '../plugs/layui/' });
+        layui.use(['layer', 'laypage', 'form', 'laydate'], function () {
+            layuiForm = layui.form();
+
+            var app = new Vue({
+                el: "#addstudent",
+                data: {
+                    grid: {
+                        curr_page: 1, //当前页码
+                        page_size: 10, //每页最大条数
+                        total: 0, //总数
+                        pageCount: 0,
+                        data: [] //当前页数据
+                    },
+                    filter: {}
+                },
+                watch: {
+                    "grid.curr_page": function (val, oldVal) { //页码改变自动reload
+                        debugger;
+                        if (val === oldVal) {
+                            return;
+                        }
+                        this.gridReload();
+                    }
+                },
+                methods: {
+                    gridFristLoad: function () { //表格首次加载(fetch data of first page -> set data -> initialize pager)
+                        this.curr_page = 1;
+                        this.fetchData(function (rs) {
+                            app.grid.data = rs.data.list;
+                            app.grid.total = rs.recordCount;
+                            app.grid.pageCount = rs.pageCount;
+                            gLayPageIni('pager', app.grid.curr_page, rs.data.pageCount, function (newPage) {
+                                app.grid.curr_page = newPage;
+                            });
+                        });
+                    },
+                    gridReload: function () { //分页获取
+                        this.fetchData(function (rs) {
+                            app.grid.data = rs.data.list;
+                            app.grid.total = rs.recordCount;
+                        });
+                    },
+                    fetchData: function (cb) {
+                        var options = this.filter;
+                        options.pageNo = this.grid.curr_page;
+                        options.pageSize = this.grid.page_size;
+                        $.post("/system/users/queryPagelist", options, function (rs) {
+                            cb(rs);
+                        }, "json");
+                    },
+                    enable: function (status, userId,userName) {
+                        var statusName = "";
+                        if (status == 0) {
+                            statusName = "启用";
+                        } else {
+                            statusName = "禁用";
+                        }
+                        var msg = "确定要" + statusName + "【" + userName + "】吗？";
+                        var title = "禁用/启用用户";
+                        ConfirmBox(msg, function () {
+                            $.ajax({
+                                url: '/system/users/enableDisable',
+                                type: 'POST',
+                                data: { 'userStatus': status,'userId': userId},
+                                dataType: 'json',
+                                timeout: 5000,
+                                success: function (rs) {
+                                    if (rs.code == '00000') {
+                                        app.gridFristLoad();
+                                    } else {
+                                        console.error(rs);
+                                        AlertMsg(rs.msg);
+                                    }
+                                },
+                                error: function (xhr, status, ex) {
+                                    console.error(xhr);
+                                    console.error(status);
+                                    console.error(ex);
+
+                                    AlertMsg("请求失败：" + xhr.statusText);
+                                }
+                            });
+                        }, title, function () { });
+                    },
+                    addUser: function () {
+                        gOpenModalWindow("添加用户", "system/userForm.html", 550, 350);
+                    },
+                    onSearch: function (event) {
+                        this.gridReload();
+                    },
+                    delUser: function (userId, userName) {
+                        var msg = "确定要删除【" + userName + "】吗？";
+                        var title = "删除用户！";
+                        ConfirmBox(msg, function () {
+                            $.ajax({
+                                url: '/system/users/delete',
+                                type: 'POST',
+                                data: { 'userId': userId },
+                                dataType: 'json',
+                                timeout: 5000,
+                                success: function (rs) {
+                                    if (rs.code == '00000') {
+                                        app.gridFristLoad();
+                                    } else {
+                                        console.error(rs);
+                                        AlertMsg(rs.msg);
+                                    }
+                                },
+                                error: function (xhr, status, ex) {
+                                    console.error(xhr);
+                                    console.error(status);
+                                    console.error(ex);
+                                    AlertMsg("请求失败：" + xhr.statusText);
+                                }
+                            });
+                        }, title, function(){});
+                    },
+                    authUser:function(userId,userName) {
+                        sessionStorage.setItem("sysytem_user_auth_userId",userId);
+                        sessionStorage.setItem("sysytem_user_auth_userName",userName);
+                        gOpenModalWindow("用户权限", "system/userAuth.html", 550, 450);
+                    }
+                },
+                created: function () {
+                    this.gridFristLoad();
+                }
+            });
+        });
+    });
+
+</script>
+</div>

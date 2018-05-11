@@ -1,0 +1,104 @@
+<!--实时数据-->
+<div class="ibox">
+<div class="ibox-title">
+    <h5>新增玩家价值</h5>
+</div>
+<div class="ibox-content fadeInUp animated">
+    <div id="payLtv" class="container"></div>
+    <div id="payLtv_div">
+    <form id="payLtv_form" class="layui-form">
+    <div class="layui-form-item" style="float: right;">
+        <label class="layui-form-label">范围选择</label>
+        <div class="layui-input-inline">
+            <input class="layui-input" placeholder="开始时间"  name="startDate" :value="filter.startDate" id="ltvStartDate" />
+        </div>
+        <div class="layui-input-inline">
+            <input class="layui-input" placeholder="结束时间" name="endDate" :value="filter.endDate" id="ltvEndDate" />
+        </div>
+        <button class="layui-btn" lay-submit lay-filter="payLtv_form">查询</button>
+        <button class="layui-btn" v-on:click="exportExcel">导出</button>
+    </div>
+    <table class="layui-table">
+        <thead>
+        <tr>
+            <th>日期</th>
+            <th>新增注册</th>
+            <th>LTV0</th>
+            <th>LTV1</th>
+            <th>LTV2</th>
+            <th>LTV3</th>
+            <th>LTV4</th>
+            <th>LTV5</th>
+            <th>LTV6</th>
+            <th>LTV7</th>
+            <th>LTV8</th>
+            <th>LTV9</th>
+            <th>LTV10</th>
+            <th>LTV11</th>
+            <th>LTV12</th>
+            <th>LTV13</th>
+            <th>LTV14</th>
+            <th>LTV15</th>
+            <th>LTV16</th>
+            <th>LTV17</th>
+            <th>LTV18</th>
+            <th>LTV19</th>
+            <th>LTV20</th>
+            <th>LTV21</th>
+            <th>LTV22</th>
+            <th>LTV23</th>
+            <th>LTV24</th>
+            <th>LTV25</th>
+            <th>LTV26</th>
+            <th>LTV27</th>
+            <th>LTV28</th>
+            <th>LTV29</th>
+            <th>LTV30</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="(item, index) in grid.data">
+             <td v-if="index===0">合计</td>
+             <td v-else>{{formatDate(item.omlDate)}}</td>
+             <td>{{item.newReg}}</td>
+             <td>{{item.ltv0}}</td>
+             <td>{{item.ltv1}}</td>
+             <td>{{item.ltv2}}</td>
+             <td>{{item.ltv3}}</td>
+             <td>{{item.ltv4}}</td>
+             <td>{{item.ltv5}}</td>
+             <td>{{item.ltv6}}</td>
+             <td>{{item.ltv7}}</td>
+             <td>{{item.ltv8}}</td>
+             <td>{{item.ltv9}}</td>
+             <td>{{item.ltv10}}</td>
+             <td>{{item.ltv11}}</td>
+             <td>{{item.ltv12}}</td>
+             <td>{{item.ltv13}}</td>
+             <td>{{item.ltv14}}</td>
+             <td>{{item.ltv15}}</td>
+             <td>{{item.ltv16}}</td>
+             <td>{{item.ltv17}}</td>
+             <td>{{item.ltv18}}</td>
+             <td>{{item.ltv19}}</td>
+             <td>{{item.ltv20}}</td>
+             <td>{{item.ltv21}}</td>
+             <td>{{item.ltv22}}</td>
+             <td>{{item.ltv23}}</td>
+             <td>{{item.ltv24}}</td>
+             <td>{{item.ltv25}}</td>
+             <td>{{item.ltv26}}</td>
+             <td>{{item.ltv27}}</td>
+             <td>{{item.ltv28}}</td>
+             <td>{{item.ltv29}}</td>
+             <td>{{item.ltv30}}</td>
+        </tr>
+        </tbody>
+    </table>
+    </form>
+    </div>
+</div>
+</div>
+<script src="../static/lztb/operator/payLtv.js"></script>
+
+		

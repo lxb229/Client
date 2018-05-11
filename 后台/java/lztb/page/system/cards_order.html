@@ -1,0 +1,65 @@
+﻿<!--内容-->
+<div>
+    <!--标题-->
+    <div class="ibox-title">
+        <h5>房卡订单</h5>
+    </div>
+    <!--主页内容 -->
+    <div class="ibox-content fadeInUp animated">
+        <div style="margin: 8px;" id="addstudent">
+            <div id="app">
+				<div class="layui-form">
+                    <div class="layui-inline">
+                        <div class="layui-input-inline" style="width: 143px;">
+                            <input type="text" placeholder="订单编号" name="carNum" class="layui-input" v-model="filter.soNo" />
+                        </div>
+                    </div>
+
+                    <div class="layui-inline">
+                        <div class="layui-btn-group">
+                            <button lay-submit="" class="layui-btn" @click="onSearch">搜索</button>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline" style="float: right;">
+						<!-- <div class="layui-btn-group"> -->
+                        <div class="layui-label-inline">
+                            共计订单<label id="orderCount">XXX</label>笔;订单金额<label id="orderAmount">XXX</label>元;
+							可提现<label id="agencyCount">XXX</label>笔;可提现金额<label id="agencyAmount">XXX</label>元。
+							<button @click="cash()" data-title="提现" class="layui-btn layui-btn-small">
+								<i class="fa fa-plus"></i> 提现
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+				<div class="layui-form">
+					<table class="layui-table">
+						<thead>
+							<tr>
+								<th>订单编号</th>
+								<th>订单金额</th>
+								<th>付款时间</th>
+								<th>订单用户</th>
+								<th>订单商品</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr v-for="(item, index) in grid.data">
+								<td>{{item.soNo}}</td>
+								<td>{{item.soAmounts}}</td>
+								<td>{{item.createTime}}</td>
+								<td>{{item.userId}}</td>
+								<td>{{item.productId}}</td>
+							</tr>
+						</tbody>
+					</table>
+					<div id="pager" class="laypager" style="float: right;"></div>
+				</div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../static/lztb/system/card_order.js"></script>
+
+</div>

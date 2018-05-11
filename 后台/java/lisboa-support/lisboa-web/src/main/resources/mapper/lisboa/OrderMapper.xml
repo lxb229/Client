@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.guse.platform.dao.doudou.OrderMapper">
+
+    <resultMap id="Order" type="com.guse.platform.entity.doudou.Order">
+        <result property="id" column="id"/>
+        <result property="orderId" column="order_id"/>
+        <result property="starNo" column="starNO"/>
+        <result property="createTime" column="create_time"/>
+        <result property="rmb" column="rmb"/>
+        <result property="goldMoney" column="goldMoney"/>
+        <result property="state" column="state"/>
+        <result property="transTime" column="trans_time"/>
+        <result property="reMarks" column="re_marks"/>
+        <result property="transPlayer" column="trans_player"/>
+        <result property="payType" column="pay_type"/>
+        <result property="payAccount" column="pay_account"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+        id ,order_id ,starNO ,create_time ,rmb ,goldMoney ,state ,trans_time ,re_marks ,trans_player ,pay_type ,pay_account 
+	    ]]>
+	</sql>
+	<!-- 用于分页查询 -->
+	<sql id="sql_of_where">
+	 	WHERE 1=1 
+    	<if test="bParam != null" >	
+		 	<if test="bParam.orderId != null">
+	      	 AND order_id = #{bParam.orderId, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="bParam.starNo != null">
+	      	 AND starNO = #{bParam.starNo, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="bParam.createTime != null">
+	      	 AND create_time = #{bParam.createTime, jdbcType=TIMESTAMP}
+		 	</if>
+		 	<if test="bParam.rmb != null">
+	      	 AND rmb = #{bParam.rmb, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.goldMoney != null">
+	      	 AND goldMoney = #{bParam.goldMoney, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.state != null">
+	      	 AND state = #{bParam.state, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.transTime != null">
+	      	 AND trans_time = #{bParam.transTime, jdbcType=TIMESTAMP}
+		 	</if>
+		 	<if test="bParam.reMarks != null">
+	      	 AND re_marks = #{bParam.reMarks, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="bParam.transPlayer != null">
+	      	 AND trans_player = #{bParam.transPlayer, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.payType != null">
+	      	 AND pay_type = #{bParam.payType, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.payAccount != null">
+	      	 AND pay_account = #{bParam.payAccount, jdbcType=VARCHAR}
+		 	</if>
+	    </if>   
+    </sql>
+    
+    <!-- 通用查询 -->
+    <select id="select" parameterType="java.util.Map" resultMap="Order">
+        select 
+        <include refid="Base_Column_List" />
+        from order 
+        <include refid="sql_of_where" /> order by create_time desc
+    </select>
+    
+    <!-- 通用分页查询 -->
+    <select id="selectPageByParam" parameterType="java.util.Map" resultMap="Order">
+        select 
+        <include refid="Base_Column_List" />
+        from order 
+        <include refid="sql_of_where" />
+        <if test="pParam != null">
+            <if test="pParam.orderByClause != null" > order by ${pParam.orderByClause} </if>
+            <if test="pParam.orderByClause == null" >
+            		order by id  desc 
+            </if>
+            <if test="pParam.startIndex != null and pParam.pageSize != null" >
+              limit ${pParam.startIndex} , ${pParam.pageSize}
+            </if>
+        </if>
+          <if test="pParam == null">
+             order by create_date desc
+        </if>
+    </select>
+    
+    <!-- 通用分页查询记录总数 -->
+    <select id="countByParam" parameterType="java.util.Map" resultType="java.lang.Long">
+        select count(*) from order 
+        <include refid="sql_of_where" />
+    </select>
+    
+    
+    <insert id="insert" parameterType="com.guse.platform.entity.doudou.Order">
+    <![CDATA[
+        INSERT INTO order (
+	        id  ,
+	        order_id  ,
+	        starNO  ,
+	        create_time  ,
+	        rmb  ,
+	        goldMoney  ,
+	        state  ,
+	        trans_time  ,
+	        re_marks  ,
+	        trans_player  ,
+	        pay_type  ,
+	        pay_account  
+        ) VALUES (
+        	#{id, jdbcType=INTEGER} ,
+        	#{orderId, jdbcType=VARCHAR} ,
+        	#{starNo, jdbcType=VARCHAR} ,
+        	#{createTime, jdbcType=TIMESTAMP} ,
+        	#{rmb, jdbcType=INTEGER} ,
+        	#{goldMoney, jdbcType=INTEGER} ,
+        	#{state, jdbcType=INTEGER} ,
+        	#{transTime, jdbcType=TIMESTAMP} ,
+        	#{reMarks, jdbcType=VARCHAR} ,
+        	#{transPlayer, jdbcType=INTEGER} ,
+        	#{payType, jdbcType=INTEGER} ,
+        	#{payAccount, jdbcType=VARCHAR} 
+        )
+    ]]>
+    </insert>
+    
+    <delete id="deleteById">
+    <![CDATA[
+        DELETE FROM order WHERE
+        id = #{id} 
+    ]]>
+    </delete>
+    
+    <select id="selectById" resultMap="Order">
+	    SELECT <include refid="Base_Column_List"/>
+	    <![CDATA[
+	        FROM order 
+	        WHERE 
+		        id = #{id} 
+	    ]]>
+    </select>
+    
+    <update id="updateByIdSelective" parameterType="com.guse.platform.entity.doudou.Order">
+		UPDATE order
+		<set>
+		 	<if test="orderId != null">
+	      	  order_id = #{orderId, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="starNo != null">
+	      	  starNO = #{starNo, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="createTime != null">
+	      	  create_time = #{createTime, jdbcType=TIMESTAMP} ,
+		 	</if>
+		 	<if test="rmb != null">
+	      	  rmb = #{rmb, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="goldMoney != null">
+	      	  goldMoney = #{goldMoney, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="state != null">
+	      	  state = #{state, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="transTime != null">
+	      	  trans_time = #{transTime, jdbcType=TIMESTAMP} ,
+		 	</if>
+		 	<if test="reMarks != null">
+	      	  re_marks = #{reMarks, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="transPlayer != null">
+	      	  trans_player = #{transPlayer, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="payType != null">
+	      	  pay_type = #{payType, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="payAccount != null">
+	      	  pay_account = #{payAccount, jdbcType=VARCHAR} ,
+		 	</if>
+		</set>
+		WHERE
+	       	id = #{id} 
+    </update>
+	
+</mapper>
+

@@ -1,0 +1,134 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+	<meta name="viewport" content="width=device-width">
+	<title>新增/编辑产品</title>
+	<meta charset="UTF-8">
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="format-detection" content="telephone=no">
+	<link href="/lztb/static/plugs/layui/css/layui.css" rel="stylesheet">
+</head>
+
+<body>
+	<!--内容-->
+	<div id="app" class="layui-form" style="padding: 25px;">
+		<div class="layui-form-item">
+			<label class="layui-form-label">产品名称</label>
+			<div class="layui-input-block">
+				<input type="text" maxlength="15" v-model="spName" name="spName" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">房卡数量</label>
+			<div class="layui-input-block">
+				<input type="text" maxlength="10" required autocomplete="off" v-model="spAmount" name="spAmount" placeholder="房卡数量" class="layui-input">
+			</div>
+        </div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">产品原价</label>
+			<div class="layui-input-block">
+				<input type="text" maxlength="10" required autocomplete="off" v-model="spCost" name="spCost" placeholder="产品原价" class="layui-input">
+			</div>
+        </div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">产品现价</label>
+			<div class="layui-input-block">
+				<input type="text" maxlength="10" required autocomplete="off" v-model="spPrice" name="spPrice" placeholder="产品现价" class="layui-input">
+			</div>
+        </div>
+		<div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">销售状态</label>
+                <div class="layui-input-inline">
+                    <input type="checkbox" name="close" lay-skin="switch" lay-text="上架|下架" checked />
+                </div>
+            </div>
+        </div>
+		<div class="hr-line-dashed"></div>
+		<div class="layui-form-item text-center">
+				<label class="layui-form-label"></label>
+			<button class="layui-btn" @click="saveData()">保存数据</button>
+		</div>
+	</div>
+	<script type="text/javascript" src="/lztb/static/plugs/jquery/jquery.min.js"></script>
+	<script type="text/javascript" src="/lztb/static/plugs/layui/layui.js"></script>
+	<script type="text/javascript" src="/lztb/static/plugs/vue/vue.js"></script>
+	<script type="text/javascript" src="/lztb/static/model/site.js"></script>
+	<script type="text/javascript">
+		layui.use(['layer', 'form', 'element'], function () {
+
+		});
+
+		var vm = new Vue({
+			el: "#app",
+			data: {
+				spId: null,
+				spName: null,
+				spState: 0,
+				spAmount: null,
+				spCost: null,
+				spPrice: null
+			},
+			methods: {
+				saveData: function () {
+					var status = $('.layui-unselect em').text();
+                    if (status == '上架') {
+                        this.spState = 1;
+                    } else {
+                        this.spState = 0;
+                    }
+					if(!vm.spName) {
+						AlertMsg("角色名称不能为空!");
+						return;
+					}
+					$.ajax({
+						url: '/systemProductController/addOrUpdate',
+						type: 'POST',
+						data: {
+							"spId":vm.spId,
+							"spName":vm.spName,
+							"spState": vm.spState,
+							"spAmount": vm.spAmount,
+							"spCost": vm.spCost,
+							"spPrice": vm.spPrice
+						},
+						dataType: 'json',
+						timeout: 10000,
+						success: function (rs) {
+							if (rs.code == '00000') {
+								top.gCloseModalWindow();
+								top.SuccessBox("产品保存成功!", "提示", 3000);
+							} else {
+								AlertMsg(rs.msg);
+								console.error(rs);
+							}
+						},
+						error: function (xhr, status, ex) {
+							AlertMsg("请求失败：" + xhr.statusText);
+							console.error(ex);
+						}
+					});
+				}
+			},
+			created:function() {
+				var roleData = localStorage.getItem("system_role_update_data");
+				if(!roleData) {
+					return;
+				}
+				roleData = JSON.parse(roleData);
+				this.spId = roleData.spId;
+				this.spName = roleData.spName;
+				this.spAmount = roleData.spAmount;
+				this.spCost = roleData.spCost;
+				this.spPrice = roleData.spPrice;
+			}
+		});
+	</script>
+</body>
+
+</html>

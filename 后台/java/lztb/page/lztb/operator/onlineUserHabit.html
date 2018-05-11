@@ -1,0 +1,179 @@
+<!--实时数据-->
+<div class="ibox">
+    <div class="ibox-title">
+        <h5>在线习惯分析</h5>
+    </div>
+    <div class="ibox-content fadeInUp animated">
+        <div class="layui-tab">
+            <ul class="layui-tab-title">
+                <li class="layui-this" lay-id="11">游戏时长/次数</li>
+                <li lay-id="33">游戏时长分布</li>
+                <li lay-id="44">启动次数分布</li>
+            </ul>
+            <div class="layui-tab-content ">
+                <!-- start -->
+                <div class="layui-tab-item layui-show">
+                        <div style="margin-bottom: 50px;">
+                            <div style="display: flex;">
+                                <div id="gameTime"  style="flex: 1 1 0%; height: 450px; margin: 10px 10px 0px 0px;"></div> 
+                                <div id="gameNumber"  style="flex: 1 1 0%; height: 450px; margin: 10px 10px 0px 0px;"></div>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 50px;" id = "div_duration_time" >
+                            <form class="layui-form" id="duration_time_sub">
+                                <div  class="layui-form-item" style="float: right;">
+                                    <div class="layui-input-inline">
+                                        <input class="layui-input" placeholder="开始时间"  name="startDate" :value="filter.startDate" id="startDate_a" />
+                                    </div>
+                                    <div class="layui-input-inline">
+                                        <input class="layui-input" placeholder="结束时间" name="endDate" :value="filter.endDate" id="endDate_a" />
+                                    </div>
+                                    <button class="layui-btn" lay-submit lay-filter="duration_time_sub">查询</button>
+                                    <button class="layui-btn" v-on:click="exportExcel">导出</button>
+                                </div>
+                                <div style="flex: 1 1 0%;">
+                                 <table class="layui-table">
+                                    <thead>
+                                        <tr>
+                                            <th>日期</th>
+                                            <th>单次平均游戏时长(分钟)</th>
+                                            <th>累计平均游戏时长(分钟)</th>
+                                            <th>新玩家平均启动次数</th>
+                                            <th>老玩家平均启动次数</th>
+                                            <th>玩家平均启动次数</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                         <tr v-for="(item, index) in grid.data">
+                                            <td>{{formatDate(item.oodDate)}}</td>
+                                            <td>{{item.oodSingleDuration}}</td>
+                                            <td>{{item.oodCumulativeDuration}}</td>
+                                            <td>{{item.oodNewUserStartupNum}}</td>
+                                            <td>{{item.oodOldUserStartupNum}}</td>
+                                            <td>{{item.oodUserStartupNum}}</td>
+                                        </tr>
+                                    </tbody>
+                                  </table>
+                                <div id="pager" class="laypager" style="float: right;"></div>
+                             </div>
+                            </form>
+                       </div> 
+                </div>
+                <!-- end -->
+                <div class="layui-tab-item" >
+                <div style="display: flex;">
+                     <div id="distribution" class="halfContainer"></div>
+                     <div class="halfContainer" id="div_distribution_time">
+                         <form  class="layui-form" id="distribution_time_form">
+                         <div class="layui-form-item" style="float: right;">
+                                <div class="layui-input-inline">
+                                    <input class="layui-input" placeholder="开始时间"  name="startDate" :value="filter.startDate" id="startDate_c" />
+                                </div>
+                                <div class="layui-input-inline">
+                                    <input class="layui-input" placeholder="结束时间" name="endDate" :value="filter.endDate" id="endDate_c" />
+                                </div>
+                                <button class="layui-btn" lay-submit lay-filter="distribution_time_form">查询</button>
+                                <button class="layui-btn" v-on:click="exportExcel">导出</button>
+                         </div>  
+                         <table class="layui-table">
+                            <thead>
+                            <tr>
+                                <th>日期</th>
+                                <th>活跃玩家</th>
+                                <th>游戏玩家</th>
+                                <th>~1mins</th>
+                                <th>1~5m</th>
+                                <th>6~10m</th>
+                                <th>10~30m</th>
+                                <th>30~60m</th>
+                                <th>1~2h</th>
+                                <th>2~4h</th>
+                                <th>4hours~</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="(item, index) in grid.data">
+                                <td>{{formatDate(item.oodsDate)}}</td>
+                                <td>{{item.oodsLoginNum}}</td>
+                                <th>{{item.oodsAllPlayerNum}}</th>
+                                <th>{{item.oodsOne}}</th>
+                                <th>{{item.oodsFive}}</th>
+                                <th>{{item.oodsTen}}</th>
+                                <td>{{item.oodsThirty}}</td>
+                                <th>{{item.oodsSixty}}</th>
+                                <th>{{item.oodsTwnHour}}</th>
+                                <th>{{item.oodsFourHour}}</th>
+                                <th>{{item.oodsGreaterFourHour}}</th>
+                            </tr>
+                            </tbody>
+                         </table>
+                         <div id="pager" class="laypager" style="float: right;"></div>  
+                        </form>
+                     </div>
+                </div>
+                <!-- end -->
+                </div>
+                <div class="layui-tab-item " >
+                <div style="display: flex;">
+                     <div id="distributionNum" class="halfContainer"></div>
+                     <div class="halfContainer" id="div_distribution_num">
+                        <form class="layui-form" id="distribution_num_form">
+                        <div class="layui-form-item" style="float: right;">
+                                <div class="layui-input-inline">
+                                    <input class="layui-input" placeholder="开始时间"  name="startDate" :value="filter.startDate" id="startDate_d" />
+                                </div>
+                                <div class="layui-input-inline">
+                                    <input class="layui-input" placeholder="结束时间" name="endDate" :value="filter.endDate" id="endDate_d" />
+                                </div>
+                                <button class="layui-btn" lay-submit lay-filter="distribution_num_form">查询</button>
+                                <button class="layui-btn" v-on:click="exportExcel">导出</button>
+                        </div>   
+                        <table class="layui-table">
+                            <thead>
+                            <tr>
+                                <th>日期</th>
+                                <th>0~1次</th>
+                                <th>2次</th>
+                                <th>3次</th>
+                                <th>4次</th>
+                                <th>5次</th>
+                                <th>5~10次</th>
+                                <th>10~15次</th>
+                                <th>>15次</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="(item, index) in grid.data">
+                                <td>{{formatDate(item.oosDate)}}</td>
+                                <td>{{item.oosOne}}</td>
+                                <th>{{item.oosTwo}}</th>
+                                <th>{{item.oosThree}}</th>
+                                <th>{{item.oosFour}}</th>
+                                <th>{{item.oosFive}}</th>
+                                <td>{{item.oosFive2ten}}</td>
+                                <th>{{item.oosTen2fifteen}}</th>
+                                <th>{{item.oosGreaterFifteen}}</th>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div id="pager" class="laypager" style="float: right;"></div>  
+                        </form>
+                     </div>
+                </div>
+                </div>
+                <!-- end -->
+                </div>
+
+           </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="../static/lztb/operator/onlineUserHabit_a.js"></script>
+<script src="../static/lztb/operator/onlineUserHabit_c.js"></script>
+<script src="../static/lztb/operator/onlineUserHabit_d.js"></script>
+
+
+
+		

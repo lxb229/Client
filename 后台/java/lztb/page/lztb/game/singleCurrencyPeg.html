@@ -1,0 +1,50 @@
+
+<!--货币比值-->
+<div class="ibox">
+    <!--主页内容-->
+    <div class="ibox-content fadeInUp animated">
+		<div id="app">
+			<div class="layui-form">
+				<div class="layui-tab-item layui-show">
+					<div class="layui-form-item">
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="开始日" name="startDate" :value="filter.startDate" id="startAt" >
+						</div>
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="截止日" name="endDate" :value="filter.endDate" id="endAt">
+						</div>
+						<button class="layui-btn layui-btn-primary layui-btn-radius" lay-submit>查询</button>
+					</div>
+					<table class="layui-table" lay-even="" lay-skin="row">
+						<thead>
+						<tr>
+							<th>日期</th>
+							<th title="非死号用户持有金币的总和">玩家持有金币</th>
+							<th title="非死号用户持有钻石的总和">玩家持有钻石</th>
+							<th title="非死号用户充值金额的总和">玩家总充值</th>
+							<th title="玩家总充值X10000÷（玩家持有金币+玩家持有钻石X1000+金币回收总额）注：金币回收总额是指从开服直今所有金币回收的总和">今日币值</th>
+							<th title="当月中币值最高日的币值">本月最高币值</th>
+							<th title="当月中币值最低日的币值">本月最低币值</th>
+							<th title="当月每日币值总和÷日数">本月平均币值</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr v-for="(item, index) in grid.data">
+							<td>{{formatDate(item.gemvDate)}}</td>
+							<td>{{item.gemvPlayerTatolGold}}</td>
+							<td>{{item.gemvTatolRecharge}}</td>
+							<td>{{item.gemvPlayerTatolDiamond}}</td>
+							<td>{{item.gemvTodayMonetaryValue}}</td>
+							<td>{{item.gemvMaxMonetaryValue}}</td>
+							<td>{{item.gemvMinMonetaryValue}}</td>
+							<td>{{item.gemvAvgMonetaryValue}}</td>
+						</tr>
+						</tbody>
+					</table>
+					<div id="pager" class="laypager" style="float: right;"></div>
+				</div>
+			</div>
+		</div>
+    </div>
+	<script src="../static/lztb/game/singleCurrencyPeg.js"></script>
+</div>

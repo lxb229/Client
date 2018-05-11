@@ -1,0 +1,82 @@
+<!--分享奖励-->
+<div class="ibox">
+    <!--主页内容-->
+    <div class="ibox-content fadeInUp animated">
+        <div class="layui-form-item">
+            <div class="layui-input-inline">
+                <input class="layui-input" placeholder="游戏ID" id="LAY_demorange_s">
+            </div>
+            <div class="layui-input-inline">
+                <input class="layui-input" placeholder="游戏昵称" id="LAY_demorange_e">
+            </div>
+            <button class="layui-btn layui-btn-primary layui-btn-radius">查询</button>
+        </div>
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>昵称</th>
+                <th>一日登录人数</th>
+                <th>十日登录人数</th>
+                <th>分享充值(元)</th>
+                <th>已领奖励(钻)</th>
+                <th>可领奖励</th>
+                <th>受邀用户</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>20170303</td>
+                <td>100</td>
+                <td>120</td>
+                <td>40</td>
+                <td>50</td>
+                <td>100</td>
+                <td>120</td>
+                <td>40</td>
+            </tr>
+            <tr>
+                <td>2017-03-03</td>
+                <td>100</td>
+                <td>120</td>
+                <td>40</td>
+                <td>50</td>
+                <td>100</td>
+                <td>120</td>
+                <td>40</td>
+            </tr>
+            </tbody>
+        </table>
+        <div id="demo2"></div>
+    </div>
+    <script>
+        layui.use(['laypage', 'layer'], function(){
+            var laypage = layui.laypage
+                    ,layer = layui.layer;
+            laypage({
+                cont: 'demo2'
+                ,pages: 100
+                ,skin: '#1E9FFF'
+            });
+            var nums = 5; //每页出现的数据量
+            //模拟渲染
+            var render = function(data, curr){
+                var arr = []
+                        ,thisData = data.concat().splice(curr*nums-nums, nums);
+                layui.each(thisData, function(index, item){
+                    arr.push('<li>'+ item +'</li>');
+                });
+                return arr.join('');
+            };
+            //调用分页
+//            laypage({
+//                cont: 'demo2'
+//                ,pages: Math.ceil(data.length/nums) //得到总页数
+//                ,jump: function(obj){
+//                    document.getElementById('biuuu_city_list').innerHTML = render(data, obj.curr);
+//                }
+//            });
+
+        });
+    </script>
+</div>

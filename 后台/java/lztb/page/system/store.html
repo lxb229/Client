@@ -1,0 +1,124 @@
+﻿<!--内容-->
+<div>
+	<!--标题-->
+	<div class="ibox-title">
+		<h5>产品管理</h5>
+	</div>
+	<!--主页内容 -->
+	<div class="ibox-content fadeInUp animated">
+		<!--   <div class="alert alert-{$alert.type} alert-dismissible" role="alert" style="border-radius:0">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div> -->
+		<div style="margin: 8px;" id="roleListBox">
+			<div id="app">
+				
+			</div>
+			<div class="layui-form">
+				<table class="layui-table">
+					<thead>
+						<tr>
+							<th>产品ID</th>
+							<th>产品名称</th>
+							<th>房卡数量</th>
+							<th>产品现价</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr v-for="(item,index) in roleList">
+							<td>{{item.spId}}</td>
+							<td>{{item.spName}}</td>
+							<td>{{item.spAmount}}</td>
+							<td>{{item.spPrice}}</td>
+							<td>
+							
+								<span class="text-explode">|</span>
+								<a @click="buylink(item)" href="javascript:void(0)">购买</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<div id="pager" class="laypager" style="float: right;"></div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	require(['vue', 'layui'], function (Vue) {
+		var vmRoles = new Vue({
+			el: "#roleListBox",
+			data: {
+				roleList: []
+			},
+			methods: {
+				
+				
+				buylink: function (product) {
+					ConfirmBox("您确定要购买产品【" + product.spName + "】吗？", buy)
+					function buy() {
+						$.ajax({
+							url: '/systemProductController/buylink',
+							type: 'POST',
+							data: { "spId": product.spId },
+							dataType: 'json',
+							timeout: 10000,
+							success: function (rs) {
+								if (rs.code == '00000') {
+									SuccessBox("产品购买成功!", "提示", 2000);
+									for (var i = 0; i < vmRoles.roleList.length; i++) {
+										if (vmRoles.roleList[i].spId == product.spId) {
+											<!-- vmRoles.roleList.splice(i, 1); -->
+											break;
+										}
+									}
+								} else {
+									AlertMsg(rs.msg);
+									console.error(rs);
+								}
+							},
+							error: function (xhr, status, ex) {
+								AlertMsg("请求失败：" + xhr.statusText);
+								console.error(ex);
+							}
+						});
+					}
+				}
+			},
+			created: function () {
+				loadRoleList();
+			}
+		});
+		function loadRoleList() {
+			$.ajax({
+				url: '/systemProductController/storeList',
+				type: 'POST',
+				data: {},
+				dataType: 'json',
+				timeout: 10000,
+				success: function (rs) {
+					if (rs.code == '00000') {
+						vmRoles.roleList = rs.data;
+					} else {
+						AlertMsg(rs.msg);
+						console.error(rs);
+					}
+				},
+				error: function (xhr, status, ex) {
+					AlertMsg("请求失败：" + xhr.statusText);
+					console.error(ex);
+				}
+			});
+		}
+		var layuiForm;
+		layui.config({ dir: baseUrl + '../plugs/layui/' });
+		layui.use(['layer', 'laypage', 'form', 'laydate'], function () {
+			layuiForm = layui.form();
+			layuiForm.render('select');
+			layuiForm.render('radio');
+		});
+
+	});
+
+</script>

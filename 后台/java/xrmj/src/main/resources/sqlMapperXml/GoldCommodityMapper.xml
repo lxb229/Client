@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangzhixuan.mapper.GoldCommodityMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="GoldCommodity" type="com.wangzhixuan.model.GoldCommodity">
+		<result column="id" property="id" />
+		<result column="commodity" property="commodity" />
+		<result column="market_price" property="marketPrice" />
+		<result column="exchange_price" property="exchangePrice" />
+		<result column="email_content" property="emailContent" />
+		<result column="amount" property="amount" />
+		<result column="residue" property="residue" />
+		<result column="issued_time" property="issuedTime" />
+		<result column="soldout_time" property="soldoutTime" />
+		<result column="introduce" property="introduce" />
+		<result column="online_url" property="onlineUrl" />
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+        id, commodity, market_price, exchange_price, email_content, amount, residue, 
+        issued_time, soldout_time, introduce, online_url 
+	    ]]>
+	</sql>
+	
+	<select id="selectGoldCommodityVoPage"  resultType="GoldCommodityVo">
+		SELECT
+			gc.id AS id,
+			gc.commodity AS commodity,
+			c.commodity_name AS commodityName,
+			gc.market_price AS marketPrice,
+			gc.exchange_price AS exchangePrice,
+			gc.email_content AS emailContent,
+			gc.amount AS amount,
+			gc.residue AS residue,
+			gc.issued_time AS issuedTime,
+			gc.soldout_time AS soldoutTime,
+			gc.introduce AS introduce,
+			gc.online_url AS onlineUrl
+		FROM gold_commodity gc
+		LEFT JOIN commodity c ON gc.commodity = c.id
+			<where>
+	        	1=1
+	            <if test=" commodityName != null and commodityName != '' ">
+	               and c.commodity_name like concat(concat('%',#{commodityName}),'%') 
+	            </if>
+	        </where>
+		GROUP BY gc.id
+    </select>
+    
+    <select id="getGoldCommodityBy"  resultMap="GoldCommodity">
+		SELECT <include refid="Base_Column_List"/> 
+		FROM gold_commodity gc
+			<where>
+	        	1=1
+	            <if test=" commodityId != null ">
+	               and gc.commodity = #{commodityId }  
+	            </if>
+	        </where>
+		GROUP BY gc.id
+		limit 1 
+    </select>
+
+</mapper>

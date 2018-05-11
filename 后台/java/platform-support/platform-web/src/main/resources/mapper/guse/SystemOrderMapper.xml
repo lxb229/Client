@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.guse.platform.dao.doudou.SystemOrderMapper">
+
+    <resultMap id="SystemOrder" type="com.guse.platform.entity.doudou.SystemOrder">
+        <result property="soId" column="so_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="productId" column="product_id"/>
+        <result property="soNo" column="so_no"/>
+        <result property="soAmounts" column="so_amounts"/>
+        <result property="payTime" column="pay_time"/>
+        <result property="payType" column="pay_type"/>
+        <result property="payPrice" column="pay_price"/>
+        <result property="payState" column="pay_state"/>
+        <result property="createTime" column="create_time"/>
+        <result property="cashState" column="cash_state"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+        system_order.so_id ,system_order.user_id ,system_order.product_id ,system_order.so_no ,
+        system_order.so_amounts ,system_order.pay_time ,system_order.pay_type ,system_order.pay_price ,
+        system_order.pay_state ,system_order.create_time ,system_order.cash_state  
+	    ]]>
+	</sql>
+	<!-- 用于分页查询 -->
+	<sql id="sql_of_where">
+	 	WHERE 1=1 
+    	<if test="bParam != null" >	
+		 	<if test="bParam.soNo != null and bParam.soNo != '' ">
+	      	 AND ( so_no like concat(concat('%',#{bParam.soNo, jdbcType=VARCHAR}),'%')  
+		      	OR system_product.sp_name like concat(concat('%',#{bParam.soNo, jdbcType=VARCHAR}),'%') 
+				OR system_users.nick like concat(concat('%',#{bParam.soNo, jdbcType=VARCHAR}),'%') 
+	      	 )
+		 	</if>
+		 	<if test="bParam.soAmounts != null">
+	      	 AND so_amounts = #{bParam.soAmounts, jdbcType=DECIMAL}
+		 	</if>
+		 	<if test="bParam.payTime != null">
+	      	 AND pay_time = #{bParam.payTime, jdbcType=TIMESTAMP}
+		 	</if>
+		 	<if test="bParam.payType != null">
+	      	 AND pay_type = #{bParam.payType, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.payPrice != null">
+	      	 AND pay_price = #{bParam.payPrice, jdbcType=DECIMAL}
+		 	</if>
+		 	<if test="bParam.payState != null">
+	      	 AND pay_state = #{bParam.payState, jdbcType=INTEGER}
+		 	</if>
+	    </if>   
+    </sql>
+    
+    <sql id="sql_user_join">
+    	LEFT JOIN system_users ON system_order.user_id = system_users.user_id
+		LEFT JOIN city ON system_users.area = city.id
+		LEFT JOIN system_agency ON city.id = system_agency.sa_city_id
+    </sql>
+    <sql id="sql_user_role">
+    	<if test="user != null">
+    		<if test="user.roleId == 1 or user.roleId == 11">
+    			and 1=1 
+    		</if>
+    		<if test="user.roleId == 12">
+    			and (system_agency.sa_user_id = #{user.userId } or system_order.user_id = #{user.userId } ) 
+    		</if>
+    		<if test="user.roleId != 1 and user.roleId != 11 and user.roleId != 12">
+    			and 1=2 
+    		</if>
+    	</if>
+    </sql>
+    
+    <!-- 通用查询 -->
+    <select id="select" parameterType="java.util.Map" resultMap="SystemOrder">
+        select 
+        <include refid="Base_Column_List" />
+        from system_order 
+        <include refid="sql_of_where" /> order by create_time desc
+    </select>
+    
+    <!-- 通用分页查询 -->
+    <select id="selectPageByParam" parameterType="java.util.Map" resultMap="SystemOrder">
+        select 
+        <include refid="Base_Column_List" />
+        from system_order 
+        LEFT JOIN system_product ON system_order.product_id = system_product.sp_id 
+        <include refid="sql_user_join" />
+        <include refid="sql_of_where" />
+        <include refid="sql_user_role" />
+        <if test="pParam != null">
+            <if test="pParam.orderByClause != null" > order by ${pParam.orderByClause} desc </if>
+            <if test="pParam.orderByClause == null" >
+            		order by so_id  desc 
+            </if>
+            <if test="pParam.startIndex != null and pParam.pageSize != null" >
+              limit ${pParam.startIndex} , ${pParam.pageSize}
+            </if>
+        </if>
+          <if test="pParam == null">
+             order by create_date desc
+        </if>
+    </select>
+    
+	 <!-- 用于统计查询 -->
+
+	 <sql id="count_of_where">
+	 	WHERE pay_state = 1 
+    	<if test="soNo != null and soNo != '' ">
+      	 AND so_no like concat(concat('%',#{soNo}),'%')  
+	 	</if> 
+    </sql>
+
+    <!-- 统计订单单数和金额 -->
+
+    <select id="countOrder" parameterType="com.guse.platform.entity.doudou.SystemOrder" resultType="java.util.Map">
+    	SELECT IFNULL(COUNT(1),0) orderNum,IFNULL(SUM(so_amounts),0) orderAmount 
+    	FROM system_order
+    	<include refid="count_of_where" />
+    </select>
+
+    <!-- 统计代理单数和金额 -->
+
+    <select id="countAgency" parameterType="com.guse.platform.entity.doudou.SystemOrder" resultType="java.util.Map">
+    	SELECT COUNT(demo.agencyNum) agencyNum,SUM(demo.agencyAmount) agencyAmount 
+    	FROM (
+	    	SELECT c.id,date_format(sr.create_time, '%Y-%m') mouth,COUNT(DISTINCT c.id) agencyNum,SUM(sr.so_amounts) agencyAmount 
+	    	FROM system_order sr
+			LEFT JOIN system_users u ON sr.user_id = u.user_id
+			LEFT JOIN city c ON u.area = c.id
+			<include refid="count_of_where" /> 
+			and cash_state = 0 
+			and PERIOD_DIFF( date_format( now( ) , '%Y%m' ) , date_format( sr.create_time, '%Y%m' ) ) =1
+			GROUP BY c.id,date_format(sr.create_time, '%Y-%m')
+    	) demo
+    	
+    </select>
+    
+    <select id="getCashList" parameterType="com.guse.platform.entity.doudou.SystemOrder" resultType="java.util.Map">
+    	SELECT c.id,date_format(sr.create_time, '%Y-%m') mouth,COUNT(DISTINCT c.id) agencyNum,SUM(sr.so_amounts) agencyAmount FROM system_order sr
+			LEFT JOIN system_users u ON sr.user_id = u.user_id
+			LEFT JOIN city c ON u.area = c.id
+			where pay_state = 1  and cash_state = 0 and PERIOD_DIFF( date_format( now( ) , '%Y%m' ) , date_format( sr.create_time, '%Y%m' ) ) =1
+			GROUP BY c.id,date_format(sr.create_time, '%Y-%m')
+    	
+    	
+    </select>
+    
+
+     
+    <!-- 通用分页查询记录总数 -->
+    <select id="countByParam" parameterType="java.util.Map" resultType="java.lang.Long">
+        select count(*) from system_order 
+        LEFT JOIN system_product ON system_order.product_id = system_product.sp_id 
+        <include refid="sql_user_join" />
+        <include refid="sql_of_where" />
+        <include refid="sql_user_role" />
+    </select>
+    
+    
+    <insert id="insert" parameterType="com.guse.platform.entity.doudou.SystemOrder">
+    <![CDATA[
+        INSERT INTO system_order (
+	        so_id  ,
+	        user_id ,
+	        product_id ,
+	        so_no  ,
+	        so_amounts  ,
+	        pay_time  ,
+	        pay_type  ,
+	        pay_price  ,
+	        pay_state  ,
+	        create_time ,
+	        cash_state 
+        ) VALUES (
+        	#{soId, jdbcType=INTEGER} ,
+        	#{userId, jdbcType=INTEGER} ,
+        	#{productId, jdbcType=INTEGER} ,
+        	#{soNo, jdbcType=INTEGER} ,
+        	#{soAmounts, jdbcType=DECIMAL} ,
+        	#{payTime, jdbcType=TIMESTAMP} ,
+        	#{payType, jdbcType=INTEGER} ,
+        	#{payPrice, jdbcType=DECIMAL} ,
+        	#{payState, jdbcType=INTEGER} ,
+        	#{createTime, jdbcType=TIMESTAMP} ,
+        	#{cashState, jdbcType=INTEGER} 
+        )
+    ]]>
+    </insert>
+    
+    <delete id="deleteById">
+    <![CDATA[
+        DELETE FROM system_order WHERE
+        so_id = #{soId} 
+    ]]>
+    </delete>
+    
+    <select id="selectById" resultMap="SystemOrder">
+	    SELECT <include refid="Base_Column_List"/>
+	    <![CDATA[
+	        FROM system_order 
+	        WHERE 
+		        so_id = #{soId} 
+	    ]]>
+    </select>
+    
+    <update id="updateByIdSelective" parameterType="com.guse.platform.entity.doudou.SystemOrder">
+		UPDATE system_order
+		<set>
+		 	<if test="soNo != null">
+	      	  so_no = #{soNo, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="userId != null">
+	      	  user_id = #{userId, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="productId != null">
+	      	  product_id = #{productId, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="soAmounts != null">
+	      	  so_amounts = #{soAmounts, jdbcType=DECIMAL} ,
+		 	</if>
+		 	<if test="payTime != null">
+	      	  pay_time = #{payTime, jdbcType=TIMESTAMP} ,
+		 	</if>
+		 	<if test="payType != null">
+	      	  pay_type = #{payType, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="payPrice != null">
+	      	  pay_price = #{payPrice, jdbcType=DECIMAL} ,
+		 	</if>
+		 	<if test="payState != null">
+	      	  pay_state = #{payState, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="createTime != null">
+	      	  create_time = #{createTime, jdbcType=TIMESTAMP} ,
+		 	</if>
+		 	<if test="cashState != null">
+	      	  cash_state = #{cashState, jdbcType=INTEGER} ,
+		 	</if>
+		</set>
+		WHERE
+	       	so_id = #{soId} 
+    </update>
+    <update id="updateCashState" >
+    	UPDATE system_order sr
+			LEFT JOIN system_users u ON sr.user_id = u.user_id
+			LEFT JOIN city c ON u.area = c.id
+			SET sr.cash_state = 1
+			WHERE sr.cash_state = 0 and date_format(sr.create_time, '%Y-%m')= #{mouth} AND c.id =  #{cityId}
+    </update>
+    <!-- 根据名称获取区域 -->
+	<select id="getOrderByNo" resultMap="SystemOrder">
+		SELECT <include refid="Base_Column_List"/>
+	        FROM system_order 
+	        where 1=1 
+	        <if test="tradeNo != null">
+	      	 	and so_no = #{tradeNo}
+		 	</if>
+	        limit 1
+	</select>
+	
+</mapper>
+

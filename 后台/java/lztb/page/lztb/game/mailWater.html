@@ -1,0 +1,68 @@
+<!--概况总览-->
+<div class="ibox">
+    <!--主页内容-->
+    <div class="ibox-content fadeInUp animated">
+		<div id="app">
+			<div id="mail_div">
+				<form id="mail_form" class="layui-form">
+					<div class="layui-form-pane" style="margin-top: 15px;">
+						<div class="layui-form-item">
+							<div class="layui-input-inline">
+								<input class="layui-input" placeholder="发送ID" name="gmdSendUserid" :value="filter.gmdSendUserid" id="gmdSendUserid" >
+							</div>
+							<div class="layui-input-inline">
+								<input class="layui-input" placeholder="接收ID" name="gmdReceiveUserid" :value="filter.gmdReceiveUserid" id="gmdReceiveUserid" >
+							</div>
+							<div class="layui-input-inline">
+								<input class="layui-input" placeholder="开始日" name="startDate" :value="filter.startDate" id="startAt" >
+							</div>
+							<div class="layui-input-inline">
+								<input class="layui-input" placeholder="截止日" name="endDate" :value="filter.endDate" id="endAt">
+							</div>
+							<button class="layui-btn" lay-filter="mail_form" lay-submit>查询</button>
+							<button class="layui-btn" v-on:click="exportExcel">导出</button>
+						</div>
+					</div>
+					<table class="layui-table" lay-even="" lay-skin="row">
+						<thead>
+						<tr>
+							<th>编号</th>
+							<th>发送ID</th>
+							<th>发送昵称</th>
+							<th>接收ID</th>
+							<th>接收昵称</th>
+							<th>发送玫瑰</th>
+							<th>发送钻戒</th>
+							<th>发送跑车</th>
+							<th>发送游艇</th>
+							<th>发送时间</th>
+							<th>接收时间</th>
+							<th>总发送金币</th>
+							<th>操作</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr v-for="(item, index) in grid.data">
+							<td>{{index+1}}</td>
+							<td>{{item.gmdSendUserid}}</td>
+							<td>{{item.gmdSendUserNick}}</td>
+							<td>{{item.gmdReceiveUserid}}</td>
+							<td>{{item.gmdReceiveNick}}</td>
+							<td>{{item.gmdRoseNum}}</td>
+							<td>{{item.gmdDiamondNum}}</td>
+							<td>{{item.gmdRoadsterNum}}</td>
+							<td>{{item.gmdYachtNum}}</td>
+							<td>{{formatDate(item.gmdSendTime)}}</td>
+							<td>{{formatDate(item.gmdReceiveTime)}}</td>
+							<td>{{item.gmdWorthGoldNum}}</td>
+							<td><a href="javascript:void(0)" @click="delData(item.gmdId)">删除</a></td>
+						</tr>
+						</tbody>
+					</table>
+					<div id="pager" class="laypager" style="float: right;"></div>
+				</form>
+			</div>
+		</div>
+    </div>
+	<script src="../static/lztb/game/mailWater.js"></script>
+</div>

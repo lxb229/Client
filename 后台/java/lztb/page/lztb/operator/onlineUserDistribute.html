@@ -1,0 +1,39 @@
+<!--实时数据-->
+<div class="ibox">
+    <div class="ibox-title">
+        <h5>玩家分布</h5>
+    </div>
+    <div class="ibox-content fadeInUp animated">
+        <div id="gamersAre"  class="container" style="height: 450px;"></div>
+        <div id="gamersAre_div">
+             <form class="layui-form" id="gamersAre_form">
+                <div class="layui-form-item" style="float: right;">
+                    <label class="layui-form-label">统计日期</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" placeholder="选择日期"  name="contrastBefourDate" :value="filter.contrastBefourDate" id="gamersAreDate_a" />
+                    </div>
+                    <button class="layui-btn" lay-submit lay-filter="gamersAre_form">查询</button>
+                    <button class="layui-btn" v-on:click="exportExcel">导出</button>
+                </div>
+                <table class="layui-table">
+                    <thead>
+                        <tr>
+                            <th>时间</th>
+                            <th>新玩家</th>
+                            <th>老玩家</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(item, index) in grid.data">
+                            <td>{{item.ocotTime}}</td>
+                            <td>{{item.ocotNewUserNum}}</td>
+                            <td>{{item.ocotOldUserNum}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div id="pager" class="laypager" style="float: right;"></div>
+            </form>
+        </div>  
+    </div>
+</div>
+<script src="../static/lztb/operator/onlineUserDistribute.js"></script>

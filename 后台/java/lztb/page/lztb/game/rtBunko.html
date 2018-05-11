@@ -1,0 +1,87 @@
+<!--实时输赢-->
+<div class="ibox">
+    <!--主页内容-->
+    <div class="ibox-content fadeInUp animated">
+		<div id="app">
+			<div class="layui-form">
+				<div class="layui-tab-item layui-show">
+					<div class="layui-form-item">
+						<div class="layui-input-inline">
+							<select style="display:block" name="grwlGameType" v-model="grwlGameType" class="layui-input">
+								<option value=1>龙珠淘宝</option>
+								<option value=2>德州扑克</option>
+								<option value=3>水浒传</option>
+								<option value=4>糖果派对</option>
+								<option value=5>深海捕鱼</option>
+								<option value=6>ATT</option>
+								<option value=7>五星宏辉</option>
+							</select>
+						</div>
+						<div class="layui-input-inline">
+							<select style="display:block" name="selectTime" v-model="selectTime" class="layui-input">
+								<option value="1" selected>今日排名</option>
+								<option value="2">最近7日</option>
+								<option value="3">最近15日</option>
+								<option value="4">最近30日</option>
+								<option value="5">历史排名</option>
+							</select>
+						</div>
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="开始日" name="startDate" :value="filter.startDate" id="startAt" >
+						</div>
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="截止日" name="endDate" :value="filter.endDate" id="endAt">
+						</div>
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="游戏ID" name="obuUserid" :value=filter.obuUserid>
+						</div>
+						<button class="layui-btn layui-btn-primary layui-btn-radius" lay-submit>查询</button>
+					</div>
+					
+					<div class="receptionSend">
+						<span>赢分玩家榜</span>
+						<span>输分玩家榜</span>
+					</div>
+					<table class="layui-table twoTable" lay-even="" lay-skin="row">
+						<thead>
+						<tr>
+							<th>排名</th>
+							<th>游戏ID</th>
+							<th>游戏昵称</th>
+							<th>赢分</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr v-for="(item, index) in grid.dataWin">
+							<td>{{index+1}}</td>
+							<td>{{item.obuUserid}}</td>
+							<td>{{item.obuUserNick}}</td>
+							<td>{{item.grwlWinLoseGold}}</td>
+						</tr>
+						</tbody>
+					</table>
+					<table class="layui-table twoTable">
+						<thead>
+						<tr>
+							<th>排名</th>
+							<th>游戏ID</th>
+							<th>游戏昵称</th>
+							<th>输分</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr v-for="(item, index) in grid.dataLose">
+							<td>{{index+1}}</td>
+							<td>{{item.obuUserid}}</td>
+							<td>{{item.obuUserNick}}</td>
+							<td>{{item.grwlWinLoseGold}}</td>
+						</tr>
+						</tbody>
+					</table>
+					<div id="pager" class="laypager" style="float: right;"></div>
+				</div>
+			</div>
+		</div>
+    </div>
+	<script src="../static/lztb/game/rtBunko.js"></script>
+</div>

@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.guse.platform.dao.doudou.SystemAgencyMapper">
+
+    <resultMap id="SystemAgency" type="com.guse.platform.entity.doudou.SystemAgency">
+        <result property="saId" column="sa_id"/>
+        <result property="saUserId" column="sa_user_id"/>
+        <result property="saCityId" column="sa_city_id"/>
+        <result property="agencyStart" column="agency_start"/>
+        <result property="agencyEnd" column="agency_end"/>
+        <result property="agencyState" column="agency_state"/>
+        <result property="saCreateTime" column="sa_create_time"/>
+        <result property="saLessOne" column="sa_less_one"/>
+        <result property="saOneToTwo" column="sa_one_to_two"/>
+        <result property="saTwoToThree" column="sa_two_to_three"/>
+        <result property="saThreeToFour" column="sa_three_to_four"/>
+        <result property="saGreaterFoure" column="sa_greater_foure"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+        system_agency.sa_id ,system_agency.sa_user_id ,system_agency.sa_city_id ,system_agency.agency_start ,system_agency.agency_end, 
+        system_agency.agency_state ,system_agency.sa_create_time ,system_agency.sa_less_one ,system_agency.sa_one_to_two ,
+        system_agency.sa_two_to_three ,system_agency.sa_three_to_four ,system_agency.sa_greater_foure 
+	    ]]>
+	</sql>
+	<!-- 用于分页查询 -->
+	<sql id="sql_of_where">
+	 	WHERE 1=1 
+    	<if test="bParam != null" >	
+    		<if test="bParam.agencyState != null">
+	      	 AND agency_state = #{bParam.agencyState, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.saCreateTime != null">
+	      	 AND sa_create_time = #{bParam.saCreateTime, jdbcType=TIMESTAMP}
+		 	</if>
+		 	<if test="bParam.saLessOne != null">
+	      	 AND sa_less_one = #{bParam.saLessOne, jdbcType=DOUBLE}
+		 	</if>
+		 	<if test="bParam.saOneToTwo != null">
+	      	 AND sa_one_to_two = #{bParam.saOneToTwo, jdbcType=DOUBLE}
+		 	</if>
+		 	<if test="bParam.saTwoToThree != null">
+	      	 AND sa_two_to_three = #{bParam.saTwoToThree, jdbcType=DOUBLE}
+		 	</if>
+		 	<if test="bParam.saThreeToFour != null">
+	      	 AND sa_three_to_four = #{bParam.saThreeToFour, jdbcType=DOUBLE}
+		 	</if>
+		 	<if test="bParam.saGreaterFoure != null">
+	      	 AND sa_greater_foure = #{bParam.saGreaterFoure, jdbcType=DOUBLE}
+		 	</if>
+		 	<if test="bParam.seacherParm != null and bParam.seacherParm != ''">
+	      	  AND( system_users.nick like concat(concat('%',#{bParam.seacherParm,jdbcType=VARCHAR}),'%') 
+	      	  or city.name like concat(concat('%',#{bParam.seacherParm,jdbcType=VARCHAR}),'%') 
+	      	  )
+		 	</if>
+	    </if>   
+    </sql>
+    
+    <!-- 通用查询 -->
+    <select id="select" parameterType="java.util.Map" resultMap="SystemAgency">
+        select 
+        <include refid="Base_Column_List" />
+        from system_agency 
+        LEFT JOIN system_users ON system_agency.sa_user_id = system_users.user_id
+		LEFT JOIN city ON system_agency.sa_city_id = city.id 
+        <include refid="sql_of_where" /> order by create_time desc
+    </select>
+    
+    <!-- 通用分页查询 -->
+    <select id="selectPageByParam" parameterType="java.util.Map" resultMap="SystemAgency">
+        select 
+        <include refid="Base_Column_List" />
+        from system_agency 
+        LEFT JOIN system_users ON system_agency.sa_user_id = system_users.user_id
+		LEFT JOIN city ON system_agency.sa_city_id = city.id 
+        <include refid="sql_of_where" />
+        <if test="pParam != null">
+            <if test="pParam.orderByClause != null" > order by ${pParam.orderByClause} </if>
+            <if test="pParam.orderByClause == null" >
+            		order by sa_id  desc 
+            </if>
+            <if test="pParam.startIndex != null and pParam.pageSize != null" >
+              limit ${pParam.startIndex} , ${pParam.pageSize}
+            </if>
+        </if>
+          <if test="pParam == null">
+             order by create_date desc
+        </if>
+    </select>
+    
+    <!-- 通用分页查询记录总数 -->
+    <select id="countByParam" parameterType="java.util.Map" resultType="java.lang.Long">
+        select count(*) from system_agency 
+        LEFT JOIN system_users ON system_agency.sa_user_id = system_users.user_id
+		LEFT JOIN city ON system_agency.sa_city_id = city.id 
+        <include refid="sql_of_where" />
+    </select>
+    
+    
+    <insert id="insert" parameterType="com.guse.platform.entity.doudou.SystemAgency">
+    <![CDATA[
+        INSERT INTO system_agency (
+	        sa_id  ,
+	        sa_user_id  ,
+	        sa_city_id  ,
+	        agency_start  ,
+	        agency_end  ,
+	        agency_state  ,
+	        sa_create_time  ,
+	        sa_less_one  ,
+	        sa_one_to_two  ,
+	        sa_two_to_three  ,
+	        sa_three_to_four  ,
+	        sa_greater_foure  
+        ) VALUES (
+        	#{saId, jdbcType=INTEGER} ,
+        	#{saUserId, jdbcType=INTEGER} ,
+        	#{saCityId, jdbcType=INTEGER} ,
+        	#{agencyStart, jdbcType=TIMESTAMP} ,
+        	#{agencyEnd, jdbcType=TIMESTAMP} ,
+        	#{agencyState, jdbcType=INTEGER} ,
+        	#{saCreateTime, jdbcType=TIMESTAMP} ,
+        	#{saLessOne, jdbcType=DOUBLE} ,
+        	#{saOneToTwo, jdbcType=DOUBLE} ,
+        	#{saTwoToThree, jdbcType=DOUBLE} ,
+        	#{saThreeToFour, jdbcType=DOUBLE} ,
+        	#{saGreaterFoure, jdbcType=DOUBLE} 
+        )
+    ]]>
+    </insert>
+    
+    <delete id="deleteById">
+    <![CDATA[
+        DELETE FROM system_agency WHERE
+        sa_id = #{saId} 
+    ]]>
+    </delete>
+    
+    <select id="selectById" resultMap="SystemAgency">
+	    SELECT <include refid="Base_Column_List"/>
+	    <![CDATA[
+	        FROM system_agency 
+	        WHERE 
+		        sa_id = #{saId} 
+	    ]]>
+    </select>
+    
+    <update id="updateByIdSelective" parameterType="com.guse.platform.entity.doudou.SystemAgency">
+		UPDATE system_agency
+		<set>
+		 	<if test="saUserId != null">
+	      	  sa_user_id = #{saUserId, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="saCityId != null">
+	      	  sa_city_id = #{saCityId, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="agencyStart != null">
+	      	  agency_start = #{agencyStart, jdbcType=TIMESTAMP} ,
+		 	</if>
+		 	<if test="agencyEnd != null">
+	      	  agency_end = #{agencyEnd, jdbcType=TIMESTAMP} ,
+		 	</if>
+		 	<if test="agencyState != null">
+	      	  agency_state = #{agencyState, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="saCreateTime != null">
+	      	  sa_create_time = #{saCreateTime, jdbcType=TIMESTAMP} ,
+		 	</if>
+		 	<if test="saLessOne != null">
+	      	  sa_less_one = #{saLessOne, jdbcType=DOUBLE} ,
+		 	</if>
+		 	<if test="saOneToTwo != null">
+	      	  sa_one_to_two = #{saOneToTwo, jdbcType=DOUBLE} ,
+		 	</if>
+		 	<if test="saTwoToThree != null">
+	      	  sa_two_to_three = #{saTwoToThree, jdbcType=DOUBLE} ,
+		 	</if>
+		 	<if test="saThreeToFour != null">
+	      	  sa_three_to_four = #{saThreeToFour, jdbcType=DOUBLE} ,
+		 	</if>
+		 	<if test="saGreaterFoure != null">
+	      	  sa_greater_foure = #{saGreaterFoure, jdbcType=DOUBLE} ,
+		 	</if>
+		</set>
+		WHERE
+	       	sa_id = #{saId} 
+    </update>
+    
+    <select id="selectAgencyListByCityId" resultMap="SystemAgency">
+	    SELECT <include refid="Base_Column_List"/>
+	    <![CDATA[
+	        FROM system_agency 
+	        WHERE sa_city_id = #{cityId} 
+	    ]]>
+    </select>
+    
+    <select id="selectAgencyOut" resultMap="SystemAgency">
+	    SELECT <include refid="Base_Column_List"/>
+	        FROM system_agency 
+	        
+	        WHERE 1=1
+	        <if test="saUserId != null">
+	      	 	and sa_user_id = #{saUserId} 
+		 	</if>
+		 	<if test="saTwoToThree != null">
+	      	 	and sa_id != #{saId} 
+		 	</if>
+    </select>
+    
+    
+    
+    <select id="getAgencyForCityId" resultMap="SystemAgency">
+	    SELECT <include refid="Base_Column_List"/>
+	    <![CDATA[
+	        FROM system_agency 
+	        WHERE sa_city_id = #{cityId} 
+	        limit 1
+	    ]]>
+    </select>
+    
+	
+</mapper>
+

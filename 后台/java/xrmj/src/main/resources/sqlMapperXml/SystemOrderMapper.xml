@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangzhixuan.mapper.SystemOrderMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="SystemOrder" type="com.wangzhixuan.model.SystemOrder">
+		<result column="id" property="id" />
+		<result column="purchase_type" property="purchaseType" />
+		<result column="order_no" property="orderNo" />
+		<result column="user_id" property="userId" />
+		<result column="start_no" property="startNo" />
+		<result column="pay_price" property="payPrice" />
+		<result column="pay_type" property="payType" />
+		<result column="pay_status" property="payStatus" />
+		<result column="pay_time" property="payTime" />
+		<result column="roomcard_price" property="roomcardPrice" />
+		<result column="roomcard_amount" property="roomcardAmount" />
+		<result column="create_time" property="createTime" />
+	</resultMap>
+	
+	<select id="selectSystemOrderVoPage"  resultType="SystemOrderVo">
+		SELECT 
+			s.id AS id,
+			s.purchase_type AS purchaseType,
+			s.order_no AS orderNo,
+			u.`name`,
+			s.user_id AS userId,
+			p.nick,
+			s.start_no AS startNo,
+			s.pay_price AS payPrice,
+			s.pay_type AS payType,
+			s.pay_status AS payStatus,
+			s.pay_time AS payTime,
+			s.roomcard_price AS roomcardPrice,
+			s.roomcard_amount AS roomcardAmount,
+			s.create_time AS createTime 
+		FROM system_order s
+		LEFT JOIN `user` u ON s.user_id = u.id
+		LEFT JOIN player p ON s.start_no = p.start_no 
+			<where>
+	        	1=1
+	            <if test=" startNo != null and startNo != '' ">
+	               and s.start_no like concat(concat('%',#{startNo}),'%') 
+	            </if>
+	            <if test=" purchaseType != null ">
+	               and s.purchase_type = #{purchaseType }  
+	            </if>
+	            <if test=" payType != null ">
+	               and s.pay_type = #{payType } 
+	            </if>
+	        </where>
+		GROUP BY s.id
+    </select>
+	
+
+</mapper>

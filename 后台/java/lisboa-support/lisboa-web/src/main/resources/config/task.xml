@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="
+          http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+          http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+
+
+	<bean id="baseUserTask" class="com.guse.platform.service.task.BaseUserTask"></bean>
+	<bean id="statFixedTask" class="com.guse.platform.service.task.StatFixedTask"></bean>
+	
+	<!-- 如下实现是通过线程池执行的 -->
+	<task:executor id="executor" pool-size="10" />
+	<task:scheduler id="scheduler" pool-size="10" />
+	<task:annotation-driven scheduler="scheduler"
+		executor="executor" proxy-target-class="true" />
+
+
+	<task:scheduled-tasks scheduler="scheduler">
+		<!--每一个小时更新一次用户-->
+		<task:scheduled ref="baseUserTask" method="save"
+			cron="0 0 0/1 * * ?" />
+		<task:scheduled ref="statFixedTask" method="excute"
+			cron="0 0 2 * * ?" />
+	</task:scheduled-tasks>
+</beans>

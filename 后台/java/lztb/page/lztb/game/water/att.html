@@ -1,0 +1,64 @@
+
+<!--ATT翻牌机-->
+<div class="ibox">
+    <!--主页内容-->
+    <div class="ibox-content fadeInUp animated">
+		<div id="app">
+			<div class="layui-form">
+				<div class="layui-tab-item layui-show">
+					<div class="layui-form-item">
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="游戏ID" name="obuUserid" :value="filter.obuUserid" id="obuUserid">
+						</div>
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="游戏昵称" name="obuUserNick" :value="filter.obuUserNick" id="obuUserNick">
+						</div>
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="开始日" name="startDate" :value="filter.startDate" id="startAt" >
+						</div>
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="截止日" name="endDate" :value="filter.endDate" id="endAt">
+						</div>
+						<button class="layui-btn layui-btn-primary layui-btn-radius" lay-submit>查询</button>
+					</div>
+					<table class="layui-table" lay-even="" lay-skin="row">
+						<thead>
+						<tr>
+							<th>游戏ID</th>
+							<th>游戏昵称</th>
+							<th>玩家身上的金币</th>
+							<th>牌型编号</th>
+							<th>押注金币</th>
+							<th>回收金币数</th>
+							<th>投骰子次数</th>
+							<th>比倍池金币</th>
+							<th>总池金币</th>
+							<th>赢得的金币</th>
+							<th>流水时间</th>
+							<!--<th>是否破产</th>-->
+						</tr>
+						</thead>
+						<tbody>
+						<tr v-for="(item, index) in grid.data">
+							<td>{{item.obuUserid}}</td>
+							<td>{{item.obuUserNick}}</td>
+							<td>{{item.gagdPlayerGold}}</td>
+							<td>{{item.gagdPokerTypeCode}}</td>
+							<td>{{item.gagdBetGold}}</td>
+							<td>{{item.gagdRecoveryGold}}</td>
+							<td>{{item.gagdDiceCount}}</td>
+							<td>{{item.gagdRatioPoolGold}}</td>
+							<td>{{item.gagdTatolPoolGold}}</td>
+							<td>{{item.gagdWinLoseGold}}</td>
+							<td>{{formatDate(item.gagdDetailTime)}}</td>
+							<!--<td>{{item.obuIsGoBroke}}</td>-->
+						</tr>
+						</tbody>
+					</table>
+					<div id="pager" class="laypager" style="float: right;"></div>
+				</div>
+			</div>
+		</div>
+    </div>
+	<script src="../static/lztb/game/water/att.js"></script>
+</div>

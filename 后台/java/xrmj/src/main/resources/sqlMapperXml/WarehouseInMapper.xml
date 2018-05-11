@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangzhixuan.mapper.WarehouseInMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="WarehouseIn" type="com.wangzhixuan.model.WarehouseIn">
+		<result column="id" property="id" />
+		<result column="in_no" property="inNo" />
+		<result column="supplier" property="supplier" />
+		<result column="commodity" property="commodity" />
+		<result column="type" property="type" />
+		<result column="warehouse_in" property="warehouseIn" />
+		<result column="amount" property="amount" />
+		<result column="price_amount" property="priceAmount" />
+		<result column="remark" property="remark" />
+		<result column="create_id" property="createId" />
+		<result column="create_time" property="createTime" />
+		<result column="update_id" property="updateId" />
+		<result column="update_time" property="updateTime" />
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+        id, in_no, supplier, commodity, type, warehouse_in, amount, 
+        price_amount, remark, create_id, create_time, update_id, update_time 
+	    ]]>
+	</sql>
+	
+	<select id="getAllWarehouseIn" resultMap="WarehouseIn">
+        SELECT <include refid="Base_Column_List"/> 
+	        FROM warehouse_in 
+		        <where>
+		        	type = 0 
+		        	<if test=" supplier != null">
+		               and supplier = #{supplier } 
+		            </if>
+		            <if test=" commodity != null">
+		               and commodity = #{commodity } 
+		            </if>
+		        </where>
+	        ORDER BY id 
+    </select>
+	
+	
+	<select id="selectWarehouseInVoPage"  resultType="WarehouseINVo">
+		SELECT 
+			wi.id AS id,
+			wi.in_no AS inNo,
+			wi.supplier AS supplier,
+			s.supplier_name AS supplierName,
+			wi.commodity AS commodity,
+			c.commodity_name AS commodityName,
+			wi.type AS type,
+			wi.warehouse_in AS warehouseIn,
+			wi2.in_no AS warehouseInNo,
+			wi.amount AS amount,
+			wi.price_amount AS priceAmount,
+			wi.remark AS remark,
+			wi.create_id AS createId,
+			u1.name AS createName,
+			wi.create_time AS createTime,
+			wi.update_id AS updateId,
+			u2.name AS updateName,
+			wi.update_time AS updateTime
+		FROM warehouse_in wi
+		LEFT JOIN warehouse_in wi2 ON wi.warehouse_in IS NOT NULL AND wi.warehouse_in = wi2.id
+		LEFT JOIN supplier s ON wi.supplier = s.id
+		LEFT JOIN commodity c ON wi.commodity = c.id
+		LEFT JOIN user u1 ON wi.create_id = u1.id
+		LEFT JOIN user u2 ON wi.update_id = u2.id
+			<where>
+	        	1=1
+	            <if test=" commodityName != null and commodityName != '' ">
+	               and c.commodity_name like concat(concat('%',#{commodityName}),'%') 
+	            </if>
+	        </where>
+		GROUP BY wi.id
+    </select>
+
+</mapper>

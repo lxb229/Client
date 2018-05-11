@@ -1,0 +1,144 @@
+﻿<!--内容-->
+<div>
+	<!--标题-->
+	<div class="ibox-title">
+		<h5>角色权限</h5>
+	</div>
+	<!--主页内容 -->
+	<div class="ibox-content fadeInUp animated">
+		<!--   <div class="alert alert-{$alert.type} alert-dismissible" role="alert" style="border-radius:0">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div> -->
+		<div style="margin: 8px;" id="roleListBox">
+			<div id="app">
+				<div class="nowrap pull-right" style="margin-top:2px;margin-bottom: 10px;">
+					<button @click="addRole()" data-title="添加权限" class="layui-btn layui-btn-small"><i class="fa fa-plus"></i> 新增角色</button>
+				</div>
+			</div>
+			<div class="layui-form">
+				<table class="layui-table">
+					<thead>
+						<tr>
+							<th>角色ID</th>
+							<th>角色名称</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr v-for="(item,index) in roleList">
+							<td>{{item.roleId}}</td>
+							<td>{{item.roleName}}</td>
+							<td>
+								<div v-if="item.roleId != 1">
+									<span class="text-explode">|</span>
+									<a @click="setMenu(item)" href="javascript:void(0)">角色权限设置</a>
+
+									<span class="text-explode">|</span>
+									<a @click="editRole(item)" href="javascript:void(0)">编辑</a>
+
+									<span class="text-explode">|</span>
+									<a @click="delRole(item)" href="javascript:void(0)">删除</a></div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<div id="pager" class="laypager" style="float: right;"></div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	require(['vue', 'layui'], function (Vue) {
+		var vmRoles = new Vue({
+			el: "#roleListBox",
+			data: {
+				roleList: []
+			},
+			methods: {
+				addRole: function () {
+					gOpenModalWindow("新增角色", "system/roleFrom.html", 450, 250, null, null, null, function () {
+						loadRoleList();
+					});
+				},
+				editRole: function (role) {
+					localStorage.setItem("system_role_update_data", JSON.stringify(role));
+					gOpenModalWindow("编辑角色 - " + role.roleName, "system/roleFrom.html", 450, 250, null, null, null, function () {
+						localStorage.removeItem("system_role_update_data");
+						loadRoleList();
+					});
+				},
+				setMenu: function (role) {
+					localStorage.setItem("system_role_setmenu_data", JSON.stringify(role));
+					gOpenModalWindow("角色权限设置 - " + role.roleName, "system/roleAuth.html", 1050, 700, true, null, null, function () {
+						localStorage.removeItem("system_role_setmenu_data");
+					});
+				},
+				delRole: function (role) {
+					ConfirmBox("您确定要删除角色【" + role.roleName + "】吗？", del)
+					function del() {
+						$.ajax({
+							url: '/system/roles/delete',
+							type: 'POST',
+							data: { "roleId": role.roleId },
+							dataType: 'json',
+							timeout: 10000,
+							success: function (rs) {
+								if (rs.code == '00000') {
+									SuccessBox("角色删除成功!", "提示", 2000);
+									for (var i = 0; i < vmRoles.roleList.length; i++) {
+										if (vmRoles.roleList[i].roleId == role.roleId) {
+											vmRoles.roleList.splice(i, 1);
+											break;
+										}
+									}
+								} else {
+									AlertMsg(rs.msg);
+									console.error(rs);
+								}
+							},
+							error: function (xhr, status, ex) {
+								AlertMsg("请求失败：" + xhr.statusText);
+								console.error(ex);
+							}
+						});
+					}
+				}
+			},
+			created: function () {
+				loadRoleList();
+			}
+		});
+		function loadRoleList() {
+			$.ajax({
+				url: '/system/roles/list',
+				type: 'POST',
+				data: {},
+				dataType: 'json',
+				timeout: 10000,
+				success: function (rs) {
+					if (rs.code == '00000') {
+						vmRoles.roleList = rs.data;
+					} else {
+						AlertMsg(rs.msg);
+						console.error(rs);
+					}
+				},
+				error: function (xhr, status, ex) {
+					AlertMsg("请求失败：" + xhr.statusText);
+					console.error(ex);
+				}
+			});
+		}
+		var layuiForm;
+		layui.config({ dir: baseUrl + '../plugs/layui/' });
+		layui.use(['layer', 'laypage', 'form', 'laydate'], function () {
+			layuiForm = layui.form();
+			layuiForm.render('select');
+			layuiForm.render('radio');
+		});
+
+	});
+
+</script>

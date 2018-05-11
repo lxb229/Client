@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangzhixuan.mapper.JoinRoomLogMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="JoinRoomLog" type="com.wangzhixuan.model.JoinRoomLog">
+		<result column="id" property="id" />
+		<result column="player_id" property="playerId" />
+		<result column="room_id" property="roomId" />
+		<result column="house_owner" property="houseOwner" />
+		<result column="join_time" property="joinTime" />
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+        id, player_id, room_id, house_owner, join_time
+	    ]]>
+	</sql>
+	
+	<select id="getRoomJoinNum" resultType="Map">
+		SELECT IFNULL(COUNT(DISTINCT player_id),0) joinNum, room_id 
+	        FROM join_room_log 
+	        <where>
+	        	1=1
+	            <if test=" houseOwner != null and houseOwner != '' ">
+	               and house_owner = #{houseOwner} 
+	            </if>
+	            <if test=" roomId != null and roomId != '' ">
+	               and room_id = #{roomId} 
+	            </if>
+	            <if test=" createTime != null ">
+	               <![CDATA[ and  DATEDIFF(join_time,#{createTime}) <= #{roomDays } ]]>
+	               <![CDATA[ and  DATEDIFF(join_time,#{createTime}) >= -#{roomDays } ]]>
+	            </if>
+	        </where>
+	        GROUP BY room_id,house_owner 
+	</select>
+	
+	<select id="getJoinRoomLogBy" resultMap="JoinRoomLog">
+       SELECT <include refid="Base_Column_List"/> 
+        FROM join_room_log 
+        <where>
+        	1=1
+        	<if test=" playerId != null and playerId != '' ">
+               and player_id = #{playerId} 
+            </if>
+            <if test=" houseOwner != null and houseOwner != '' ">
+               and house_owner = #{houseOwner} 
+            </if>
+            <if test=" roomId != null and roomId != '' ">
+               and room_id = #{roomId} 
+            </if>
+            <if test=" createTime != null ">
+               <![CDATA[ and  DATEDIFF(join_time,#{createTime}) <= #{roomDays } ]]> 
+               <![CDATA[ and  DATEDIFF(join_time,#{createTime}) >= -#{roomDays } ]]> 
+            </if>
+        </where>
+        GROUP BY id 
+        limit 1
+    </select>
+    
+	<select id="selectJoinRoomData" resultType="Map">
+		SELECT 
+			IFNULL(SUM(if(id>0,1,0)),0) allJoinRooms,
+			IFNULL(SUM(IF(TO_DAYS(join_time)=TO_DAYS(NOW()),1,0)),0) todayJoinRooms
+			FROM join_room_log
+	</select>
+    
+</mapper>

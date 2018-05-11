@@ -1,0 +1,86 @@
+<!--实时数据-->
+<div class="ibox">
+    <div class="ibox-content fadeInUp animated">
+        <div id="chart_stay_long" style="height: 600px;width: 100%;"></div>
+    </div>
+</div>
+<script>
+    //图形统计
+    require(['echarts', 'vue'], function (echarts, Vue) {
+        var countChart = echarts.init(document.getElementById('chart_stay_long'));
+
+        function renderCountChartChart() {
+            option = {
+                title: {
+                    text: '今日和昨日的实时数据'
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['昨日', '今日']
+                },
+                toolbox: {
+                    show: true,
+                    feature: {
+                        dataView: {show: true, readOnly: false},
+                        magicType: {show: true, type: ['line', 'bar']},
+                        restore: {show: true},
+                        saveAsImage: {show: true}
+                    }
+                },
+                calculable: true,
+                xAxis: [
+                    {
+                        type: 'category',
+                        data: ['新增注册', '新增玩家', '活跃玩家', '充值人数', '充值金额', 'ARPPU', 'ARPU', '付费率', '次日留存率', '3日留存率', '7日留存率']
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value'
+                    }
+                ],
+                series: [
+                    {
+                        name: '昨日',
+                        type: 'bar',
+                        data: [2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4],
+                        markPoint: {
+                            data: [
+                                {type: 'max', name: '最大值'},
+                                {type: 'min', name: '最小值'}
+                            ]
+                        },
+                        markLine: {
+                            data: [
+                                {type: 'average', name: '平均值'}
+                            ]
+                        }
+                    },
+                    {
+                        name: '今日',
+                        type: 'bar',
+                        data: [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0],
+                        markPoint: {
+                            data: [
+                                {name: '年最高', value: 182.2, xAxis: 7, yAxis: 183},
+                                {name: '年最低', value: 2.3, xAxis: 11, yAxis: 3}
+                            ]
+                        },
+                        markLine: {
+                            data: [
+                                {type: 'average', name: '平均值'}
+                            ]
+                        }
+                    }
+                ]
+            };
+            countChart.setOption(option);
+        }
+
+        renderCountChartChart();
+    });
+</script>
+
+		

@@ -1,0 +1,48 @@
+<!--回收和免充-->
+<div class="ibox">
+    <!--主页内容-->
+    <div class="ibox-content fadeInUp animated">
+		<div id="app">
+			<div class="layui-form">
+				<div class="layui-tab-item layui-show">
+					<div class="layui-form-item">
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="开始日" name="startDate" :value="filter.startDate" id="startAt" >
+						</div>
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="截止日" name="endDate" :value="filter.endDate" id="endAt">
+						</div>
+						<button class="layui-btn layui-btn-primary layui-btn-radius" lay-submit>查询</button>
+					</div>
+					<table class="layui-table" lay-even="" lay-skin="row">
+						<thead>
+						<tr>
+							<th>日期</th>
+							<th title="当天金币回收量（回收范围：抽水、互动道具、技能消费、商城金币道具、打赏荷官、幸运轮盘等。">金币回收</th>
+							<th title="当日免充金额总量，免充范围：新用户赠送、绑定手机赠送、破产补助、登录奖励、大转盘金币与钻
+							石、每日首充赠送钻石、限时礼包赠送钻石、德州机器人输赢金额等。（所有钻石需以1:1000换算为金币）">免充金额</th>
+							<th title="当日免充金额÷当日金币回收X100%">今日免充率</th>
+							<th title="当月中免充率最高日免充率">本月最高免充率</th>
+							<th title="当月中免充率最低日免充率">本月最低免充率</th>
+							<th title="当月每日免率总和÷日数X100%">本月平均免充率</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr v-for="(item, index) in grid.data">
+							<td>{{formatDate(item.gernrDate)}}</td>
+							<td>{{item.gernrRecoveryGold}}</td>
+							<td>{{item.gernrNorechargeGold}}</td>
+							<td>{{item.gernrNorechargeRate}}</td>
+							<td>{{item.gernrMonthHighest}}</td>
+							<td>{{item.gernrMonthMinimum}}</td>
+							<td>{{item.gernrMonthAverage}}</td>
+						</tr>
+						</tbody>
+					</table>
+					<div id="pager" class="laypager" style="float: right;"></div>
+				</div>
+			</div>
+		</div>
+    </div>
+	<script src="../static/lztb/game/recycleFree.js"></script>
+</div>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangzhixuan.mapper.PropLogMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="PropLog" type="com.wangzhixuan.model.PropLog">
+		<result column="id" property="id" />
+		<result column="start_no" property="startNo" />
+		<result column="money_type" property="moneyType" />
+		<result column="amount" property="amount" />
+		<result column="log_type" property="logType" />
+		<result column="content" property="content" />
+		<result column="create_time" property="createTime" />
+	</resultMap>
+	
+	<select id="selectPropLogVoPage"  resultType="PropLogVo">
+       SELECT 
+			pl.id AS id,
+			pl.start_no AS startNo,
+			p.nick AS nick,
+			pl.money_type AS moneyType,
+			pl.amount AS amount,
+			pl.log_type AS logType,
+			pl.content AS content,
+			pl.create_time AS createTime
+		FROM prop_log pl 
+		LEFT JOIN player p ON pl.start_no = p.start_no
+	        <where>
+	        	1=1
+	            <if test=" startNo != null and startNo != '' ">
+	               and pl.start_no like concat(concat('%',#{startNo}),'%') 
+	            </if>
+	        </where>
+		GROUP BY pl.id
+    </select>
+
+</mapper>

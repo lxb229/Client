@@ -1,0 +1,299 @@
+<!--实时数据-->
+<div class="ibox">
+    <div class="ibox-title">
+        <h5>玩家留存分析</h5>
+    </div>
+    <div class="ibox-content fadeInUp animated">
+
+        <div class="layui-tab" lay-filter="test">
+            <ul class="layui-tab-title">
+                <li class="layui-this" lay-id="11">玩家留存</li>
+                <li lay-id="22">自定义玩家留存</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+
+                   <div id="remain_div">
+                       <form id="remain_form" method="post" class="layui-form" >
+                        <div class="layui-form-item">
+                            <div class="layui-input-inline">
+                                <input class="layui-input" placeholder="开始日期"  name="startDate" :value="filter.startDate" id="startDate" />
+                            </div>
+                            <div class="layui-input-inline">
+                                <input class="layui-input" placeholder="结束日期" name="endDate" :value="filter.endDate" id="endDate" />
+                            </div>
+                            <div class="layui-input-inline ">
+                                <select name="remainType" class="layui-input" :value="filter.remainType">
+                                    <option value="1">留存率</option>
+                                    <option value="2">留存人数</option>
+                                </select>
+                            </div>
+                            <button class="layui-btn" lay-submit lay-filter="remain_form">统计</button>
+                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                        </div>
+                        </form>
+                    </div>
+                    <!--留存玩家-->
+                    <div id="daysLeft" class="container"></div>
+
+                </div>
+                <div class="layui-tab-item">
+
+                    <div class="layui-tab" lay-filter="test1">
+                         <ul class="layui-tab-title">
+                            <li class="layui-this" lay-id="111">日</li>
+                            <li lay-id="222">周</li>
+                            <li lay-id="333">月</li>
+                        </ul>
+                        <div class="layui-tab-content">
+                            <div class="layui-tab-item layui-show">
+                            <!-- s -->
+                                    <div id="remainDay_div">
+                                    <form id="remainDay_form" method="post" class="layui-form" >
+                                    <div class="layui-form-item">
+                                         <div class="layui-input-inline">
+                                            <input class="layui-input" placeholder="开始日期"  name="startDate" :value="filter.startDate" id="startDate_a" />
+                                        </div>
+                                        <div class="layui-input-inline">
+                                            <input class="layui-input" placeholder="结束日期" name="endDate" :value="filter.endDate" id="endDate_a" />
+                                        </div>
+                                        <div class="layui-input-inline ">
+                                            <select name="remainType" class="layui-input" :value="filter.remainType">
+                                                <option value="1">留存率</option>
+                                                <option value="2">留存人数</option>
+                                            </select>
+                                        </div>
+                                       <button class="layui-btn" lay-submit lay-filter="remainDay_form">统计</button>
+                                       <button class="layui-btn" v-on:click="exportExcel">导出</button>
+                                       <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                                    </div> 
+                                    <!--表格-->
+                                    <table class="layui-table">
+                                        <thead>
+                                        <tr>
+                                            <th>日期</th>
+                                            <th>玩家</th>
+                                            <th>1日</th>
+                                            <th>2日</th>
+                                            <th>3日</th>
+                                            <th>4日</th>
+                                            <th>5日</th>
+                                            <th>6日</th>
+                                            <th>7日</th>
+                                            <th>8日</th>
+                                            <th>9日</th>
+                                            <th>10日</th>
+                                            <th>11日</th>
+                                            <th>12日</th>
+                                            <th>13日</th>
+                                            <th>14日</th>
+                                            <th>15日</th>
+                                            <th>16日</th>
+                                            <th>17日</th>
+                                            <th>18日</th>
+                                            <th>19日</th>
+                                            <th>20日</th>
+                                            <th>21日</th>
+                                            <th>22日</th>
+                                            <th>23日</th>
+                                            <th>24日</th>
+                                            <th>25日</th>
+                                            <th>26日</th>
+                                            <th>27日</th>
+                                            <th>28日</th>
+                                            <th>29日</th>
+                                            <th>30日</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr v-for="(item, index) in grid.data">
+                                           <td>{{formatDate(item.ordRemainDate)}}</td>
+                                           <td>{{item.ordRemainUserNum}}</td>
+                                           <td>{{item.r1}}</td>
+                                           <td>{{item.r2}}</td>
+                                           <td>{{item.r3}}</td>
+                                           <td>{{item.r4}}</td>
+                                           <td>{{item.r5}}</td>
+                                           <td>{{item.r6}}</td>
+                                           <td>{{item.r7}}</td>
+                                           <td>{{item.r8}}</td>
+                                           <td>{{item.r9}}</td>
+                                           <td>{{item.r10}}</td>
+                                           <td>{{item.r11}}</td>
+                                           <td>{{item.r12}}</td>
+                                           <td>{{item.r13}}</td>
+                                           <td>{{item.r14}}</td>
+                                           <td>{{item.r15}}</td>
+                                           <td>{{item.r16}}</td>
+                                           <td>{{item.r17}}</td>
+                                           <td>{{item.r18}}</td>
+                                           <td>{{item.r19}}</td>
+                                           <td>{{item.r20}}</td>
+                                           <td>{{item.r21}}</td>
+                                           <td>{{item.r22}}</td>
+                                           <td>{{item.r23}}</td>
+                                           <td>{{item.r24}}</td>
+                                           <td>{{item.r25}}</td>
+                                           <td>{{item.r26}}</td>
+                                           <td>{{item.r27}}</td>
+                                           <td>{{item.r28}}</td>
+                                           <td>{{item.r29}}</td>
+                                           <td>{{item.r30}}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    </form>
+                                    </div>
+                            <!-- e -->
+                            </div>
+
+                            <div class="layui-tab-item">
+                                <!-- s -->
+                                    <div id="remainWeek_div">
+                                    <form id="remainWeek_form" method="post" class="layui-form" >
+                                    <div class="layui-form-item">
+                                         <div class="layui-input-inline">
+                                            <input class="layui-input" placeholder="开始日期"  name="startDate" :value="filter.startDate" id="startDate_b" />
+                                        </div>
+                                        <div class="layui-input-inline">
+                                            <input class="layui-input" placeholder="结束日期" name="endDate" :value="filter.endDate" id="endDate_b" />
+                                        </div>
+                                        <div class="layui-input-inline ">
+                                            <select name="remainType" class="layui-input" :value="filter.remainType">
+                                                <option value="1">留存率</option>
+                                                <option value="2">留存人数</option>
+                                            </select>
+                                        </div>
+                                       <button class="layui-btn" lay-submit lay-filter="remainWeek_form">统计</button>
+                                       <button class="layui-btn" v-on:click="exportExcel">导出</button>
+                                       <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                                    </div> 
+                                    <!--表格-->
+                                    <table class="layui-table">
+                                        <thead>
+                                        <tr>
+                                            <th>日期</th>
+                                            <th>玩家</th>
+                                            <th>1周</th>
+                                            <th>2周</th>
+                                            <th>3周</th>
+                                            <th>4周</th>
+                                            <th>5周</th>
+                                            <th>6周</th>
+                                            <th>7周</th>
+                                            <th>8周</th>
+                                            <th>9周</th>
+                                            <th>10周</th>
+                                            <th>11周</th>
+                                            <th>12周</th>
+                                            <th>13周</th>
+                                            <th>14周</th>
+                                            <th>15周</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr v-for="(item, index) in grid.data">
+                                           <td>{{formatDate(item.orwRemainSdate)}}</td>
+                                           <td>{{item.orwRemainUserNum}}</td>
+                                           <td>{{item.w1}}</td>
+                                           <td>{{item.w2}}</td>
+                                           <td>{{item.w3}}</td>
+                                           <td>{{item.w4}}</td>
+                                           <td>{{item.w5}}</td>
+                                           <td>{{item.w6}}</td>
+                                           <td>{{item.w7}}</td>
+                                           <td>{{item.w8}}</td>
+                                           <td>{{item.w9}}</td>
+                                           <td>{{item.w10}}</td>
+                                           <td>{{item.w11}}</td>
+                                           <td>{{item.w12}}</td>
+                                           <td>{{item.w13}}</td>
+                                           <td>{{item.w14}}</td>
+                                           <td>{{item.w15}}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    </form>
+                                    </div>
+                            <!-- e -->
+                            </div>
+
+                            <div class="layui-tab-item">
+                            <!-- s -->
+                                    <div id="remainMonth_div">
+                                    <form id="remainMonth_form" method="post" class="layui-form" >
+                                    <div class="layui-form-item">
+                                         <div class="layui-input-inline">
+                                            <input class="layui-input" placeholder="开始日期"  name="startDate" :value="filter.startDate" id="startDate_c" />
+                                        </div>
+                                        <div class="layui-input-inline">
+                                            <input class="layui-input" placeholder="结束日期" name="endDate" :value="filter.endDate" id="endDate_c" />
+                                        </div>
+                                        <div class="layui-input-inline ">
+                                            <select name="remainType" class="layui-input" :value="filter.remainType">
+                                                <option value="1">留存率</option>
+                                                <option value="2">留存人数</option>
+                                            </select>
+                                        </div>
+                                       <button class="layui-btn" lay-submit lay-filter="remainMonth_form">统计</button>
+                                       <button class="layui-btn" v-on:click="exportExcel">导出</button>
+                                       <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                                    </div> 
+                                    <!--表格-->
+                                    <table class="layui-table">
+                                        <thead>
+                                        <tr>
+                                            <th>日期</th>
+                                            <th>玩家</th>
+                                            <th>1月</th>
+                                            <th>2月</th>
+                                            <th>3月</th>
+                                            <th>4月</th>
+                                            <th>5月</th>
+                                            <th>6月</th>
+                                            <th>7月</th>
+                                            <th>8月</th>
+                                            <th>9月</th>
+                                            <th>10月</th>
+                                            <th>11月</th>
+                                            <th>12月</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                         <tr v-for="(item, index) in grid.data">
+                                           <td>{{formatDate(item.ormYearMonth)}}</td>
+                                           <td>{{item.ormRemainUserNum}}</td>
+                                           <td>{{item.m1}}</td>
+                                           <td>{{item.m2}}</td>
+                                           <td>{{item.m3}}</td>
+                                           <td>{{item.m4}}</td>
+                                           <td>{{item.m5}}</td>
+                                           <td>{{item.m6}}</td>
+                                           <td>{{item.m7}}</td>
+                                           <td>{{item.m8}}</td>
+                                           <td>{{item.m9}}</td>
+                                           <td>{{item.m10}}</td>
+                                           <td>{{item.m11}}</td>
+                                           <td>{{item.m12}}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    </form>
+                                    </div>
+                            <!-- e --> 
+                            </div>
+                        </div>
+                    </div>    
+                </div>    
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</div>
+<script src="../static/lztb/operator/remain.js"></script>
+<script src="../static/lztb/operator/remainDay.js"></script>
+<script src="../static/lztb/operator/remainWeek.js"></script>
+<script src="../static/lztb/operator/remainMonth.js"></script> 
+		

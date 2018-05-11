@@ -1,0 +1,61 @@
+
+<!--糖果派对房间信息-->
+<div class="ibox">
+    <!--主页内容-->
+    <div class="ibox-content fadeInUp animated">
+		<div id="app">
+			<div class="layui-form">
+				<div class="layui-tab-item layui-show">
+					<div class="layui-form-item">
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="开始日" name="startDate" :value="filter.startDate" id="startAt" >
+						</div>
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="截止日" name="endDate" :value="filter.endDate" id="endAt">
+						</div>
+						<button class="layui-btn layui-btn-primary layui-btn-radius" lay-submit>查询</button>
+						<a style="text-decoration:none;" class="layui-btn layui-btn-primary layui-btn-radius" href="/lztb/page/adm1.html#./lztb/game/gameShby.html?spm=m-2-4-5">返回深海捕鱼游戏概况</a>
+					</div>
+					<table class="layui-table" lay-even="" lay-skin="row">
+						<thead>
+						<tr>
+							<th>时间</th>
+							<th>房间</th>
+							<th>人数</th>
+							<th>人数比</th>
+							<th>玫瑰次数</th>
+							<th>飞吻次数</th>
+							<th>拖鞋次数</th>
+							<th>炸弹次数</th>
+							<th>狂暴次数</th>
+							<th>锁定次数</th>
+							<th>互动道具次数</th>
+							<th>技能回收</th>
+							<th>回收</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr v-for="(item, index) in grid.data">
+							<td>{{formatDate(item.gbrDate)}}</td>
+							<td>{{item.gbrRoomType}}</td>
+							<td>{{item.gbrPalyerNum}}</td>
+							<td>{{item.gbrPalyerRete}}</td>
+							<td>{{item.gbrRoseNum}}</td>
+							<td>{{item.gbrKissNum}}</td>
+							<td>{{item.gbrSlipperNum}}</td>
+							<td>{{item.gbrBombNum}}</td>
+							<td>{{item.gbrRageNum}}</td>
+							<td>{{item.gbrLockNum}}</td>
+							<td>{{item.gbrPropRecovery}}</td>
+							<td>{{item.gbrSkillRecovery}}</td>
+							<td>{{item.gbrRecoveryGold}}</td>
+						</tr>
+						</tbody>
+					</table>
+					<div id="pager" class="laypager" style="float: right;"></div>
+				</div>
+			</div>
+		</div>
+    </div>
+	<script src="../static/lztb/game/room/shby.js"></script>
+</div>

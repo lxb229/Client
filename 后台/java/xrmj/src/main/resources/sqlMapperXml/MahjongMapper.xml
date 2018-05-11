@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangzhixuan.mapper.MahjongMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.wangzhixuan.model.Mahjong">
+		<id column="id" property="id" />
+		<result column="mahjong_no" property="mahjongNo" />
+		<result column="mahjong_name" property="mahjongName" />
+		<result column="mahjong_wechat" property="mahjongWechat" />
+		<result column="start_no" property="startNo" />
+		<result column="liveness" property="liveness" />
+		<result column="pattern" property="pattern" />
+		<result column="people_number" property="peopleNumber" />
+		<result column="usable_amount" property="usableAmount" />
+		<result column="donate_amount" property="donateAmount" />
+		<result column="consume_amount" property="consumeAmount" />
+		<result column="status" property="status" />
+		<result column="recommend" property="recommend" />
+		<result column="create_time" property="createTime" />
+	</resultMap>
+
+</mapper>

@@ -1,0 +1,107 @@
+<!--付费数据分析-->
+<div class="ibox">
+    <div class="ibox-title">
+        <h5>付费数据分析</h5>
+    </div>
+    <div class="ibox-content fadeInUp animated">
+         <!--付费数据-->
+        <div id="payData_div">
+        <form class="layui-form" id="payData_form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">范围选择</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" placeholder="开始时间"  name="startDate" :value="filter.startDate" id="payDate_start" />
+            </div>
+            <div class="layui-input-inline">
+                <input class="layui-input" placeholder="结束时间" name="endDate" :value="filter.endDate" id="payDate_end" />
+            </div>
+            <button class="layui-btn" lay-submit lay-filter="payData_form">查询</button>
+            <button class="layui-btn" v-on:click="exportExcel">导出</button>
+        </div>
+        <!--表格-->
+        <table class="layui-table" lay-even >
+            <thead>
+            <tr>
+                <th>日期</th>
+                <th>渠道</th>
+                <th>充值金额</th>
+                <th>充值人数</th>
+                <th>充值人次</th>
+                <th>新增充值人数</th>
+                <th>新增充值金额</th>
+                <th>付费率</th>
+                <th>ARPPU</th>
+                <th>每日首充礼包</th>
+                <th>限时礼包</th>
+                <th>首次充值人数</th>
+                <th>首次充值金额</th>
+                <th>破产充值人数</th>
+                <th>每日破产人数</th>
+                <th>破产充值金额</th>
+                <th>微信充值人数</th>
+                <th>微信充值金额</th>
+                <th>官网微信充值人数</th>
+                <th>官网微信充值金额</th>
+                <th>支付宝充值人数</th>
+                <th>支付宝充值金额</th>
+                <th>官网支付宝充值人数</th>
+                <th>官网支付宝充值金额</th>
+                <th>IOS充值人数</th>
+                <th>IOS充值金额</th>
+                <th>12元订单</th>
+                <th>30元订单</th>
+                <th>50元订单</th>
+                <th>108元订单</th>
+                <th>218元订单</th>
+                <th>518元订单</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="(item, index) in grid.data">
+                <td>{{formatDate(item.omdDate)}}</td>
+                <td>{{item.obdDloadChannel}}</td>
+                <td>{{item.omdRechargeAmount}}</td>
+                <td>{{item.omdRechargeUserNum}}</td>
+                <td>{{item.omdRechargeNum}}</td>
+                <td>{{item.omdNewUserRechargeUserNum}}</td>
+                <td>{{item.omdNewUserRechargeAmount}}</td>
+                <td>{{item.ordPayRate}}</td>
+                <td>{{item.ordArppu}}</td>
+                <td>{{item.omdFirstRechargeNum}}</td>
+                <td>{{item.omdTimelimitRechargeNum}}</td>
+                <td>{{item.omdFirstRechargeUserNum}}</td>
+                <td>{{item.omdFirstRechargeAmount}}</td>
+                <td>{{item.omdBankruptRechargeUserNum}}</td>
+                <td>{{item.omdBankruptUserNum}}</td>
+                <td>{{item.omdBankruptRechargeAmount}}</td>
+                <td>{{item.omdWechatRechargeUserNum}}</td>
+                <td>{{item.omdWechatRechargeAmount}}</td>
+                <td>{{item.omdOffwebWechatRechargeUserNum}}</td>
+                <td>{{item.omdOffwebWechatRechargeUserNum}}</td>
+                <td>{{item.omdAlipayRechargeUserNum}}</td>
+                <td>{{item.omdAlipayRechargeAmount}}</td>
+                <td>{{item.omdOffwebAlipayRechargeAmount}}</td>
+                <td>{{item.omdOffwebAlipayRechargeUserNum}}</td>
+                <td>{{item.omdIosRechargeUserNum}}</td>
+                <td>{{item.omdIosRechargeAmount}}</td>
+                <td>{{item.omdIosRechargeAmount}}</td>
+                <td>{{item.omdOrder12yuan}}</td>
+                <td>{{item.omdOrder30yuan}}</td>
+                <td>{{item.omdOrder50yuan}}</td>
+                <td>{{item.omdOrder108yuan}}</td>
+                <td>{{item.omdOrder218yuan}}</td>
+                <td>{{item.omdOrder518yuan}}</td>
+            </tr>
+            </tbody>
+        </table>
+        <div id="pager" class="laypager" style="float: right;"></div>
+        </form>
+        </div>
+    </div>    
+</div>
+<script src="../static/lztb/operator/payData.js"></script>
+
+
+
+
+		

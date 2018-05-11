@@ -1,0 +1,107 @@
+﻿<!--内容-->
+<div>
+    <!--标题-->
+    <div class="ibox-title">
+        <h5>登录日志</h5>
+    </div>
+    <!--主页内容 -->
+    <div class="ibox-content fadeInUp animated">
+        <div style="margin: 8px;" id="addstudent">
+            <div id="app">
+                <table class="layui-table">
+                    <thead>
+                        <tr>
+                            <th>登录时间</th>
+                            <th>登录账号</th>
+                            <th>IP</th>
+                            <th>国家</th>
+                            <th>省份</th>
+                            <th>城市</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(item, index) in grid.data">
+                            <td>{{item.loginTime}}</td>
+                            <td>{{item.loginName}}</td>
+                            <td>{{item.ip}}</td>
+                            <td>{{item.country}}</td>
+                            <td>{{item.province}}</td>
+                            <td>{{item.city}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div id="pager" class="laypager" style="float: right;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- javascript -->
+<script type="text/javascript">
+    require(['vue', 'layui', 'site'], function (Vue) {
+
+        var layuiForm;
+        layui.config({ dir: baseUrl + '../plugs/layui/' });
+        layui.use(['layer', 'laypage', 'form', 'laydate'], function () {
+            layuiForm = layui.form();
+            var app = new Vue({
+                el: "#addstudent",
+                data: {
+                    grid: {
+                        curr_page: 1, //当前页码
+                        page_size: 10, //每页最大条数
+                        total: 0, //总数
+                        pageCount: 0,
+                        data: [] //当前页数据
+                    },
+                    filter: {}
+                },
+                watch: {
+                    "grid.curr_page": function (val, oldVal) { //页码改变自动reload
+                        debugger;
+                        if (val === oldVal) {
+                            return;
+                        }
+                        this.gridReload();
+                    }
+                },
+                methods: {
+                    gridFristLoad: function () {
+                        this.curr_page = 1;
+                        this.fetchData(function (rs) {
+                            app.grid.data = rs.data.list;
+                            app.grid.total = rs.recordCount;
+                            app.grid.pageCount = rs.pageCount;
+                            gLayPageIni('pager', app.grid.curr_page, rs.data.pageCount, function (newPage) {
+                                app.grid.curr_page = newPage;
+                            });
+                        });
+                    },
+                    gridReload: function () { //分页获取
+                        this.fetchData(function (rs) {
+                            app.grid.data = rs.data.list;
+                            app.grid.total = rs.recordCount;
+                        });
+                    },
+                    fetchData: function (cb) {
+                        var options = this.filter;
+                        options.pageNo = this.grid.curr_page;
+                        options.pageSize = this.grid.page_size;
+                        $.post("/system/logs/queryLogPagelist", options, function (rs) {
+                            cb(rs);
+                        }, "json");
+                    },
+                    onSearch: function (event) {
+                        this.gridReload();
+                    }
+                },
+                created: function () {
+                    this.gridFristLoad();
+                }
+            });
+        });
+    });
+
+</script>
+</div>

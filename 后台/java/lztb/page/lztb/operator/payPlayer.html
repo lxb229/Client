@@ -1,0 +1,51 @@
+<!--付费玩家趋势-->
+<div class="ibox">
+    <div class="ibox-title">
+        <h5>付费玩家趋势</h5>
+    </div>
+    <div class="ibox-content fadeInUp animated">
+        <div id="payPlayers" class="container"></div>
+        <div id="payPlayers_div">
+        <form id="payPlayers_form" class="layui-form">
+        <div class="layui-form-item" style="float: right;">
+            <label class="layui-form-label">范围选择</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" placeholder="开始时间"  name="startDate" :value="filter.startDate" id="moneyTrendStartDate" />
+            </div>
+            <div class="layui-input-inline">
+                <input class="layui-input" placeholder="结束时间" name="endDate" :value="filter.endDate" id="moneyTrendEndDate" />
+            </div>
+            <button class="layui-btn" lay-submit lay-filter="payPlayers_form">查询</button>
+            <button class="layui-btn" v-on:click="exportExcel">导出</button>
+        </div>
+        <table class="layui-table" lay-even="" lay-skin="row">
+            <thead>
+            <tr>
+                <th>日期</th>
+                <th>活跃玩家</th>
+                <th>充值人数</th>
+                <th>新增充值人数</th>
+                <th>老玩家充值人数</th>
+                <th>付费率</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="(item, index) in grid.data">
+                <td>{{formatDate(item.omtTime)}}</td>
+                <td>{{item.omtBriskUserNum}}</td>
+                <td>{{item.omtBriskUserNum}}</td>
+                <td>{{item.omtNewUserRechargeUserNum}}</td>
+                <td>{{item.omtOldUserRechargeUserNum}}</td>
+                <td>{{item.omtPayRate}}</td>
+            </tr>
+            </tbody>
+        </table>
+        <div id="pager" class="laypager" style="float: right;"></div>
+        </form>
+        </div>
+    </div>
+</div>
+<script src="../static/lztb/operator/payPalyer.js"></script>
+
+
+		

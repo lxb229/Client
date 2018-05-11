@@ -1,0 +1,938 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="shortcut icon" href="https://think.ctolog.com/upload/8cd2ab293660edf0/15723a9730c2d51a.png" />
+    <title>四川澳博互动游戏运营平台</title>
+    <link rel="stylesheet" href="../static/plugs/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../static/plugs/layui/css/layui.css" />
+    <link rel="stylesheet" href="../static/theme/default/css/console.css">
+    <link rel="stylesheet" href="../static/theme/default/css/admin.css">
+    <script>
+        window.ROOT_URL = '';
+    </script>
+    <script src="../static/plugs/require/require.js"></script>
+    <script src="../static/admin/app.js"></script>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <div class="framework-topbar">
+        <div id="topbar" class="console-topbar">
+            <div class="topbar-wrap topbar-clearfix">
+                <div class="topbar-head topbar-left topbar-logo">
+                    龙珠探宝
+                </div>
+                <a data-menu-target='m-1' class="topbar-home-link topbar-btn topbar-left">
+                    <span>运营数据</span>
+                </a>
+                <a data-menu-target='m-2' class="topbar-home-link topbar-btn topbar-left">
+                    <span>游戏数据</span>
+                </a>
+                <a data-menu-target='m-3' class="topbar-home-link topbar-btn topbar-left">
+                    <span>GM中心</span>
+                </a>
+                <a data-menu-target='m-4' class="topbar-home-link topbar-btn topbar-left">
+                    <span>平台配置</span>
+                </a>
+                <a data-menu-target='m-6' class="topbar-home-link topbar-btn topbar-left">
+                    <span>系统管理</span>
+                </a>
+
+                <div class="topbar-info topbar-right">
+                    <a data-reload data-tips-text='刷新' class=" topbar-btn topbar-left topbar-info-item text-center" style='width:50px;'>
+                        <span class='glyphicon glyphicon-refresh`'></span>
+                    </a>
+                    <div class="topbar-left topbar-user">
+                        <div class="dropdown topbar-info-item">
+                            <a href="#" class="dropdown-toggle topbar-btn text-center" data-toggle="dropdown">
+                            <span class='glyphicon glyphicon-user'> {{userInfo.loginName}} </span>
+                            <span class="glyphicon glyphicon-menu-up transition" style="font-size:12px"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="topbar-info-btn">
+                                    <a @click="midPass()">
+                                    <span><i class='glyphicon glyphicon-lock'></i> 修改密码</span>
+                                </a>
+                                </li>
+                                <!-- <li class="topbar-info-btn">
+                                    <a data-modal="/admin/index/info.html?id=10000">
+                                    <span><i class='glyphicon glyphicon-edit'></i> 修改资料</span>
+                                </a>
+                                </li> -->
+                                <li class="topbar-info-btn">
+                                    <a @click="userLogout()">
+                                        <span><i class="glyphicon glyphicon-log-out"></i> 退出登录</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="framework-body framework-sidebar-mini">
+        <div id="sidebar" class="framework-sidebar">
+            <div class="sidebar-content">
+                <div class="sidebar-inner">
+                    <div class="sidebar-fold">
+                        <span class="glyphicon glyphicon-option-vertical transition"></span>
+                    </div>
+                    <!-- 运营数据-->
+                    <div data-menu-box="m-1">
+                        <div class="sidebar-nav main-nav">
+                            <div class="sidebar-title">
+                                <div class="sidebar-title-inner">
+                                    <span class="sidebar-title-icon fa fa-caret-right transition-min"></span>
+                                    <span class="sidebar-title-text">实时数据</span>
+                                </div>
+                            </div>
+                            <ul class="sidebar-trans" style="display:none" data-menu-node='m-1-1'>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-1-1-2' data-open="./lztb/operator/liveDataEcharts.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-bar-chart transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">实时数据图表</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-1-1-3' data-open="./lztb/operator/liveDataETable.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-bar-chart-o transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">实时数据列表</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="sidebar-nav main-nav">
+                            <div class="sidebar-title">
+                                <div class="sidebar-title-inner">
+                                    <span class="sidebar-title-icon fa fa-caret-right transition-min"></span>
+                                    <span class="sidebar-title-text">在线分析</span>
+                                </div>
+                            </div>
+                            <ul class="sidebar-trans" style="display:none" data-menu-node='m-1-2'>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-1-2-1' data-open="./lztb/operator/onlineUserDetial.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">在线用户明细</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-1-2-2' data-open="./lztb/operator/onlineEverydayUser.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-user-secret transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">在线玩家趋势</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-1-2-3' data-open="./lztb/operator/onlineUserDistribute.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-user-secret transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">在线玩家分布</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-1-2-4' data-open="./lztb/operator/onlineUserLoginTime.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-user-secret transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">登录时段分布</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-1-2-5' data-open="./lztb/operator/onlineUserHabit.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-user-secret transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">在线习惯分析</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="sidebar-nav main-nav">
+                            <div class="sidebar-title">
+                                <div class="sidebar-title-inner">
+                                    <span class="sidebar-title-icon fa fa-caret-right transition-min"></span>
+                                    <span class="sidebar-title-text">玩家分析</span>
+                                </div>
+                            </div>
+                            <ul class="sidebar-trans" style="display:none" data-menu-node='m-1-3'>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-1-3-1' data-open="./lztb/operator/playerAdd.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">新增玩家分析</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-1-3-2' data-open="./lztb/operator/playerActive.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">活跃玩家分析</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-1-3-3' data-open="./lztb/operator/playerLose.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">流失回流分析</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="sidebar-nav main-nav">
+                            <div class="sidebar-title">
+                                <div class="sidebar-title-inner">
+                                    <span class="sidebar-title-icon fa fa-caret-right transition-min"></span>
+                                    <span class="sidebar-title-text">付费分析</span>
+                                </div>
+                            </div>
+                            <ul class="sidebar-trans" style="display:none" data-menu-node='m-1-4'>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-1-4-1' data-open="./lztb/operator/payData.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">付费数据分析</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-1-4-2' data-open="./lztb/operator/payPlayer.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">付费玩家趋势</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-1-4-3' data-open="./lztb/operator/payLtv.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">新增玩家价值</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-1-4-4' data-open="./lztb/operator/payRanking.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">付费排行分析</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="sidebar-nav main-nav">
+                            <div class="sidebar-title">
+                                <div class="sidebar-title-inner">
+                                    <span class="sidebar-title-icon fa fa-caret-right transition-min"></span>
+                                    <span class="sidebar-title-text">留存分析</span>
+                                </div>
+                            </div>
+                            <ul class="sidebar-trans" style="display:none" data-menu-node='m-1-5'>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-1-5-1' data-open="./lztb/operator/persistenceGeneralize.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">推广阶段分析</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-1-5-2' data-open="./lztb/operator/persistenceSign.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">注册阶段分析</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-1-5-3' data-open="./lztb/operator/remainPlayer.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">玩家留存分析</span>
+                                    </a>
+                                </li>
+                            </ul>
+
+                        </div>
+                    </div>
+                    <!-- 游戏数据-->
+                    <div data-menu-box="m-2">
+                        <!--经济概况-->
+                        <div class="sidebar-nav main-nav">
+                            <div class="sidebar-title">
+                                <div class="sidebar-title-inner">
+                                    <span class="sidebar-title-icon fa fa-caret-right transition-min"></span>
+                                    <span class="sidebar-title-text">经济概况</span>
+                                </div>
+                            </div>
+                            <ul class="sidebar-trans" style="display:none" data-menu-node='m-2-1'>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-2-3' data-open="./lztb/game/economicProfile.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">概况总览</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-2-4' data-open="./lztb/game/userDetails.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">用户明细</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-2-5' data-open="./lztb/game/recycleFree.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">回收与免充</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-2-6' data-open="./lztb/game/singleCurrencyPeg.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">货币比值</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!--道具概况-->
+                        <div class="sidebar-nav main-nav">
+                            <div class="sidebar-title">
+                                <div class="sidebar-title-inner">
+                                    <span class="sidebar-title-icon fa fa-caret-right transition-min"></span>
+                                    <span class="sidebar-title-text">道具概况</span>
+                                </div>
+                            </div>
+                            <ul class="sidebar-trans" style="display:none" data-menu-node='m-2-7'>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-2-8' data-open="./lztb/game/prop.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">道具概况</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!--邮件概况-->
+                        <div class="sidebar-nav main-nav">
+                            <div class="sidebar-title">
+                                <div class="sidebar-title-inner">
+                                    <span class="sidebar-title-icon fa fa-caret-right transition-min"></span>
+                                    <span class="sidebar-title-text">邮件概况</span>
+                                </div>
+                            </div>
+                            <ul class="sidebar-trans" style="display:none" data-menu-node='m-2-9'>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-2-10' data-open="./lztb/game/mailWater.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">邮件流水</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-3-11' data-open="./lztb/game/emailList.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">邮件排行</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!--游戏概况-->
+                        <div class="sidebar-nav main-nav">
+                            <div class="sidebar-title">
+                                <div class="sidebar-title-inner">
+                                    <span class="sidebar-title-icon fa fa-caret-right transition-min"></span>
+                                    <span class="sidebar-title-text">游戏概况</span>
+                                </div>
+                            </div>
+                            <ul class="sidebar-trans" style="display:none" data-menu-node='m-2-12'>
+                                <!--<li class="nav-item">
+                                    <a data-menu-node='m-2-13' data-open="./lztb/game/gameSurvey.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">游戏概况</span>
+                                    </a>
+                                </li> -->
+                                <li class="nav-item">
+                                    <a data-menu-node='m-2-12-1' data-open="./lztb/game/gameLztb.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">龙珠探宝</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-2-12-2' data-open="./lztb/game/gameDzpk.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">德州扑克</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-2-12-3' data-open="./lztb/game/gameShz.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">水浒传</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-2-12-4' data-open="./lztb/game/gameTgpd.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">糖果派对</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-2-12-5' data-open="./lztb/game/gameShby.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">深海扑鱼</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-2-12-6' data-open="./lztb/game/gameAtt.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">ATT翻牌机</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-2-12-7' data-open="./lztb/game/gameWxhh.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">五星宏辉</span>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a data-menu-node='m-2-12-8' data-open="./lztb/game/gameWzq.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">五子棋</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!--实时输赢-->
+                        <div class="sidebar-nav main-nav">
+                            <div class="sidebar-title">
+                                <div class="sidebar-title-inner">
+                                    <span class="sidebar-title-icon fa fa-caret-right transition-min"></span>
+                                    <span class="sidebar-title-text">实时输赢</span>
+                                </div>
+                            </div>
+                            <ul class="sidebar-trans" style="display:none" data-menu-node='m-2-14'>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-2-15' data-open="./lztb/game/rtBunko.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">实时输赢</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!--游戏流水-->
+                        <div class="sidebar-nav main-nav">
+                            <div class="sidebar-title">
+                                <div class="sidebar-title-inner">
+                                    <span class="sidebar-title-icon fa fa-caret-right transition-min"></span>
+                                    <span class="sidebar-title-text">游戏流水</span>
+                                </div>
+                            </div>
+                            <ul class="sidebar-trans" style="display:none" data-menu-node='m-2-16'>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-2-16-1' data-open="./lztb/game/water/lztb.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">龙珠探宝</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-2-16-2' data-open="./lztb/game/water/dzpk.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">德州扑克</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-2-16-3' data-open="./lztb/game/water/shz.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">水浒传</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-2-16-4' data-open="./lztb/game/water/tgpd.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">糖果派对</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-2-16-5' data-open="./lztb/game/water/shby.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">深海扑鱼</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-2-16-6' data-open="./lztb/game/water/att.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">ATT翻牌机</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-2-16-7' data-open="./lztb/game/water/wxhh.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">五星宏辉</span>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a data-menu-node='m-2-16-8' data-open="./lztb/game/water/wzq.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">五子棋</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!--活动概况-->
+                        <div class="sidebar-nav main-nav">
+                            <div class="sidebar-title">
+                                <div class="sidebar-title-inner">
+                                    <span class="sidebar-title-icon fa fa-caret-right transition-min"></span>
+                                    <span class="sidebar-title-text">活动概况</span>
+                                </div>
+                            </div>
+                            <ul class="sidebar-trans" style="display:none" data-menu-node='m-2-18'>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-2-19' data-open="./lztb/game/luckyWheel.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">幸运转盘统计</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-2-20' data-open="./lztb/game/rewardPoint.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">分享奖励</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- GM中心-->
+                    <div data-menu-box="m-3">
+                        <!--账号信息-->
+                        <div class="sidebar-nav main-nav">
+                            <div class="sidebar-title">
+                                <div class="sidebar-title-inner">
+                                    <span class="sidebar-title-icon fa fa-caret-right transition-min"></span>
+                                    <span class="sidebar-title-text">账号信息</span>
+                                </div>
+                            </div>
+                            <ul class="sidebar-trans" style="display:none" data-menu-node='m-3-1'>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-3-1-1' data-open="./lztb/gm/accountInfor.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">账号信息</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!--增减道具-->
+                        <div class="sidebar-nav main-nav">
+                            <div class="sidebar-title">
+                                <div class="sidebar-title-inner">
+                                    <span class="sidebar-title-icon fa fa-caret-right transition-min"></span>
+                                    <span class="sidebar-title-text">增减道具</span>
+                                </div>
+                            </div>
+                            <ul class="sidebar-trans" style="display:none" data-menu-node='m-3-2'>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-3-2-1' data-open="./lztb/gm/propsIncreaseDecrease.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">增减道具</span>
+                                    </a>
+                                </li>
+								
+                            </ul>
+                        </div>
+                        <!--禁言管理-->
+                        <div class="sidebar-nav main-nav">
+                            <div class="sidebar-title">
+                                <div class="sidebar-title-inner"  data-open="">
+                                    <span class="sidebar-title-icon fa fa-caret-right transition-min"></span>
+                                    <span class="sidebar-title-text">禁言管理</span>
+                                </div>
+                            </div>
+                            <ul class="sidebar-trans" style="display:none" data-menu-node='m-3-3'>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-3-3-1' data-open="./lztb/gm/banHall.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">大厅</span>
+                                    </a>
+                                </li>
+								<li class="nav-item">
+                                    <a data-menu-node='m-3-3-2' data-open="./lztb/gm/banLztb.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">龙珠探宝</span>
+                                    </a>
+                                </li>
+								<li class="nav-item">
+                                    <a data-menu-node='m-3-3-3' data-open="./lztb/gm/banWxhh.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">五星宏辉</span>
+                                    </a>
+                                </li>
+								<li class="nav-item">
+                                    <a data-menu-node='m-3-3-4' data-open="./lztb/gm/banTgpd.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">糖果派对</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!--平台配置-->
+                    <div data-menu-box="m-4">
+                        <!--大厅配置-->
+                        <div class="sidebar-nav main-nav">
+                            <div class="sidebar-title">
+                                <div class="sidebar-title-inner">
+                                    <span class="sidebar-title-icon fa fa-caret-right transition-min"></span>
+                                    <span class="sidebar-title-text">大厅配置</span>
+                                </div>
+                            </div>
+                            <ul class="sidebar-trans" style="display:none" data-menu-node='m-4-1'>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-4-1-1' data-open="./lztb/backstage/marquee.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">跑马灯配置</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-4-1-2' data-open="./lztb/backstage/mail.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">邮件配置</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-4-1-3' data-open="./lztb/backstage/announcement.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">公告配置</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!--中奖展示配置-->
+                        <div class="sidebar-nav main-nav">
+                            <div class="sidebar-title">
+                                <div class="sidebar-title-inner" data-open="">
+                                    <span class="sidebar-title-icon fa fa-caret-right transition-min"></span>
+                                    <span class="sidebar-title-text">中奖展示配置</span>
+                                </div>
+                            </div>
+                            <ul class="sidebar-trans" style="display:none" data-menu-node='m-4-2'>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-4-2-1' data-open="./lztb/backstage/winningShowLztb.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">龙珠探宝</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-4-2-2' data-open="./lztb/backstage/winningShowWxhh.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">五星宏辉</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-4-2-3' data-open="./lztb/backstage/winningShowShz.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">水浒传</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-4-2-4' data-open="./lztb/backstage/winningShowBydr.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">捕鱼达人</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-4-2-5' data-open="./lztb/backstage/winningShowTgpd.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">糖果派对</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!--官网新闻配置-->
+                        <div class="sidebar-nav main-nav">
+                            <div class="sidebar-title">
+                                <div class="sidebar-title-inner">
+                                    <span class="sidebar-title-icon fa fa-caret-right transition-min"></span>
+                                    <span class="sidebar-title-text">官网新闻配置</span>
+                                </div>
+                            </div>
+                            <ul class="sidebar-trans" style="display:none" data-menu-node='m-4-3'>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-4-3-1' data-open="./lztb/backstage/websiteNews.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">官网新闻配置</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- 系统管理-->
+                    <div data-menu-box="m-6">
+                        <div class="sidebar-nav main-nav">
+                            <div class="sidebar-title">
+                                <div class="sidebar-title-inner">
+                                    <span class="sidebar-title-icon fa fa-caret-right transition-min"></span>
+                                    <span class="sidebar-title-text">系统权限</span>
+                                </div>
+                            </div>
+                            <ul class="sidebar-trans" style="display:none" data-menu-node='m-6-5'>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-6-1' data-open="system/user.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">系统用户</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-6-2' data-open="system/role.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-user-secret transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">角色权限</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-6-3' data-open="system/menu.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="glyphicon glyphicon-menu-hamburger transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">系统菜单</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a data-menu-node='m-6-4' data-open="system/resource.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-modx glyphicon-menu-hamburger transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">系统资源</span>
+                                    </a>
+                                </li>
+								<li class="nav-item">
+                                    <a data-menu-node='m-6-5' data-open="system/area.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-modx glyphicon-menu-hamburger transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">区域管理</span>
+                                    </a>
+                                </li>
+								<li class="nav-item">
+                                    <a data-menu-node='m-6-6' data-open="system/product.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">产品管理</span>
+                                    </a>
+                                </li>
+								<li class="nav-item">
+                                    <a data-menu-node='m-6-7' data-open="system/store.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-users transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">道具商城</span>
+                                    </a>
+                                </li>
+								<li class="nav-item">
+                                    <a data-menu-node='m-6-8' data-open="system/cards_order.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-user-secret transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">房卡订单</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="sidebar-nav main-nav">
+                            <div class="sidebar-title">
+                                <div class="sidebar-title-inner">
+                                    <span class="sidebar-title-icon fa fa-caret-right transition-min"></span>
+                                    <span class="sidebar-title-text">日志监控</span>
+                                </div>
+                            </div>
+                            <ul class="sidebar-trans" style="display:none" data-menu-node='m-6-9'>
+
+                                <li class="nav-item">
+                                    <a data-menu-node='m-6-6' data-open="system/login_log.html" class="sidebar-trans">
+                                        <div class="nav-icon sidebar-trans">
+                                            <span class="fa fa-user-secret transition-min"></span>
+                                        </div>
+                                        <span class="nav-title">登录日志</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- 菜单结束 -->
+                </div>
+            </div>
+        </div>
+
+        <!--内容-->
+        <div class="framework-container layer-main-container">
+
+        </div>
+    </div>
+    <script type="text/javascript">
+        // UI框架初始化
+        require(['vue','site'], function (Vue) {
+            //顶部栏
+            var vmtopbar = new Vue({
+                el: "#topbar",
+                data: {
+                    userInfo: {
+                        loginName:"<未登录>"
+                    }
+                },
+                methods: {
+                    midPass:function(){
+                        gOpenModalWindow("修改密码", "system/userMidPass.html", 550, 350);
+                    },
+                    userLogout:function() {
+                        ConfirmBox("您确定要退出系统吗？",function(){
+                            $.post("/system/user/logout",function(){},"json");
+                            window.top.location.href="login.html";
+                        },"退出系统！",function(){});
+                    }
+                },
+                created: function () {
+                    var user = localStorage.getItem("loginUserInfo_data");
+                    if(!user) {
+                        alert("未登录或登录超时，请重新登录！");
+                        window.top.location.href="login.html";
+                        return;
+                    }
+                    user = JSON.parse(user);
+                    this.userInfo.loginName = user.loginName;
+                }
+            });
+
+            //左侧栏
+            var vmsidebar = new Vue({
+                el: "#sidebar",
+                data: {
+
+                },
+                methods: {
+
+                },
+                created: function () {
+
+                }
+            });
+
+            // UI框架初始化
+            require(['pace', 'jquery', 'layui', 'bootstrap', 'ueditor', 'jquery.cookies','jstree'], function () {
+                layui.config({dir: baseUrl + '../plugs/layui/'});
+                layui.use(['layer', 'form', 'element'], function () {
+                    window.layer = layui.layer;
+                    window.form = layui.form();
+                    require(['admin.listen']);
+                });
+            });
+        });
+
+
+    </script>
+</body>
+
+</html>

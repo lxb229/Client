@@ -1,0 +1,145 @@
+﻿<!--内容-->
+<div>
+	<!--标题-->
+	<div class="ibox-title">
+		<h5>产品管理</h5>
+	</div>
+	<!--主页内容 -->
+	<div class="ibox-content fadeInUp animated">
+		<!--   <div class="alert alert-{$alert.type} alert-dismissible" role="alert" style="border-radius:0">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div> -->
+		<div style="margin: 8px;" id="roleListBox">
+			<div id="app">
+				<div class="nowrap pull-right" style="margin-top:2px;margin-bottom: 10px;">
+					<button @click="addRole()" data-title="添加权限" class="layui-btn layui-btn-small"><i class="fa fa-plus"></i> 新增产品</button>
+				</div>
+			</div>
+			<div class="layui-form">
+				<table class="layui-table">
+					<thead>
+						<tr>
+							<th>产品ID</th>
+							<th>产品名称</th>
+							<th>房卡数量</th>
+							<th>产品原价</th>
+							<th>产品现价</th>
+							<th>销售状态</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr v-for="(item,index) in roleList">
+							<td>{{item.spId}}</td>
+							<td>{{item.spName}}</td>
+							<td>{{item.spAmount}}</td>
+							<td>{{item.spCost}}</td>
+							<td>{{item.spPrice}}</td>
+							<td v-if="item.spState == 1">上架</td>
+                            <td v-else>下架</td>
+							<td>
+								
+								<span class="text-explode">|</span>
+								<a @click="editRole(item)" href="javascript:void(0)">编辑</a>
+
+								<span class="text-explode">|</span>
+								<a @click="delRole(item)" href="javascript:void(0)">删除</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<div id="pager" class="laypager" style="float: right;"></div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	require(['vue', 'layui'], function (Vue) {
+		var vmRoles = new Vue({
+			el: "#roleListBox",
+			data: {
+				roleList: []
+			},
+			methods: {
+				addRole: function () {
+					gOpenModalWindow("新增产品", "system/productFrom.html", 450, 650, null, null, null, function () {
+						loadRoleList();
+					});
+				},
+				editRole: function (product) {
+					localStorage.setItem("system_role_update_data", JSON.stringify(product));
+					gOpenModalWindow("编辑产品 - " + product.spName, "system/productFrom.html", 450, 650, null, null, null, function () {
+						localStorage.removeItem("system_role_update_data");
+						loadRoleList();
+					});
+				},
+				
+				delRole: function (product) {
+					ConfirmBox("您确定要删除产品【" + product.spName + "】吗？", del)
+					function del() {
+						$.ajax({
+							url: '/systemProductController/delete',
+							type: 'POST',
+							data: { "spId": product.spId },
+							dataType: 'json',
+							timeout: 10000,
+							success: function (rs) {
+								if (rs.code == '00000') {
+									SuccessBox("产品删除成功!", "提示", 2000);
+									for (var i = 0; i < vmRoles.roleList.length; i++) {
+										if (vmRoles.roleList[i].spId == product.spId) {
+											vmRoles.roleList.splice(i, 1);
+											break;
+										}
+									}
+								} else {
+									AlertMsg(rs.msg);
+									console.error(rs);
+								}
+							},
+							error: function (xhr, status, ex) {
+								AlertMsg("请求失败：" + xhr.statusText);
+								console.error(ex);
+							}
+						});
+					}
+				}
+			},
+			created: function () {
+				loadRoleList();
+			}
+		});
+		function loadRoleList() {
+			$.ajax({
+				url: '/systemProductController/productList',
+				type: 'POST',
+				data: {},
+				dataType: 'json',
+				timeout: 10000,
+				success: function (rs) {
+					if (rs.code == '00000') {
+						vmRoles.roleList = rs.data;
+					} else {
+						AlertMsg(rs.msg);
+						console.error(rs);
+					}
+				},
+				error: function (xhr, status, ex) {
+					AlertMsg("请求失败：" + xhr.statusText);
+					console.error(ex);
+				}
+			});
+		}
+		var layuiForm;
+		layui.config({ dir: baseUrl + '../plugs/layui/' });
+		layui.use(['layer', 'laypage', 'form', 'laydate'], function () {
+			layuiForm = layui.form();
+			layuiForm.render('select');
+			layuiForm.render('radio');
+		});
+
+	});
+
+</script>

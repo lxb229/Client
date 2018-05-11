@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.guse.platform.dao.doudou.SystemMessageMapper">
+
+    <resultMap id="SystemMessage" type="com.guse.platform.entity.doudou.SystemMessage">
+        <result property="smId" column="sm_id"/>
+        <result property="smContent" column="sm_content"/>
+        <result property="createId" column="create_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="smType" column="sm_type"/>
+        <result property="smUserId" column="sm_user_id"/>
+        <result property="smState" column="sm_state"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+        sm_id ,sm_content ,create_id ,create_time ,sm_type ,sm_user_id ,sm_state 
+	    ]]>
+	</sql>
+	<!-- 用于分页查询 -->
+	<sql id="sql_of_where">
+	 	WHERE 1=1 
+    	<if test="bParam != null" >	
+		 	<if test="bParam.smContent != null">
+	      	 AND sm_content = #{bParam.smContent, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="bParam.createId != null">
+	      	 AND create_id = #{bParam.createId, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.createTime != null">
+	      	 AND create_time = #{bParam.createTime, jdbcType=TIMESTAMP}
+		 	</if>
+		 	<if test="bParam.smType != null">
+	      	 AND sm_type = #{bParam.smType, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.smUserId != null">
+	      	 AND sm_user_id = #{bParam.smUserId, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.smState != null">
+	      	 AND sm_state = #{bParam.smState, jdbcType=VARCHAR}
+		 	</if>
+	    </if>   
+    </sql>
+    
+    <!-- 通用查询 -->
+    <select id="select" parameterType="java.util.Map" resultMap="SystemMessage">
+        select 
+        <include refid="Base_Column_List" />
+        from system_message 
+        <include refid="sql_of_where" /> order by create_time desc
+    </select>
+    
+    <!-- 通用分页查询 -->
+    <select id="selectPageByParam" parameterType="java.util.Map" resultMap="SystemMessage">
+        select 
+        <include refid="Base_Column_List" />
+        from system_message 
+        <include refid="sql_of_where" />
+        <if test="pParam != null">
+            <if test="pParam.orderByClause != null" > order by ${pParam.orderByClause} desc </if>
+            <if test="pParam.orderByClause == null" >
+            		order by sm_id  desc 
+            </if>
+            <if test="pParam.startIndex != null and pParam.pageSize != null" >
+              limit ${pParam.startIndex} , ${pParam.pageSize}
+            </if>
+        </if>
+          <if test="pParam == null">
+             order by create_date desc
+        </if>
+    </select>
+    
+    <!-- 通用分页查询记录总数 -->
+    <select id="countByParam" parameterType="java.util.Map" resultType="java.lang.Long">
+        select count(*) from system_message 
+        <include refid="sql_of_where" />
+    </select>
+    
+    
+    <insert id="insert" parameterType="com.guse.platform.entity.doudou.SystemMessage">
+    <![CDATA[
+        INSERT INTO system_message (
+	        sm_id  ,
+	        sm_content  ,
+	        create_id  ,
+	        create_time  ,
+	        sm_type  ,
+	        sm_user_id  ,
+	        sm_state  
+        ) VALUES (
+        	#{smId, jdbcType=INTEGER} ,
+        	#{smContent, jdbcType=VARCHAR} ,
+        	#{createId, jdbcType=INTEGER} ,
+        	#{createTime, jdbcType=TIMESTAMP} ,
+        	#{smType, jdbcType=INTEGER} ,
+        	#{smUserId, jdbcType=INTEGER} ,
+        	#{smState, jdbcType=VARCHAR} 
+        )
+    ]]>
+    </insert>
+    
+    <delete id="deleteById">
+    <![CDATA[
+        DELETE FROM system_message WHERE
+        sm_id = #{smId} 
+    ]]>
+    </delete>
+    
+    <select id="selectById" resultMap="SystemMessage">
+	    SELECT <include refid="Base_Column_List"/>
+	    <![CDATA[
+	        FROM system_message 
+	        WHERE 
+		        sm_id = #{smId} 
+	    ]]>
+    </select>
+    
+    <update id="updateByIdSelective" parameterType="com.guse.platform.entity.doudou.SystemMessage">
+		UPDATE system_message
+		<set>
+		 	<if test="smContent != null">
+	      	  sm_content = #{smContent, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="createId != null">
+	      	  create_id = #{createId, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="createTime != null">
+	      	  create_time = #{createTime, jdbcType=TIMESTAMP} ,
+		 	</if>
+		 	<if test="smType != null">
+	      	  sm_type = #{smType, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="smUserId != null">
+	      	  sm_user_id = #{smUserId, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="smState != null">
+	      	  sm_state = #{smState, jdbcType=VARCHAR} ,
+		 	</if>
+		</set>
+		WHERE
+	       	sm_id = #{smId} 
+    </update>
+	
+</mapper>
+

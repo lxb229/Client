@@ -1,0 +1,68 @@
+
+<!--游戏概况德州扑克-->
+<div class="ibox">
+    <!--主页内容-->
+    <div class="ibox-content fadeInUp animated">
+		<div id="app">
+			<div class="layui-form">
+				<div class="layui-tab-item layui-show">
+					<div class="layui-form-item">
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="开始日" name="startDate" :value="filter.startDate" id="startAt" >
+						</div>
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="截止日" name="endDate" :value="filter.endDate" id="endAt">
+						</div>
+						<button class="layui-btn layui-btn-primary layui-btn-radius" lay-submit>查询</button>
+						<a style="text-decoration:none;" class="layui-btn layui-btn-primary layui-btn-radius" href="/lztb/page/adm1.html#./lztb/game/room/dzpk.html?spm=m-2-4-2">德州扑克房间信息</a>
+					</div>
+					<table class="layui-table" lay-even="" lay-skin="row">
+						<thead>
+						<tr>
+							<th>日期</th>
+							<th>游戏玩家</th>
+							<th>游戏时间小于1分钟</th>
+							<th>游戏时间小于10分钟</th>
+							<th>游戏时间小于25分钟</th>
+							<th>游戏时间小于60分钟</th>
+							<th>游戏时间大于60分钟</th>
+							<th>游戏时间小于120分钟</th>
+							<th>赢分玩家</th>
+							<th>赢分玩家比</th>
+							<th>输分玩家</th>
+							<th>输分玩家比</th>
+							<th>破产玩家</th>
+							<th>游戏总回收</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr v-for="(item, index) in grid.data">
+							<td>{{formatDate(item.ggsDate)}}</td>
+							<td>{{item.ggsPlayerNum}}</td>
+							<td>{{item.ggsLess1}}</td>
+							<td>{{item.ggsLess10}}</td>
+							<td>{{item.ggsLess25}}</td>
+							<td>{{item.ggsLess60}}</td>
+							<td>{{item.ggsGreater60}}</td>
+							<td>{{item.ggsGreater120}}</td>
+							<td>{{item.ggsWinPlayerNum}}</td>
+							<td>{{item.ggsWinPlayerRate}}</td>
+							<td>{{item.ggsLosePlayerNum}}</td>
+							<td>{{item.ggsLosePlayerRate}}</td>
+							<td>{{item.ggsBankruptPlayerNum}}</td>
+							<td>{{item.ggsSysRecoveryGold}}</td>
+						</tr>
+						</tbody>
+					</table>
+					<div id="pager" class="laypager" style="float: right;"></div>
+				</div>
+			</div>
+		</div>
+    </div>
+	<script>
+        function dzpkInfoBtn(){
+            $("#dzpkInfo").show().siblings('table').hide();
+        }
+	</script>
+	<script src="../static/lztb/game/gameDzpk.js"></script>
+</div>

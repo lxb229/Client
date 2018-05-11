@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>中奖展示配置新建龙珠探宝</title>
+    <link href="/lztb/static/plugs/layui/css/layui.css" rel="stylesheet">
+    <!--<script src="../../../static/admin/app.js"></script>-->
+</head>
+<body>
+    <div id="winFromLztb" style="padding: 15px;">
+        <div class="layui-form">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">倍数需求</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" type="number" min="0" placeholder="倍数区间下限" v-model="formData.bs_min" />
+                    </div>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" type="number" min="0" placeholder="倍数区间上限" v-model="formData.bs_max" />
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">金币需求</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" type="number" min="0" placeholder="本轮获得最低金币数" v-model="formData.award_gold_min" />
+                    </div>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" type="number" min="0" placeholder="本轮获得最高金币数" v-model="formData.award_gold_max" />
+                    </div>
+                </div>
+            </div>
+        <!--     <div class="layui-form-item">
+                <label class="layui-form-label">中奖配置</label>
+            </div> -->
+            <div class="layui-form-item">
+                <label class="layui-form-label">播报样式</label>
+                <div class="layui-input-block">
+                    <select style="height: 38px;width: 200px;" lay-ignore v-model="formData.style_type">
+                        <option value="0">普通</option>
+                        <option value="1">豪华</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">中奖类型</label>
+                <div class="layui-input-block">
+                    <select style="height: 38px;width: 200px;" lay-ignore v-model="formData.type">
+                        <option value="">请选择</option>
+                        <option value="1">幸运星</option>
+                        <option value="2">今日集锦</option>
+                        <option value="3">累积大奖</option>
+                        <option value="4">跑马灯</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">上架状态</label>
+                <div class="layui-input-block">
+                    <select style="height: 38px;width: 200px;" lay-ignore v-model="formData.is_open">
+                        <option value="1">上架</option>
+                        <option value="0">下架</option>
+                    </select>
+                </div>
+            </div>
+     <!--        <div class="layui-form-item">
+                <label class="layui-form-label">播放地点</label>
+                <div class="layui-input-block">
+                    <input type="checkbox" name="write" lay-skin="primary" title="全服">
+                    <input type="checkbox" name="write" lay-skin="primary" title="龙珠探宝">
+                    <input type="checkbox" name="write" lay-skin="primary" title="ATT">
+                    <input type="checkbox" name="write" lay-skin="primary" title="水浒传">
+                    <input type="checkbox" name="write" lay-skin="primary" title="疯狂宝石">
+                </div>
+            </div> -->
+            <div class="layui-form-item">
+                <textarea placeholder="公告内容" class="layui-textarea" v-model="formData.format"></textarea>
+            </div>
+            <div class="layui-form-item" style="text-align: center">
+                <button class="layui-btn" @click="saveData()"> 提 交 </button>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="/lztb/static/plugs/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/lztb/static/plugs/layui/layui.js"></script>
+    <script type="text/javascript" src="/lztb/static/plugs/vue/vue.js"></script>
+    <script type="text/javascript" src="/lztb/static/model/site.js"></script>
+    <script type="text/javascript">
+        window.baseUrl = window.parent.window.baseUrl;
+        layui.use(['layer', 'form', 'laydate'], function () {
+            var layform = layui.form();
+            layform.render();
+
+            var vmFromLztb = new Vue({
+                el: "#winFromLztb",
+                data: {
+                    formData:{
+                        format_id:null,
+                        format:null,
+                        bs_min:null,
+                        bs_max:null,
+                        award_gold_min:null,
+                        award_gold_max:null,
+                        style_type:0,
+                        is_open:1,
+                        type:''
+                    },
+                    tmpls:[
+                        {
+                            id:1,
+                            name:"幸运星",
+                            tmp:"轻松中的%i金币！"
+                        },
+                        {
+                            id:2,
+                            name:"今日集锦",
+                            tmp:"恭喜<color=#00ff00>%s</color>在龙珠探宝游戏中中得<color=#ff0000>%d</color>倍，获得<color=#ffff00>%i</color>金币，让人羡慕嫉妒恨啊！"
+                        },
+                        {
+                            id:3,
+                            name:"累计大奖",
+                            tmp:"恭喜<color=#00ff00>%s</color>在龙珠探宝游戏中中得<color=#ff0000>%d</color>倍，获得<color=#ffff00>%i</color>金币，让人羡慕嫉妒恨啊！"
+                        },
+                        {
+                            id:4,
+                            name:"跑马灯",
+                            tmp:"恭喜<color=#00ff00>%s</color>在龙珠探宝游戏中中得<color=#ff0000>%d</color>倍，获得<color=#ffff00>%i</color>金币，让人羡慕嫉妒恨啊！"
+                        }
+                    ]
+                },
+                watch:{
+                    // 'fromData.type':function(nval,oval){
+                    //     for (var i = 0; i < vmFromLztb.tmpls.length; i++) {
+                    //         var tmp = vmFromLztb.tmpls[i];
+                    //         if(tmp.id == nval) {
+                    //             vmFromLztb.fromData.format = tmp.tmp;
+                    //             break;
+                    //         }
+                    //     }
+                    // }
+                },
+                methods: {
+                    saveData:function() {
+                        $.ajax({
+                            url: '/config/winning/lztbSave',
+                            type: 'POST',
+                            data: vmFromLztb.formData,
+                            dataType: 'json',
+                            timeout: 10000,
+                            success: function (rs) {
+                                if (rs.code == '00000') {
+                                    var rsdata = JSON.parse(rs.data);
+                                    if(rsdata.code == 200) {
+                                        top.gCloseModalWindow();
+                                        top.SuccessBox("配置保存成！", "提示", 2000);
+                                    } else {
+                                        top.AlertMsg(rsdata.info);
+                                    }      
+                                } else {
+                                    top.AlertMsg("保存失败："+rs.msg);
+                                    console.error(rs);
+                                }
+                            },
+                            error: function (xhr, status, ex) {
+                                top.AlertMsg("请求失败：" + xhr.statusText);
+                                console.error(ex);
+                            }
+                        });
+                    }
+                },
+                created: function () {
+                    //VUE实例创建完成后
+                    var strData = localStorage.getItem("config_winning_lztb_edit");
+                    if(strData) {
+                        strData = JSON.parse(strData);
+                        this.formData = strData;
+                    }
+                },
+                mounted: function () {
+                    //VUE的DOM渲染后
+                    layform.render();
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

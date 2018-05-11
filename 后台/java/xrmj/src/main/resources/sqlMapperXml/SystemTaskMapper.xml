@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangzhixuan.mapper.SystemTaskMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="SystemTask" type="com.wangzhixuan.model.SystemTask">
+		<result column="id" property="id" />
+		<result column="task_cmd" property="taskCmd" />
+		<result column="task_content" property="taskContent" />
+		<result column="task_status" property="taskStatus" />
+		<result column="task_num" property="taskNum" />
+		<result column="task_lv" property="taskLv" />
+		<result column="create_time" property="createTime" />
+	</resultMap>
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+        id, task_cmd, task_content, task_status, task_num, task_lv, create_time  
+	    ]]>
+	</sql>
+	
+    <select id="getPendingTask" resultMap="SystemTask">
+     SELECT <include refid="Base_Column_List"/>
+        FROM system_task 
+        WHERE 
+	       task_num  &lt; 3 AND task_status &lt;&gt; 1 
+	       ORDER BY task_lv desc,create_time 
+	       LIMIT 30
+    </select>
+    
+</mapper>

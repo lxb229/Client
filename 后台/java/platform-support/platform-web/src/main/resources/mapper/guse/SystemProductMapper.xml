@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.guse.platform.dao.doudou.SystemProductMapper">
+
+    <resultMap id="SystemProduct" type="com.guse.platform.entity.doudou.SystemProduct">
+        <result property="spId" column="sp_id"/>
+        <result property="spName" column="sp_name"/>
+        <result property="spAmount" column="sp_amount"/>
+        <result property="spCost" column="sp_cost"/>
+        <result property="spPrice" column="sp_price"/>
+        <result property="spState" column="sp_state"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+        sp_id ,sp_name ,sp_amount ,sp_cost ,sp_price ,sp_state ,create_time 
+	    ]]>
+	</sql>
+	<!-- 用于分页查询 -->
+	<sql id="sql_of_where">
+	 	WHERE 1=1 
+    	<if test="bParam != null" >	
+		 	<if test="bParam.spName != null">
+	      	 AND sp_name = #{bParam.spName, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="bParam.spAmount != null">
+	      	 AND sp_amount = #{bParam.spAmount, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.spCost != null">
+	      	 AND sp_cost = #{bParam.spCost, jdbcType=DOUBLE}
+		 	</if>
+		 	<if test="bParam.spPrice != null">
+	      	 AND sp_price = #{bParam.spPrice, jdbcType=DOUBLE}
+		 	</if>
+		 	<if test="bParam.spState != null">
+	      	 AND sp_state = #{bParam.spState, jdbcType=INTEGER}
+		 	</if>
+	    </if>   
+    </sql>
+    
+    <!-- 通用查询 -->
+    <select id="select" parameterType="java.util.Map" resultMap="SystemProduct">
+        select 
+        <include refid="Base_Column_List" />
+        from system_product 
+        <include refid="sql_of_where" /> order by create_time desc
+    </select>
+    
+    <!-- 商城道具查询 -->
+    <select id="selectStore" parameterType="com.guse.platform.entity.doudou.SystemProduct" resultMap="SystemProduct">
+        select 
+        <include refid="Base_Column_List" />
+        from system_product 
+        WHERE 1=1 
+	 	<if test="spName != null">
+      	 AND sp_name = #{spName}
+	 	</if>
+	    and sp_state = 1 order by create_time desc
+    </select>
+    
+    <!-- 通用分页查询 -->
+    <select id="selectPageByParam" parameterType="java.util.Map" resultMap="SystemProduct">
+        select 
+        <include refid="Base_Column_List" />
+        from system_product 
+        <include refid="sql_of_where" />
+        <if test="pParam != null">
+            <if test="pParam.orderByClause != null" > order by ${pParam.orderByClause} </if>
+            <if test="pParam.orderByClause == null" >
+            		order by sp_id  desc 
+            </if>
+            <if test="pParam.startIndex != null and pParam.pageSize != null" >
+              limit ${pParam.startIndex} , ${pParam.pageSize}
+            </if>
+        </if>
+          <if test="pParam == null">
+             order by create_date desc
+        </if>
+    </select>
+    
+    <!-- 通用分页查询记录总数 -->
+    <select id="countByParam" parameterType="java.util.Map" resultType="java.lang.Long">
+        select count(*) from system_product 
+        <include refid="sql_of_where" />
+    </select>
+    
+    
+    <insert id="insert" parameterType="com.guse.platform.entity.doudou.SystemProduct">
+    <![CDATA[
+        INSERT INTO system_product (
+	        sp_id  ,
+	        sp_name  ,
+	        sp_amount  ,
+	        sp_cost  ,
+	        sp_price  ,
+	        sp_state  ,
+	        create_time  
+        ) VALUES (
+        	#{spId, jdbcType=INTEGER} ,
+        	#{spName, jdbcType=VARCHAR} ,
+        	#{spAmount, jdbcType=INTEGER} ,
+        	#{spCost, jdbcType=DECIMAL} ,
+        	#{spPrice, jdbcType=DECIMAL} ,
+        	#{spState, jdbcType=INTEGER} ,
+        	#{createTime, jdbcType=TIMESTAMP} 
+        )
+    ]]>
+    </insert>
+    
+    <delete id="deleteById">
+    <![CDATA[
+        DELETE FROM system_product WHERE
+        sp_id = #{spId} 
+    ]]>
+    </delete>
+    
+    <select id="selectById" resultMap="SystemProduct">
+	    SELECT <include refid="Base_Column_List"/>
+	    <![CDATA[
+	        FROM system_product 
+	        WHERE 
+		        sp_id = #{spId} 
+	    ]]>
+    </select>
+    
+    <update id="updateByIdSelective" parameterType="com.guse.platform.entity.doudou.SystemProduct">
+		UPDATE system_product
+		<set>
+		 	<if test="spName != null">
+	      	  sp_name = #{spName, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="spAmount != null">
+	      	  sp_amount = #{spAmount, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="spCost != null">
+	      	  sp_cost = #{spCost, jdbcType=DECIMAL} ,
+		 	</if>
+		 	<if test="spPrice != null">
+	      	  sp_price = #{spPrice, jdbcType=DECIMAL} ,
+		 	</if>
+		 	<if test="spState != null">
+	      	  sp_state = #{spState, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="createTime != null">
+	      	  create_time = #{createTime, jdbcType=TIMESTAMP} ,
+		 	</if>
+		</set>
+		WHERE
+	       	sp_id = #{spId} 
+    </update>
+    
+    <select id="getProductByName" resultMap="SystemProduct">
+	    SELECT <include refid="Base_Column_List"/>
+	    <![CDATA[
+	        FROM system_product 
+	        WHERE 
+		        sp_name = #{productName} 
+	    ]]>
+    </select>
+	
+</mapper>
+

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangzhixuan.mapper.CommodityMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="Commodity" type="com.wangzhixuan.model.Commodity">
+		<result column="id" property="id" />
+		<result column="commodity_no" property="commodityNo" />
+		<result column="bar_code" property="barCode" />
+		<result column="commodity_type" property="commodityType" />
+		<result column="commodity_name" property="commodityName" />
+		<result column="specification" property="specification" />
+		<result column="price" property="price" />
+		<result column="alarm" property="alarm" />
+		<result column="origin" property="origin" />
+		<result column="brand" property="brand" />
+		<result column="manufacturer" property="manufacturer" />
+		<result column="remark" property="remark" />
+		<result column="user_id" property="userId" />
+		<result column="create_time" property="createTime" />
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+        id, commodity_no, bar_code, commodity_type, commodity_name, 
+        specification, price, alarm, origin, brand, 
+        manufacturer, remark, user_id, create_time 
+	    ]]>
+	</sql>
+	
+	<select id="getAllCommodity"  resultMap="Commodity">
+		SELECT <include refid="Base_Column_List"/> 
+		FROM commodity 
+		order by id
+    </select>
+    
+    
+	<select id="getAllSilverCommodity"  resultType="java.lang.String">
+		SELECT 
+			c.commodity_name 
+		FROM silver_commodity sc 
+		LEFT JOIN commodity c ON sc.commodity = c.id 
+		WHERE sc.issued_time &lt; NOW() AND sc.soldout_time &gt; NOW()
+		GROUP BY sc.id 
+    </select>
+    
+    <select id="getSilverCommodityBy"  resultType="SilverCommodityVo">
+    	SELECT
+			sc.id AS id,
+			sc.commodity AS commodity,
+			c.commodity_name AS commodityName,
+			sc.award_lv AS awardLv,
+			sc.email_content AS emailContent,
+			cl.lv_name AS lvName,
+			sc.issued_time AS issuedTime,
+			sc.soldout_time AS soldoutTime
+		FROM silver_commodity sc
+		LEFT JOIN commodity c ON sc.commodity = c.id
+		LEFT JOIN commodity_lv cl ON sc.award_lv = cl.id
+			<where>
+	        	sc.issued_time &lt; NOW() AND sc.soldout_time &gt; NOW()
+	            <if test=" lv != null">
+	               AND sc.award_lv = #{lv}  
+	            </if>
+	        </where>
+		order by id
+    </select>
+    
+    <select id="getAllGoldCommodity"  resultType="GoldExchangeVo">
+		SELECT 
+			gc.commodity AS itemId, 
+			c.commodity_name AS itemName,
+			gc.exchange_price AS goldMoney,
+			ci.image_url AS icon
+		FROM gold_commodity gc
+		LEFT JOIN commodity c ON gc.commodity = c.id
+		LEFT JOIN commodity_image ci ON c.id = ci.commodity AND ci.image_type = 1 
+		WHERE gc.issued_time &lt; NOW() AND gc.soldout_time &gt; NOW()
+		GROUP BY gc.id
+    </select>
+    
+    <select id="exchangeCommodity"  resultType="ExchangeDetailsVo">
+    	SELECT 
+			gc.commodity AS itemId, 
+			c.commodity_name AS itemName,
+			gc.exchange_price AS goldMoney,
+			ci.image_url AS icon,
+			gc.market_price AS price,
+			gc.residue AS num,
+			gc.introduce AS description,
+			gc.online_url AS jumpUrl
+		FROM gold_commodity gc
+		LEFT JOIN commodity c ON gc.commodity = c.id
+		LEFT JOIN commodity_image ci ON c.id = ci.commodity AND ci.image_type =1
+		<where>
+			1=1
+			<if test=" itemId != null">
+	               AND c.id = #{itemId}  
+	            </if>
+		</where>
+		GROUP BY gc.id
+		limit 1
+    </select>
+    
+	
+	<select id="selectCommodityVoPage"  resultType="CommodityVo">
+		SELECT 
+			c.id AS id,
+			c.commodity_no AS commodityNo,
+			c.bar_code AS barCode,
+			c.commodity_type AS commodityType,
+			ct.type_name AS typeName,
+			c.commodity_name AS commodityName,
+			c.specification AS specification,
+			c.price AS price,
+			c.alarm AS alarm,
+			c.origin AS origin,
+			c.brand AS brand,
+			c.manufacturer AS manufacturer,
+			c.remark AS remark,
+			c.user_id AS userId,
+			c.create_time AS createTime
+		FROM commodity c
+		LEFT JOIN commodity_type ct ON c.commodity_type = ct.id
+			<where>
+	        	1=1
+	            <if test=" commodityName != null and commodityName != '' ">
+	               and c.commodity_name like concat(concat('%',#{commodityName}),'%') 
+	            </if>
+	        </where>
+		GROUP BY c.id
+    </select>
+
+</mapper>

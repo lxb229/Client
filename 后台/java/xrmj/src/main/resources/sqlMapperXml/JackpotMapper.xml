@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangzhixuan.mapper.JackpotMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="Jackpot" type="com.wangzhixuan.model.Jackpot">
+		<result column="id" property="id" />
+		<result column="minimum" property="minimum" />
+		<result column="crowdfunding" property="crowdfunding" />
+		<result column="get_number" property="getNumber" />
+		<result column="bonus" property="bonus" />
+		<result column="sendout_minimum" property="sendoutMinimum" />
+		<result column="sendout_crowdfunding" property="sendoutCrowdfunding" />
+		<result column="investment_amount" property="investmentAmount" />
+		<result column="sendout_gold" property="sendoutGold" />
+		<result column="sendout_silver" property="sendoutSilver" />
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+        id, minimum, crowdfunding, get_number, bonus, sendout_minimum, sendout_crowdfunding, 
+        investment_amount, sendout_gold, sendout_silver 
+	    ]]>
+	</sql>
+	
+	<select id="selectJackpotPage" resultMap="Jackpot">
+        SELECT <include refid="Base_Column_List"/> 
+	        FROM jackpot 
+	        GROUP BY id 
+    </select>
+
+</mapper>

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.guse.platform.dao.doudou.StatisticsRoomcardMapper">
+
+    <resultMap id="StatisticsRoomcard" type="com.guse.platform.entity.doudou.StatisticsRoomcard">
+        <result property="srId" column="sr_id"/>
+        <result property="srCityId" column="sr_city_id"/>
+        <result property="srCreateTime" column="sr_create_time"/>
+        <result property="createRoomcards" column="create_roomcards"/>
+        <result property="marketRoomcards" column="market_roomcards"/>
+        <result property="consumeRoomcards" column="consume_roomcards"/>
+        <result property="giveOutRoomcards" column="give_out_roomcards"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+        sr_id ,sr_city_id ,sr_create_time ,create_roomcards ,market_roomcards ,consume_roomcards ,give_out_roomcards 
+	    ]]>
+	</sql>
+	<!-- 用于分页查询 -->
+	<sql id="sql_of_where">
+	 	WHERE 1=1 
+    	<if test="bParam != null" >	
+		 	<if test="bParam.srCityId != null">
+	      	 AND sr_city_id = #{bParam.srCityId, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.srCreateTime != null">
+	      	 AND sr_create_time = #{bParam.srCreateTime, jdbcType=TIMESTAMP}
+		 	</if>
+		 	<if test="bParam.createRoomcards != null">
+	      	 AND create_roomcards = #{bParam.createRoomcards, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.marketRoomcards != null">
+	      	 AND market_roomcards = #{bParam.marketRoomcards, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.consumeRoomcards != null">
+	      	 AND consume_roomcards = #{bParam.consumeRoomcards, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.giveOutRoomcards != null">
+	      	 AND give_out_roomcards = #{bParam.giveOutRoomcards, jdbcType=INTEGER}
+		 	</if>
+	    </if>   
+    </sql>
+    
+    <!-- 通用查询 -->
+    <select id="select" parameterType="java.util.Map" resultMap="StatisticsRoomcard">
+        select 
+        <include refid="Base_Column_List" />
+        from statistics_roomcard 
+        <include refid="sql_of_where" /> order by create_time desc
+    </select>
+    
+    <!-- 通用分页查询 -->
+    <select id="selectPageByParam" parameterType="java.util.Map" resultMap="StatisticsRoomcard">
+        select 
+        <include refid="Base_Column_List" />
+        from statistics_roomcard 
+        <include refid="sql_of_where" />
+        <if test="pParam != null">
+            <if test="pParam.orderByClause != null" > order by ${pParam.orderByClause} </if>
+            <if test="pParam.orderByClause == null" >
+            		order by sr_id  desc 
+            </if>
+            <if test="pParam.startIndex != null and pParam.pageSize != null" >
+              limit ${pParam.startIndex} , ${pParam.pageSize}
+            </if>
+        </if>
+          <if test="pParam == null">
+             order by create_date desc
+        </if>
+    </select>
+    
+    <!-- 通用分页查询记录总数 -->
+    <select id="countByParam" parameterType="java.util.Map" resultType="java.lang.Long">
+        select count(*) from statistics_roomcard 
+        <include refid="sql_of_where" />
+    </select>
+    
+    
+    <insert id="insert" parameterType="com.guse.platform.entity.doudou.StatisticsRoomcard">
+    <![CDATA[
+        INSERT INTO statistics_roomcard (
+	        sr_id  ,
+	        sr_city_id  ,
+	        sr_create_time  ,
+	        create_roomcards  ,
+	        market_roomcards  ,
+	        consume_roomcards  ,
+	        give_out_roomcards  
+        ) VALUES (
+        	#{srId, jdbcType=INTEGER} ,
+        	#{srCityId, jdbcType=INTEGER} ,
+        	#{srCreateTime, jdbcType=TIMESTAMP} ,
+        	#{createRoomcards, jdbcType=INTEGER} ,
+        	#{marketRoomcards, jdbcType=INTEGER} ,
+        	#{consumeRoomcards, jdbcType=INTEGER} ,
+        	#{giveOutRoomcards, jdbcType=INTEGER} 
+        )
+    ]]>
+    </insert>
+    
+    <delete id="deleteById">
+    <![CDATA[
+        DELETE FROM statistics_roomcard WHERE
+        sr_id = #{srId} 
+    ]]>
+    </delete>
+    
+    <select id="selectById" resultMap="StatisticsRoomcard">
+	    SELECT <include refid="Base_Column_List"/>
+	    <![CDATA[
+	        FROM statistics_roomcard 
+	        WHERE 
+		        sr_id = #{srId} 
+	    ]]>
+    </select>
+    
+    <update id="updateByIdSelective" parameterType="com.guse.platform.entity.doudou.StatisticsRoomcard">
+		UPDATE statistics_roomcard
+		<set>
+		 	<if test="srCityId != null">
+	      	  sr_city_id = #{srCityId, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="srCreateTime != null">
+	      	  sr_create_time = #{srCreateTime, jdbcType=TIMESTAMP} ,
+		 	</if>
+		 	<if test="createRoomcards != null">
+	      	  create_roomcards = #{createRoomcards, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="marketRoomcards != null">
+	      	  market_roomcards = #{marketRoomcards, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="consumeRoomcards != null">
+	      	  consume_roomcards = #{consumeRoomcards, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="giveOutRoomcards != null">
+	      	  give_out_roomcards = #{giveOutRoomcards, jdbcType=INTEGER} ,
+		 	</if>
+		</set>
+		WHERE
+	       	sr_id = #{srId} 
+    </update>
+	
+</mapper>
+

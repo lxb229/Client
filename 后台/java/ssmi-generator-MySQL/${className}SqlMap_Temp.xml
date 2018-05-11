@@ -1,0 +1,149 @@
+<#include "/macro.include"/>
+<#assign className = table.className>   
+<#assign classNameLower = className?uncap_first> 
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="${className}">
+
+    <resultMap id="${className}" type="${basepackage}.model.${className}">
+        <#list table.columns as column>
+        <result property="${column.columnNameLower}" column="${column.sqlName}"/>
+		</#list>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="columns">
+	    <![CDATA[
+        <#list table.columns as column>${column.sqlName} <#if column_has_next>,</#if></#list>
+	    ]]>
+	</sql>
+	
+    <insert id="insert" >
+    <![CDATA[
+        INSERT INTO ${table.sqlName} (
+        <#list table.columns as column>
+	        ${column.sqlName}  <#if column_has_next>,</#if>
+	        </#list>
+        ) VALUES (
+        <#list table.columns as column>
+        	#${r"{"}${column.columnNameLower}<#if column.nullable>, jdbcType=<#switch column.sqlTypeName?upper_case><#case 'TEXT'>VARCHAR<#break><#case 'VARCHAR2'>VARCHAR<#break><#case 'NUMBER'>NUMERIC<#break><#case 'DATETIME'>TIMESTAMP<#break><#case 'TIMESTAMPTZ'>TIMESTAMP<#break><#case 'DATE'>TIMESTAMP<#break><#case 'INT4'>INTEGER<#break><#case 'FLOAT8'>DOUBLE<#break><#case 'INT'>INTEGER<#break><#default>${column.sqlTypeName?upper_case}</#switch></#if>} <#if column_has_next>,</#if>
+        </#list>        
+        )
+    ]]>
+    </insert>
+
+    <update id="update" >
+    <![CDATA[
+        UPDATE ${table.sqlName} SET
+	        <#list table.notPkColumns as column>
+	        ${column.sqlName} = #${r"{"}${column.columnNameLower}<#if column.nullable>, jdbcType=<#switch column.sqlTypeName?upper_case><#case 'TEXT'>VARCHAR<#break><#case 'VARCHAR2'>VARCHAR<#break><#case 'NUMBER'>NUMERIC<#break><#case 'DATETIME'>TIMESTAMP<#break><#case 'TIMESTAMPTZ'>TIMESTAMP<#break><#case 'DATE'>TIMESTAMP<#break><#case 'INT4'>INTEGER<#break><#case 'FLOAT8'>DOUBLE<#break><#case 'INT'>INTEGER<#break><#default>${column.sqlTypeName?upper_case}</#switch></#if>} <#if column_has_next>,</#if>
+	        </#list>
+        WHERE 
+        	<#list table.compositeIdColumns as column>
+	        ${column.sqlName} = #${r"{"}${column.columnNameLower}${r"}"} <#if column_has_next>,</#if>
+	        </#list>
+    ]]>
+    </update>
+
+    <delete id="delete">
+    <![CDATA[
+        DELETE FROM ${table.sqlName} WHERE
+        <#list table.compositeIdColumns as column>
+        ${column.sqlName} = #${r"{"}${column.columnNameLower}${r"}"} <#if column_has_next>,</#if>
+		</#list>
+    ]]>
+    </delete>
+    
+    <select id="getById" resultMap="${className}">
+	    SELECT <include refid="columns"/>
+	    <![CDATA[
+	        FROM ${table.sqlName} 
+	        WHERE 
+				<#list table.compositeIdColumns as column>
+		        ${column.sqlName} = #${r"{"}${column.columnNameLower}${r"}"} <#if column_has_next>,</#if>
+		        </#list>
+	    ]]>
+    </select>
+
+	<sql id="findWhere">
+	    <where>
+	    	<choose>
+	    		<when test="queryType==0">
+		       		<#list table.columns as column>
+			   		<#if column.isStringColumn && !column.pk>
+			       	<if test="@Ognl@isNotEmpty(${column.columnNameLower})">
+	   			 		AND ${column.sqlName} = #${r"{"}${column.columnNameLower}${r"}"}
+	   			   	</if>
+			   		</#if>
+		       		</#list>
+	       		</when>
+	       		<otherwise>
+			       	<#list table.columns as column>
+				   	<#if column.isStringColumn && !column.pk>
+				    <if test="@Ognl@isNotEmpty(${column.columnNameLower})">
+			   			AND ${column.sqlName} LIKE '%'||#${r"{"}${column.columnNameLower}${r"}"}||'%'
+			   		</if>
+				   	</#if>
+			       	</#list>
+		        </otherwise>
+	      	</choose>
+	       	<#list table.columns as column>
+		   	<#if column.isDateTimeColumn>
+		   	<if test="@Ognl@isNotEmpty(${column.columnNameLower}Begin)">
+		   		AND ${column.sqlName} >= #${r"{"}${column.columnNameLower}${r"Begin}"}
+		   	</if>
+		   	<if test="@Ognl@isNotEmpty(${column.columnNameLower}End)">
+		   		AND ${column.sqlName} &lt; #${r"{"}${column.columnNameLower}${r"End}"}
+		   	</if>
+		   	<#else>
+		   	<#if !column.isStringColumn || column.pk>
+		   	<if test="@Ognl@isNotEmpty(${column.columnNameLower})">
+			    AND ${column.sqlName} = #${r"{"}${column.columnNameLower}${r"}"}
+			</if>
+			</#if>
+		   	</#if>
+		   	</#list>
+	    </where>
+	</sql>
+	 
+    <select id="findPageCount" resultType="long">
+        SELECT count(*) FROM ${table.sqlName} <include refid="findWhere"/>    
+    </select>
+    
+    <!--
+    	分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
+    	因为分页查询将传 #offset#,#pageSize#,#lastRows# 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
+    -->
+    <select id="findPage" resultMap="${className}">
+    	SELECT <include refid="columns"/> FROM ${table.sqlName} 
+		<include refid="findWhere"/>
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY $${r"{"}sortColumns${r"}"}
+		</if>
+    </select>
+
+    <#list table.columns as column>
+    <#if column.unique && !column.pk>
+    <select id="getBy${column.columnName}" resultMap="${className}" >
+	    SELECT <include refid="columns"/>
+	    <![CDATA[
+	        FROM ${table.sqlName} WHERE ${column.sqlName} = #${column.columnNameLower}#
+	    ]]>
+    </select>
+    
+    </#if>
+	</#list>
+	
+	<select id="find" resultMap="${className}">
+	    SELECT <include refid="columns"/> FROM ${table.sqlName} 
+		<include refid="findWhere"/>
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY $${r"{"}sortColumns${r"}"}
+		</if>
+    </select>
+	
+</mapper>
+

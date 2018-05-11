@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.guse.platform.dao.doudou.GameActivityRotorDetailMapper">
+
+    <resultMap id="GameActivityRotorDetail" type="com.guse.platform.entity.doudou.GameActivityRotorDetail">
+        <result property="gardId" column="gard_id"/>
+        <result property="obuUserid" column="obu_userid"/>
+        <result property="obuUserNick" column="obu_user_nick"/>
+        <result property="gardBettingGold" column="gard_betting_gold"/>
+        <result property="gardPrizeName" column="gard_prize_name"/>
+        <result property="gardPrizeGold" column="gard_prize_gold"/>
+        <result property="gardPrizeNumber" column="gard_prize_number"/>
+        <result property="gardPrizeTime" column="gard_prize_time"/>
+        <result property="gardCreateTime" column="gard_create_time"/>
+        <result property="obuIsGoBroke" column="obu_is_go_broke"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+        gard_id ,obu_userid ,obu_user_nick ,gard_betting_gold ,gard_prize_name ,gard_prize_gold ,gard_prize_number ,gard_prize_time ,gard_create_time ,obu_is_go_broke 
+	    ]]>
+	</sql>
+	<!-- 用于分页查询 -->
+	<sql id="sql_of_where">
+	 	WHERE 1=1 
+    	<if test="bParam != null" >	
+		 	<if test="bParam.obuUserid != null">
+			 	<if test="bParam.obuUserid !='' ">
+		      	 	AND obu_userid = #{bParam.obuUserid, jdbcType=BIGINT}
+		      	</if>
+		 	</if>
+		 	<if test="bParam.obuUserNick != null">
+			 	<if test="bParam.obuUserNick !='' ">
+		      	 	AND obu_user_nick = #{bParam.obuUserNick, jdbcType=VARCHAR}
+		      	</if>
+		 	</if>
+		 	<if test="bParam.gardBettingGold != null">
+	      	 AND gard_betting_gold = #{bParam.gardBettingGold, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.gardPrizeName != null">
+			 	<if test="bParam.gardPrizeName !='' ">
+		      	 	AND gard_prize_name = #{bParam.gardPrizeName, jdbcType=VARCHAR}
+		      	</if>
+		 	</if>
+		 	<if test="bParam.gardPrizeGold != null">
+	      	 AND gard_prize_gold = #{bParam.gardPrizeGold, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.gardPrizeNumber != null">
+	      	 AND gard_prize_number = #{bParam.gardPrizeNumber, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.gardPrizeTime != null">
+	      	 AND gard_prize_time = #{bParam.gardPrizeTime, jdbcType=TIMESTAMP}
+		 	</if>
+		 	<if test="bParam.gardCreateTime != null">
+	      	 AND gard_create_time = #{bParam.gardCreateTime, jdbcType=TIMESTAMP}
+		 	</if>
+		 	<if test="bParam.obuIsGoBroke != null">
+	      	 AND obu_is_go_broke = #{bParam.obuIsGoBroke, jdbcType=INTEGER}
+		 	</if>
+	    </if>   
+    </sql>
+    
+    <!-- 通用查询 -->
+    <select id="select" parameterType="java.util.Map" resultMap="GameActivityRotorDetail">
+        select 
+        <include refid="Base_Column_List" />
+        from game_activity_rotor_detail 
+        <include refid="sql_of_where" /> order by gard_create_time desc
+    </select>
+    
+    <!-- 通用分页查询 -->
+    <select id="selectPageByParam" parameterType="java.util.Map" resultMap="GameActivityRotorDetail">
+        select 
+        <include refid="Base_Column_List" />
+        from game_activity_rotor_detail 
+        <include refid="sql_of_where" />
+        <if test="pParam != null">
+            <if test="pParam.orderByClause != null" > order by ${pParam.orderByClause} </if>
+            <if test="pParam.orderByClause == null" >
+            		order by gard_id  desc 
+            </if>
+            <if test="pParam.startIndex != null and pParam.pageSize != null" >
+              limit ${pParam.startIndex} , ${pParam.pageSize}
+            </if>
+        </if>
+          <if test="pParam == null">
+             order by gard_create_time desc
+        </if>
+    </select>
+    
+    <!-- 通用分页查询记录总数 -->
+    <select id="countByParam" parameterType="java.util.Map" resultType="java.lang.Long">
+        select count(*) from game_activity_rotor_detail 
+        <include refid="sql_of_where" />
+    </select>
+    
+    
+    <insert id="insert" parameterType="com.guse.platform.entity.doudou.GameActivityRotorDetail">
+    <![CDATA[
+        INSERT INTO game_activity_rotor_detail (
+	        gard_id  ,
+	        obu_userid  ,
+	        obu_user_nick  ,
+	        gard_betting_gold  ,
+	        gard_prize_name  ,
+	        gard_prize_gold  ,
+	        gard_prize_number  ,
+	        gard_prize_time  ,
+	        gard_create_time  ,
+	        obu_is_go_broke  
+        ) VALUES (
+        	#{gardId, jdbcType=VARCHAR} ,
+        	#{obuUserid, jdbcType=BIGINT} ,
+        	#{obuUserNick, jdbcType=VARCHAR} ,
+        	#{gardBettingGold, jdbcType=INTEGER} ,
+        	#{gardPrizeName, jdbcType=VARCHAR} ,
+        	#{gardPrizeGold, jdbcType=INTEGER} ,
+        	#{gardPrizeNumber, jdbcType=INTEGER} ,
+        	#{gardPrizeTime, jdbcType=TIMESTAMP} ,
+        	#{gardCreateTime, jdbcType=TIMESTAMP} ,
+        	#{obuIsGoBroke, jdbcType=INTEGER} 
+        )
+    ]]>
+    </insert>
+    
+    <delete id="deleteById">
+    <![CDATA[
+        DELETE FROM game_activity_rotor_detail WHERE
+        gard_id = #{gardId} 
+    ]]>
+    </delete>
+    
+    <select id="selectById" resultMap="GameActivityRotorDetail">
+	    SELECT <include refid="Base_Column_List"/>
+	    <![CDATA[
+	        FROM game_activity_rotor_detail 
+	        WHERE 
+		        gard_id = #{gardId} 
+	    ]]>
+    </select>
+    
+    <update id="updateByIdSelective" parameterType="com.guse.platform.entity.doudou.GameActivityRotorDetail">
+		UPDATE game_activity_rotor_detail
+		<set>
+		 	<if test="obuUserid != null">
+	      	  obu_userid = #{obuUserid, jdbcType=BIGINT} ,
+		 	</if>
+		 	<if test="obuUserNick != null">
+	      	  obu_user_nick = #{obuUserNick, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="gardBettingGold != null">
+	      	  gard_betting_gold = #{gardBettingGold, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="gardPrizeName != null">
+	      	  gard_prize_name = #{gardPrizeName, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="gardPrizeGold != null">
+	      	  gard_prize_gold = #{gardPrizeGold, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="gardPrizeNumber != null">
+	      	  gard_prize_number = #{gardPrizeNumber, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="gardPrizeTime != null">
+	      	  gard_prize_time = #{gardPrizeTime, jdbcType=TIMESTAMP} ,
+		 	</if>
+		 	<if test="gardCreateTime != null">
+	      	  gard_create_time = #{gardCreateTime, jdbcType=TIMESTAMP} ,
+		 	</if>
+		 	<if test="obuIsGoBroke != null">
+	      	  obu_is_go_broke = #{obuIsGoBroke, jdbcType=INTEGER} ,
+		 	</if>
+		</set>
+		WHERE
+	       	gard_id = #{gardId} 
+    </update>
+	
+</mapper>
+

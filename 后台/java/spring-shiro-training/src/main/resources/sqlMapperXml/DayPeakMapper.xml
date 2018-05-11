@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangzhixuan.mapper.DayPeakMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="DayPeak" type="com.wangzhixuan.model.DayPeak">
+		<result column="id" property="id" />
+		<result column="day_date" property="dayDate" />
+		<result column="peak" property="peak" />
+		<result column="peak_time" property="peakTime" />
+		<result column="online_num" property="onlineNum" />
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+        id, day_date, peak, peak_time, online_num  
+	    ]]>
+	</sql>
+	
+	<select id="selectMaxDayPeak" resultMap="DayPeak">
+        SELECT <include refid="Base_Column_List"/> 
+	        FROM day_peak 
+	        ORDER BY peak DESC LIMIT 1 
+    </select>
+    
+    <select id="selectDayPeakByTime" resultMap="DayPeak">
+        SELECT <include refid="Base_Column_List"/> 
+	        FROM day_peak 
+	        <where>
+	        	1=1
+	            <if test=" createTime != null  ">
+	               and DATEDIFF(day_date,#{createTime }) = 0 
+	            </if>
+	        </where>
+	        ORDER BY peak DESC LIMIT 1 
+    </select>
+    
+    <select id="getMeanPeak" resultType="Map">
+		SELECT FORMAT(IFNULL(SUM(peak)/COUNT(id),0),2) meanPeak  FROM day_peak 
+	</select>
+	
+
+</mapper>

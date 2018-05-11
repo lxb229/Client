@@ -1,0 +1,94 @@
+<!--禁言管理-->
+<div class="ibox">
+    <!--主页内容-->
+    <div class="ibox-content fadeInUp animated">
+        <div class="layui-form-item">
+            <div class="layui-input-inline ">
+                <select name="modules" class="layui-input">
+                    <option value="1">大厅</option>
+                    <option value="2">龙珠探宝</option>
+                    <option value="3">五星宏辉</option>
+                    <option value="4">糖果派对</option>
+                </select>
+            </div>
+            <button class="layui-btn layui-btn-primary layui-btn-radius" id="selectAll">全选</button>
+            <button class="layui-btn layui-btn-primary layui-btn-radius" id="reverse">反选</button>
+            <button class="layui-btn layui-btn-primary layui-btn-radius layui-btn-disabled">删除</button>
+        </div>
+        <table class="layui-table" id="list">
+            <thead>
+            <tr>
+                <th>编号</th>
+                <th>玩家ID</th>
+                <th>玩家昵称</th>
+                <th>评论内容</th>
+                <th>评论时间</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td><input type="checkbox" name="like1[write]" lay-skin="primary" title="1" >&ensp;1</td>
+                <td>100551</td>
+                <td>死了都要爱</td>
+                <td>哈哈哈 马化腾给我爆清泉流响</td>
+                <td>93-11-5</td>
+                <td><button class="layui-btn layui-btn-primary layui-btn-radius">删除</button></td>
+            </tr>
+            <tr>
+                <td><input type="checkbox" name="like1[write]" lay-skin="primary" title="1">&ensp;2</td>
+                <td>100551</td>
+                <td>死了都要爱</td>
+                <td>哈哈哈 马化腾给我爆清泉流响</td>
+                <td>93-11-5</td>
+
+                <td><button class="layui-btn layui-btn-primary layui-btn-radius">删除</button></td>
+            </tr>
+            </tbody>
+        </table>
+        <div id="demo2"></div>
+    </div>
+    <script>
+        layui.use(['laypage', 'layer'], function(){
+            var laypage = layui.laypage
+                    ,layer = layui.layer;
+            laypage({
+                cont: 'demo2'
+                ,pages: 100
+                ,skin: '#1E9FFF'
+            });
+            var nums = 5; //每页出现的数据量
+            //模拟渲染
+            var render = function(data, curr){
+                var arr = []
+                        ,thisData = data.concat().splice(curr*nums-nums, nums);
+                layui.each(thisData, function(index, item){
+                    arr.push('<li>'+ item +'</li>');
+                });
+                return arr.join('');
+            };
+            //调用分页
+//            laypage({
+//                cont: 'demo2'
+//                ,pages: Math.ceil(data.length/nums) //得到总页数
+//                ,jump: function(obj){
+//                    document.getElementById('biuuu_city_list').innerHTML = render(data, obj.curr);
+//                }
+//            });
+
+
+        });
+        //        全选和反选
+        checked();
+        function checked(){
+            $("#selectAll").click(function(){
+                $("#list :checkbox,#all").prop("checked", true);
+            });
+            $("#reverse").click(function () {
+                $("#list :checkbox").each(function () {
+                    $(this).prop("checked", !$(this).prop("checked"));
+                });
+            });
+        }
+    </script>
+</div>

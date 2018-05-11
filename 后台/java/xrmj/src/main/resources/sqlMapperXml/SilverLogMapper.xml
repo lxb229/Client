@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangzhixuan.mapper.SilverLogMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="SilverLog" type="com.wangzhixuan.model.SilverLog">
+		<result column="id" property="id" />
+		<result column="start_no" property="startNo" />
+		<result column="commodity" property="commodity" />
+		<result column="consume" property="consume" />
+		<result column="award_lv" property="awardLv" />
+		<result column="commodity_name" property="commodityName" />
+		<result column="warehouse_out" property="warehouseOut" />
+		<result column="create_time" property="createTime" />
+	</resultMap>
+	
+	<select id="selectSilverLogVoPage"  resultType="SilverLogVo">
+       SELECT
+			sl.id AS id,
+			sl.start_no AS startNo,
+			p.nick AS playerNick,
+			sl.commodity AS commodity,
+			sl.consume AS consume,
+			sl.award_lv AS awardLv,
+			cl.lv_name AS awardName,
+			sl.commodity_name AS commodityName,
+			sl.warehouse_out AS warehouseOut,
+			wo.out_no AS warehouseOutNo,
+			sl.create_time AS createTime
+		FROM silver_log sl 
+		LEFT JOIN player p ON sl.start_no = p.start_no
+		LEFT JOIN commodity_lv cl ON sl.award_lv = cl.lv
+		LEFT JOIN warehouse_out wo ON sl.warehouse_out IS NOT NULL AND sl.warehouse_out = wo.id
+	        <where>
+	        	1=1
+	            <if test=" startNo != null and startNo != '' ">
+	               and sl.start_no like concat(concat('%',#{startNo}),'%') 
+	            </if>
+	        </where>
+		GROUP BY sl.id
+    </select>
+
+</mapper>

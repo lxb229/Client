@@ -1,0 +1,174 @@
+<!--在线分析-->
+<div class="ibox">
+    <!--主页内容-->
+    <div class="ibox-content fadeInUp animated">
+        <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">概况总览</li>
+                <li>用户明细</li>
+                <li>回收与免充</li>
+                <li>货币比值</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <!--经济概况-->
+                    <div class="layui-form-item">
+                        <div class="layui-input-inline">
+                            <input class="layui-input" placeholder="开始日期" id="LAY_demorange_s">
+                        </div>
+                        <div class="layui-input-inline">
+                            <input class="layui-input" placeholder="截止日期" id="LAY_demorange_e">
+                        </div>
+                        <button class="layui-btn layui-btn-primary layui-btn-radius">查询</button>
+                    </div>
+                    <table class="layui-table">
+                        <thead>
+                        <tr>
+                            <th>日期</th>
+                            <th>购买发放</th>
+                            <th>后台发放</th>
+                            <th>钻石总发放</th>
+                            <th>金币兑换回收</th>
+                            <th>道具兑换回收</th>
+                            <th>后台回收</th>
+                            <th>钻石总回收</th>
+                            <th>钻石平衡</th>
+                            <th>钻石兑换发放</th>
+                            <th>注册发放</th>
+                            <th>签到发放</th>
+                            <th>破产发放</th>
+                            <th>绑定手机发放</th>
+                            <th>后台发放</th>
+                            <th>金币总发放</th>
+                            <th>游戏回收</th>
+                            <th>兑换道具回收</th>
+                            <th>后台回收</th>
+                            <th>金币总回收</th>
+                            <th>金币平衡</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>2017-03-03</td>
+                            <td>100</td>
+                            <td>120</td>
+                            <td>40</td>
+                            <td>50</td>
+                            <td>100</td>
+                            <td>120</td>
+                            <td>40</td>
+                            <td>50</td>
+                            <td>100</td>
+                            <td>120</td>
+                            <td>40</td>
+                            <td>50</td>
+                            <td>100</td>
+                            <td>120</td>
+                            <td>40</td>
+                            <td>50</td>
+                            <td>100</td>
+                            <td>120</td>
+                            <td>40</td>
+                            <td>50</td>
+                        </tr>
+                        <tr>
+                            <td>2017-03-03</td>
+                            <td>100</td>
+                            <td>120</td>
+                            <td>40</td>
+                            <td>50</td>
+                            <td>100</td>
+                            <td>120</td>
+                            <td>40</td>
+                            <td>50</td>
+                            <td>100</td>
+                            <td>120</td>
+                            <td>40</td>
+                            <td>50</td>
+                            <td>100</td>
+                            <td>120</td>
+                            <td>40</td>
+                            <td>50</td>
+                            <td>100</td>
+                            <td>120</td>
+                            <td>40</td>
+                            <td>50</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div id="demo2"></div>
+                </div>
+                <div class="layui-tab-item">
+                    <!--用户明细-->
+                    <table class="layui-table">
+                        <thead>
+                        <tr>
+                            <th>游戏ID</th>
+                            <th>用户昵称</th>
+                            <th title="用户当前金币持有量">金币</th>
+                            <th title="用户当前钻石持有量">钻石</th>
+                            <th title="用户从首次充值到现在首次充值金额">充值金额</th>
+                            <th>帐号类型</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>1234566</td>
+                            <td>100</td>
+                            <td>120</td>
+                            <td>40</td>
+                            <td>50</td>
+                            <td>100</td>
+                        </tr>
+                        <tr>
+                            <td>132456</td>
+                            <td>100</td>
+                            <td>120</td>
+                            <td>40</td>
+                            <td>50</td>
+                            <td>100</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="layui-tab-item">
+                    <!--回收与免充-->
+                </div>
+
+                <div class="layui-tab-item">
+                    <!--货币比值-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        layui.use(['laypage', 'layer'], function(){
+            var laypage = layui.laypage
+                    ,layer = layui.layer;
+            laypage({
+                cont: 'demo2'
+                ,pages: 100
+                ,skin: '#1E9FFF'
+            });
+            var nums = 5; //每页出现的数据量
+            //模拟渲染
+            var render = function(data, curr){
+                var arr = []
+                        ,thisData = data.concat().splice(curr*nums-nums, nums);
+                layui.each(thisData, function(index, item){
+                    arr.push('<li>'+ item +'</li>');
+                });
+                return arr.join('');
+            };
+            //调用分页
+//            laypage({
+//                cont: 'demo2'
+//                ,pages: Math.ceil(data.length/nums) //得到总页数
+//                ,jump: function(obj){
+//                    document.getElementById('biuuu_city_list').innerHTML = render(data, obj.curr);
+//                }
+//            });
+
+        });
+    </script>
+</div>

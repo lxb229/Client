@@ -1,0 +1,45 @@
+<!--实时数据-->
+<div class="ibox">
+    <div class="ibox-title">
+        <h5>注册阶段分析</h5>
+    </div>
+    <div class="ibox-content fadeInUp animated">
+        <div id="registrationPhase" class="container"></div>
+        <div id="registrationPhase_div">
+        <form id="registrationPhase_form" class="layui-form" method="post">
+            <div class="layui-form-item" style="float: right;">
+                    <div class="layui-input-inline">
+                        <input class="layui-input" placeholder="开始日期"  name="startDate" :value="filter.startDate" id="startDate_a" />
+                    </div>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" placeholder="结束日期" name="endDate" :value="filter.endDate" id="endDate_a" />
+                    </div>
+                <button class="layui-btn" lay-submit lay-filter="registrationPhase_form">查询</button>
+                <button class="layui-btn" v-on:click="exportExcel">导出</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <th>名称</th>
+                    <th>完成人数</th>
+                    <th>流失人数</th>
+                    <th>流失率</th>
+                </tr>
+                </thead>
+                <tbody>
+                 <tr v-for="(item, index) in grid.data">
+                    <td>{{item.itemsType}}</td>
+                    <td>{{item.completeUserNum}}</td>
+                    <td>{{item.lossUserNum}}</td>
+                    <td v-if="item.lossRate!=null">{{item.lossRate}}%</td>
+                </tr>
+                </tbody>
+            </table>
+       </form>  
+       </div>   
+    </div>
+</div>
+<script src="../static/lztb/operator/persistenceSign.js"></script>
+
+		

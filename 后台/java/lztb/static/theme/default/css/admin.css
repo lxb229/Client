@@ -1,0 +1,38 @@
+/*全局*/
+table th,table td{
+    text-align: center;
+}
+/*统计图容器大小*/
+.container{
+    width: 1500px;
+    height: 600px;
+}
+@media screen and (max-width: 980px) {
+    .container {
+        width: 800px;
+    }
+    .halfContainer {
+        width: 400px;
+
+    }
+}
+.halfContainer{
+    display: inline-block;
+    width:700px;
+    height: 600px;
+}
+/*游戏数据>邮件排行模块*/
+.twoTable{
+    display: inline-table;
+    width: 49%;
+}
+
+.receptionSend>span{
+    display: inline-block;
+    width: 49%;
+    text-align: center;
+}
+/*幸运转盘明细*/
+.showHide{
+    display: none;
+}

@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.guse.platform.dao.doudou.OperationBaseLoginDetailMapper">
+
+    <resultMap id="OperationBaseLoginDetail" type="com.guse.platform.entity.doudou.OperationBaseLoginDetail">
+        <result property="oblId" column="obl_id"/>
+        <result property="obuUserid" column="obu_userid"/>
+        <result property="obuUserNick" column="obu_user_nick"/>
+        <result property="obuUsename" column="obu_usename"/>
+        <result property="oblSessionid" column="obl_sessionid"/>
+        <result property="oblLoginTime" column="obl_login_time"/>
+        <result property="oblLoginIp" column="obl_login_ip"/>
+        <result property="oblLoginRegion" column="obl_login_region"/>
+        <result property="obdDloadChannel" column="obd_dload_channel"/>
+        <result property="obaOsType" column="oba_os_type"/>
+        <result property="obaOsName" column="oba_os_name"/>
+        <result property="obaDeviceModel" column="oba_device_model"/>
+        <result property="obaDeviceId" column="oba_device_id"/>
+        <result property="obaDeviceMemory" column="oba_device_memory"/>
+        <result property="obaDeviceNet" column="oba_device_net"/>
+        <result property="obaDeviceResolution" column="oba_device_resolution"/>
+        <result property="obaTelcos" column="oba_telcos"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+        obl_id ,obu_userid ,obu_user_nick ,obu_usename ,obl_sessionid ,obl_login_time ,obl_login_ip ,obl_login_region ,obd_dload_channel ,oba_os_type ,oba_os_name ,oba_device_model ,oba_device_id ,oba_device_memory ,oba_device_net ,oba_device_resolution ,oba_telcos 
+	    ]]>
+	</sql>
+	<!-- 用于分页查询 -->
+	<sql id="sql_of_where">
+	 	WHERE 1=1 
+    	<if test="bParam != null" >	
+		 	<if test="bParam.obuUserid != null">
+	      	 AND obu_userid = #{bParam.obuUserid, jdbcType=BIGINT}
+		 	</if>
+		 	<if test="bParam.obuUserNick != null">
+	      	 AND obu_user_nick = #{bParam.obuUserNick, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="bParam.obuUsename != null">
+	      	 AND obu_usename = #{bParam.obuUsename, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="bParam.oblSessionid != null">
+	      	 AND obl_sessionid = #{bParam.oblSessionid, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="bParam.oblLoginTime != null">
+	      	 AND obl_login_time = #{bParam.oblLoginTime, jdbcType=TIMESTAMP}
+		 	</if>
+		 	<if test="bParam.oblLoginIp != null">
+	      	 AND obl_login_ip = #{bParam.oblLoginIp, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="bParam.oblLoginRegion != null">
+	      	 AND obl_login_region = #{bParam.oblLoginRegion, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="bParam.obdDloadChannel != null">
+	      	 AND obd_dload_channel = #{bParam.obdDloadChannel, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="bParam.obaOsType != null">
+	      	 AND oba_os_type = #{bParam.obaOsType, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="bParam.obaOsName != null">
+	      	 AND oba_os_name = #{bParam.obaOsName, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="bParam.obaDeviceModel != null">
+	      	 AND oba_device_model = #{bParam.obaDeviceModel, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="bParam.obaDeviceId != null">
+	      	 AND oba_device_id = #{bParam.obaDeviceId, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="bParam.obaDeviceMemory != null">
+	      	 AND oba_device_memory = #{bParam.obaDeviceMemory, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.obaDeviceNet != null">
+	      	 AND oba_device_net = #{bParam.obaDeviceNet, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="bParam.obaDeviceResolution != null">
+	      	 AND oba_device_resolution = #{bParam.obaDeviceResolution, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="bParam.obaTelcos != null">
+	      	 AND oba_telcos = #{bParam.obaTelcos, jdbcType=VARCHAR}
+		 	</if>
+	    </if>   
+    </sql>
+    
+    <!-- 通用查询 -->
+    <select id="select" parameterType="java.util.Map" resultMap="OperationBaseLoginDetail">
+        select 
+        <include refid="Base_Column_List" />
+        from operation_base_login_detail 
+        <include refid="sql_of_where" /> order by obu_userid desc
+    </select>
+    
+    <!-- 通用分页查询 -->
+    <select id="selectPageByParam" parameterType="java.util.Map" resultMap="OperationBaseLoginDetail">
+        select 
+        <include refid="Base_Column_List" />
+        from operation_base_login_detail 
+        <include refid="sql_of_where" />
+        <if test="pParam != null">
+            <if test="pParam.orderByClause != null" > order by ${pParam.orderByClause} </if>
+            <if test="pParam.orderByClause == null" >
+            		order by obl_id  desc 
+            </if>
+            <if test="pParam.startIndex != null and pParam.pageSize != null" >
+              limit ${pParam.startIndex} , ${pParam.pageSize}
+            </if>
+        </if>
+          <if test="pParam == null">
+             order by obu_userid desc
+        </if>
+    </select>
+    
+    <!-- 通用分页查询记录总数 -->
+    <select id="countByParam" parameterType="java.util.Map" resultType="java.lang.Long">
+        select count(*) from operation_base_login_detail 
+        <include refid="sql_of_where" />
+    </select>
+    
+    
+    <insert id="insert" parameterType="com.guse.platform.entity.doudou.OperationBaseLoginDetail">
+    <![CDATA[
+        INSERT INTO operation_base_login_detail (
+	        obl_id  ,
+	        obu_userid  ,
+	        obu_user_nick  ,
+	        obu_usename  ,
+	        obl_sessionid  ,
+	        obl_login_time  ,
+	        obl_login_ip  ,
+	        obl_login_region  ,
+	        obd_dload_channel  ,
+	        oba_os_type  ,
+	        oba_os_name  ,
+	        oba_device_model  ,
+	        oba_device_id  ,
+	        oba_device_memory  ,
+	        oba_device_net  ,
+	        oba_device_resolution  ,
+	        oba_telcos  
+        ) VALUES (
+        	#{oblId, jdbcType=VARCHAR} ,
+        	#{obuUserid, jdbcType=BIGINT} ,
+        	#{obuUserNick, jdbcType=VARCHAR} ,
+        	#{obuUsename, jdbcType=VARCHAR} ,
+        	#{oblSessionid, jdbcType=VARCHAR} ,
+        	#{oblLoginTime, jdbcType=TIMESTAMP} ,
+        	#{oblLoginIp, jdbcType=VARCHAR} ,
+        	#{oblLoginRegion, jdbcType=VARCHAR} ,
+        	#{obdDloadChannel, jdbcType=VARCHAR} ,
+        	#{obaOsType, jdbcType=VARCHAR} ,
+        	#{obaOsName, jdbcType=VARCHAR} ,
+        	#{obaDeviceModel, jdbcType=VARCHAR} ,
+        	#{obaDeviceId, jdbcType=VARCHAR} ,
+        	#{obaDeviceMemory, jdbcType=INTEGER} ,
+        	#{obaDeviceNet, jdbcType=VARCHAR} ,
+        	#{obaDeviceResolution, jdbcType=VARCHAR} ,
+        	#{obaTelcos, jdbcType=VARCHAR} 
+        )
+    ]]>
+    </insert>
+    
+    <delete id="deleteById">
+    <![CDATA[
+        DELETE FROM operation_base_login_detail WHERE
+        obl_id = #{oblId} 
+    ]]>
+    </delete>
+    
+    <select id="selectById" resultMap="OperationBaseLoginDetail">
+	    SELECT <include refid="Base_Column_List"/>
+	    <![CDATA[
+	        FROM operation_base_login_detail 
+	        WHERE 
+		        obl_id = #{oblId} 
+	    ]]>
+    </select>
+    
+    <update id="updateByIdSelective" parameterType="com.guse.platform.entity.doudou.OperationBaseLoginDetail">
+		UPDATE operation_base_login_detail
+		<set>
+		 	<if test="obuUserid != null">
+	      	  obu_userid = #{obuUserid, jdbcType=BIGINT} ,
+		 	</if>
+		 	<if test="obuUserNick != null">
+	      	  obu_user_nick = #{obuUserNick, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="obuUsename != null">
+	      	  obu_usename = #{obuUsename, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="oblSessionid != null">
+	      	  obl_sessionid = #{oblSessionid, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="oblLoginTime != null">
+	      	  obl_login_time = #{oblLoginTime, jdbcType=TIMESTAMP} ,
+		 	</if>
+		 	<if test="oblLoginIp != null">
+	      	  obl_login_ip = #{oblLoginIp, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="oblLoginRegion != null">
+	      	  obl_login_region = #{oblLoginRegion, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="obdDloadChannel != null">
+	      	  obd_dload_channel = #{obdDloadChannel, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="obaOsType != null">
+	      	  oba_os_type = #{obaOsType, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="obaOsName != null">
+	      	  oba_os_name = #{obaOsName, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="obaDeviceModel != null">
+	      	  oba_device_model = #{obaDeviceModel, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="obaDeviceId != null">
+	      	  oba_device_id = #{obaDeviceId, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="obaDeviceMemory != null">
+	      	  oba_device_memory = #{obaDeviceMemory, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="obaDeviceNet != null">
+	      	  oba_device_net = #{obaDeviceNet, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="obaDeviceResolution != null">
+	      	  oba_device_resolution = #{obaDeviceResolution, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="obaTelcos != null">
+	      	  oba_telcos = #{obaTelcos, jdbcType=VARCHAR} ,
+		 	</if>
+		</set>
+		WHERE
+	       	obl_id = #{oblId} 
+    </update>
+	
+</mapper>
+

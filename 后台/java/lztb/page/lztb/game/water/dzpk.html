@@ -1,0 +1,76 @@
+
+<!--德州扑克-->
+<div class="ibox">
+    <!--主页内容-->
+    <div class="ibox-content fadeInUp animated">
+		<div id="app">
+			<div class="layui-form">
+				<div class="layui-tab-item layui-show">
+					<div class="layui-form-item">
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="游戏ID" name="obuUserid" :value="filter.obuUserid" id="obuUserid">
+						</div>
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="游戏昵称" name="obuUserNick" :value="filter.obuUserNick" id="obuUserNick">
+						</div>
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="开始日" name="startDate" :value="filter.startDate" id="startAt" >
+						</div>
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="截止日" name="endDate" :value="filter.endDate" id="endAt">
+						</div>
+						<button class="layui-btn layui-btn-primary layui-btn-radius" lay-submit>查询</button>
+					</div>
+					<table class="layui-table" lay-even="" lay-skin="row">
+						<thead>
+						<tr>
+							<th>游戏ID</th>
+							<th>游戏昵称</th>
+							<th>玩家状态</th>
+							<th>玩家身上金币</th>
+							<th>牌桌金币</th>
+							<th>玩家此局花费金额</th>
+							<th>局数编号</th>
+							<th>房间类型</th>
+							<th>盲注金额</th>
+							<th>互动类型</th>
+							<th>玩家类型</th>
+							<th>操作类型</th>
+							<th>交易数</th>
+							<th>回收金币数</th>
+							<th>公共牌</th>
+							<th>玩家牌</th>
+							<th>流水时间</th>
+							<!--<th>是否破产</th>-->
+						</tr>
+						</thead>
+						<tbody>
+						<tr v-for="(item, index) in grid.data">
+							<td>{{item.obuUserid}}</td>
+							<td>{{item.obuUserNick}}</td>
+							<td>{{item.gdgdPlayerState}}</td>
+							<td>{{item.gdgdPlayerGold}}</td>
+							<td>{{item.gdgdTableGold}}</td>
+							<td>{{item.gdgdPlayerSpendGold}}</td>
+							<td>{{item.gdgdInningsIndex}}</td>
+							<td>{{item.gdgdRoomType}}</td>
+							<td>{{item.gdgdBlindBetGold}}</td>
+							<td>{{item.gdgdInteractType}}</td>
+							<td>{{item.gdgdPlayerType}}</td>
+							<td>{{item.gdgdOpType}}</td>
+							<td>{{item.gdgdWinLoseGold}}</td>
+							<td>{{item.gdgdRecoveryGold}}</td>
+							<td>{{item.gdgdPublicePoker}}</td>
+							<td>{{item.gdgdPlayerPoker}}</td>
+							<td>{{formatDate(item.gdgdDetailTime)}}</td>
+							<!--<td>{{item.obuIsGoBroke}}</td>-->
+						</tr>
+						</tbody>
+					</table>
+					<div id="pager" class="laypager" style="float: right;"></div>
+				</div>
+			</div>
+		</div>
+    </div>
+	<script src="../static/lztb/game/water/dzpk.js"></script>
+</div>

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.guse.platform.dao.doudou.SystemNoticeMapper">
+
+    <resultMap id="SystemNotice" type="com.guse.platform.entity.doudou.SystemNotice">
+        <result property="snId" column="sn_id"/>
+        <result property="snContent" column="sn_content"/>
+        <result property="snTemplateId" column="sn_template_id"/>
+        <result property="snStartTime" column="sn_start_time"/>
+        <result property="snEndTime" column="sn_end_time"/>
+        <result property="snIntervalTime" column="sn_interval_time"/>
+        <result property="createId" column="create_id"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+        sn_id ,sn_content ,sn_template_id ,sn_start_time ,sn_end_time ,sn_interval_time ,create_id ,create_time 
+	    ]]>
+	</sql>
+	<!-- 用于分页查询 -->
+	<sql id="sql_of_where">
+	 	WHERE 1=1 
+    	<if test="bParam != null" >	
+		 	<if test="bParam.snContent != null">
+	      	 AND sn_content = #{bParam.snContent, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="bParam.snTemplateId != null">
+	      	 AND sn_template_id = #{bParam.snTemplateId, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.snStartTime != null">
+	      	 AND sn_start_time = #{bParam.snStartTime, jdbcType=TIMESTAMP}
+		 	</if>
+		 	<if test="bParam.snEndTime != null">
+	      	 AND sn_end_time = #{bParam.snEndTime, jdbcType=TIMESTAMP}
+		 	</if>
+		 	<if test="bParam.snIntervalTime != null">
+	      	 AND sn_interval_time = #{bParam.snIntervalTime, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.createId != null">
+	      	 AND create_id = #{bParam.createId, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.createTime != null">
+	      	 AND create_time = #{bParam.createTime, jdbcType=TIMESTAMP}
+		 	</if>
+	    </if>   
+    </sql>
+    
+    <!-- 通用查询 -->
+    <select id="select" parameterType="java.util.Map" resultMap="SystemNotice">
+        select 
+        <include refid="Base_Column_List" />
+        from system_notice 
+        <include refid="sql_of_where" /> order by create_time desc
+    </select>
+    
+    <!-- 通用分页查询 -->
+    <select id="selectPageByParam" parameterType="java.util.Map" resultMap="SystemNotice">
+        select 
+        <include refid="Base_Column_List" />
+        from system_notice 
+        <include refid="sql_of_where" />
+        <if test="pParam != null">
+            <if test="pParam.orderByClause != null" > order by ${pParam.orderByClause} </if>
+            <if test="pParam.orderByClause == null" >
+            		order by sn_id  desc 
+            </if>
+            <if test="pParam.startIndex != null and pParam.pageSize != null" >
+              limit ${pParam.startIndex} , ${pParam.pageSize}
+            </if>
+        </if>
+          <if test="pParam == null">
+             order by create_date desc
+        </if>
+    </select>
+    
+    <!-- 通用分页查询记录总数 -->
+    <select id="countByParam" parameterType="java.util.Map" resultType="java.lang.Long">
+        select count(*) from system_notice 
+        <include refid="sql_of_where" />
+    </select>
+    
+    <!-- 查询公告下一个主键编号 -->
+    <select id="getNextNoticeId" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT auto_increment FROM information_schema.TABLES WHERE table_schema='chess' AND TABLE_name = 'system_notice'
+    </select>
+    
+    <insert id="insert" parameterType="com.guse.platform.entity.doudou.SystemNotice">
+    <![CDATA[
+        INSERT INTO system_notice (
+	        sn_id  ,
+	        sn_content  ,
+	        sn_template_id  ,
+	        sn_start_time  ,
+	        sn_end_time  ,
+	        sn_interval_time  ,
+	        create_id  ,
+	        create_time  
+        ) VALUES (
+        	#{snId, jdbcType=INTEGER} ,
+        	#{snContent, jdbcType=VARCHAR} ,
+        	#{snTemplateId, jdbcType=INTEGER} ,
+        	#{snStartTime, jdbcType=TIMESTAMP} ,
+        	#{snEndTime, jdbcType=TIMESTAMP} ,
+        	#{snIntervalTime, jdbcType=INTEGER} ,
+        	#{createId, jdbcType=INTEGER} ,
+        	#{createTime, jdbcType=TIMESTAMP} 
+        )
+    ]]>
+    </insert>
+    
+    <delete id="deleteById">
+    <![CDATA[
+        DELETE FROM system_notice WHERE
+        sn_id = #{snId} 
+    ]]>
+    </delete>
+    
+    <select id="selectById" resultMap="SystemNotice">
+	    SELECT <include refid="Base_Column_List"/>
+	    <![CDATA[
+	        FROM system_notice 
+	        WHERE 
+		        sn_id = #{snId} 
+	    ]]>
+    </select>
+    
+    <update id="updateByIdSelective" parameterType="com.guse.platform.entity.doudou.SystemNotice">
+		UPDATE system_notice
+		<set>
+		 	<if test="snContent != null">
+	      	  sn_content = #{snContent, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="snTemplateId != null">
+	      	  sn_template_id = #{snTemplateId, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="snStartTime != null">
+	      	  sn_start_time = #{snStartTime, jdbcType=TIMESTAMP} ,
+		 	</if>
+		 	<if test="snEndTime != null">
+	      	  sn_end_time = #{snEndTime, jdbcType=TIMESTAMP} ,
+		 	</if>
+		 	<if test="snIntervalTime != null">
+	      	  sn_interval_time = #{snIntervalTime, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="createId != null">
+	      	  create_id = #{createId, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="createTime != null">
+	      	  create_time = #{createTime, jdbcType=TIMESTAMP} ,
+		 	</if>
+		</set>
+		WHERE
+	       	sn_id = #{snId} 
+    </update>
+	
+</mapper>
+

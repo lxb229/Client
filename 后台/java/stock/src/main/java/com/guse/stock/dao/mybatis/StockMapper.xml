@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guse.stock.dao.IStockDao">
+
+	<select id="findByUserGamePer" resultType="stock">
+		select * from pl_stock where user_id=#{userId} and game_id=#{gameId} and par_id=#{parId} 
+		order by is_buy desc,is_qs desc,
+		<if test="priority != null and priority == 1 ">
+			stock_id desc,
+		</if>
+		<if test="priority == null or priority != 1 ">
+			stock_id asc,
+		</if>
+		game_id asc,par_id asc 
+		limit 1
+	</select>
+	
+	<select id="countStock" resultType="java.lang.Integer">
+		select count(1) from pl_stock where is_use=0 and user_id=#{0} and game_id=#{1} and par_id=#{2}
+	</select>
+
+</mapper>

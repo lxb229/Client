@@ -1,0 +1,47 @@
+<!--实时数据-->
+<div class="ibox">
+    <div class="ibox-title">
+        <h5>玩家趋势</h5>
+    </div>
+    <div class="ibox-content fadeInUp animated">
+        <div id="chart_sinFo" class="container" style="height: 400px"></div>
+            <div id="onilneEvery_div">
+                <form class="layui-form" id="onilneEvery_form">
+                <div class="layui-form-item" style="float: right;">
+                    <div class="layui-input-inline">
+                        <input class="layui-input" placeholder="当前日期"  name="contrastBefourDate" :value="filter.contrastBefourDate" id="contrastBefourDate_a" />
+                    </div>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" placeholder="对比日期" name="contrastAfterDate" :value="filter.contrastAfterDate" id="contrastAfterDate_a" />
+                    </div>
+                    <button class="layui-btn" lay-submit lay-filter="onilneEvery_form">查询</button>
+                    <button class="layui-btn" v-on:click="exportExcel">导出</button>
+                </div>
+                <table class="layui-table">
+                    <thead>
+                    <tr>
+                        <th>时间</th>
+                        <th>在线人数</th>
+                        <th>对比在线人数</th>
+                        <th>大厅人数</th>
+                        <th>游戏中人数</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(item, index) in grid.data">
+                            <td>{{item.ocotTime}}</td>
+                            <td>{{item.ocotAllUserNum}}</td>
+                            <td>{{item.contrastUserNum}}</td>
+                            <td>{{item.ocotHallUserNum}}</td>
+                            <td>{{item.ocotGameUserNum}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                 <div id="pager" class="laypager" style="float: right;"></div>
+                </form>
+        </div>
+    </div>
+</div>
+<script src="../static/lztb/operator/onlineEverydayUser.js"></script>
+
+		

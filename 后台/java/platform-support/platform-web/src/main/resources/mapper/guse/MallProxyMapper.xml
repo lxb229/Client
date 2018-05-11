@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.guse.platform.dao.doudou.MallProxyMapper">
+
+    <resultMap id="MallProxy" type="com.guse.platform.entity.doudou.MallProxy">
+        <result property="id" column="id"/>
+        <result property="proxyType" column="proxy_type"/>
+        <result property="wxNo" column="wxNO"/>
+        <result property="proxyDesc" column="proxy_desc"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+        id ,proxy_type ,wxNO ,proxy_desc 
+	    ]]>
+	</sql>
+	<!-- 用于分页查询 -->
+	<sql id="sql_of_where">
+	 	WHERE 1=1 
+    	<if test="bParam != null" >	
+		 	<if test="bParam.proxyType != null">
+	      	 AND proxy_type = #{bParam.proxyType, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="bParam.wxNo != null">
+	      	 AND wxNO = #{bParam.wxNo, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="bParam.proxyDesc != null">
+	      	 AND proxy_desc = #{bParam.proxyDesc, jdbcType=VARCHAR}
+		 	</if>
+	    </if>   
+    </sql>
+    
+    <!-- 通用查询 -->
+    <select id="select" parameterType="java.util.Map" resultMap="MallProxy">
+        select 
+        <include refid="Base_Column_List" />
+        from mall_proxy 
+        <include refid="sql_of_where" /> order by create_time desc
+    </select>
+    
+    <!-- 通用分页查询 -->
+    <select id="selectPageByParam" parameterType="java.util.Map" resultMap="MallProxy">
+        select 
+        <include refid="Base_Column_List" />
+        from mall_proxy 
+        <include refid="sql_of_where" />
+        <if test="pParam != null">
+            <if test="pParam.orderByClause != null" > order by ${pParam.orderByClause} </if>
+            <if test="pParam.orderByClause == null" >
+            		order by id  desc 
+            </if>
+            <if test="pParam.startIndex != null and pParam.pageSize != null" >
+              limit ${pParam.startIndex} , ${pParam.pageSize}
+            </if>
+        </if>
+          <if test="pParam == null">
+             order by create_date desc
+        </if>
+    </select>
+    
+    <!-- 通用分页查询记录总数 -->
+    <select id="countByParam" parameterType="java.util.Map" resultType="java.lang.Long">
+        select count(*) from mall_proxy 
+        <include refid="sql_of_where" />
+    </select>
+    
+    
+    <insert id="insert" parameterType="com.guse.platform.entity.doudou.MallProxy">
+    <![CDATA[
+        INSERT INTO mall_proxy (
+	        id  ,
+	        proxy_type  ,
+	        wxNO  ,
+	        proxy_desc  
+        ) VALUES (
+        	#{id, jdbcType=INTEGER} ,
+        	#{proxyType, jdbcType=VARCHAR} ,
+        	#{wxNo, jdbcType=VARCHAR} ,
+        	#{proxyDesc, jdbcType=VARCHAR} 
+        )
+    ]]>
+    </insert>
+    
+    <delete id="deleteById">
+    <![CDATA[
+        DELETE FROM mall_proxy WHERE
+        id = #{id} 
+    ]]>
+    </delete>
+    
+    <select id="selectById" resultMap="MallProxy">
+	    SELECT <include refid="Base_Column_List"/>
+	    <![CDATA[
+	        FROM mall_proxy 
+	        WHERE 
+		        id = #{id} 
+	    ]]>
+    </select>
+    
+    <update id="updateByIdSelective" parameterType="com.guse.platform.entity.doudou.MallProxy">
+		UPDATE mall_proxy
+		<set>
+		 	<if test="proxyType != null">
+	      	  proxy_type = #{proxyType, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="wxNo != null">
+	      	  wxNO = #{wxNo, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="proxyDesc != null">
+	      	  proxy_desc = #{proxyDesc, jdbcType=VARCHAR} ,
+		 	</if>
+		</set>
+		WHERE
+	       	id = #{id} 
+    </update>
+	
+</mapper>
+

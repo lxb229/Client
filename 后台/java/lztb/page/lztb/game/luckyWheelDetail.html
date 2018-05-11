@@ -1,0 +1,57 @@
+
+<!--幸运转盘明细-->
+<div class="ibox">
+    <!--主页内容-->
+    <div class="ibox-content fadeInUp animated">
+		<div id="app">
+			<div class="layui-form">
+				<div class="layui-tab-item layui-show">
+					<div class="layui-form-item">
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="游戏ID" name="obuUserid" :value="filter.obuUserid" id="obuUserid">
+						</div>
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="游戏昵称" name="obuUserNick" :value="filter.obuUserNick" id="obuUserNick">
+						</div>
+						<div class="layui-input-inline">
+							<select style="display:block" name="gardPrizeName" v-model="gardPrizeName" class="layui-input">
+								<option value="月卡">月卡</option>
+								<option value="钻石8">钻石8</option>
+								<option value="金币2000">金币2000</option>
+								<option value="金币5000">金币5000</option>
+								<option value="10元话费">10元话费</option>
+								<option value="20元话费">20元话费</option>
+							</select>
+						</div>
+						<div class="layui-inline">
+							<button class="layui-btn layui-btn-primary layui-btn-radius" lay-submit>查询</button>
+						</div>
+						<a style="text-decoration:none;" class="layui-btn layui-btn-primary layui-btn-radius" href="/lztb/page/adm1.html#./lztb/game/luckyWheel.html?spm=m-2-7-1">返回幸运转盘统计</a>
+					</div>
+					<table class="layui-table" lay-even="" lay-skin="row">
+						<thead>
+						<tr>
+							<th>游戏ID</th>
+							<th>游戏昵称</th>
+							<th>投注</th>
+							<th>中奖</th>
+							<th>时间</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr v-for="(item, index) in grid.data">
+							<td>{{item.obuUserid}}</td>
+							<td>{{item.obuUserNick}}</td>
+							<td>{{item.gardBettingGold}}</td>
+							<td>{{item.gardPrizeName}}</td>
+							<td>{{item.gardPrizeTime}}</td>
+						</tr>
+						</tbody>
+					</table>
+					<div id="pager" class="laypager" style="float: right;"></div>
+				</div>
+			</div>
+		</div>
+    </div>
+	<script src="../static/lztb/game/luckWheelDetail.js"></script>
+</div>

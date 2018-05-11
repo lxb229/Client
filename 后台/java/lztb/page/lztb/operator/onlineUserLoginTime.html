@@ -1,0 +1,39 @@
+<!--实时数据-->
+<div class="ibox">
+    <div class="ibox-title">
+        <h5>登录时段分布</h5>
+    </div>
+    <div class="ibox-content fadeInUp animated">
+           <!--时段登录统计图-->
+           <div id="timeLogin" class="container" style="height: 450px;"></div>
+           <div id="timeLogin_div">
+            <form class="layui-form" id="timeLogin_form">
+            <div class="layui-form-item" style="float: right;" > 
+                <label class="layui-form-label">统计日期</label>
+                <div class="layui-input-inline">
+                    <input class="layui-input" placeholder="选择日期"  name="contrastBefourDate" :value="filter.contrastBefourDate" id="timeLoginDate_a" />
+                </div>
+                <button class="layui-btn" lay-submit lay-filter="timeLogin_form">查询</button>
+                <button class="layui-btn" v-on:click="exportExcel">导出</button>
+             </div>
+            <table class="layui-table" lay-even="" lay-skin="row">
+                <thead>
+                    <tr>
+                        <th>时间</th>
+                        <th>人数</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(item, index) in grid.data">
+                        <td>{{item.oolTime}}</td>
+                        <td>{{item.oolLoginUserNum}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            </form>
+       </div>
+    </div>
+</div>
+<script src="../static/lztb/operator/onlineUserLoginTime.js"></script>
+
+		

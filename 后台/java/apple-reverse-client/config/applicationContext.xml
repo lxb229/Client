@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:tx="http://www.springframework.org/schema/tx" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:gorm="http://grails.org/schema/gorm"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation=
+	   "http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/lang 
+	    http://www.springframework.org/schema/lang/spring-lang-3.1.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-2.5.xsd
+		http://www.springframework.org/schema/data/mongo
+        http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd
+		http://grails.org/schema/gorm http://grails.org/schema/gorm/gorm.xsd
+		">
+	<!-- 加载其他配置文件 -->
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>config/properties/settings.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- socket客服端 服务启动类 -->
+	<bean id="echoClient" class="com.guse.apple_reverse_client.netty.EchoClient">
+		<!-- socket服务器配置 -->
+		<property name="name" value="${netty.server.name}" />
+		<property name="host" value="${netty.server.host}" />
+		<property name="port" value="${netty.server.port}" />
+	</bean>
+	<bean id="queryLine" class="com.guse.apple_reverse_client.netty.QueryLineService">
+		<!-- 最多支持同时查询数 -->
+		<property name="threadNum" value="${query.thread.number}" />
+		<property name="queryType" value="${query.queryType}"></property>
+	</bean>
+	<bean id="changeIP" class="com.guse.apple_reverse_client.netty.ChangeIPService">
+		<!-- 自动切换IP时间 -->
+		<property name="changeTime" value="${change.ip.time}" />
+	</bean>
+	
+	<!-- 日志信息加载 -->
+	<bean id="log4jInitialization" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetClass" value="org.springframework.util.Log4jConfigurer" />
+		<property name="targetMethod" value="initLogging" />
+		<property name="arguments">
+			<list>
+				<value>config/log4j.xml</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 注册spring上下文环境 -->
+	<bean id="context" class="com.guse.apple_reverse_client.base.SpringContext" />
+	
+	<!-- 自动扫描该包下所有组件 -->
+	<context:component-scan base-package="com.guse.apple_reverse_client" />
+
+</beans>

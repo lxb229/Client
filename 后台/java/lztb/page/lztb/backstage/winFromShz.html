@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>中奖展示配置新建水浒传</title>
+    <link href="/lztb/static/plugs/layui/css/layui.css" rel="stylesheet">
+</head>
+
+<body>
+    <div id="shzData" style="padding: 15px;">
+        <div class="layui-form">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">倍数需求区间</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" placeholder="区间下限" v-model="fdata.multipleMin" />
+                    </div>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" placeholder="区间上限" v-model="fdata.multipleMax" />
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">金币需求区间</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" placeholder="本轮获得最低金币数" v-model="fdata.goldMin" />
+                    </div>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" placeholder="本轮获得最高金币数" v-model="fdata.goldMax" />
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                    <label class="layui-form-label"></label>
+                    <div style="font-size: 13px;font-weight: bold;">备注：此部分勾选时，优先生效。如勾选全屏，则配置全屏的信息</div>
+                </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">优先选项</label>
+                <div class="layui-input-block">
+                    <select v-model="fdata.youXian" style="height: 38px;width: 200px;" lay-ignore>
+                        <option value="0">普通中奖</option>
+                        <option value="1">压中全屏</option>
+                        <option value="2">进入玛丽</option>
+                        <option value="3">玛丽高倍</option>
+                        <option value="4">美人高倍</option>
+                        <option value="5">普通好汉</option>
+                        <option value="6">特殊好汉</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">播放样式</label>
+                <div class="layui-input-block">
+                    <select v-model="fdata.showStyle" style="height: 38px;width: 200px;" lay-ignore>
+                    <option value="">请选择</option>
+                    <option value="1">普通</option>
+                    <option value="2">豪华</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">中奖类型</label>
+                <div class="layui-input-block">
+                    <select v-model="fdata.showType" style="height: 38px;width: 200px;" lay-ignore>
+                    <option value="">请选择</option>
+                    <option value="1">幸运星</option>
+                    <option value="4">跑马灯</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">播放地点</label>
+                <div class="layui-input-block">
+                    <select v-model="fdata.showPlace" style="height: 38px;width: 200px;" lay-ignore>
+                    <option value="">请选择</option>
+                    <option value="1">全服</option>
+                    <option value="2">五星宏辉</option>
+                    <option value="3">水浒传</option>
+                    <option value="4">ATT</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">上架状态</label>
+                <div class="layui-input-block">
+                    <select v-model="fdata.state" style="height: 38px;width: 200px;" lay-ignore>
+                    <option value="">请选择</option>
+                    <option value="1">上架</option>
+                    <option value="2">下架</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <textarea placeholder="公告内容" class="layui-textarea" v-model="fdata.format"></textarea>
+            </div>
+            <div class="layui-form-item" style="text-align: center">
+                <button class="layui-btn" @click="saveData()"> 提交 </button>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="/lztb/static/plugs/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/lztb/static/plugs/layui/layui.js"></script>
+    <script type="text/javascript" src="/lztb/static/plugs/vue/vue.js"></script>
+    <script type="text/javascript" src="/lztb/static/model/site.js"></script>
+    <script type="text/javascript">
+        var vmShzData = new Vue({
+            el: "#shzData",
+            data: {
+                fdata: {
+                    format: null,
+                    goldMax: null,
+                    goldMin: null,
+                    id: null,
+                    multipleMax: null,
+                    multipleMin: null,
+                    showPlace: null,
+                    showStyle: null,
+                    showType: null,
+                    state: null,
+                    youXian: null
+                }
+            },
+            methods: {
+                saveData: function () {
+                    $.ajax({
+                        url: '/config/winning/shzSave',
+                        type: 'POST',
+                        data: vmShzData.fdata,
+                        dataType: 'json',
+                        timeout: 10000,
+                        success: function (rs) {
+                            if (rs.code == '00000') {
+                                var rsdata = JSON.parse(rs.data);
+                                if(rsdata.code == 200) {
+                                    top.gCloseModalWindow();
+                                    top.SuccessBox("配置保存成功！", "提示", 2000);
+                                } else {
+                                    rsdata.info ? top.AlertMsg(rsdata.info) : top.AlertMsg(rsdata.msg);
+                                }
+                            } else {
+                                top.AlertMsg("保存失败："+rs.msg);
+                                console.error(rs);
+                            }
+                        },
+                        error: function (xhr, status, ex) {
+                            top.AlertMsg("请求失败：" + xhr.statusText);
+                            console.error(ex);
+                        }
+                    });
+                }
+            },
+            watch: {
+
+            },
+            created: function () {
+                //VUE的实例创建完成后
+                var editd = localStorage.getItem("config_winning_shz_edit");
+                if(editd) {
+                    this.fdata = JSON.parse(editd);
+                }
+            },
+            mounted: function () {
+                //VUE的DOM渲染完成后
+                layui.use(['layer', 'form', 'laydate'], function () {
+                    var layform = layui.form();
+                    layform.render('checkbox');
+                    var laydate = layui.laydate;
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

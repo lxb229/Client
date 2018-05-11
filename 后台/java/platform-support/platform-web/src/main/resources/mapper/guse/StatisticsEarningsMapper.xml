@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.guse.platform.dao.doudou.StatisticsEarningsMapper">
+
+    <resultMap id="StatisticsEarnings" type="com.guse.platform.entity.doudou.StatisticsEarnings">
+        <result property="seId" column="se_id"/>
+        <result property="seCityId" column="se_city_id"/>
+        <result property="seCreateTime" column="se_create_time"/>
+        <result property="earning" column="earning"/>
+        <result property="kiting" column="kiting"/>
+        <result property="profit" column="profit"/>
+        <result property="maximum" column="maximum"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+        se_id ,se_city_id ,se_create_time ,earning ,kiting ,profit ,maximum 
+	    ]]>
+	</sql>
+	<!-- 用于分页查询 -->
+	<sql id="sql_of_where">
+	 	WHERE 1=1 
+    	<if test="bParam != null" >	
+		 	<if test="bParam.seCityId != null">
+	      	 AND se_city_id = #{bParam.seCityId, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.seCreateTime != null">
+	      	 AND se_create_time = #{bParam.seCreateTime, jdbcType=TIMESTAMP}
+		 	</if>
+		 	<if test="bParam.earning != null">
+	      	 AND earning = #{bParam.earning, jdbcType=DECIMAL}
+		 	</if>
+		 	<if test="bParam.kiting != null">
+	      	 AND kiting = #{bParam.kiting, jdbcType=DECIMAL}
+		 	</if>
+		 	<if test="bParam.profit != null">
+	      	 AND profit = #{bParam.profit, jdbcType=DECIMAL}
+		 	</if>
+		 	<if test="bParam.maximum != null">
+	      	 AND maximum = #{bParam.maximum, jdbcType=DECIMAL}
+		 	</if>
+	    </if>   
+    </sql>
+    
+    <!-- 通用查询 -->
+    <select id="select" parameterType="java.util.Map" resultMap="StatisticsEarnings">
+        select 
+        <include refid="Base_Column_List" />
+        from statistics_earnings 
+        <include refid="sql_of_where" /> order by create_time desc
+    </select>
+    
+    <!-- 通用分页查询 -->
+    <select id="selectPageByParam" parameterType="java.util.Map" resultMap="StatisticsEarnings">
+        select 
+        <include refid="Base_Column_List" />
+        from statistics_earnings 
+        <include refid="sql_of_where" />
+        <if test="pParam != null">
+            <if test="pParam.orderByClause != null" > order by ${pParam.orderByClause} </if>
+            <if test="pParam.orderByClause == null" >
+            		order by se_id  desc 
+            </if>
+            <if test="pParam.startIndex != null and pParam.pageSize != null" >
+              limit ${pParam.startIndex} , ${pParam.pageSize}
+            </if>
+        </if>
+          <if test="pParam == null">
+             order by create_date desc
+        </if>
+    </select>
+    
+    <!-- 通用分页查询记录总数 -->
+    <select id="countByParam" parameterType="java.util.Map" resultType="java.lang.Long">
+        select count(*) from statistics_earnings 
+        <include refid="sql_of_where" />
+    </select>
+    
+    
+    <insert id="insert" parameterType="com.guse.platform.entity.doudou.StatisticsEarnings">
+    <![CDATA[
+        INSERT INTO statistics_earnings (
+	        se_id  ,
+	        se_city_id  ,
+	        se_create_time  ,
+	        earning  ,
+	        kiting  ,
+	        profit  ,
+	        maximum  
+        ) VALUES (
+        	#{seId, jdbcType=INTEGER} ,
+        	#{seCityId, jdbcType=INTEGER} ,
+        	#{seCreateTime, jdbcType=TIMESTAMP} ,
+        	#{earning, jdbcType=DECIMAL} ,
+        	#{kiting, jdbcType=DECIMAL} ,
+        	#{profit, jdbcType=DECIMAL} ,
+        	#{maximum, jdbcType=DECIMAL} 
+        )
+    ]]>
+    </insert>
+    
+    <delete id="deleteById">
+    <![CDATA[
+        DELETE FROM statistics_earnings WHERE
+        se_id = #{seId} 
+    ]]>
+    </delete>
+    
+    <select id="selectById" resultMap="StatisticsEarnings">
+	    SELECT <include refid="Base_Column_List"/>
+	    <![CDATA[
+	        FROM statistics_earnings 
+	        WHERE 
+		        se_id = #{seId} 
+	    ]]>
+    </select>
+    
+    <update id="updateByIdSelective" parameterType="com.guse.platform.entity.doudou.StatisticsEarnings">
+		UPDATE statistics_earnings
+		<set>
+		 	<if test="seCityId != null">
+	      	  se_city_id = #{seCityId, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="seCreateTime != null">
+	      	  se_create_time = #{seCreateTime, jdbcType=TIMESTAMP} ,
+		 	</if>
+		 	<if test="earning != null">
+	      	  earning = #{earning, jdbcType=DECIMAL} ,
+		 	</if>
+		 	<if test="kiting != null">
+	      	  kiting = #{kiting, jdbcType=DECIMAL} ,
+		 	</if>
+		 	<if test="profit != null">
+	      	  profit = #{profit, jdbcType=DECIMAL} ,
+		 	</if>
+		 	<if test="maximum != null">
+	      	  maximum = #{maximum, jdbcType=DECIMAL} ,
+		 	</if>
+		</set>
+		WHERE
+	       	se_id = #{seId} 
+    </update>
+	
+</mapper>
+

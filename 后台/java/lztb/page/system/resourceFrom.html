@@ -1,0 +1,132 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width">
+    <title>新增/编辑</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link href="/lztb/static/plugs/layui/css/layui.css" rel="stylesheet">
+</head>
+
+<body>
+    <div id="dataForm" style="padding: 25px;">
+        <div class="layui-form">
+            <div class="layui-form-item">
+                <label class="layui-form-label">所属菜单</label>
+                <div class="layui-input-block">
+                    <input type="text" disabled autocomplete="off" v-bind:value="menuName" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">资源名称</label>
+                <div class="layui-input-block">
+                    <input type="text" maxlength="20" required autocomplete="off" v-model="srName" placeholder="请输入资源名称" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">资源URL</label>
+                <div class="layui-input-block">
+                    <input type="text" maxlength="100" required autocomplete="off" v-model="srUrl" placeholder="URL" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">排序</label>
+                <div class="layui-input-block">
+                    <input type="number" max="999999" required autocomplete="off" v-model="srSort" placeholder="排序数字" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item" style="margin-left: 46%;">
+                <button class="layui-btn layui-btn-small" @click="saveData()"> 保存数据 </button>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="/lztb/static/plugs/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/lztb/static/plugs/layui/layui.js"></script>
+    <script type="text/javascript" src="/lztb/static/plugs/vue/vue.js"></script>
+    <script type="text/javascript" src="/lztb/static/model/site.js"></script>
+    <script type="text/javascript">
+        if (window.parent.window.gCloseModalWindow) {
+            window.gCloseModalWindow = window.parent.window.gCloseModalWindow;
+        }
+        if (window.parent.window.AlertMsg) {
+            window.AlertMsg = window.parent.window.AlertMsg;
+        } else {
+            window.AlertMsg = alert;
+        }
+        window.location.reload = window.parent.window.location.reload;
+        window.baseUrl = window.parent.window.baseUrl;
+
+        var app = new Vue({
+            el: "#dataForm",
+            data: {
+                menuId:null,
+                menuName:null,
+                srId:null,
+                srName:null,
+                srUrl:null,
+                srSort:0
+            },
+            methods:{
+                saveData:function() {
+                    if(!app.menuId){
+                        AlertMsg("菜单ID为空，不能保存!");
+                        return;
+                    }
+                    if(!app.srName || !app.srUrl){
+                        AlertMsg("资源名称和资源URL不能为空!");
+                        return;
+                    }
+                    $.ajax({
+						url: '/system/resource/saveOrUpdateResource',
+						type: 'POST',
+						data: {
+                            "srId":app.srId,
+                            "srGroup":app.menuId,
+                            "srName":app.srName,
+                            "srUrl":app.srUrl,
+                            "srSort":app.srSort
+                        },
+						dataType: 'json',
+						timeout: 10000,
+						success: function (rs) {
+							if (rs.code == '00000') {
+								AlertMsg("操作成功.");
+								gCloseModalWindow();
+							} else {
+								console.error(rs);
+								AlertMsg(rs.msg);
+							}
+						},
+						error: function (xhr, status, ex) {
+							AlertMsg("请求失败：" + xhr.statusText);
+							console.error(ex);
+						}
+					});
+                }
+            },
+            created:function() {
+                var menuNode = JSON.parse(localStorage.getItem("system_resource_add_data"));
+                if(!menuNode) {
+                    AlertMsg("请先选择菜单!");
+                    return;
+                }
+                this.menuId = menuNode.id;
+                this.menuName=menuNode.text;
+                var resData = JSON.parse(localStorage.getItem("system_resource_update_data"));
+                if(resData){
+                    this.srId = resData.srId;
+                    this.srName = resData.srName;
+                    this.srUrl = resData.srUrl;
+                    this.srSort = resData.srSort;
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

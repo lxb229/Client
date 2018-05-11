@@ -1,0 +1,304 @@
+<!--活跃玩家分析-->
+<div class="ibox">
+    <div class="ibox-title">
+        <h5>活跃玩家分析</h5>
+    </div>
+    <div class="ibox-content fadeInUp animated">
+     <div class="layui-tab" lay-filter="test">
+        <ul class="layui-tab-title">
+            <li class="layui-this" lay-id="11">活跃玩家趋势</li>
+            <li lay-id="22">活跃玩家</li>
+            <li lay-id="33">活跃玩家渠道分布</li>
+            <li lay-id="44">活跃玩家结构</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <!--活跃玩家趋势统计图-->
+                <div id="active_echart_a" class="container" style="height: 450px;"></div><!--选择日期和导出-->
+                <div id="active_div_a">
+                <form id ="active_form_a" class="layui-form">
+                <div class="layui-form-item" style="float: right;">
+                    <label class="layui-form-label">范围选择</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" placeholder="开始时间"  name="startDate" :value="filter.startDate" id="activeStartDate_a" />
+                    </div>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" placeholder="结束时间" name="endDate" :value="filter.endDate" id="activeEndDate_a" />
+                    </div>
+                    <button class="layui-btn" lay-submit lay-filter="active_form_a">查询</button>
+                    <button class="layui-btn" v-on:click="exportExcel">导出</button>
+                </div>
+                <!--表格-->
+                <table class="layui-table" lay-even="" lay-skin="row">
+                    <thead>
+                        <tr>
+                            <th>日期</th>
+                            <th>活跃玩家</th>
+                            <th>活跃新玩家</th>
+                            <th>活跃老玩家</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                         <tr v-for="(item, index) in grid.data">
+                            <td>{{formatDate(item.opbtTime)}}</td>
+                            <td>{{item.opbtBriskNum}}</td>
+                            <td>{{item.opbtNewBriskNum}}</td>
+                            <td>{{item.opbtOldBriskNum}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div id="pager" class="laypager" style="float: right;"></div>
+                </form>
+                </div>
+            </div>
+            <div class="layui-tab-item">
+                <!--活跃玩家统计图-->
+                <div id="dwm_echarts_a" class="halfContainer" style="height: 450px;"></div>
+                <div id="dwm_echarts_b" class="halfContainer" style="height: 450px;"></div>
+                <div id="dwm_div">
+                <form id ="dwm_form" class="layui-form">
+                <div class="layui-form-item" style="float: right;">
+                    <label class="layui-form-label">范围选择</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" placeholder="开始时间"  name="startDate" :value="filter.startDate" id="dwmStartDate" />
+                    </div>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" placeholder="结束时间" name="endDate" :value="filter.endDate" id="dwmEndDate" />
+                    </div>
+                    <button class="layui-btn" lay-submit lay-filter="dwm_form">查询</button>
+                    <button class="layui-btn" v-on:click="exportExcel">导出</button>
+                </div>
+                <!--表格-->
+                <table class="layui-table" lay-even="" lay-skin="row">
+                    <thead>
+                        <tr>
+                            <th>日期</th>
+                            <th>DAU:日活跃</th>
+                            <th>WAU:周活跃</th>
+                            <th>MAU:月活跃</th>
+                            <th>DAU/MAU:玩家黏度指标</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(item, index) in grid.data">
+                            <td>{{formatDate(item.opbDate)}}</td>
+                            <td>{{item.opbDayBrisk}}</td>
+                            <td>{{item.opbWeekBrisk}}</td>
+                            <td>{{item.opbMonthBrisk}}</td>
+                            <td v-if="item.percentage!=null">{{item.percentage}}%</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div id="pager" class="laypager" style="float: right;"></div>
+                </form>
+                </div>
+            </div>
+            <div class="layui-tab-item">
+                <!--活跃玩家渠道分布统计图-->
+                <div id="active_channel_echart" class="container" style="height:530px;"></div>
+                <div id="active_channel_div">
+                <form id ="active_channel_form" class="layui-form">
+                <div class="layui-form-item" style="float: right;">
+                    <label class="layui-form-label">范围选择</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" placeholder="开始时间"  name="startDate" :value="filter.startDate" id="activeChannelStartDate_a" />
+                    </div>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" placeholder="结束时间" name="endDate" :value="filter.endDate" id="activeChannelEndDate_a" />
+                    </div>
+                    <button class="layui-btn" lay-submit lay-filter="active_channel_form">查询</button>
+                    <button class="layui-btn" v-on:click="exportExcel">导出</button>
+                </div>
+                <!--表格-->
+                <table class="layui-table" lay-even="" lay-skin="row">
+                    <thead>
+                        <tr>
+                            <th>日期</th>
+                            <th>ios官网</th>
+                            <th>IOS个人(龙头版)</th>
+                            <th>IOS个人版(att)</th>
+                            <th>IOS个人版(疯狂电玩城)</th>
+                            <th>IOS个人版(街机电玩城)</th>
+                            <th>IOS个人版(连环夺宝)</th>
+                            <th>IOS个人版(水浒传)</th>
+                            <th>IOS个人版(糖果派对)</th>
+                            <th>IOS个人版(娱乐电玩城)</th>
+                            <th>android官网</th>
+                            <th>阿里游戏</th>
+                            <th>百度游戏中心</th>
+                            <th>百度</th>
+                            <th>二维码推广(ewm.lztb.cn)</th>
+                            <th>华为</th>
+                            <th>老系统导入</th>
+                            <th>木蚂蚁</th>
+                            <th>应用宝</th>
+                            <th>未知</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                         <tr v-for="(item, index) in grid.data">
+                            <td style="width: 120px;">{{formatDate(item.opncTime)}}</td>
+                            <td>{{item.c1}}</td>
+                            <td>{{item.c2}}</td>
+                            <td>{{item.c3}}</td>
+                            <td>{{item.c4}}</td>
+                            <td>{{item.c5}}</td>
+                            <td>{{item.c6}}</td>
+                            <td>{{item.c7}}</td>
+                            <td>{{item.c8}}</td>
+                            <td>{{item.c9}}</td>
+                            <td>{{item.c10}}</td>
+                            <td>{{item.c11}}</td>
+                            <td>{{item.c12}}</td>
+                            <td>{{item.c13}}</td>
+                            <td>{{item.c14}}</td>
+                            <td>{{item.c15}}</td>
+                            <td>{{item.c16}}</td>
+                            <td>{{item.c17}}</td>
+                            <td>{{item.c18}}</td>
+                            <td>{{item.c19}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div id="pager" class="laypager" style="float: right;"></div>
+                </form>
+                </div>
+            </div>
+            <div class="layui-tab-item">
+                <div class="layui-tab layui-tab-card">
+                    <ul class="layui-tab-title">
+                        <li lay-id="d1" class="layui-this">游戏天数</li>
+                        <li lay-id="d2">付费贡献</li>
+                    </ul>
+                    <div class="layui-tab-content" >
+                        <div class="layui-tab-item layui-show">
+                            <!--活跃玩家结构（游戏天数）统计图-->
+                            <div id="structure_days_echart" class="container" style="height: 450px;"></div>
+                            <!--选择日期和导出-->
+                            <div id="structure_days_div">
+                            <form id ="structure_days_form" class="layui-form">
+                            <div class="layui-form-item" style="float: right;">
+                                <label class="layui-form-label">范围选择</label>
+                                <div class="layui-input-inline">
+                                    <input class="layui-input" placeholder="开始时间"  name="startDate" :value="filter.startDate" id="structureDaysStartDate_a" />
+                                </div>
+                                <div class="layui-input-inline">
+                                    <input class="layui-input" placeholder="结束时间" name="endDate" :value="filter.endDate" id="structureDaysEndDate_a" />
+                                </div>
+                                <button class="layui-btn" lay-submit lay-filter="structure_days_form">查询</button>
+                                <button class="layui-btn" v-on:click="exportExcel">导出</button>
+                            </div>
+                            <!--表格-->
+                            <table class="layui-table" lay-even="" lay-skin="row">
+                                <thead>
+                                    <tr>
+                                        <th>日期</th>
+                                        <th>首日</th>
+                                        <th>2~7天</th>
+                                        <th>8~14天</th>
+                                        <th>15~30天</th>
+                                        <th>31~60天</th>
+                                        <th>61~90天</th>
+                                        <th>90~180天</th>
+                                        <th>＞180天</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(item, index) in grid.data">
+                                        <td style="width: 120px;">{{formatDate(item.opbgDate)}}</td>
+                                        <td>{{item.opbgDay1}}</td>
+                                        <td>{{item.opbgDay2To7}}</td>
+                                        <td>{{item.opbgDay8To14}}</td>
+                                        <td>{{item.opbgDay15To30}}</td>
+                                        <td>{{item.opbgDay31To60}}</td>
+                                        <td>{{item.opbgDay61To90}}</td>
+                                        <td>{{item.opbgDay91To180}}</td>
+                                        <td>{{item.opbgDay180More}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div id="pager" class="laypager" style="float: right;"></div>
+                            </form>
+                            </div>
+                        </div>
+                        <div class="layui-tab-item">
+                            <!--活跃玩家结构（付费贡献）统计图-->
+                            <div id="structure_pay_echart" class="container" style="height: 450px;"></div>
+                            <div id="structure_pay_div">
+                            <form id ="structure_pay_form" class="layui-form">
+                            <div class="layui-form-item" style="float: right;">
+                                <label class="layui-form-label">范围选择</label>
+                                <div class="layui-input-inline">
+                                    <input class="layui-input" placeholder="开始时间"  name="startDate" :value="filter.startDate" id="structurePayStartDate_a" />
+                                </div>
+                                <div class="layui-input-inline">
+                                    <input class="layui-input" placeholder="结束时间" name="endDate" :value="filter.endDate" id="structurePayEndDate_a" />
+                                </div>
+                                <button class="layui-btn" lay-submit lay-filter="structure_pay_form">查询</button>
+                                <button class="layui-btn" v-on:click="exportExcel">导出</button>
+                            </div>
+                            <!--表格-->
+                            <table class="layui-table" lay-even="" lay-skin="row">
+                                <thead>
+                                    <tr>
+                                        <th>日期</th>
+                                        <th>免费玩家</th>
+                                        <th>VIP1</th>
+                                        <th>VIP2</th>
+                                        <th>VIP3</th>
+                                        <th>VIP4</th>
+                                        <th>VIP5</th>
+                                        <th>VIP6</th>
+                                        <th>VIP7</th>
+                                        <th>VIP8</th>
+                                        <th>VIP9</th>
+                                        <th>VIP10</th>
+                                        <th>VIP11</th>
+                                        <th>VIP12</th>
+                                        <th>VIP13</th>
+                                        <th>VIP14</th>
+                                        <th>VIP15</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                     <tr v-for="(item, index) in grid.data">
+                                        <td style="width: 120px;">{{formatDate(item.opbpDate)}}</td>
+                                        <td>{{item.opbpFreeNum}}</td>
+                                        <td>{{item.opbpVip1}}</td>
+                                        <td>{{item.opbpVip2}}</td>
+                                        <td>{{item.opbpVip3}}</td>
+                                        <td>{{item.opbpVip4}}</td>
+                                        <td>{{item.opbpVip5}}</td>
+                                        <td>{{item.opbpVip6}}</td>
+                                        <td>{{item.opbpVip7}}</td>
+                                        <td>{{item.opbpVip8}}</td>
+                                        <td>{{item.opbpVip9}}</td>
+                                        <td>{{item.opbpVip10}}</td>
+                                        <td>{{item.opbpVip11}}</td>
+                                        <td>{{item.opbpVip12}}</td>
+                                        <td>{{item.opbpVip13}}</td>
+                                        <td>{{item.opbpVip14}}</td>
+                                        <td>{{item.opbpVip15}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div id="pager" class="laypager" style="float: right;"></div>
+                        </div>
+                        </form>
+                        </div>
+                    </div>
+                    <!-- end -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<script src="../static/lztb/operator/playerActive_a.js"></script>
+<script src="../static/lztb/operator/playerActive_b.js"></script>
+<script src="../static/lztb/operator/playerActive_d.js"></script>
+<script src="../static/lztb/operator/playerActive_e.js"></script>
+<script src="../static/lztb/operator/playerActive_f.js"></script>
+
+		

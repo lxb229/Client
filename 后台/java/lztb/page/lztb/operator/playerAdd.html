@@ -1,0 +1,308 @@
+<!--新增玩家分析-->
+<div class="ibox">
+    <div class="ibox-title">
+        <h5>新增玩家分析</h5>
+    </div>
+    <div class="ibox-content fadeInUp animated">
+        <div class="layui-tab-item layui-show">
+            <div class="layui-tab" lay-filter="test">
+                <ul class="layui-tab-title">
+                    <li class="layui-this" lay-id="11">新增玩家分析</li>
+                    <li lay-id="22">首次在线时长分析</li>
+                    <li lay-id="33">小号分析(设备)</li>
+                    <li lay-id="44">小号分析(IP)</li>
+                    <li lay-id="55">新增玩家渠道分布</li>
+                </ul>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show">   
+                        <!-- start -->
+                        <div id="playerAnalyze" class="container" style="height: 450px"></div>
+                        <div id="playerAnalyze_div">
+                        <form id = "playerAnalyze_form" class="layui-form">
+                            <div class="layui-form-item" style="float: right;">
+                                <label class="layui-form-label">范围选择</label>
+                                <div class="layui-input-inline">
+                                    <input class="layui-input" placeholder="开始时间"  name="startDate" :value="filter.startDate" id="startDate_a" />
+                                </div>
+                                <div class="layui-input-inline">
+                                    <input class="layui-input" placeholder="结束时间" name="endDate" :value="filter.endDate" id="endDate_a" />
+                                </div>
+                                <button class="layui-btn" lay-submit lay-filter="playerAnalyze_form">查询</button>
+                                <button class="layui-btn" v-on:click="exportExcel">导出</button>
+                            </div>   
+                            <table class="layui-table" lay-even="" lay-skin="row">
+                                <thead>
+                                <tr>
+                                    <th>日期</th>
+                                    <th>新增设备</th>
+                                    <th>新增注册</th>
+                                    <th>新增玩家</th>
+                                    <th>账号注册率</th>
+                                    <th>角色创建率</th>
+                                    <th>新增活跃比</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr v-for="(item, index) in grid.data">
+                                    <td>{{formatDate(item.opnTime)}}</td>
+                                    <td>{{item.opnNewDeviceNum}}</td>
+                                    <td>{{item.opnNewRegisterNum}}</td>
+                                    <td>{{item.opnNewPlayerNum}}</td>
+                                    <td>{{item.opnRegisterRate}}</td>
+                                    <td>{{item.opnRoleCreateRate}}</td>
+                                    <td>{{item.opnBriskRate}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div id="pager" class="laypager" style="float: right;"></div>
+                        </form>
+                        </div>
+                        <!-- end -->     
+                    </div>
+                    <div class="layui-tab-item"> 
+                         <!-- start -->
+                        <div>
+                            <div style="display: flex;">
+                                  <!-- echarts -->
+                                  <div id="durationAnalysis" class="halfContainer" style="height: 450px;"></div>
+                                  <div id="durationAnalysis_div">
+                                  <form id = "durationAnalysis_form" class="layui-form">                                
+                                      <div class="layui-form-item" style="float: right;">
+                                        <label class="layui-form-label">范围选择</label>
+                                        <div class="layui-input-inline">
+                                           <input class="layui-input" placeholder="开始时间"  name="startDate" :value="filter.startDate" id="startDate_b" />
+                                        </div>
+                                        <div class="layui-input-inline">
+                                           <input class="layui-input" placeholder="结束时间" name="endDate" :value="filter.endDate" id="endDate_b" />
+                                        </div>
+                                        <button class="layui-btn" lay-submit lay-filter="durationAnalysis_form">查询</button>
+                                        <button class="layui-btn" v-on:click="exportExcel">导出</button>
+                                      </div> 
+                                      <table class="layui-table" lay-even>
+                                            <thead>
+                                            <tr>
+                                                <th>日期</th>
+                                                <th>1mins以下</th>
+                                                <th>1~5mins</th>
+                                                <th>6~10mins</th>
+                                                <th>10~30mins</th>
+                                                <th>30~60mins</th>
+                                                <th>1~2hours</th>
+                                                <th>2~4hours</th>
+                                                <th>4hours以上</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr v-for="(item, index) in grid.data">
+                                                <td>{{formatDate(item.opfoTime)}}</td>
+                                                <td>{{item.opfoOne}}</td>
+                                                <td>{{item.opfoFive}}</td>
+                                                <td>{{item.opfoTen}}</td>
+                                                <td>{{item.opfoThirty}}</td>
+                                                <td>{{item.opfoSixty}}</td>
+                                                <td>{{item.opfoTwnHour}}</td>
+                                                <td>{{item.opfoFourHour}}</td>
+                                                <td>{{item.opfoGreaterFourHour}}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>  
+                                 </form>
+                                 </div>
+                            </div>
+                        </div>    
+                    <!-- end -->
+
+                    </div>
+                    <div class="layui-tab-item">  
+                        <!-- start -->
+                        <div>
+                            <div style="display: flex;">
+                                  <!-- echarts -->
+                                  <div id="equipment" class="halfContainer" style="height: 450px;"></div>
+                                  <div id="equipment_div">
+                                  <form id = "equipment_form"  class="layui-form">   
+                                      <div class="layui-form-item" style="float: right;">
+                                        <label class="layui-form-label">范围选择</label>
+                                        <div class="layui-input-inline">
+                                            <input class="layui-input" placeholder="开始时间"  name="startDate" :value="filter.startDate" id="startDate_c" />
+                                        </div>
+                                        <div class="layui-input-inline">
+                                           <input class="layui-input" placeholder="结束时间" name="endDate" :value="filter.endDate" id="endDate_c" />
+                                        </div>
+                                        <button class="layui-btn" lay-submit lay-filter="equipment_form">查询</button>
+                                        <button class="layui-btn" v-on:click="exportExcel">导出</button>
+                                      </div> 
+                                      <table class="layui-table" lay-even>
+                                        <thead>
+                                            <tr>
+                                                <th>日期</th>
+                                                <th>0个</th>
+                                                <th>1个</th>
+                                                <th>2个</th>
+                                                <th>3个</th>
+                                                <th>4个</th>
+                                                <th>5个</th>
+                                                <th>5~10个</th>
+                                                <th>10以上</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="(item, index) in grid.data">
+                                                <td>{{formatDate(item.opsdDate)}}</td>
+                                                <td>{{item.opsdZero}}</td>
+                                                <td>{{item.opsdOne}}</td>
+                                                <td>{{item.opsdTwo}}</td>
+                                                <td>{{item.opsdThree}}</td>
+                                                <td>{{item.opsdFour}}</td>
+                                                <td>{{item.opsdSix2ten}}</td>
+                                                <td>{{item.opsdSix2ten}}</td>
+                                                <td>{{item.opsdGreaterTen}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>  
+                                 </form>
+                                 </div>
+                            </div>
+                        </div>    
+                    <!-- end -->
+
+                    </div>
+                    <div class="layui-tab-item">
+                        <!-- start -->
+                        <div>
+                            <div style="display: flex;">
+                                <div id="ip" class="halfContainer" style="height: 450px;"></div>
+                                <div id="ip_div">
+                                <form id = "ip_form"  class="layui-form"> 
+                                    <div class="layui-form-item" style="float: right;">
+                                        <label class="layui-form-label">范围选择</label>
+                                        <div class="layui-input-inline">
+                                            <input class="layui-input" placeholder="开始时间"  name="startDate" :value="filter.startDate" id="startDate_d" />
+                                        </div>
+                                        <div class="layui-input-inline">
+                                            <input class="layui-input" placeholder="结束时间" name="endDate" :value="filter.endDate" id="endDate_d" />
+                                        </div>
+                                        <button class="layui-btn" lay-submit lay-filter="ip_form">查询</button>
+                                        <button class="layui-btn" v-on:click="exportExcel">导出</button>
+                                    </div>  
+                                    <table class="layui-table" lay-even>
+                                    <thead>
+                                        <tr>
+                                            <th>日期</th>
+                                            <th>0个</th>
+                                            <th>1个</th>
+                                            <th>2个</th>
+                                            <th>3个</th>
+                                            <th>4个</th>
+                                            <th>5个</th>
+                                            <th>5~10个</th>
+                                            <th>10以上</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(item, index) in grid.data">
+                                            <td>{{formatDate(item.opsiDate)}}</td>
+                                            <td>{{item.opsiZero}}</td>
+                                            <td>{{item.opsiOne}}</td>
+                                            <td>{{item.opsiTwo}}</td>
+                                            <td>{{item.opsiThree}}</td>
+                                            <td>{{item.opsiFour}}</td>
+                                            <td>{{item.opsiFive}}</td>
+                                            <td>{{item.opsiSix2ten}}</td>
+                                            <td>{{item.opsiGreaterTen}}</td>
+                                        </tr>
+                                    </tbody>
+                                    </table>
+                                </form>
+                                </div>  
+                            </div>
+                        </div>
+                   
+                    <!-- end -->                
+                    </div>
+
+                    <div class="layui-tab-item">
+                        <!-- start -->
+                        <!--新增玩家渠道分布统计图-->
+                        <div id="channel" class="container" style="height:530px;"></div>
+                        <div id="channel_div" >
+                        <form id = "channel_form"  class="layui-form"> 
+                            <!--选择日期和导出-->
+                            <div class="layui-form-item" style="float: right;">
+                                <label class="layui-form-label">范围选择</label>
+                                <div class="layui-input-inline">
+                                    <input class="layui-input" placeholder="开始时间"  name="startDate" :value="filter.startDate" id="startDate_e" />
+                                </div>
+                                <div class="layui-input-inline">
+                                    <input class="layui-input" placeholder="结束时间" name="endDate" :value="filter.endDate" id="endDate_e" />
+                                </div>
+                                <button class="layui-btn" lay-submit lay-filter="channel_form">查询</button>
+                                <button class="layui-btn" v-on:click="exportExcel">导出</button>
+                            </div>
+                            <!--表格-->
+                            <table class="layui-table" lay-even=>
+                                <thead>
+                                    <tr>
+                                        <th>日期</th>
+                                        <th>ios官网</th>
+                                        <th>IOS个人(龙头版)</th>
+                                        <th>IOS个人版(att)</th>
+                                        <th>IOS个人版(疯狂电玩城)</th>
+                                        <th>IOS个人版(街机电玩城)</th>
+                                        <th>IOS个人版(连环夺宝)</th>
+                                        <th>IOS个人版(水浒传)</th>
+                                        <th>IOS个人版(糖果派对)</th>
+                                        <th>IOS个人版(娱乐电玩城)</th>
+                                        <th>android官网</th>
+                                        <th>阿里游戏</th>
+                                        <th>百度游戏中心</th>
+                                        <th>百度</th>
+                                        <th>二维码推广(ewm.lztb.cn)</th>
+                                        <th>华为</th>
+                                        <th>老系统导入</th>
+                                        <th>木蚂蚁</th>
+                                        <th>应用宝</th>
+                                        <th>未知</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr v-for="(item, index) in grid.data">
+                                        <td style="width: 120px;">{{formatDate(item.opncTime)}}</td>
+                                        <td>{{item.c1}}</td>
+                                        <td>{{item.c2}}</td>
+                                        <td>{{item.c3}}</td>
+                                        <td>{{item.c4}}</td>
+                                        <td>{{item.c5}}</td>
+                                        <td>{{item.c6}}</td>
+                                        <td>{{item.c7}}</td>
+                                        <td>{{item.c8}}</td>
+                                        <td>{{item.c9}}</td>
+                                        <td>{{item.c10}}</td>
+                                        <td>{{item.c11}}</td>
+                                        <td>{{item.c12}}</td>
+                                        <td>{{item.c13}}</td>
+                                        <td>{{item.c14}}</td>
+                                        <td>{{item.c15}}</td>
+                                        <td>{{item.c16}}</td>
+                                        <td>{{item.c17}}</td>
+                                        <td>{{item.c18}}</td>
+                                        <td>{{item.c19}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </form>
+                        </div>
+                        </div>
+                        <!-- end -->                    
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../static/lztb/operator/playerAdd_a.js"></script>
+<script src="../static/lztb/operator/playerAdd_b.js"></script>
+<script src="../static/lztb/operator/playerAdd_c.js"></script>	
+<script src="../static/lztb/operator/playerAdd_d.js"></script>  
+<script src="../static/lztb/operator/playerAdd_e.js"></script> 

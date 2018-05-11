@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.guse.platform.dao.doudou.GoldLogMapper">
+
+    <resultMap id="GoldLog" type="com.guse.platform.entity.doudou.GoldLog">
+        <result property="id" column="id"/>
+        <result property="starNo" column="star_no"/>
+        <result property="theEventTime" column="the_event_time"/>
+        <result property="score" column="score"/>
+        <result property="gameType" column="game_type"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+        id ,star_no ,the_event_time ,score ,game_type 
+	    ]]>
+	</sql>
+	<!-- 用于分页查询 -->
+	<sql id="sql_of_where">
+	 	WHERE 1=1 
+    	<if test="bParam != null" >	
+		 	<if test="bParam.starNo != null and bParam.starNo != '' ">
+	      	 AND star_no = #{bParam.starNo, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="bParam.theEventTime != null">
+	      	 AND the_event_time = #{bParam.theEventTime, jdbcType=TIMESTAMP}
+		 	</if>
+		 	<if test="bParam.score != null ">
+	      	 AND score = #{bParam.score, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.luckStart != null and bParam.luckStart != '' ">
+	      	 AND the_event_time &gt;= #{bParam.luckStart, jdbcType=TIMESTAMP}
+		 	</if>
+		 	<if test="bParam.luckEnd != null and bParam.luckEnd != '' ">
+	      	 AND the_event_time &lt;= #{bParam.luckEnd, jdbcType=TIMESTAMP}
+		 	</if>
+		 	<if test="bParam.gameType != null and bParam.gameType != '' ">
+		 		<if test="bParam.gameType == 1">
+	      	 		
+		 		</if>
+		 		<if test="bParam.gameType == 2">
+	      	 		and score &gt;= 0 and (game_type= 1 or game_type = 2)
+		 		</if>
+		 		<if test="bParam.gameType == 3">
+	      	 		and score &lt; 0 and (game_type= 1 or game_type = 2)
+		 		</if>
+		 		<if test="bParam.gameType == 4">
+	      	 		and game_type= 99 
+		 		</if>
+		 		<if test="bParam.gameType == 5">
+	      	 		and game_type= 0 
+		 		</if>
+		 		<if test="bParam.gameType == 6">
+	      	 		and game_type= 2 
+		 		</if>
+		 		<if test="bParam.gameType == 7">
+	      	 		and game_type= 1 
+		 		</if>
+		 		<if test="bParam.gameType == 8">
+	      	 		and game_type= 3 
+		 		</if>
+	    	</if>  
+	    </if>   
+    </sql>
+    
+    <!-- 通用查询 -->
+    <select id="select" parameterType="java.util.Map" resultMap="GoldLog">
+        select 
+        <include refid="Base_Column_List" />
+        from gold_log 
+        <include refid="sql_of_where" /> order by id desc
+    </select>
+    
+    <!-- 通用分页查询 -->
+    <select id="selectPageByParam" parameterType="java.util.Map" resultMap="GoldLog">
+        select 
+        <include refid="Base_Column_List" />
+        from gold_log 
+        <include refid="sql_of_where" />
+        <if test="pParam != null">
+            <if test="pParam.orderByClause != null" > order by ${pParam.orderByClause} </if>
+            <if test="pParam.orderByClause == null" >
+            		order by id  desc 
+            </if>
+            <if test="pParam.startIndex != null and pParam.pageSize != null" >
+              limit ${pParam.startIndex} , ${pParam.pageSize}
+            </if>
+        </if>
+          <if test="pParam == null">
+             order by create_date desc
+        </if>
+    </select>
+    
+    <!-- 统计盈利数据 -->
+    <select id="countProfit" parameterType="java.util.Map" resultType="java.util.Map">
+    	SELECT payCount,extractCount,orderCount,orderAmount,agencyCount,(orderCount+orderAmount+agencyCount) agencyAmount FROM (
+			SELECT 
+			IFNULL(SUM(IF(game_type = 99 AND score &gt; 0, score, 0)),0) payCount,
+			0-IFNULL(SUM(IF(game_type = 99 AND score &lt; 0, score, 0)),0) extractCount,
+			IFNULL(SUM(IF(game_type = 99, score, 0)),0) orderCount,
+			IFNULL(SUM(IF(game_type = 0, score, 0)),0) orderAmount,
+			IFNULL(SUM(IF(game_type = 3,score,0)),0) agencyCount
+			FROM gold_log 
+    		<include refid="sql_of_where" />
+    		) demo
+    </select>
+    
+    
+    <!-- 通用分页查询记录总数 -->
+    <select id="countByParam" parameterType="java.util.Map" resultType="java.lang.Long">
+        select count(*) from gold_log 
+        <include refid="sql_of_where" />
+    </select>
+    
+    <insert id="insert" parameterType="com.guse.platform.entity.doudou.GoldLog">
+    <![CDATA[
+        INSERT INTO gold_log (
+	        id  ,
+	        star_no  ,
+	        the_event_time  ,
+	        score  ,
+	        game_type  
+        ) VALUES (
+        	#{id, jdbcType=INTEGER} ,
+        	#{starNo, jdbcType=VARCHAR} ,
+        	#{theEventTime, jdbcType=TIMESTAMP} ,
+        	#{score, jdbcType=INTEGER} ,
+        	#{gameType, jdbcType=INTEGER} 
+        )
+    ]]>
+    </insert>
+    
+    <delete id="deleteById">
+    <![CDATA[
+        DELETE FROM gold_log WHERE
+        id = #{id} 
+    ]]>
+    </delete>
+    
+    <select id="selectById" resultMap="GoldLog">
+	    SELECT <include refid="Base_Column_List"/>
+	    <![CDATA[
+	        FROM gold_log 
+	        WHERE 
+		        id = #{id} 
+	    ]]>
+    </select>
+    
+    <update id="updateByIdSelective" parameterType="com.guse.platform.entity.doudou.GoldLog">
+		UPDATE gold_log
+		<set>
+		 	<if test="starNo != null">
+	      	  star_no = #{starNo, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="theEventTime != null">
+	      	  the_event_time = #{theEventTime, jdbcType=TIMESTAMP} ,
+		 	</if>
+		 	<if test="score != null">
+	      	  score = #{score, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="gameType != null">
+	      	  game_type = #{gameType, jdbcType=INTEGER} ,
+		 	</if>
+		</set>
+		WHERE
+	       	id = #{id} 
+    </update>
+	
+</mapper>
+

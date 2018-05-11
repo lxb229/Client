@@ -1,0 +1,193 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="shortcut icon" href="https://think.ctolog.com/upload/8cd2ab293660edf0/15723a9730c2d51a.png" />
+    <title>四川澳博互动游戏运营平台</title>
+    <link rel="stylesheet" href="../static/plugs/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../static/plugs/layui/css/layui.css" />
+    <link rel="stylesheet" href="../static/theme/default/css/console.css">
+    <link rel="stylesheet" href="../static/theme/default/css/admin.css">
+    <script>
+        window.ROOT_URL = '';
+    </script>
+    <script src="../static/plugs/require/require.js"></script>
+    <script src="../static/admin/app.js"></script>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <div id="mainBody">
+        <div class="framework-topbar">
+            <div id="topbar" class="console-topbar">
+                <div class="topbar-wrap topbar-clearfix">
+                    <div class="topbar-head topbar-left topbar-logo">
+                        龙珠探宝
+                    </div>
+                    <a v-for="(item,index) in menuList" :data-menu-target="'m-'+(index+1)" class="topbar-home-link topbar-btn topbar-left">
+                        <span>{{item.menuTitle}}</span>
+                    </a>
+                    <div class="topbar-info topbar-right">
+                        <a data-reload data-tips-text='刷新' class=" topbar-btn topbar-left topbar-info-item text-center" style='width:50px;'>
+                            <span class='glyphicon glyphicon-refresh'></span>
+                        </a>
+                        <div class="topbar-left topbar-user">
+                            <div class="dropdown topbar-info-item">
+                                <a href="#" class="dropdown-toggle topbar-btn text-center" data-toggle="dropdown">
+                                    <span class='glyphicon glyphicon-user'> {{userInfo.loginName}} </span>
+                                    <span class="glyphicon glyphicon-menu-up transition" style="font-size:12px"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li class="topbar-info-btn">
+                                        <a @click="midPass()"><span><i class='glyphicon glyphicon-lock'></i> 修改密码</span></a>
+                                    </li>
+                                    <li class="topbar-info-btn">
+                                        <a @click="userLogout()"><span><i class="glyphicon glyphicon-log-out"></i> 退出登录</span></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="framework-body framework-sidebar-mini">
+            <div id="sidebar" class="framework-sidebar">
+                <div class="sidebar-content">
+                    <div class="sidebar-inner">
+                        <div class="sidebar-fold">
+                            <span class="glyphicon glyphicon-option-vertical transition"></span>
+                        </div>
+                        <div v-for="(onem,index1) in menuList" :data-menu-box="'m-'+(index1+1)">
+                            <div v-for="(twom,index2) in onem.twoMenus" class="sidebar-nav main-nav">
+                                <div class="sidebar-title">
+                                    <div class="sidebar-title-inner">
+                                        <span class="sidebar-title-icon fa fa-caret-right transition-min"></span>
+                                        <span class="sidebar-title-text">{{twom.menuTitle}}</span>
+                                    </div>
+                                </div>
+                                <ul class="sidebar-trans" style="display:none" :data-menu-node="'m-'+(index1+1)+'-'+(index2+1)">
+                                    <li v-for="(threem,index3) in twom.threeMenus" class="nav-item">
+                                        <a :data-menu-node="'m-'+(index1+1)+'-'+(index2+1)+'-'+(index3+1)" :data-open="threem.menuUrl" class="sidebar-trans">
+                                            <div class="nav-icon sidebar-trans">
+                                                <span :class="threem.menuIcon"></span>
+                                            </div>
+                                            <span class="nav-title">{{threem.menuTitle}}</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- 菜单结束 -->
+                    </div>
+                </div>
+            </div>
+
+            <!--内容-->
+            <div class="framework-container layer-main-container">
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+    // UI框架初始化
+    require(['vue', 'site'], function (Vue) {
+        //顶部栏
+        var vmMianBody = new Vue({
+            el: "#mainBody",
+            data: {
+                userInfo: {
+                    loginName: "<未登录>"
+                },
+                menuList: []
+            },
+            methods: {
+                midPass: function () {
+                    gOpenModalWindow("修改密码", "system/userMidPass.html", 550, 350);
+                },
+                userLogout: function () {
+                    ConfirmBox("您确定要退出系统吗？", function () {
+                        $.post("/system/user/logout", function () { }, "json");
+                        window.top.location.href = "login.html";
+                    }, "退出系统！", function () { });
+                }
+            },
+            created: function () {
+                var user = localStorage.getItem("loginUserInfo_data");
+                if (!user) {
+                    alert("未登录或登录超时，请重新登录！");
+                    window.top.location.href = "login.html";
+                    return;
+                }
+                user = JSON.parse(user);
+                this.userInfo.loginName = user.loginName;
+                menuHandler(this, user.menusList);
+            }
+        });
+
+        function menuHandler(vm, menusList) {
+            if (!menusList || !vm) {
+                return;
+            }
+            //组合一级菜单
+            for (var i = 0; i < menusList.length; i++) {
+                var onemenu = menusList[i];
+                if (onemenu.pid == 0) {
+                    onemenu.twoMenus = [];
+                    vm.menuList.push(onemenu);
+                    //移除已经处理过的元素
+                    menusList.splice(i, 1);
+                    i--;
+                    //组合二级菜单
+                    for (var j = 0; j < menusList.length; j++) {
+                        var twomenu = menusList[j];
+                        if (twomenu.pid == onemenu.menuId) {
+                            twomenu.threeMenus = [];
+                            onemenu.twoMenus.push(twomenu);
+                            //移除已经处理过的元素
+                            menusList.splice(j, 1);
+                            j--;
+                            if (i > -1) {
+                                i--;
+                            }
+                            //组合三级菜单
+                            for (var k = 0; k < menusList.length; k++) {
+                                var threemenu = menusList[k];
+                                if (threemenu.pid == twomenu.menuId) {
+                                    twomenu.threeMenus.push(threemenu);
+                                    //移除已经处理过的元素
+                                    menusList.splice(k, 1);
+                                    k--;
+                                    if (j > -1) {
+                                        j--;
+                                    }
+                                    if (i > -1) {
+                                        i--;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // UI框架初始化
+        require(['pace', 'jquery', 'layui', 'bootstrap', 'ueditor', 'jquery.cookies', 'jstree'], function () {
+            layui.config({ dir: baseUrl + '../plugs/layui/' });
+            layui.use(['layer', 'form', 'element'], function () {
+                window.layer = layui.layer;
+                window.form = layui.form();
+                require(['admin.listen']);
+            });
+        });
+    });
+
+</script>
+
+</html>

@@ -1,0 +1,84 @@
+
+<!--五星宏辉-->
+<div class="ibox">
+    <!--主页内容-->
+    <div class="ibox-content fadeInUp animated">
+		<div id="app">
+			<div class="layui-form">
+				<div class="layui-tab-item layui-show">
+					<div class="layui-form-item">
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="游戏ID" name="obuUserid" :value="filter.obuUserid" id="obuUserid">
+						</div>
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="游戏昵称" name="obuUserNick" :value="filter.obuUserNick" id="obuUserNick">
+						</div>
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="开始日" name="startDate" :value="filter.startDate" id="startAt" >
+						</div>
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="截止日" name="endDate" :value="filter.endDate" id="endAt">
+						</div>
+						<button class="layui-btn layui-btn-primary layui-btn-radius" lay-submit>查询</button>
+					</div>
+					<table class="layui-table" lay-even="" lay-skin="row">
+						<thead>
+						<tr>
+							<th>游戏ID</th>
+							<th>游戏昵称</th>
+							<th>玩家当前总金币</th>
+							<th>玩家本局金币</th>
+							<th>押注线数</th>
+							<th>单线押注金币</th>
+							<th>数量押注5</th>
+							<th>数量押注6</th>
+							<th>数量押注7</th>
+							<th>数量押注8</th>
+							<th>种类押注红</th>
+							<th>种类押注橙</th>
+							<th>种类押注黄</th>
+							<th>种类押注绿</th>
+							<th>种类押注钻</th>
+							<th>数量中奖格子号</th>
+							<th>种类中奖格子号</th>
+							<th>押注格子编号</th>
+							<th>赢得的金币</th>
+							<th>回收金币数</th>
+							<th>流水数据时间</th>
+							<!--<th>是否破产</th>-->
+						</tr>
+						</thead>
+						<tbody>
+						<tr v-for="(item, index) in grid.data">
+							<td>{{item.obuUserid}}</td>
+							<td>{{item.obuUserNick}}</td>
+							<td>{{item.gfgdPlayerGold}}</td>
+							<td>{{item.gfgdInningsGold}}</td>
+							<td>{{item.gfgdBetLineNum}}</td>
+							<td>{{item.gfgdBetSingleGold}}</td>
+							<td>{{item.gfgdBetFive}}</td>
+							<td>{{item.gfgdBetSix}}</td>
+							<td>{{item.gfgdBetSeven}}</td>
+							<td>{{item.gfgdBetEight}}</td>
+							<td>{{item.gfgdBetRed}}</td>
+							<td>{{item.gfgdBetOrange}}</td>
+							<td>{{item.gfgdBetYellow}}</td>
+							<td>{{item.gfgdBetGreen}}</td>
+							<td>{{item.gfgdBetDiamond}}</td>
+							<td>{{item.gfgdNumberPrizeLatticeIndex}}</td>
+							<td>{{item.gfgdTypePrizeLatticeIndex}}</td>
+							<td>{{item.gfgdLatticeIndex}}</td>
+							<td>{{item.gfgdWinLoseGold}}</td>
+							<td>{{item.gfgdRecoveryGold}}</td>
+							<td>{{formatDate(item.gfgdDetailTime)}}</td>
+							<!--<td>{{item.obuIsGoBroke}}</td>-->
+						</tr>
+						</tbody>
+					</table>
+					<div id="pager" class="laypager" style="float: right;"></div>
+				</div>
+			</div>
+		</div>
+    </div>
+	<script src="../static/lztb/game/water/wxhh.js"></script>
+</div>

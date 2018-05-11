@@ -1,0 +1,64 @@
+
+<!--糖果派对-->
+<div class="ibox">
+    <!--主页内容-->
+    <div class="ibox-content fadeInUp animated">
+		<div id="app">
+			<div class="layui-form">
+				<div class="layui-tab-item layui-show">
+					<div class="layui-form-item">
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="游戏ID" name="obuUserid" :value="filter.obuUserid" id="obuUserid">
+						</div>
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="游戏昵称" name="obuUserNick" :value="filter.obuUserNick" id="obuUserNick">
+						</div>
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="开始日" name="startDate" :value="filter.startDate" id="startAt" >
+						</div>
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="截止日" name="endDate" :value="filter.endDate" id="endAt">
+						</div>
+						<button class="layui-btn layui-btn-primary layui-btn-radius" lay-submit>查询</button>
+					</div>
+					<table class="layui-table" lay-even="" lay-skin="row">
+						<thead>
+						<tr>
+							<th>游戏ID</th>
+							<th>游戏昵称</th>
+							<th>下注前总金币</th>
+							<th>本场游戏金币</th>
+							<th>下注类型</th>
+							<th>下注线数</th>
+							<th>下注金币</th>
+							<th>回收金币数</th>
+							<th>总倍数</th>
+							<th>此局赢得金币数</th>
+							<th>流水时间</th>
+							<!--<th>是否破产</th>-->
+						</tr>
+						</thead>
+						<tbody>
+						<tr v-for="(item, index) in grid.data">
+							<td>{{item.obuUserid}}</td>
+							<td>{{item.obuUserNick}}</td>
+							<td>{{item.gtgdBeforeGold}}</td>
+							<td>{{item.gtgdInningsGold}}</td>
+							<td>{{item.gtgdBetType}}</td>
+							<td>{{item.gtgdBetLines}}</td>
+							<td>{{item.gtgdBetGold}}</td>
+							<td>{{item.gtgdRecoveryGold}}</td>
+							<td>{{item.gtgdTatolMultiple}}</td>
+							<td>{{item.gtgdWinLoseGold}}</td>
+							<td>{{formatDate(item.gtgdTime)}}</td>
+							<!--<td>{{item.obuIsGoBroke}}</td>-->
+						</tr>
+						</tbody>
+					</table>
+					<div id="pager" class="laypager" style="float: right;"></div>
+				</div>
+			</div>
+		</div>
+    </div>
+	<script src="../static/lztb/game/water/tgpd.js"></script>
+</div>

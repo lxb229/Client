@@ -1,0 +1,68 @@
+<!--实时数据-->
+<div class="ibox">
+    <div class="ibox-title">
+        <h5>实时数据列表</h5>
+    </div>
+    <div class="ibox-content fadeInUp animated">
+        <div id="realTime_div">
+            <form id="realTime_form" class="layui-form" >
+            <div class="layui-form-pane" style="margin-top: 15px;">
+                <div class="layui-form-item" id="report" style="float: right;">
+                    <label class="layui-form-label">范围选择</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" placeholder="开始时间"  name="startDate" :value="filter.startDate" id="startAt" />
+                    </div>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" placeholder="结束时间" name="endDate" :value="filter.endDate" id="endAt" />
+                    </div>
+                    <button class="layui-btn" lay-submit lay-filter="realTime_form">查询</button>
+                    <button class="layui-btn" v-on:click="exportExcel">导出</button>
+                </div>
+            </div> 
+            <table class="layui-table" lay-even>
+                <thead>
+                <tr>
+                    <th>日期</th>
+                    <th>新增注册</th>
+                    <th>新增玩家</th>
+                    <th>活跃玩家</th>
+                    <th>充值人数</th>
+                    <th>充值金额</th>
+                    <th>ARPPU</th>
+                    <th>ARPU</th>
+                    <th>付费率</th>
+                    <th>次日留存率</th>
+                    <th>3日留存率</th>
+                    <th>7日留存率</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(item, index) in grid.data">
+                    <td>{{item.ordDate}}</td>
+                    <td>{{item.ordNewRegisterNum}}</td>
+                    <td>{{item.ordNewPlayerNum}}</td>
+                    <td>{{item.ordBriskPlayerNum}}</td>
+                    <td>{{item.ordRechargeUserNum}}</td>
+                    <td>{{item.ordRechargeAmount}}</td>
+                    <td>{{item.ordArppu}}</td>
+                    <td>{{item.ordArpu}}</td>
+                    <td>{{item.ordPayRate}}</td>
+                    <td v-if="item.ordTwoDayRemain!=null">{{item.ordTwoDayRemain}}%</td>
+                    <td v-else></td>
+                    <td v-if="item.ordThreeDayRemain!=null">{{item.ordThreeDayRemain}}%</td>
+                    <td v-else></td>
+                    <td v-if="item.ordSevenDayRemain!=null">{{item.ordSevenDayRemain}}%</td>
+                    <td v-else></td>
+                </tr>
+               
+                </tbody>
+            </table>
+            <div id="pager" class="laypager" style="float: right;"></div>
+          </form>
+        </div> 
+    </div>
+    <script src="../static/lztb/operator/liveDataETable.js"></script>
+
+</div>
+
+        

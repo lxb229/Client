@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<!--别名申明 -->
+	<typeAliases>
+		<typeAlias type="com.guse.stock.dao.model.Stock" alias="stock"/>
+		<typeAlias type="com.guse.stock.dao.model.StockCer" alias="stockCer"/>
+		<typeAlias type="com.guse.stock.dao.model.StockLog" alias="stockLog"/>
+		<typeAlias type="com.guse.stock.dao.model.StockUseLog" alias="stockUseLog"/>
+		<typeAlias type="com.guse.stock.dao.model.Game" alias="game" />
+		<typeAlias type="com.guse.stock.dao.model.GamePar" alias="gamePar"/>
+		<typeAlias type="com.guse.stock.dao.model.UserAuthorise" alias="userAuthorise"/>
+		<typeAlias type="com.guse.stock.dao.model.User" alias="user"/>
+		<typeAlias type="com.guse.stock.dao.model.PluginOrder" alias="pluginOrder"/>
+		<typeAlias type="com.guse.stock.dao.model.StockCounts" alias="stockCounts"/>
+		<typeAlias type="com.guse.stock.dao.model.StockCerSplit" alias="stockCerSplit"/>
+	</typeAliases>
+	
+	
+	
+</configuration>

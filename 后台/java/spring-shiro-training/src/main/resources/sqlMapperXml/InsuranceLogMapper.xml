@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangzhixuan.mapper.InsuranceLogMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.wangzhixuan.model.InsuranceLog">
+		<result column="id" property="id" />
+		<result column="player_id" property="playerId" />
+		<result column="room_id" property="roomId" />
+		<result column="house_owner" property="houseOwner" />
+		<result column="party_no" property="partyNo" />
+		<result column="insurance_num" property="insuranceNum" />
+		<result column="insurance_time" property="insuranceTime" />
+	</resultMap>
+	
+	<select id="getInsuranceWater" resultType="Map">
+		SELECT IFNULL(sum(insurance_num),0) insuranceWater, room_id, house_owner 
+		FROM insurance_log 
+	        <where>
+	        	1=1
+	        	<if test=" playId != null and playId != '' ">
+	              and  player_id = #{playId} 
+	            </if>
+	            <if test=" houseOwner != null and houseOwner != '' ">
+	              and  house_owner = #{houseOwner} 
+	            </if>
+	            <if test=" roomId != null and roomId != '' ">
+	              and  room_id = #{roomId} 
+	            </if>
+	            <if test=" createTime != null ">
+	               <![CDATA[ and  DATEDIFF(insurance_time,#{createTime}) <= #{roomDays } ]]>
+	               <![CDATA[ and  DATEDIFF(insurance_time,#{createTime}) >= -#{roomDays } ]]>
+	            </if>
+	        </where>
+	        GROUP BY room_id,house_owner 
+	</select>
+
+</mapper>

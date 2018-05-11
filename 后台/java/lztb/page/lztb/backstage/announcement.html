@@ -1,0 +1,124 @@
+<!--公告配置-->
+<div class="ibox">
+    <!--主页内容-->
+    <div class="ibox-content fadeInUp animated" id="noticeForm">
+        <div class="">
+            <button data-method="offset" data-type="auto" class="layui-btn layui-btn-normal" @click="addNotice()">新建公告</button>
+        </div>
+        <table class="layui-table">
+            <thead>
+                <tr>
+                    <th>标题</th>
+                    <th style="width: 730px;">内容</th>
+                    <th>优先级</th>
+                    <th>上架时间</th>
+                    <th>下架时间</th>
+                    <th style="width: 130px;">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(item,index) in dlist">
+                    <td>{{item.title}}</td>
+                    <td>{{item.content}}</td>
+                    <td>{{item.order}}</td>
+                    <td>{{item.open_date}}</td>
+                    <td>{{item.end_date}}</td>
+                    <td>
+                        <a class="layui-btn layui-btn-mini" @click="editNotice(item)">编辑</a>
+                        <a class="layui-btn layui-btn-mini layui-btn-danger" @click="delNotice(item)">删除</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script>
+        require(['vue', 'site'], function (Vue) {
+            var vmNotice = new Vue({
+                el: "#noticeForm",
+                data: {
+                    dlist: []
+                },
+                methods: {
+                    addNotice: function () {
+                        gOpenModalWindow("发布公告", "lztb/backstage/noticeFrom.html", 750, 500,null,null,null,function(){
+                            loadData(vmNotice);
+                        });
+                    },
+                    editNotice: function (data) {
+                        localStorage.setItem("config_hell_notice_edit",JSON.stringify(data));
+                        gOpenModalWindow("编辑发布", "lztb/backstage/noticeFrom.html", 750, 500,null,null,null,function(){
+                            localStorage.removeItem("config_hell_notice_edit");
+                            loadData(vmNotice);
+                        });
+                    },
+                    delNotice: function (data) {
+                        ConfirmBox("您确定要删除【" + data.title + "】吗？", delHandler, "删除确认！");
+                        function delHandler() {
+                            $.ajax({
+                                url: '/config/hall/noticeDel',
+                                type: 'POST',
+                                data: { "id": data.id },
+                                dataType: 'json',
+                                timeout: 10000,
+                                success: function (rs) {
+                                    debugger;
+                                    if (rs.code == '00000') {
+                                        var rsdata = JSON.parse(rs.data);
+                                        if (rsdata.code == 200) {
+                                            SuccessBox("公告删除成功!", "提示", 2000);
+                                            for (var i = 0; i < mar.dlist.length; i++) {
+                                                if (mar.dlist[i].id == data.id) {
+                                                    mar.dlist.splice(i, 1);
+                                                    break;
+                                                }
+                                            }
+                                        } else {
+                                            AlertMsg(rsdata.msg);
+                                        }
+                                    } else {
+                                        AlertMsg("公告删除失败：" + rs.msg);
+                                        console.error(rs);
+                                    }
+                                },
+                                error: function (xhr, status, ex) {
+                                    AlertMsg("请求失败：" + xhr.statusText);
+                                    console.error(ex);
+                                }
+                            });
+                        }
+                    }
+                },
+                created: function () {
+                    loadData(this);
+                },
+                update: function () {
+
+                }
+            });
+            function loadData(vm) {
+                $.ajax({
+                    url: '/config/hall/noticeList',
+                    type: 'POST',
+                    data: {},
+                    dataType: 'json',
+                    timeout: 10000,
+                    success: function (rs) {
+                        if (rs.code == '00000') {
+                            vm.dlist = JSON.parse(rs.data);
+                        } else {
+                            AlertMsg(rs.msg);
+                            console.error(rs);
+                        }
+                    },
+                    error: function (xhr, status, ex) {
+                        AlertMsg("请求失败：" + xhr.statusText);
+                        console.error(ex);
+                    }
+                });
+            }
+        });
+        layui.use(['laypage', 'layer'], function () {
+
+        });
+    </script>
+</div>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangzhixuan.mapper.SilverJackpotMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="SilverJackpot" type="com.wangzhixuan.model.SilverJackpot">
+		<result column="id" property="id" />
+		<result column="award_name" property="awardName" />
+		<result column="award_lv" property="awardLv" />
+		<result column="amount" property="amount" />
+		<result column="residue" property="residue" />
+	</resultMap>	
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+        id, award_name, award_lv, amount, residue 
+	    ]]>
+	</sql>
+	
+	<select id="selectSilverJackpotPage"  resultMap="SilverJackpot">
+		SELECT <include refid="Base_Column_List"/> 
+		FROM silver_jackpot 
+		<where>
+			1=1 
+			<if test=" awardName != null and awardName != '' ">
+	               and award_name like concat(concat('%',#{awardName}),'%') 
+	            </if>
+		</where>
+		order by award_lv 
+    </select>
+	
+	
+	<update id="setSilverJackot">
+ 		update silver_jackpot set residue = amount 
+  	</update>
+  	
+  	
+  	<select id="getSilverJackpotResidue" resultMap="SilverJackpot">
+        SELECT <include refid="Base_Column_List"/>
+	        FROM silver_jackpot 
+	        <where>
+	        	<![CDATA[ residue > 0 ]]>
+	        </where>
+    </select>
+
+</mapper>

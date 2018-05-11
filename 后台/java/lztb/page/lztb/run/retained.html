@@ -1,0 +1,1039 @@
+<!--留存玩家分析-->
+<div class="ibox">
+    <!--主页内容 -->
+    <div class="ibox-content fadeInUp animated">
+        <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">推广阶段分析</li>
+                <li>注册阶段分析</li>
+                <li>玩家留存分析</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <div class="layui-tab" lay-filter="test">
+                        <ul class="layui-tab-title">
+                            <li class="layui-this" lay-id="11">新增玩家用户明细</li>
+                            <li lay-id="22">二维码推广</li>
+                            <li lay-id="33">推广链接推广</li>
+                            <li lay-id="44">新增概况明细</li>
+                        </ul>
+                        <div class="layui-tab-content">
+                            <div class="layui-tab-item layui-show">
+                                <!--新增玩家用户明细-->
+                                <!--选择日期和导出-->
+                                <div class="layui-form-item">
+                                    <div class="layui-input-inline">
+                                        <input class="layui-input" placeholder="开始日期" id="LAY_demorange_s4">
+                                    </div>
+                                    <div class="layui-input-inline">
+                                        <input class="layui-input" placeholder="截止日期" id="LAY_demorange_e4">
+                                    </div>
+                                    <div class="layui-inline ">
+                                        <select name="modules" class="layui-input">
+                                            <option value="">注册渠道</option>
+                                            <option value="1">来了</option>
+                                            <option value="2">来了</option>
+                                            <option value="3">来了</option>
+                                            <option value="4">来了</option>
+                                            <option value="5">来了</option>
+                                            <option value="6">来了</option>
+                                        </select>
+                                    </div>
+                                    <button class="layui-btn layui-btn-primary layui-btn-radius">查询</button>
+                                    <button class="layui-btn layui-btn-primary layui-btn-radius">导出</button>
+                                </div>
+                                <!--表格-->
+                                <table class="layui-table">
+                                    <thead>
+                                    <tr>
+                                        <th>日期</th>
+                                        <th>新增注册</th>
+                                        <th>LTV0</th>
+                                        <th>LTV1</th>
+                                        <th>LTV2</th>
+                                        <th>LTV3</th>
+                                        <th>LTV4</th>
+                                        <th>LTV5</th>
+                                        <th>LTV6</th>
+                                        <th>LTV7</th>
+                                        <th>LTV8</th>
+                                        <th>LTV9</th>
+                                        <th>LTV10</th>
+                                        <th>LTV11</th>
+                                        <th>LTV12</th>
+                                        <th>LTV13</th>
+                                        <th>LTV14</th>
+                                        <th>LTV15</th>
+                                        <th>LTV16</th>
+                                        <th>LTV17</th>
+                                        <th>LTV18</th>
+                                        <th>LTV19</th>
+                                        <th>LTV20</th>
+                                        <th>LTV21</th>
+                                        <th>LTV22</th>
+                                        <th>LTV23</th>
+                                        <th>LTV24</th>
+                                        <th>LTV25</th>
+                                        <th>LTV26</th>
+                                        <th>LTV27</th>
+                                        <th>LTV28</th>
+                                        <th>LTV29</th>
+                                        <th>LTV30</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <th>合计</th>
+                                        <th>100</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <td>100</td>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <td>100</td>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                    </tr>
+                                    <tr>
+                                        <th>06-07</th>
+                                        <th>100</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <td>100</td>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <td>100</td>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="layui-tab-item">
+                                <!--二维码推广-->
+                                <!--选择日期和导出-->
+                                <div class="layui-form-item">
+                                    <div class="layui-input-inline">
+                                        <input class="layui-input" placeholder="开始日期" id="LAY_demorange_s5">
+                                    </div>
+                                    <div class="layui-input-inline">
+                                        <input class="layui-input" placeholder="截止日期" id="LAY_demorange_e5">
+                                    </div>
+                                    <button class="layui-btn layui-btn-primary layui-btn-radius">导出</button>
+                                </div>
+                                <!--表格-->
+                                <table class="layui-table">
+                                    <thead>
+                                    <tr>
+                                        <th>日期</th>
+                                        <th>点击</th>
+                                        <th>下载</th>
+                                        <th>安卓安装</th>
+                                        <th>IOS安装</th>
+                                        <th>总安装</th>
+                                        <th>安卓注册</th>
+                                        <th>IOS注册</th>
+                                        <th>总注册数</th>
+                                        <th>新增充值人数</th>
+                                        <th>新增充值金额</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <th>合计</th>
+                                        <th>100</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <td>100</td>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                    </tr>
+                                    <tr>
+                                        <th>06-07</th>
+                                        <th>100</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <td>100</td>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="layui-tab-item">
+                                <!--推广链接推广-->
+                                <!--选择日期和导出-->
+                                <div class="layui-form-item">
+                                    <div class="layui-input-inline">
+                                        <input class="layui-input" placeholder="开始日期" id="LAY_demorange_s6">
+                                    </div>
+                                    <div class="layui-input-inline">
+                                        <input class="layui-input" placeholder="截止日期" id="LAY_demorange_e6">
+                                    </div>
+                                    <div class="layui-inline ">
+                                        <select name="modules" class="layui-input">
+                                            <option value="">bd.lztb.cn</option>
+                                            <option value="1">by.lztb.cn</option>
+                                        </select>
+                                    </div>
+                                    <button class="layui-btn layui-btn-primary layui-btn-radius">查询</button>
+                                    <button class="layui-btn layui-btn-primary layui-btn-radius">导出</button>
+                                </div>
+                                <!--表格-->
+                                <table class="layui-table">
+                                    <thead>
+                                    <tr>
+                                        <th>日期</th>
+                                        <th>点击</th>
+                                        <th>下载</th>
+                                        <th>安卓安装</th>
+                                        <th>IOS安装</th>
+                                        <th>总安装</th>
+                                        <th>安卓注册</th>
+                                        <th>IOS注册</th>
+                                        <th>总注册数</th>
+                                        <th>新增充值人数</th>
+                                        <th>新增充值金额</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <th>合计</th>
+                                        <th>100</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <td>100</td>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                    </tr>
+                                    <tr>
+                                        <th>06-07</th>
+                                        <th>100</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <td>100</td>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="layui-tab-item">
+                                <!--新增概况明细-->
+                                <div id="survey" class="container"></div>
+                                <!--选择日期和导出-->
+                                <div class="layui-form-item">
+                                    <div class="layui-input-inline">
+                                        <input class="layui-input" placeholder="开始日期" id="LAY_demorange_s7">
+                                    </div>
+                                    <div class="layui-input-inline">
+                                        <input class="layui-input" placeholder="截止日期" id="LAY_demorange_e7">
+                                    </div>
+                                    <button class="layui-btn layui-btn-primary layui-btn-radius">导出</button>
+                                </div>
+                                <!--表格-->
+                                <table class="layui-table">
+                                    <thead>
+                                    <tr>
+                                        <th>日期</th>
+                                        <th>ios官网</th>
+                                        <th>IOS个人(龙头版)</th>
+                                        <th>IOS个人版(att)</th>
+                                        <th>IOS个人版(疯狂电玩城)</th>
+                                        <th>IOS个人版(街机电玩城)</th>
+                                        <th>IOS个人版(连环夺宝)</th>
+                                        <th>IOS个人版(水浒传)</th>
+                                        <th>IOS个人版(糖果派对)</th>
+                                        <th>IOS个人版(娱乐电玩城)</th>
+                                        <th>android官网</th>
+                                        <th>阿里游戏</th>
+                                        <th>百度游戏中心</th>
+                                        <th>百度</th>
+                                        <th>二维码推广(ewm.lztb.cn)</th>
+                                        <th>华为</th>
+                                        <th>老系统导入</th>
+                                        <th>木蚂蚁</th>
+                                        <th>应用宝</th>
+                                        <th>未知</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <th>6-2</th>
+                                        <th>100</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <td>100</td>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                    </tr>
+                                    <tr>
+                                        <th>06-07</th>
+                                        <th>100</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <td>100</td>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-tab-item">
+                    <!--注册阶段分析-->
+                    <div id="registrationPhase" class="container"></div>
+                    <!--选择日期和导出-->
+                    <div class="layui-form-item">
+                        <div class="layui-input-inline">
+                            <input class="layui-input" placeholder="开始日期" id="LAY_demorange_s8">
+                        </div>
+                        <div class="layui-input-inline">
+                            <input class="layui-input" placeholder="截止日期" id="LAY_demorange_e8">
+                        </div>
+                        <button class="layui-btn layui-btn-primary layui-btn-radius">导出</button>
+                    </div>
+                    <!--表格-->
+                    <table class="layui-table">
+                        <thead>
+                        <tr>
+                            <th>名称</th>
+                            <th>完成人数</th>
+                            <th>流失人数</th>
+                            <th>流失率</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <th>激活</th>
+                            <th>3500</th>
+                            <th>300</th>
+                            <th>8.75%</th>
+                        </tr>
+                        <tr>
+                            <th>加载</th>
+                            <th>3200</th>
+                            <th>200</th>
+                            <th>6.25%</th>
+                        </tr>
+
+                        <tr>
+                            <th>新注册玩家</th>
+                            <th>2800</th>
+                            <th>800</th>
+                            <th>6.25%</th>
+                        </tr>
+                        <tr>
+                            <th>新增有效用户</th>
+                            <th>2000</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <th>游客角色</th>
+                            <th>2000</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="layui-tab-item">
+                    <div class="layui-tab" lay-filter="test">
+                        <ul class="layui-tab-title">
+                            <li class="layui-this" lay-id="11">玩家留存</li>
+                            <li lay-id="22">自定义玩家留存</li>
+                        </ul>
+                        <div class="layui-tab-content">
+                            <div class="layui-tab-item layui-show">
+                                <!--留存玩家-->
+                                <div id="daysLeft" class="container"></div>
+                                <!--选择日期和导出-->
+                                <div class="layui-form-item">
+                                    <div class="layui-input-inline">
+                                        <input class="layui-input" placeholder="开始日期" id="LAY_demorange_s9">
+                                    </div>
+                                    <div class="layui-input-inline">
+                                        <input class="layui-input" placeholder="截止日期" id="LAY_demorange_e9">
+                                    </div>
+                                    <div class="layui-inline ">
+                                        <select name="modules" class="layui-input">
+                                            <option value="">留存率</option>
+                                            <option value="1">留存人数</option>
+                                        </select>
+                                    </div>
+                                    <button class="layui-btn layui-btn-primary layui-btn-radius">导出</button>
+                                </div>
+                                <!--表格-->
+                                <table class="layui-table">
+                                    <thead>
+                                    <tr>
+                                        <th>日期</th>
+                                        <th>新增玩家</th>
+                                        <th>2日</th>
+                                        <th>3日</th>
+                                        <th>4日</th>
+                                        <th>5日</th>
+                                        <th>6日</th>
+                                        <th>7日</th>
+                                        <th>8日</th>
+                                        <th>9日</th>
+                                        <th>10日</th>
+                                        <th>11日</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <th>6-6</th>
+                                        <th>3500</th>
+                                        <th>8.75%</th>
+                                        <th>8.75%</th>
+                                    </tr>
+                                    <tr>
+                                        <th>6-5</th>
+                                        <th>3200</th>
+                                        <th>8.75%</th>
+                                        <th>6.25%</th>
+                                    </tr>
+
+                                    <tr>
+                                        <th>6-4</th>
+                                        <th>2800</th>
+                                        <th>8.75%</th>
+                                        <th>6.25%</th>
+                                    </tr>
+                                    <tr>
+                                        <th>6-3</th>
+                                        <th>2000</th>
+                                        <th>8.75%</th>
+                                        <th>8.75%</th>
+                                    </tr>
+                                    <tr>
+                                        <th>6-2</th>
+                                        <th>2000</th>
+                                        <th>8.75%</th>
+                                        <th>8.75%</th>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="layui-tab-item">
+                                <!--自定义留存玩家分析-->
+                                <!--选择日期和导出-->
+                                <div class="layui-form-item">
+                                    <button class="layui-btn layui-btn-primary layui-btn-radius">日</button>
+                                    <button class="layui-btn layui-btn-primary layui-btn-radius">周</button>
+                                    <button class="layui-btn layui-btn-primary layui-btn-radius">月</button>
+                                    <div class="layui-inline ">
+                                        <select name="modules" class="layui-input">
+                                            <option value="">留存率</option>
+                                            <option value="1">留存人数</option>
+                                        </select>
+                                    </div>
+                                    <button class="layui-btn layui-btn-primary layui-btn-radius">导出</button>
+                                </div>
+                                <!--表格-->
+                                <table class="layui-table">
+                                    <thead>
+                                    <tr>
+                                        <th>日期</th>
+                                        <th>
+                                                <select name="modules" class="layui-input">
+                                                    <option value="">活跃玩家</option>
+                                                    <option value="1">新增设备</option>
+                                                    <option value="">新增账号</option>
+                                                    <option value="">充值玩家</option>
+                                                </select>
+                                        </th>
+                                        <th>2日</th>
+                                        <th>3日</th>
+                                        <th>4日</th>
+                                        <th>5日</th>
+                                        <th>6日</th>
+                                        <th>7日</th>
+                                        <th>8日</th>
+                                        <th>9日</th>
+                                        <th>10日</th>
+                                        <th>11日</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <th>6-6</th>
+                                        <th>3500</th>
+                                        <th>8.75%</th>
+                                        <th>8.75%</th>
+                                        <th>8.75%</th>
+                                        <th>8.75%</th>
+                                        <th>8.75%</th>
+                                        <th>8.75%</th>
+                                        <th>8.75%</th>
+                                        <th>8.75%</th>
+                                        <th>8.75%</th>
+                                        <th>8.75%</th>
+                                    </tr>
+                                    <tr>
+                                        <th>6-5</th>
+                                        <th>3200</th>
+                                        <th>8.75%</th>
+                                        <th>6.25%</th>
+                                        <th>8.75%</th>
+                                        <th>8.75%</th>
+                                        <th>8.75%</th>
+                                        <th>8.75%</th>
+                                        <th>8.75%</th>
+                                        <th>8.75%</th>
+                                        <th>8.75%</th>
+                                        <th>8.75%</th>
+                                    </tr>
+
+                                    <tr>
+                                        <th>6-4</th>
+                                        <th>2800</th>
+                                        <th>8.75%</th>
+                                        <th>6.25%</th>
+                                        <th>8.75%</th>
+                                        <th>8.75%</th>
+                                        <th>8.75%</th>
+                                        <th>8.75%</th>
+                                        <th>8.75%</th>
+                                        <th>8.75%</th>
+                                        <th>8.75%</th>
+                                        <th>8.75%</th>
+                                    </tr>
+                                    <tr>
+                                        <th>6-3</th>
+                                        <th>2000</th>
+                                        <th>8.75%</th>
+                                        <th>8.75%</th>
+                                        <th>8.75%</th>
+                                        <th>8.75%</th>
+                                        <th>8.75%</th>
+                                        <th>8.75%</th>
+                                        <th>8.75%</th>
+                                        <th>8.75%</th>
+                                        <th>8.75%</th>
+                                        <th>8.75%</th>
+                                    </tr>
+                                    <tr>
+                                        <th>6-2</th>
+                                        <th>2000</th>
+                                        <th>8.75%</th>
+                                        <th>8.75%</th>
+                                        <th>8.75%</th>
+                                        <th>8.75%</th>
+                                        <th>8.75%</th>
+                                        <th>8.75%</th>
+                                        <th>8.75%</th>
+                                        <th>8.75%</th>
+                                        <th>8.75%</th>
+                                        <th>8.75%</th>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        //            新增概况明细统计图
+        require(['echarts','vue'], function (echarts,Vue) {
+            var survey = echarts.init(document.getElementById('survey'));
+            var registrationPhase = echarts.init(document.getElementById('registrationPhase'));
+            var daysLeft = echarts.init(document.getElementById('daysLeft'));
+
+            function renderSurvey() {
+                option = {
+                    tooltip : {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data:['ios官网','IOS个人(龙头版)','IOS个人版(att)','IOS个人版(疯狂电玩城)','IOS个人版(街机电玩城)','IOS个人版(连环夺宝)','IOS个人版(水浒传)', 'IOS个人版(糖果派对)',
+                            'IOS个人版(娱乐电玩城)','android官网', '阿里游戏','百度游戏中心','百度', '二维码推广(ewm.lztb.cn)','华为','老系统导入', '木蚂蚁','应用宝','未知']
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar']},
+                            restore : {show: true},
+                            saveAsImage : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    xAxis : [
+                        {
+                            type : 'category',
+                            data : ['06-06','06-07']
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            type : 'value'
+                        }
+                    ],
+                    series : [
+                        {
+                            name:'ios官网',
+                            type:'bar',
+                            data:[79.0, 54.9],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'IOS个人(龙头版)',
+                            type:'bar',
+                            data:[2.0, 4.9],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'IOS个人版(att)',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'IOS个人版(疯狂电玩城)',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'IOS个人版(街机电玩城)',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'IOS个人版(连环夺宝)',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'IOS个人版(水浒传)',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'IOS个人版(糖果派对)',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'IOS个人(娱乐电玩城)',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'android官网',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'阿里游戏',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'百度游戏中心',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'百度',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'二维码推广(ewm.lztb.cn)',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'华为',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'老系统导入',
+                            type:'bar',
+                            data:[25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'木蚂蚁',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'应用宝',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'未知',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        }
+
+                    ]
+                };
+                survey.setOption(option);
+                option = {
+                    tooltip : {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data:['完成人数','流失人数']
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar']},
+                            restore : {show: true},
+                            saveAsImage : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    xAxis : [
+                        {
+                            type : 'category',
+                            data : ['激活','加载','新增注册','新增玩家','新增有效用户 ','游客角色']
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            type : 'value'
+                        }
+                    ],
+                    series : [
+                        {
+                            name:'完成人数',
+                            type:'bar',
+                            data:[ 5.9, 8.0, 23.2, 25.6, 53.7, 85.6],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'流失人数',
+                            type:'bar',
+                            data:[ 4.9, 7.0, 23.2, 25.6, 76.7, 135.6],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        }
+                    ]
+                };
+                registrationPhase.setOption(option);
+                option = {
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data:['2日留存','3日留存','7日留存']
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    toolbox: {
+                        feature: {
+                            saveAsImage: {}
+                        }
+                    },
+                    xAxis: {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: ['6-1','6-2','6-3','6-4','6-5','6-6','6-7']
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: [
+                        {
+                            name:'2日留存',
+                            type:'line',
+                            stack: '总量',
+                            data:[120, 132, 101, 134, 90, 230, 210]
+                        },{
+                            name:'3日留存',
+                            type:'line',
+                            stack: '总量',
+                            data:[120, 132, 101, 134, 90, 230, 210]
+                        },{
+                            name:'7日留存',
+                            type:'line',
+                            stack: '总量',
+                            data:[120, 132, 101, 134, 90, 230, 210]
+                        }
+                    ]
+                };
+                daysLeft.setOption(option);
+            }
+            renderSurvey();
+        })
+    </script>
+</div>

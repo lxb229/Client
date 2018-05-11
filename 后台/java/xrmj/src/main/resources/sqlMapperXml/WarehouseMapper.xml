@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangzhixuan.mapper.WarehouseMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.wangzhixuan.model.Warehouse">
+		<result column="id" property="id" />
+		<result column="commodity" property="commodity" />
+		<result column="usable_amount" property="usableAmount" />
+		<result column="outbound_amount" property="outboundAmount" />
+		<result column="all_amount" property="allAmount" />
+		<result column="use_amount" property="useAmount" />
+	</resultMap>
+	
+	<select id="selectWarehouseVoPage"  resultType="WarehouseVo">
+		SELECT 
+			w.id AS id,
+			w.commodity AS commodity,
+			c.commodity_name AS commodityName,
+			w.usable_amount AS usableAmount,
+			w.outbound_amount AS outboundAmount,
+			w.all_amount AS allAmount,
+			w.use_amount AS useAmount
+		FROM warehouse w
+		LEFT JOIN commodity c ON w.commodity = c.id
+			<where>
+	        	1=1
+	            <if test=" commodityName != null and commodityName != '' ">
+	               and c.commodity_name like concat(concat('%',#{commodityName}),'%') 
+	            </if>
+	        </where>
+		GROUP BY w.id
+    </select>
+
+</mapper>

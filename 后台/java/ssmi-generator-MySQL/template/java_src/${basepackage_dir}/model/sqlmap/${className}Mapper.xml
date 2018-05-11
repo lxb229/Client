@@ -1,0 +1,122 @@
+<#include "/macro.include"/>
+<#assign className = table.className>   
+<#assign classNameLower = className?uncap_first> 
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="${basepackage}.dao.${branchpackage}.${className}Mapper">
+
+    <resultMap id="${className}" type="${basepackage}.entity.${branchpackage}.${className}">
+        <#list table.columns as column>
+        <result property="${column.columnNameLower}" column="${column.sqlName}"/>
+		</#list>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+        <#list table.columns as column>${column.sqlName} <#if column_has_next>,</#if></#list>
+	    ]]>
+	</sql>
+	<!-- 用于分页查询 -->
+	<sql id="sql_of_where">
+	 	WHERE 1=1 
+    	<if test="bParam != null" >	
+    	 <#list table.notPkColumns as column>
+		 	<if test="bParam.${column.columnNameLower} != null">
+	      	 AND ${column.sqlName} = #${r"{"}bParam.${column.columnNameLower}, jdbcType=<#switch column.sqlTypeName?upper_case><#case 'TEXT'>VARCHAR<#break><#case 'VARCHAR2'>VARCHAR<#break><#case 'NUMBER'>NUMERIC<#break><#case 'DATETIME'>TIMESTAMP<#break><#case 'TIMESTAMPTZ'>TIMESTAMP<#break><#case 'DATE'>TIMESTAMP<#break><#case 'INT4'>INTEGER<#break><#case 'FLOAT8'>DOUBLE<#break><#case 'INT'>INTEGER<#break><#default>${column.sqlTypeName?upper_case}</#switch>}
+		 	</if>
+	     </#list>
+	    </if>   
+    </sql>
+    
+    <!-- 通用查询 -->
+    <select id="select" parameterType="java.util.Map" resultMap="${className}">
+        select 
+        <include refid="Base_Column_List" />
+        from ${table.sqlName} 
+        <include refid="sql_of_where" /> order by create_time desc
+    </select>
+    
+    <!-- 通用分页查询 -->
+    <select id="selectPageByParam" parameterType="java.util.Map" resultMap="${className}">
+        select 
+        <include refid="Base_Column_List" />
+        from ${table.sqlName} 
+        <include refid="sql_of_where" />
+        <if test="pParam != null">
+            <if test="pParam.orderByClause != null" > order by $${r"{"}pParam.orderByClause${r"}"} </if>
+            <if test="pParam.orderByClause == null" >
+            	<#list table.compositeIdColumns as column>
+            		order by ${column.sqlName} <#if column_has_next>,</#if> desc 
+            	</#list> 
+            </if>
+            <if test="pParam.startIndex != null and pParam.pageSize != null" >
+              limit $${r"{"}pParam.startIndex${r"}"} , $${r"{"}pParam.pageSize${r"}"}
+            </if>
+        </if>
+          <if test="pParam == null">
+             order by create_date desc
+        </if>
+    </select>
+    
+    <!-- 通用分页查询记录总数 -->
+    <select id="countByParam" parameterType="java.util.Map" resultType="java.lang.Long">
+        select count(*) from ${table.sqlName} 
+        <include refid="sql_of_where" />
+    </select>
+    
+    
+    <insert id="insert" parameterType="com.guse.platform.entity.doudou.${className}">
+    <![CDATA[
+        INSERT INTO ${table.sqlName} (
+        <#list table.columns as column>
+	        ${column.sqlName}  <#if column_has_next>,</#if>
+	        </#list>
+        ) VALUES (
+        <#list table.columns as column>
+        	#${r"{"}${column.columnNameLower}, jdbcType=<#switch column.sqlTypeName?upper_case><#case 'TEXT'>VARCHAR<#break><#case 'VARCHAR2'>VARCHAR<#break><#case 'NUMBER'>NUMERIC<#break><#case 'DATETIME'>TIMESTAMP<#break><#case 'TIMESTAMPTZ'>TIMESTAMP<#break><#case 'DATE'>TIMESTAMP<#break><#case 'INT4'>INTEGER<#break><#case 'FLOAT8'>DOUBLE<#break><#case 'INT'>INTEGER<#break><#default>${column.sqlTypeName?upper_case}</#switch>} <#if column_has_next>,</#if>
+        </#list>        
+        )
+    ]]>
+    </insert>
+    
+    <delete id="deleteById">
+    <![CDATA[
+        DELETE FROM ${table.sqlName} WHERE
+        <#list table.compositeIdColumns as column>
+        ${column.sqlName} = #${r"{"}${column.columnNameLower}${r"}"} <#if column_has_next>,</#if>
+		</#list>
+    ]]>
+    </delete>
+    
+    <select id="selectById" resultMap="${className}">
+	    SELECT <include refid="Base_Column_List"/>
+	    <![CDATA[
+	        FROM ${table.sqlName} 
+	        WHERE 
+				<#list table.compositeIdColumns as column>
+		        ${column.sqlName} = #${r"{"}${column.columnNameLower}${r"}"} <#if column_has_next>,</#if>
+		        </#list>
+	    ]]>
+    </select>
+    
+    <update id="updateByIdSelective" parameterType="com.guse.platform.entity.doudou.${className}">
+		UPDATE ${table.sqlName}
+		<set>
+		 <#list table.notPkColumns as column>
+		 	<if test="${column.columnNameLower} != null">
+	      	  ${column.sqlName} = #${r"{"}${column.columnNameLower}, jdbcType=<#switch column.sqlTypeName?upper_case><#case 'TEXT'>VARCHAR<#break><#case 'VARCHAR2'>VARCHAR<#break><#case 'NUMBER'>NUMERIC<#break><#case 'DATETIME'>TIMESTAMP<#break><#case 'TIMESTAMPTZ'>TIMESTAMP<#break><#case 'DATE'>TIMESTAMP<#break><#case 'INT4'>INTEGER<#break><#case 'FLOAT8'>DOUBLE<#break><#case 'INT'>INTEGER<#break><#default>${column.sqlTypeName?upper_case}</#switch>} ,
+		 	</if>
+	     </#list>
+		</set>
+		WHERE
+		<#list table.compositeIdColumns as column>
+	       	${column.sqlName} = #${r"{"}${column.columnNameLower}${r"}"} <#if column_has_next>,</#if>
+	    </#list>
+    </update>
+	
+</mapper>
+

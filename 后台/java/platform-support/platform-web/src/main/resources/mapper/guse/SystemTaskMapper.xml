@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.guse.platform.dao.doudou.SystemTaskMapper">
+
+    <resultMap id="SystemTask" type="com.guse.platform.entity.doudou.SystemTask">
+        <result property="id" column="id"/>
+        <result property="taskCmd" column="task_cmd"/>
+        <result property="jsonContent" column="json_content"/>
+        <result property="taskStatus" column="task_status"/>
+        <result property="taskNum" column="task_num"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+        id ,task_cmd ,json_content ,task_status ,task_num ,create_time 
+	    ]]>
+	</sql>
+	<!-- 用于分页查询 -->
+	<sql id="sql_of_where">
+	 	WHERE 1=1 
+    	<if test="bParam != null" >	
+		 	<if test="bParam.taskCmd != null">
+	      	 AND task_cmd = #{bParam.taskCmd, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.jsonContent != null">
+	      	 AND json_content = #{bParam.jsonContent, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="bParam.taskStatus != null">
+	      	 AND task_status = #{bParam.taskStatus, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.taskNum != null">
+	      	 AND task_num = #{bParam.taskNum, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.createTime != null">
+	      	 AND create_time = #{bParam.createTime, jdbcType=TIMESTAMP}
+		 	</if>
+	    </if>   
+    </sql>
+    
+    <!-- 通用查询 -->
+    <select id="select" parameterType="java.util.Map" resultMap="SystemTask">
+        select 
+        <include refid="Base_Column_List" />
+        from system_task 
+        <include refid="sql_of_where" /> order by create_time desc
+    </select>
+    
+    <!-- 通用分页查询 -->
+    <select id="selectPageByParam" parameterType="java.util.Map" resultMap="SystemTask">
+        select 
+        <include refid="Base_Column_List" />
+        from system_task 
+        <include refid="sql_of_where" />
+        <if test="pParam != null">
+            <if test="pParam.orderByClause != null" > order by ${pParam.orderByClause} </if>
+            <if test="pParam.orderByClause == null" >
+            		order by id  desc 
+            </if>
+            <if test="pParam.startIndex != null and pParam.pageSize != null" >
+              limit ${pParam.startIndex} , ${pParam.pageSize}
+            </if>
+        </if>
+          <if test="pParam == null">
+             order by create_date desc
+        </if>
+    </select>
+    
+    <!-- 通用分页查询记录总数 -->
+    <select id="countByParam" parameterType="java.util.Map" resultType="java.lang.Long">
+        select count(*) from system_task 
+        <include refid="sql_of_where" />
+    </select>
+    
+    
+    <insert id="insert" parameterType="com.guse.platform.entity.doudou.SystemTask">
+    <![CDATA[
+        INSERT INTO system_task (
+	        id  ,
+	        task_cmd  ,
+	        json_content  ,
+	        task_status  ,
+	        task_num  ,
+	        create_time  
+        ) VALUES (
+        	#{id, jdbcType=INTEGER} ,
+        	#{taskCmd, jdbcType=INTEGER} ,
+        	#{jsonContent, jdbcType=VARCHAR} ,
+        	#{taskStatus, jdbcType=INTEGER} ,
+        	#{taskNum, jdbcType=INTEGER} ,
+        	#{createTime, jdbcType=TIMESTAMP} 
+        )
+    ]]>
+    </insert>
+    
+    <delete id="deleteById">
+    <![CDATA[
+        DELETE FROM system_task WHERE
+        id = #{id} 
+    ]]>
+    </delete>
+    
+    <select id="selectById" resultMap="SystemTask">
+	    SELECT <include refid="Base_Column_List"/>
+	    <![CDATA[
+	        FROM system_task 
+	        WHERE 
+		        id = #{id} 
+	    ]]>
+    </select>
+    
+    <select id="getPendingTask" resultMap="SystemTask">
+     SELECT <include refid="Base_Column_List"/>
+        FROM system_task 
+        WHERE 
+	       task_num  &lt; 3 AND task_status &lt;&gt; 1 
+	       ORDER BY create_time 
+	       LIMIT 10
+    </select>
+    
+    <update id="updateByIdSelective" parameterType="com.guse.platform.entity.doudou.SystemTask">
+		UPDATE system_task
+		<set>
+		 	<if test="taskCmd != null">
+	      	  task_cmd = #{taskCmd, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="jsonContent != null">
+	      	  json_content = #{jsonContent, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="taskStatus != null">
+	      	  task_status = #{taskStatus, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="taskNum != null">
+	      	  task_num = #{taskNum, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="createTime != null">
+	      	  create_time = #{createTime, jdbcType=TIMESTAMP} ,
+		 	</if>
+		</set>
+		WHERE
+	       	id = #{id} 
+    </update>
+	
+</mapper>
+

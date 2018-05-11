@@ -1,0 +1,73 @@
+
+<!--水浒传-->
+<div class="ibox">
+    <!--主页内容-->
+    <div class="ibox-content fadeInUp animated">
+		<div id="app">
+			<div class="layui-form">
+				<div class="layui-tab-item layui-show">
+					<div class="layui-form-item">
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="游戏ID" name="obuUserid" :value="filter.obuUserid" id="obuUserid">
+						</div>
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="游戏昵称" name="obuUserNick" :value="filter.obuUserNick" id="obuUserNick">
+						</div>
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="开始日" name="startDate" :value="filter.startDate" id="startAt" >
+						</div>
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="截止日" name="endDate" :value="filter.endDate" id="endAt">
+						</div>
+						<button class="layui-btn layui-btn-primary layui-btn-radius" lay-submit>查询</button>
+					</div>
+					<table class="layui-table" lay-even="" lay-skin="row">
+						<thead>
+						<tr>
+							<th>游戏ID</th>
+							<th>游戏昵称</th>
+							<th>之前总金币</th>
+							<th>类型</th>
+							<th>赢得的金币</th>
+							<th>当前总金币</th>
+							<th>房间类型</th>
+							<th>押注金额</th>
+							<th>回收金币数</th>
+							<th>赢得倍数</th>
+							<th>流水时间</th>
+							<!--<th>是否破产</th>-->
+						</tr>
+						</thead>
+						<tbody>
+						<tr v-for="(item, index) in grid.data">
+							<td>{{item.obuUserid}}</td>
+							<td>{{item.obuUserNick}}</td>
+							<td>{{item.gsgdBeforeTatolGold}}</td>
+							<td>
+								<span v-if="item.gsgdType == 1">押注的金币</span>
+								<span v-if="item.gsgdType == 2">水浒传发放的金币</span>
+								<span v-if="item.gsgdType == 3">比倍获取的金币</span>
+								<span v-if="item.gsgdType == 4">小玛丽获得的金币</span>
+								<span v-if="item.gsgdType == 5">美人助威获得的金币</span>
+								<span v-if="item.gsgdType == 6">累积奖获得的金币</span>
+								<span v-if="item.gsgdType == 7">卡片兑换</span>
+								<span v-if="item.gsgdType == 8">其他</span>
+							</td>
+							<td>{{item.gsgdWinLoseGold}}</td>
+							<td>{{item.gsgdAfterTatolGold}}</td>
+							<td>{{item.gsgdRoomType}}</td>
+							<td>{{item.gsgdAmount}}</td>
+							<td>{{item.gsgdRecoveryGold}}</td>
+							<td>{{item.gsgdWinMultiple}}</td>
+							<td>{{formatDate(item.gsgdDatailTime)}}</td>
+							<!--<td>{{item.obuIsGoBroke}}</td>-->
+						</tr>
+						</tbody>
+					</table>
+					<div id="pager" class="laypager" style="float: right;"></div>
+				</div>
+			</div>
+		</div>
+    </div>
+	<script src="../static/lztb/game/water/shz.js"></script>
+</div>

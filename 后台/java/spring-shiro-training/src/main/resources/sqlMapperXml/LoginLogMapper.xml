@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangzhixuan.mapper.LoginLogMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.wangzhixuan.model.LoginLog">
+		<result column="id" property="id" />
+		<result column="player_id" property="playerId" />
+		<result column="login_type" property="loginType" />
+		<result column="create_time" property="createTime" />
+	</resultMap>
+	
+	<select id="getContinuousLogin" resultType="Map">
+        SELECT player_id,format(lianxu_days,0) lianxu_days,start_date,end_date
+			FROM (SELECT player_id,lianxu_days,start_date,end_date
+			   FROM (
+			       SELECT
+			        player_id,
+			        max(days)   lianxu_days,
+			        min(login_day) start_date,
+			        max(login_day) end_date
+			       FROM (SELECT
+			           player_id,
+			           <![CDATA[ @cont_day := ]]>
+			           (CASE
+			           <![CDATA[ WHEN (@last_player_id = player_id AND DATEDIFF(create_time, @last_dt) = 1) ]]>
+			            THEN
+			           <![CDATA[ (@cont_day + 1) ]]>
+			           <![CDATA[ WHEN (@last_player_id = player_id AND DATEDIFF(create_time, @last_dt) < 1) ]]>
+			            THEN
+			            <![CDATA[ (@cont_day + 0) ]]>
+			           ELSE
+			            1
+			           END)                       AS days,
+			           <![CDATA[ (@cont_ix := (@cont_ix + IF(@cont_day = 1, 1, 0))) AS cont_ix, ]]>
+			           <![CDATA[ @last_player_id := player_id, ]]>
+			           <![CDATA[ @last_dt := create_time                login_day ]]>
+			          FROM (SELECT
+			              player_id,
+			              DATE(create_time) create_time
+			             FROM login_log
+			             <where>
+			             	player_id is NOT null AND login_type = 1
+				            <if test=" playId != null and playId != '' ">
+				               and player_id = #{playId}
+				            </if>
+				        </where>
+			             ORDER BY player_id, create_time) AS t,
+			           (SELECT
+			           	<![CDATA[ @last_player_id := '', ]]>
+			            <![CDATA[ @last_dt := '', ]]>
+			            <![CDATA[ @cont_ix := 0, ]]>
+			            <![CDATA[ @cont_day := 0) AS t1 ]]>
+			         ) AS t2
+			       GROUP BY player_id, cont_ix
+			       HAVING lianxu_days > 0 
+			       <if test=" createDate != null ">
+		                AND start_date = DATE(#{createDate})
+		            </if>
+			        
+			      ) tmp
+			   ORDER BY lianxu_days DESC) ntmp
+			GROUP BY player_id
+    </select>
+
+</mapper>

@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.guse.platform.dao.system.ResourceMapper">
+
+    <resultMap id="Resource" type="com.guse.platform.entity.system.Resource">
+        <result property="srId" column="sr_id"/>
+        <result property="srGroup" column="sr_group"/>
+        <result property="srName" column="sr_name"/>
+        <result property="srUrl" column="sr_url"/>
+        <result property="srSort" column="sr_sort"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+        sr_id ,sr_group ,sr_name ,sr_url ,sr_sort 
+	    ]]>
+	</sql>
+	
+    <insert id="insert" parameterType="com.guse.platform.entity.system.Resource">
+    <![CDATA[
+        INSERT INTO system_resource (
+	        sr_id  ,
+	        sr_group  ,
+	        sr_name  ,
+	        sr_url  ,
+	        sr_sort  
+        ) VALUES (
+        	#{srId, jdbcType=INTEGER} ,
+        	#{srGroup, jdbcType=INTEGER} ,
+        	#{srName, jdbcType=VARCHAR} ,
+        	#{srUrl, jdbcType=VARCHAR} ,
+        	#{srSort, jdbcType=INTEGER} 
+        )
+    ]]>
+    </insert>
+    
+    <!-- 批量insert -->
+     <insert id="insertBatch" parameterType="java.util.List">
+   		INSERT INTO system_resource (
+	        sr_id  ,
+	        sr_group  ,
+	        sr_name  ,
+	        sr_url  ,
+	        sr_sort  
+        ) VALUES 
+	    <foreach collection="list" item="item" index="index" separator="," >  
+	        (
+	        	#{item.srId, jdbcType=INTEGER} ,
+	        	#{item.srGroup, jdbcType=INTEGER} ,
+	        	#{item.srName, jdbcType=VARCHAR} ,
+	        	#{item.srUrl, jdbcType=VARCHAR} ,
+	        	#{item.srSort, jdbcType=INTEGER} 
+	        )
+	    </foreach>  
+    </insert>
+    
+    <update id="updateByPrimaryKeySelective" parameterType="com.guse.platform.entity.system.Resource">
+		UPDATE system_resource
+		<set>
+		 	<if test="srGroup != null">
+	      	  sr_group = #{srGroup, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="srName != null">
+	      	  sr_name = #{srName, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="srUrl != null">
+	      	  sr_url = #{srUrl, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="srSort != null">
+	      	  sr_sort = #{srSort, jdbcType=INTEGER} ,
+		 	</if>
+		</set>
+		WHERE
+	       	sr_id = #{srId} 
+    </update>
+    
+    <update id="updateByPrimaryKey" parameterType="com.guse.platform.entity.system.Resource">
+    <![CDATA[
+        UPDATE system_resource SET
+	        sr_group = #{srGroup, jdbcType=INTEGER} ,
+	        sr_name = #{srName, jdbcType=VARCHAR} ,
+	        sr_url = #{srUrl, jdbcType=VARCHAR} ,
+	        sr_sort = #{srSort, jdbcType=INTEGER} 
+        WHERE 
+	        sr_id = #{srId} 
+    ]]>
+    </update>
+
+    <delete id="deleteByPrimaryKey">
+    <![CDATA[
+        DELETE FROM system_resource WHERE
+        sr_id = #{srId} 
+    ]]>
+    </delete>
+    
+    <delete id="deleteByCondition" parameterType="com.guse.platform.entity.system.Resource">
+		DELETE from system_resource
+		<where>
+		 	<if test="srId != null">
+	      	  AND sr_id = #{srId, jdbcType=INTEGER} 
+		 	</if>
+		 	<if test="srGroup != null">
+	      	  AND sr_group = #{srGroup, jdbcType=INTEGER} 
+		 	</if>
+		 	<if test="srName != null">
+	      	  AND sr_name = #{srName, jdbcType=VARCHAR} 
+		 	</if>
+		 	<if test="srUrl != null">
+	      	  AND sr_url = #{srUrl, jdbcType=VARCHAR} 
+		 	</if>
+		 	<if test="srSort != null">
+	      	  AND sr_sort = #{srSort, jdbcType=INTEGER} 
+		 	</if>
+	     <!-- 避免删除整个表数据 -->
+	     	<if test="srId == null and srGroup == null and srName == null and srUrl == null and srSort == null">
+			 AND 1 = 2
+			</if>
+		</where>
+	</delete>
+    
+    
+    <select id="selectByPrimaryKey" resultMap="Resource">
+	    SELECT <include refid="Base_Column_List"/>
+	    <![CDATA[
+	        FROM system_resource 
+	        WHERE 
+		        sr_id = #{srId} 
+	    ]]>
+    </select>
+    
+    <select id="selectResourceListByMenuId" resultMap="Resource">
+	    SELECT <include refid="Base_Column_List"/>
+	    <![CDATA[
+	        FROM system_resource 
+	        WHERE sr_group = #{menuId} 
+	    ]]>
+    </select>
+    
+    <select id="selectResourceListByMenuIds" resultMap="Resource">
+	    SELECT <include refid="Base_Column_List"/>
+	    FROM system_resource WHERE sr_group in
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">  
+		 #{item}
+		</foreach>
+    </select>
+	
+</mapper>
+

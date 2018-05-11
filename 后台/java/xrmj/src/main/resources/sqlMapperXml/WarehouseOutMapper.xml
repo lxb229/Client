@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangzhixuan.mapper.WarehouseOutMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="WarehouseOut" type="com.wangzhixuan.model.WarehouseOut">
+		<result column="id" property="id" />
+		<result column="out_no" property="outNo" />
+		<result column="type" property="type" />
+		<result column="commodity" property="commodity" />
+		<result column="amount" property="amount" />
+		<result column="warehouse_out" property="warehouseOut" />
+		<result column="remark" property="remark" />
+		<result column="user_id" property="userId" />
+		<result column="create_time" property="createTime" />
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+        id, out_no, type, commodity, amount, warehouse_out, remark, user_id, create_time 
+	    ]]>
+	</sql>
+	
+	<select id="getAllWarehouseOut" resultMap="WarehouseOut">
+        SELECT <include refid="Base_Column_List"/> 
+	        FROM warehouse_out 
+		        <where>
+		        	type = 0 
+		            <if test=" commodity != null">
+		               and commodity = #{commodity } 
+		            </if>
+		        </where>
+	        ORDER BY id 
+    </select>
+    
+    <select id="selectWarehouseOutVoPage"  resultType="WarehouseOutVo">
+		SELECT 
+			wo.id AS id,
+			wo.out_no AS outNo,
+			wo.type AS type,
+			wo.commodity AS commodity,
+			c.commodity_name AS commodityName,
+			wo.amount AS amount,
+			wo.warehouse_out AS warehouseOut,
+			wo2.out_no AS warehouseOutNo,
+			wo.remark AS remark,
+			wo.user_id AS userId,
+			u1.name AS userName,
+			wo.create_time AS createTime
+		FROM warehouse_out wo 
+		LEFT JOIN commodity c ON wo.commodity = c.id
+		LEFT JOIN warehouse_out wo2 ON wo.warehouse_out IS NOT NULL AND wo.warehouse_out = wo2.id
+		LEFT JOIN user u1 ON wo.user_id = u1.id
+			<where>
+	        	1=1
+	            <if test=" commodityName != null and commodityName != '' ">
+	               and c.commodity_name like concat(concat('%',#{commodityName}),'%') 
+	            </if>
+	        </where>
+		GROUP BY wo.id
+    </select>
+
+</mapper>

@@ -1,0 +1,138 @@
+<!--跑马灯配置-->
+<div class="ibox">
+    <!--主页内容-->
+    <div class="ibox-content fadeInUp animated" id="marqueeList">
+        <div class="site-demo-button">
+            <button data-method="offset" data-type="auto" class="layui-btn layui-btn-normal" @click="addData()">新建跑马灯</button>
+        </div>
+        <table class="layui-table">
+            <thead>
+                <tr>
+                    <th>优先级</th>
+                    <th>标题</th>
+                    <th>上架时间</th>
+                    <th>下架时间</th>
+                    <th>间隔</th>
+                    <th>内容</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(item,index) in dataList">
+                    <td>{{item.priority}}</td>
+                    <td>{{item.title}}</td>
+                    <td>{{item.start_time}}</td>
+                    <td>{{item.end_time}}</td>
+                    <td>{{item.interval}}</td>
+                    <td>{{item.content}}</td>
+                    <td>{{getStatus(item)}}</td>
+                    <td>
+                        <a class="layui-btn layui-btn-mini" @click="editData(item)">编辑</a>
+                        <a class="layui-btn layui-btn-mini layui-btn-danger" @click="delData(item)">删除</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div id="pager" class="laypager" style="float: right;"></div>
+    </div>
+    <script>
+        require(['vue','layui','site'], function (Vue) {
+            var mar = new Vue({
+                el: "#marqueeList",
+                data: {
+                    pidnex:1,
+                    psize:20,
+                    pcount:1,
+                    dcount:0,
+                    dataList:[]
+                },
+                methods: {
+                    getStatus:function(item) {
+                        var sp = 0;
+                        try {
+                            sp = (new Date()) - (new Date(item.end_time));
+                            if(sp > 0) {
+                                return "下架";
+                            }
+                        } catch (error) {
+                            return "[未知]";
+                        }
+                        return "上架";
+                    },
+                    addData:function () {
+                        gOpenModalWindow("添加跑马灯", "lztb/backstage/marqueeFrom.html", 850, 500,null,null,null,function(){
+                            loadData(mar);
+                        });
+                    },
+                    editData: function (data) {
+                        var srdata = JSON.stringify(data);
+                        localStorage.setItem("config_hell_marquee_edit",srdata);
+                        gOpenModalWindow("编辑跑马灯", "lztb/backstage/marqueeFrom.html", 850, 500,null,null,null,function(){
+                            localStorage.removeItem("config_hell_marquee_edit");
+                            loadData(mar);
+                        });
+                    },
+                    delData:function (data) {
+                        ConfirmBox("您确定要删除【"+data.title+"】",function(){
+                            $.ajax({
+                                url: '/config/hall/marqueeDel',
+                                type: 'POST',
+                                data: { "pmd_id": data.id },
+                                dataType: 'json',
+                                timeout: 10000,
+                                success: function (rs) {
+                                    if (rs.code == '00000') {
+                                        var rsdata = JSON.parse(rs.data);
+                                        if(rsdata.code == 200) {
+                                            SuccessBox("跑马灯删除成功!", "提示", 2000);
+                                            for(var i = 0;i<mar.dataList.length;i++ ) {
+                                                if(mar.dataList[i].id == data.id) {
+                                                    mar.dataList.splice(i,1);
+                                                    break;
+                                                }
+                                            }
+                                        } else {
+                                            AlertMsg(rsdata.info);
+                                        }      
+                                    } else {
+                                        AlertMsg("跑马灯删除失败："+rs.msg);
+                                        console.error(rs);
+                                    }
+                                },
+                                error: function (xhr, status, ex) {
+                                    AlertMsg("请求失败：" + xhr.statusText);
+                                    console.error(ex);
+                                }
+                            });
+                        },"删除确认！");
+                    }
+                },
+                created:function(){
+                    loadData(this);
+                }
+            });
+            function loadData(vm) {
+                $.ajax({
+                    url: '/config/hall/marqueeList',
+                    type: 'POST',
+                    data: { },
+                    dataType: 'json',
+                    timeout: 10000,
+                    success: function (rs) {
+                        if (rs.code == '00000') {
+                            vm.dataList = JSON.parse(rs.data);
+                        } else {
+                            AlertMsg(rs.msg);
+                            console.error(rs);
+                        }
+                    },
+                    error: function (xhr, status, ex) {
+                        AlertMsg("请求失败：" + xhr.statusText);
+                        console.error(ex);
+                    }
+                });
+            }
+        });
+    </script>
+</div>

@@ -1,0 +1,261 @@
+﻿<!--内容-->
+<div class="ibox">
+	<!--标题-->
+	<div class="ibox-title">
+		<h5>菜单管理</h5>
+	</div>
+	<!--主页内容 -->
+	<div class="ibox-content fadeInUp animated">
+		<div class="alert alert-success alert-dismissible" role="alert" style="border-radius:0">
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+			<p style="font-size:18px;padding-bottom:10px">操作提示！<span style="font-size:14px">点击菜单为当前菜单添加子菜单。</span></p>
+		</div>
+		<div class="layui-tab layui-tab-card">
+			<ul class="layui-tab-title">
+				<li class="layui-this">菜单管理</li>
+			</ul>
+			<div class="layui-tab-content" style="padding: 10px;">
+				<div class="layui-tab-item layui-show">
+					<div id="treeMenuBox" style="display: flex;">
+						<div style="flex: 1 1 0%; border-right: 1px dotted rgb(221, 221, 221);">
+							<div style="padding: 10px 0px 0px 20px; display: inline-block; width: 250px; overflow: auto;">
+								<div id="treeMenu" class="jstree jstree-1 jstree-default" role="tree" tabindex="0" aria-activedescendant="n43btVByomKRxYgg"
+								 aria-busy="false">
+								</div>
+							</div>
+						</div>
+						<div style="flex: 5 1 0%;">
+							<div class="layui-form" style="padding: 0px 30px 20px;">
+								<div class="layui-form-item">
+									<label class="layui-form-label">上级菜单</label>
+									<div class="layui-input-block">
+										<input type="text" disabled autocomplete="off" placeholder="" :value="currentNode.pName" class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<label class="layui-form-label">菜单名称</label>
+									<div class="layui-input-block">
+										<input type="text" maxlength="20" autocomplete="off" required v-model="currentNode.menuTitle" placeholder="请输入菜单名称" class="layui-input"/>
+									</div>
+								</div>
+								<div class="layui-form-item">
+										<label class="layui-form-label">菜单URL</label>
+										<div class="layui-input-block">
+											<input type="text" maxlength="50" autocomplete="off" v-model="currentNode.menuUrl" placeholder="请输入菜单URL" class="layui-input"/>
+										</div>
+									</div>
+								<div class="layui-form-item">
+									<label class="layui-form-label">菜单排序</label>
+									<div class="layui-input-block">
+										<input type="number" min="1" max="99999" autocomplete="off" v-model="currentNode.menuSort" placeholder="排序数字"  class="layui-input" />
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<label class="layui-form-label">菜单图标</label>
+									<div class="layui-input-block">
+										<input type="text" max="20" autocomplete="off" name="txtmenuIcon" v-model="currentNode.menuIcon" @click="selectIcon()" placeholder="点击选择图标代码" class="layui-input"/>
+									</div>
+								</div>
+								<div class="layui-form-item" style="margin-left: 30%;">
+									<div class="layui-inline">
+										<button class="layui-btn layui-btn-normal" v-on:click="addNewMenu()">新增子菜单</button>
+										&nbsp;&nbsp;
+										<button type="button" lay-submit="" lay-filter="*" class="layui-btn" @click="saveData()">保存数据</button>
+										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										<button type="button" lay-submit="" lay-filter="*" class="layui-btn layui-btn-primary" @click="deleteMenu()">删除菜单</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	require(['vue'], function (Vue) {
+		var menuTree=null;
+		var vmmenu = new Vue({
+			el: "#treeMenuBox",
+			data: {
+				menuData: [],
+				currentNode: {
+					pid:null,
+					pName:null,
+					menuId:null,
+					menuTitle:null,
+					menuUrl:null,
+					menuSort:null,
+					menuIcon:null
+				}
+			},
+			methods: {
+				//添加子菜单
+				addNewMenu: function () {
+					vmmenu.currentNode.pid = vmmenu.currentNode.menuId;
+					vmmenu.currentNode.pName = vmmenu.currentNode.menuTitle;
+					vmmenu.currentNode.menuId = null;
+					vmmenu.currentNode.menuTitle = null;
+					vmmenu.currentNode.menuUrl = null;
+					vmmenu.currentNode.menuSort = null;
+					vmmenu.currentNode.menuIcon = null;
+				},
+				//保存菜单数据
+				saveData: function () {					
+					if(!vmmenu.currentNode.pid) {
+						AlertMsg("上级菜单不能为空！");
+						return;
+					}
+					if(!vmmenu.currentNode.menuTitle) {
+						AlertMsg("菜单名称不能为空！");
+						return;
+					}
+					if(!vmmenu.currentNode.menuSort) {
+						vmmenu.currentNode.menuSort = 1;
+					}
+					$.ajax({
+						url: '/system/menus/insertUpdateMenus',
+						type: 'POST',
+						data: {
+							"menuId":vmmenu.currentNode.menuId,
+							"menuTitle":vmmenu.currentNode.menuTitle,
+							"pid":vmmenu.currentNode.pid,
+							"menuIcon":vmmenu.currentNode.menuIcon,
+							"menuSort":vmmenu.currentNode.menuSort,
+							"menuUrl":vmmenu.currentNode.menuUrl
+						},
+						dataType: 'json',
+						timeout: 10000,
+						success: function (rs) {
+							if (rs.code == '00000') {
+								SuccessBox("菜单保存成功!", "提示", 2000);
+								for(var ind in vmmenu.currentNode) {
+									if(ind != 'pid' && ind != 'pName') {
+										vmmenu.currentNode[ind] = null;
+									}
+								}
+								loadMenu();
+							} else {
+								AlertMsg(rs.msg);
+								console.error(rs);
+							}
+						},
+						error: function (xhr, status, ex) {
+							AlertMsg("请求失败：" + xhr.statusText);
+							console.error(ex);
+						}
+					});
+				},
+				//删除菜单
+				deleteMenu: function () {
+					if(!vmmenu.currentNode.menuId) {
+						AlertMsg("请选择需要删除的菜单！");
+						return;
+					}
+					if(vmmenu.currentNode.menuId == 0) {
+						AlertMsg("根菜单不能删除！");
+						return;
+					}
+					var msg = "您确定要删除菜单【"+vmmenu.currentNode.menuTitle+"】吗？<br/>菜单删除后，子菜单及菜单资源都将被删除。";
+					ConfirmBox(msg, function () {
+						$.ajax({
+							url: '/system/menus/delete',
+							type: 'POST',
+							data: { "menusId": vmmenu.currentNode.menuId },
+							dataType: 'json',
+							timeout: 10000,
+							success: function (rs) {
+								if (rs.code == '00000') {
+									SuccessBox("菜单删除成功!", "提示", 2000);
+									for(var id in vmmenu.currentNode) {
+										vmmenu.currentNode[id] = null;
+									}
+									loadMenu();
+								} else {
+									AlertMsg(rs.msg);
+									console.error(rs);
+								}
+							},
+							error: function (xhr, status, ex) {
+								AlertMsg("请求失败：" + xhr.statusText);
+								console.error(ex);
+							}
+						});
+					});
+				},
+				selectIcon:function () {
+					gOpenModalWindow("选择图标", "system/menuIcon.html", 1000, 750,true,null,null,function(){
+						var className = localStorage.getItem("system_menu_set_icon_val");
+						vmmenu.currentNode.menuIcon = className;
+						localStorage.removeItem("system_menu_set_icon_val");
+					});
+				}
+			},
+			created: function () {
+				loadMenu();
+			}
+		});
+		//加载菜单数据
+		function loadMenu() {
+			$.ajax({
+				url: '/system/menus/loadMenusTree',
+				type: 'POST',
+				data: {},
+				dataType: 'json',
+				timeout: 10000,
+				success: function (rs) {
+					if (rs.code == '00000') {
+						vmmenu.menuData = rs.data;
+						showMenu();
+					} else {
+						AlertMsg(rs.msg);
+						console.error(rs);
+					}
+				},
+				error: function (xhr, status, ex) {
+					AlertMsg("请求失败：" + xhr.statusText);
+					console.error(ex);
+				}
+			});
+		}
+		//显示菜单
+		function showMenu() {
+			if(menuTree) {
+				menuTree.jstree(true).settings.core.data = vmmenu.menuData;
+				menuTree.jstree(true).refresh();
+				return;
+			}
+			menuTree = $('#treeMenu').jstree({
+				core: {
+					data: vmmenu.menuData
+				}
+			}).on("ready.jstree", function (e, data) {
+				//data.instance.open_all();
+			}).on("changed.jstree", function (e, data) {
+				var currentNode = data.instance.get_node(data.selected[0]);
+				if(!currentNode) {
+					return;
+				}
+				if(currentNode.original.parent != "#") {
+					vmmenu.currentNode.pid = currentNode.original.parent;
+				}
+				vmmenu.currentNode.pName = null;
+				for(var i=0;i<vmmenu.menuData.length;i++){
+					var menu = vmmenu.menuData[i];
+					if(menu.id == currentNode.original.parent) {
+						vmmenu.currentNode.pName = menu.text;
+					}
+				}
+				vmmenu.currentNode.menuId = currentNode.original.id;
+				vmmenu.currentNode.menuTitle = currentNode.original.text;
+				vmmenu.currentNode.menuUrl = currentNode.original.url;
+				vmmenu.currentNode.menuSort = currentNode.original.sort;
+				vmmenu.currentNode.menuIcon = currentNode.original.icon;
+			});
+		}
+	});
+
+</script>

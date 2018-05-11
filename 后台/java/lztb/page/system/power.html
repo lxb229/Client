@@ -1,0 +1,62 @@
+<!--内容-->
+
+<div class="ibox" xmlns:v-on="http://www.w3.org/1999/xhtml">
+
+    <!--主页内容 -->
+    <div class="ibox-content fadeInUp animated">
+
+        <div class="layui-form-item" id="app">
+
+            <div class="layui-inline">
+                <label class="layui-form-label">权限名称</label>
+                <div class="layui-input-inline">
+                    <select name="modules" lay-verify="required" lay-search="">
+                        <option value="1">权限管理</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="hr-line-dashed"></div>
+
+            <div class="layui-form-item text-center">
+
+                <!-- <button class="layui-btn" type='submit'>保存数据</button> -->
+                <button lay-submit="" lay-filter="*" type='submit' class="layui-btn layui-btn-danger" v-on:click="submit()">确定</button>
+                <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消</button>
+            </div>
+            </form>
+        </div>
+        <script type="text/javascript">
+
+            require(['vue','site'], function (Vue) {
+                layui.config({dir: baseUrl + '../plugs/layui/'});
+                layui.use(['layer', 'form', 'element'], function () {
+                    var vm=new Vue({
+                        el:"#app",
+                        data:{
+                            roleName:"roleName"
+                        },
+                        mounted: function () {
+                            form.on('submit', function (data) {
+                                console.log(data);
+                                var options = data.field;
+                                $.post("/system/roles/addOrUpdate", options, function (rs) {
+                                    console.log(rs.code);
+                                    if(rs.code == '00000'){
+                                      alert('添加成功!');
+                                        window.location.reload();
+                                    }else{
+                                        alert(rs.msg);
+                                    }
+                                }, "json");
+                            });
+
+                        }
+                    });
+
+                });
+
+            });
+        </script>
+    </div>
+</div>

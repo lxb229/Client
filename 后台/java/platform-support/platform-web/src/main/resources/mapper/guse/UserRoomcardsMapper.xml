@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.guse.platform.dao.doudou.UserRoomcardsMapper">
+
+    <resultMap id="UserRoomcards" type="com.guse.platform.entity.doudou.UserRoomcards">
+        <result property="urcId" column="urc_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="newRoomcards" column="new_roomcards"/>
+        <result property="buyRoomcards" column="buy_roomcards"/>
+        <result property="useRoomcards" column="use_roomcards"/>
+        <result property="givenRoomcards" column="given_roomcards"/>
+        <result property="sendOutRoomcards" column="send_out_roomcards"/>
+        <result property="receiveRoomcards" column="receive_roomcards"/>
+        <result property="consumptionAmount" column="consumption_amount"/>
+        <result property="earningsAmount" column="earnings_amount"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+        urc_id, user_id ,new_roomcards ,buy_roomcards ,use_roomcards ,given_roomcards ,send_out_roomcards ,receive_roomcards ,consumption_amount ,earnings_amount ,create_time 
+	    ]]>
+	</sql>
+	<!-- 用于分页查询 -->
+	<sql id="sql_of_where">
+	 	WHERE 1=1 
+    	<if test="bParam != null" >	
+		 	<if test="bParam.newRoomcards != null">
+	      	 AND new_roomcards = #{bParam.newRoomcards, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.buyRoomcards != null">
+	      	 AND buy_roomcards = #{bParam.buyRoomcards, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.useRoomcards != null">
+	      	 AND use_roomcards = #{bParam.useRoomcards, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.givenRoomcards != null">
+	      	 AND given_roomcards = #{bParam.givenRoomcards, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.sendOutRoomcards != null">
+	      	 AND send_out_roomcards = #{bParam.sendOutRoomcards, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.receiveRoomcards != null">
+	      	 AND receive_roomcards = #{bParam.receiveRoomcards, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.consumptionAmount != null">
+	      	 AND consumption_amount = #{bParam.consumptionAmount, jdbcType=DOUBLE}
+		 	</if>
+		 	<if test="bParam.earningsAmount != null">
+	      	 AND earnings_amount = #{bParam.earningsAmount, jdbcType=DOUBLE}
+		 	</if>
+	    </if>   
+    </sql>
+    
+    <!-- 通用查询 -->
+    <select id="select" parameterType="java.util.Map" resultMap="UserRoomcards">
+        select 
+        <include refid="Base_Column_List" />
+        from user_roomcards 
+        <include refid="sql_of_where" /> order by create_time desc
+    </select>
+    
+    <!-- 通用分页查询 -->
+    <select id="selectPageByParam" parameterType="java.util.Map" resultMap="UserRoomcards">
+        select 
+        <include refid="Base_Column_List" />
+        from user_roomcards 
+        <include refid="sql_of_where" />
+        <if test="pParam != null">
+            <if test="pParam.orderByClause != null" > order by ${pParam.orderByClause} desc </if>
+            <if test="pParam.orderByClause == null" >
+            		order by urc_id  desc 
+            </if>
+            <if test="pParam.startIndex != null and pParam.pageSize != null" >
+              limit ${pParam.startIndex} , ${pParam.pageSize}
+            </if>
+        </if>
+          <if test="pParam == null">
+             order by create_date desc
+        </if>
+    </select>
+    
+    <!-- 通用分页查询记录总数 -->
+    <select id="countByParam" parameterType="java.util.Map" resultType="java.lang.Long">
+        select count(*) from user_roomcards 
+        <include refid="sql_of_where" />
+    </select>
+    
+    
+    <insert id="insert" parameterType="com.guse.platform.entity.doudou.UserRoomcards">
+    <![CDATA[
+        INSERT INTO user_roomcards (
+	        urc_id  ,
+	        user_id  ,
+	        new_roomcards  ,
+	        buy_roomcards  ,
+	        use_roomcards  ,
+	        given_roomcards  ,
+	        send_out_roomcards  ,
+	        receive_roomcards  ,
+	        consumption_amount  ,
+	        earnings_amount  ,
+	        create_time  
+        ) VALUES (
+        	#{urcId, jdbcType=INTEGER} ,
+        	#{userId, jdbcType=INTEGER} ,
+        	#{newRoomcards, jdbcType=INTEGER} ,
+        	#{buyRoomcards, jdbcType=INTEGER} ,
+        	#{useRoomcards, jdbcType=INTEGER} ,
+        	#{givenRoomcards, jdbcType=INTEGER} ,
+        	#{sendOutRoomcards, jdbcType=INTEGER} ,
+        	#{receiveRoomcards, jdbcType=INTEGER} ,
+        	#{consumptionAmount, jdbcType=DOUBLE} ,
+        	#{earningsAmount, jdbcType=DOUBLE} ,
+        	#{createTime, jdbcType=TIMESTAMP} 
+        )
+    ]]>
+    </insert>
+    
+    <delete id="deleteById">
+    <![CDATA[
+        DELETE FROM user_roomcards WHERE
+        urc_id = #{urcId} 
+    ]]>
+    </delete>
+    
+    <select id="selectById" resultMap="UserRoomcards">
+	    SELECT <include refid="Base_Column_List"/>
+	    <![CDATA[
+	        FROM user_roomcards 
+	        WHERE 
+		        urc_id = #{urcId} 
+	    ]]>
+    </select>
+    
+    <update id="updateByIdSelective" parameterType="com.guse.platform.entity.doudou.UserRoomcards">
+		UPDATE user_roomcards
+		<set>
+			<if test="userId != null">
+	      	  user_id = #{userId, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="newRoomcards != null">
+	      	  new_roomcards = #{newRoomcards, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="buyRoomcards != null">
+	      	  buy_roomcards = #{buyRoomcards, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="useRoomcards != null">
+	      	  use_roomcards = #{useRoomcards, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="givenRoomcards != null">
+	      	  given_roomcards = #{givenRoomcards, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="sendOutRoomcards != null">
+	      	  send_out_roomcards = #{sendOutRoomcards, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="receiveRoomcards != null">
+	      	  receive_roomcards = #{receiveRoomcards, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="consumptionAmount != null">
+	      	  consumption_amount = #{consumptionAmount, jdbcType=DOUBLE} ,
+		 	</if>
+		 	<if test="earningsAmount != null">
+	      	  earnings_amount = #{earningsAmount, jdbcType=DOUBLE} ,
+		 	</if>
+		 	<if test="createTime != null">
+	      	  create_time = #{createTime, jdbcType=TIMESTAMP} ,
+		 	</if>
+		</set>
+		WHERE
+	       	urc_id = #{urcId} 
+    </update>
+    
+    <select id="getRoomcardByUser" resultMap="UserRoomcards">
+	    SELECT <include refid="Base_Column_List"/>
+	    <![CDATA[
+	        FROM user_roomcards 
+	        WHERE 
+		        user_id = #{userId} 
+	    ]]>
+    </select>
+	
+</mapper>
+

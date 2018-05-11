@@ -1,0 +1,212 @@
+﻿<!--内容-->
+<div class="ibox">
+	<!--标题-->
+	<div class="ibox-title">
+		<h5>系统资源</h5>
+	</div>
+	<!--主页内容 -->
+	<div class="ibox-content fadeInUp animated">
+		<div class="alert alert-success alert-dismissible" role="alert" style="border-radius:0">
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+			<p style="font-size:18px;padding-bottom:10px">操作提示！<span style="font-size:14px">点击菜单为当前菜单添资源</span></p>
+		</div>
+		<div class="layui-tab layui-tab-card">
+			<ul class="layui-tab-title">
+				<li class="layui-this">区域管理</li>
+			</ul>
+			<div class="layui-tab-content" style="padding: 10px;">
+				<div class="layui-tab-item layui-show">
+					<div id="treeMenuBox" style="display: flex;">
+						<div style="flex: 1 1 0%; border-right: 1px dotted rgb(221, 221, 221);">
+							<div style="padding: 10px 0px 0px 20px; display: inline-block; width: 220px; overflow: auto;">
+								<div id="treeMenu" class="jstree jstree-1 jstree-default" role="tree" tabindex="0" aria-activedescendant="n43btVByomKRxYgg"
+								 aria-busy="false">
+								</div>
+								<!-- <ul id="trueMenu"></ul> -->
+							</div>
+						</div>
+						<div style="flex: 5 1 0%;">
+							<div class="layui-form-item" style="margin: 10px 0px 0px 30px;">
+								<div class="layui-inline">
+									<div class="layui-btn-group">
+										<button class="layui-btn layui-btn-small" @click="addRes()">新增代理</button>
+									</div>
+								</div>
+							</div>
+							<div class="layui-form" style="padding: 0px 30px 20px;">
+								<table class="layui-table">
+									<thead>
+										<tr>
+											<th>代理ID</th>
+											<th>代理名称</th>
+											<th>代理时间</th>
+											<th>小于10万</th>
+											<th>10-20万</th>
+											<th>20-30万</th>
+											<th>30-40万</th>
+											<th>大于40万</th>
+											<th>操作</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr v-for="(item,index) in menuResList">
+											<td>{{item.saId}}</td>
+											<td>{{item.saUserId}}</td>
+											<th>{{item.saCreateTime}}</th>
+											<td>{{item.saLessOne}}</td>
+											<td>{{item.saOneToTwo}}</td>
+											<td>{{item.saTwoToThree}}</td>
+											<td>{{item.saThreeToFour}}</td>
+											<td>{{item.saGreaterFoure}}</td>
+											<td>
+												<a href="javascript:void(0)" class="layui-btn layui-btn-mini" @click="updateRes(item)">修改</a>
+												<a href="javascript:void(0)" class="layui-btn layui-btn-mini" @click="deleteRes(item)">删除</a>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	require(['vue'], function (Vue) {
+		var vmmenu = new Vue({
+			el: "#treeMenuBox",
+			data: {
+				menuData:[],
+				currentNode:null,
+				menuResList:[]
+			},
+			methods: {
+				//添加资源
+				addRes: function () {
+					if(vmmenu.currentNode == null) {
+						AlertMsg("请选择无子菜单节点，再新增资源！");
+						return;
+					}
+					var strCurrentNode = JSON.stringify(vmmenu.currentNode);
+					localStorage.setItem("system_resource_add_data",strCurrentNode);
+					localStorage.setItem("system_resource_update_data","");
+					gOpenModalWindow("新增资源", "system/areaFrom.html", 500, 570,null,null,null,function(){
+						loadShowRes(vmmenu.currentNode);//重新加载资源列表
+					});
+				},
+				//修改资源
+				updateRes:function(resData){
+					var strCurrentNode = JSON.stringify(vmmenu.currentNode);
+					localStorage.setItem("system_resource_add_data",strCurrentNode);
+					var strResData = JSON.stringify(resData);
+					localStorage.setItem("system_resource_update_data",strResData);
+					gOpenModalWindow("编辑资源", "system/areaFrom.html", 500, 570,null,null,null,function(){
+						loadShowRes(vmmenu.currentNode);//重新加载资源列表
+					});
+				},
+				//删除资源
+				deleteRes:function(resData) {
+					ConfirmBox("您确定要删除代理【" + resData.saUserId + "】吗？", del)
+					function del() {
+						$.ajax({
+							url: '/systemAgencyController/delete',
+							type: 'POST',
+							data: {"agencyId":resData.saId},
+							dataType: 'json',
+							timeout: 10000,
+							success: function (rs) {
+								if (rs.code == '00000') {
+									SuccessBox("代理删除成功!","提示",3000);
+									for(var i=0;i<vmmenu.menuResList.length;i++) {
+										var element = vmmenu.menuResList[i];
+										if(element.saId == resData.saId) {
+											vmmenu.menuResList.splice(i,1);
+										}
+									}
+								} else {
+									console.error(rs);
+									AlertMsg(rs.msg);
+								}
+							},
+							error: function (xhr, status, ex) {
+								AlertMsg("请求失败：" + xhr.statusText);
+								console.error(ex);
+							}
+						});
+					}
+					
+				}
+			},
+			created:function(){
+				loadMenu();				
+			}
+		});
+		//加载菜单数据
+		function loadMenu() {
+			$.ajax({
+				url: '/cityController/loadCityTree',
+				type: 'POST',
+				data: {},
+				dataType: 'json',
+				timeout: 10000,
+				success: function (rs) {
+					if (rs.code == '00000') {
+						vmmenu.menuData = rs.data;
+						showMenu();
+					} else {						
+						AlertMsg(rs.msg);
+						console.error(rs);
+					}
+				},
+				error: function (xhr, status, ex) {
+					AlertMsg("请求失败：" + xhr.statusText);
+					console.error(ex);
+				}
+			});
+		}
+		//显示菜单
+		function showMenu() {
+			$('#treeMenu').jstree({
+				core: {
+					data:vmmenu.menuData
+				}
+			}).on("ready.jstree", function (e, data) {
+				//data.instance.open_all();
+			}).on("changed.jstree", function (e, data) {
+				var currentNode = data.instance.get_node(data.selected[0]);
+				if(currentNode.id===0 || currentNode.children.length > 0) {
+					vmmenu.currentNode = null;
+					return;
+				}
+				vmmenu.currentNode = currentNode;
+				loadShowRes(currentNode);
+			});
+		}
+		//加载菜单的资源列表
+		function loadShowRes(menuNode) {
+			$.ajax({
+				url: '/systemAgencyController/getAgencyListForCityId',
+				type: 'POST',
+				data: {"cityId":menuNode.id},
+				dataType: 'json',
+				timeout: 10000,
+				success: function (rs) {
+					if (rs.code == '00000') {
+						vmmenu.menuResList = rs.data;
+					} else {
+						AlertMsg(rs.msg);
+						console.error(rs);						
+					}
+				},
+				error: function (xhr, status, ex) {
+					AlertMsg("请求失败：" + xhr.statusText);
+					console.error(ex);
+				}
+			});
+		}
+	});
+</script>

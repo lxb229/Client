@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.guse.platform.dao.system.RolesMapper">
+
+    <resultMap id="Roles" type="com.guse.platform.entity.system.Roles">
+        <result property="roleId" column="role_id"/>
+        <result property="roleName" column="role_name"/>
+        <result property="menuRights" column="menu_rights"/>
+        <result property="resourceRights" column="resource_rights"/>
+        <result property="roleStatus" column="role_status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+        role_id ,role_name ,menu_rights ,resource_rights ,role_status ,create_time ,update_time 
+	    ]]>
+	</sql>
+	
+	<sql id="sql_of_where">
+	 	WHERE 1=1 
+    	<if test="bParam != null" >
+            <if test="bParam.roleId != null"> AND role_id = #{bParam.roleId,jdbcType=INTEGER} </if>
+            <if test="bParam.roleName != null"> AND role_name = #{bParam.roleName,jdbcType=VARCHAR} </if>
+            <if test="bParam.roleStatus != null"> AND role_status = #{bParam.roleStatus,jdbcType=INTEGER} </if>
+            <if test="bParam.createTime != null"> AND create_time = #{bParam.createTime,jdbcType=TIMESTAMP} </if>
+            <if test="bParam.updateTime != null"> AND update_time = #{bParam.updateTime,jdbcType=TIMESTAMP} </if>
+        </if>
+    </sql>
+    
+    <!-- 通用查询 -->
+    <select id="select" parameterType="java.util.Map" resultMap="Roles">
+        select 
+        <include refid="Base_Column_List" />
+        from system_roles
+        <include refid="sql_of_where" /> order by create_time desc
+    </select>
+	
+    <insert id="insert" parameterType="com.guse.platform.entity.system.Roles">
+    <![CDATA[
+        INSERT INTO system_roles (
+	        role_id  ,
+	        role_name  ,
+	        menu_rights  ,
+	        resource_rights  ,
+	        role_status  ,
+	        create_time  ,
+	        update_time  
+        ) VALUES (
+        	#{roleId, jdbcType=INTEGER} ,
+        	#{roleName, jdbcType=VARCHAR} ,
+        	#{menuRights, jdbcType=VARCHAR} ,
+        	#{resourceRights, jdbcType=VARCHAR} ,
+        	#{roleStatus, jdbcType=BIT} ,
+        	#{createTime, jdbcType=TIMESTAMP} ,
+        	#{updateTime, jdbcType=TIMESTAMP} 
+        )
+    ]]>
+    </insert>
+    
+    <!-- 批量insert -->
+     <insert id="insertBatch" parameterType="java.util.List">
+   		INSERT INTO system_roles (
+	        role_id  ,
+	        role_name  ,
+	        menu_rights  ,
+	        resource_rights  ,
+	        role_status  ,
+	        create_time  ,
+	        update_time  
+        ) VALUES 
+	    <foreach collection="list" item="item" index="index" separator="," >  
+	        (
+	        	#{item.roleId, jdbcType=INTEGER} ,
+	        	#{item.roleName, jdbcType=VARCHAR} ,
+	        	#{item.menuRights, jdbcType=VARCHAR} ,
+	        	#{item.resourceRights, jdbcType=VARCHAR} ,
+	        	#{item.roleStatus, jdbcType=BIT} ,
+	        	#{item.createTime, jdbcType=TIMESTAMP} ,
+	        	#{item.updateTime, jdbcType=TIMESTAMP} 
+	        )
+	    </foreach>  
+    </insert>
+    
+    <update id="updateByPrimaryKeySelective" parameterType="com.guse.platform.entity.system.Roles">
+		UPDATE system_roles
+		<set>
+		 	<if test="roleName != null">
+	      	  role_name = #{roleName, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="menuRights != null">
+	      	  menu_rights = #{menuRights, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="resourceRights != null">
+	      	  resource_rights = #{resourceRights, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="roleStatus != null">
+	      	  role_status = #{roleStatus, jdbcType=BIT} ,
+		 	</if>
+		 	<if test="createTime != null">
+	      	  create_time = #{createTime, jdbcType=TIMESTAMP} ,
+		 	</if>
+		 	<if test="updateTime != null">
+	      	  update_time = #{updateTime, jdbcType=TIMESTAMP} ,
+		 	</if>
+		</set>
+		WHERE
+	       	role_id = #{roleId} 
+    </update>
+
+    <delete id="deleteByPrimaryKey">
+    <![CDATA[
+        DELETE FROM system_roles WHERE
+        role_id = #{roleId} 
+    ]]>
+    </delete>
+    
+    <select id="selectByPrimaryKey" resultMap="Roles">
+	    SELECT <include refid="Base_Column_List"/>
+	    <![CDATA[
+	        FROM system_roles 
+	        WHERE 
+		        role_id = #{roleId} 
+	    ]]>
+    </select>
+    
+    <select id="getRolesByRoleName" resultMap="Roles">
+	    SELECT <include refid="Base_Column_List"/>
+	    <![CDATA[
+	        FROM system_roles 
+	        WHERE 
+		        role_name = #{roleName} 
+	    ]]>
+    </select>
+	
+	
+</mapper>
+

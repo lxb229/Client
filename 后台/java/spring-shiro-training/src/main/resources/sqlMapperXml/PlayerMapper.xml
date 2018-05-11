@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangzhixuan.mapper.PlayerMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="Player" type="com.wangzhixuan.model.Player">
+		<result column="id" property="id" />
+		<result column="play_id" property="playId" />
+		<result column="play_status" property="playStatus" />
+		<result column="create_time" property="createTime" />
+		<result column="play_nick" property="playNick" />
+		<result column="create_type" property="createType" />
+		<result column="login_num" property="loginNum" />
+		<result column="login_days" property="loginDays" />
+		<result column="last_login_time" property="lastLoginTime" />
+		<result column="create_room_num" property="createRoomNum" />
+		<result column="join_room_num" property="joinRoomNum" />
+		<result column="join_party_num" property="joinPartyNum" />
+		<result column="jetton_num" property="jettonNum" />
+		<result column="profit_num" property="profitNum" />
+		<result column="two_days_keep" property="twoDaysKeep" />
+		<result column="three_days_keep" property="threeDaysKeep" />
+		<result column="seven_days_keep" property="sevenDaysKeep" />
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+        id, play_id, play_status, create_time, play_nick, create_type, login_num, 
+        login_days, last_login_time, create_room_num, join_room_num, join_party_num, 
+        jetton_num, profit_num, two_days_keep, three_days_keep, seven_days_keep 
+	    ]]>
+	</sql>
+	
+	<select id="selectPlayerPage" resultMap="Player">
+        SELECT <include refid="Base_Column_List"/> 
+	        FROM player 
+	        <where>
+	        	1=1
+	            <if test=" playId != null and playId != '' ">
+	               and play_id like concat(concat('%',#{playId}),'%') 
+	            </if>
+	        </where>
+	        GROUP BY id 
+    </select>
+    
+    <select id="selectPlayer" resultType="Map">
+		SELECT 
+			IFNULL(SUM(if(id>0,1,0)),0) allPlayer,
+			IFNULL(SUM(if(create_type=1,1,0)),0) wxPlayer,
+			<![CDATA[ IFNULL(SUM(if(create_type<>1,1,0)),0) otherPlayer, ]]>
+			IFNULL(SUM(if(two_days_keep=1,1,0)),0) twoDays,
+			IFNULL(SUM(if(three_days_keep=1,1,0)),0) threeDays,
+			IFNULL(SUM(if(seven_days_keep=1,1,0)),0) sevenDays
+			FROM player
+	</select>
+    
+
+</mapper>

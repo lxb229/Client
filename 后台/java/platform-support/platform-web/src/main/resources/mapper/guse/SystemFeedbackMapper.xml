@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.guse.platform.dao.doudou.SystemFeedbackMapper">
+
+    <resultMap id="SystemFeedback" type="com.guse.platform.entity.doudou.SystemFeedback">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="contactWay" column="contact_way"/>
+        <result property="content" column="content"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+        system_feedback.id ,system_feedback.user_id ,system_feedback.contact_way ,system_feedback.content ,system_feedback.create_time 
+	    ]]>
+	</sql>
+	<!-- 用于分页查询 -->
+	<sql id="sql_of_where">
+	 	WHERE 1=1 
+    	<if test="bParam != null" >	
+		 	<if test="bParam.contactWay != null and bParam.contactWay != '' ">
+	      	 AND (  contact_way like concat(concat('%',#{bParam.contactWay,jdbcType=VARCHAR}),'%') 
+	      	 or system_users.nick like concat(concat('%',#{bParam.contactWay,jdbcType=VARCHAR}),'%') 
+	      	 ) 
+		 	</if>
+		 	<if test="bParam.content != null">
+	      	 AND content = #{bParam.content, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="bParam.createTime != null">
+	      	 AND create_time = #{bParam.createTime, jdbcType=TIMESTAMP}
+		 	</if>
+	    </if>   
+    </sql>
+    
+    <!-- 通用查询 -->
+    <select id="select" parameterType="java.util.Map" resultMap="SystemFeedback">
+        select 
+        <include refid="Base_Column_List" />
+        from system_feedback 
+        <include refid="sql_of_where" /> order by create_time desc
+    </select>
+    
+    <!-- 通用分页查询 -->
+    <select id="selectPageByParam" parameterType="java.util.Map" resultMap="SystemFeedback">
+        select 
+        <include refid="Base_Column_List" />
+        from system_feedback 
+        LEFT JOIN system_users ON system_feedback.user_id = system_users.user_id 
+        <include refid="sql_of_where" />
+        <if test="pParam != null">
+            <if test="pParam.orderByClause != null" > order by ${pParam.orderByClause} </if>
+            <if test="pParam.orderByClause == null" >
+            		order by id  desc 
+            </if>
+            <if test="pParam.startIndex != null and pParam.pageSize != null" >
+              limit ${pParam.startIndex} , ${pParam.pageSize}
+            </if>
+        </if>
+          <if test="pParam == null">
+             order by create_date desc
+        </if>
+    </select>
+    
+    <!-- 通用分页查询记录总数 -->
+    <select id="countByParam" parameterType="java.util.Map" resultType="java.lang.Long">
+        select count(*) from system_feedback 
+        LEFT JOIN system_users ON system_feedback.user_id = system_users.user_id 
+        <include refid="sql_of_where" />
+    </select>
+    
+    
+    <insert id="insert" parameterType="com.guse.platform.entity.doudou.SystemFeedback">
+    <![CDATA[
+        INSERT INTO system_feedback (
+	        id  ,
+	        user_id  ,
+	        contact_way  ,
+	        content  ,
+	        create_time  
+        ) VALUES (
+        	#{id, jdbcType=INTEGER} ,
+        	#{userId, jdbcType=INTEGER} ,
+        	#{contactWay, jdbcType=VARCHAR} ,
+        	#{content, jdbcType=VARCHAR} ,
+        	#{createTime, jdbcType=TIMESTAMP} 
+        )
+    ]]>
+    </insert>
+    
+    <delete id="deleteById">
+    <![CDATA[
+        DELETE FROM system_feedback WHERE
+        id = #{id} 
+    ]]>
+    </delete>
+    
+    <select id="selectById" resultMap="SystemFeedback">
+	    SELECT <include refid="Base_Column_List"/>
+	    <![CDATA[
+	        FROM system_feedback 
+	        WHERE 
+		        id = #{id} 
+	    ]]>
+    </select>
+    
+    <update id="updateByIdSelective" parameterType="com.guse.platform.entity.doudou.SystemFeedback">
+		UPDATE system_feedback
+		<set>
+		 	<if test="userId != null">
+	      	  user_id = #{userId, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="contactWay != null">
+	      	  contact_way = #{contactWay, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="content != null">
+	      	  content = #{content, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="createTime != null">
+	      	  create_time = #{createTime, jdbcType=TIMESTAMP} ,
+		 	</if>
+		</set>
+		WHERE
+	       	id = #{id} 
+    </update>
+	
+</mapper>
+

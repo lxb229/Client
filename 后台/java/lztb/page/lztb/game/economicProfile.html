@@ -1,0 +1,80 @@
+<!--概况总览-->
+<div class="ibox">
+    <!--主页内容-->
+    <div class="ibox-content fadeInUp animated">
+		<div id="app">
+			<div class="layui-form">
+				<div class="layui-tab-item layui-show">
+					<div class="layui-form-item">
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="开始日" name="startDate" :value="filter.startDate" id="startAt" >
+						</div>
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="截止日" name="endDate" :value="filter.endDate" id="endAt">
+						</div>
+						<button class="layui-btn layui-btn-primary layui-btn-radius" lay-submit>查询</button>
+					</div>
+					<table class="layui-table" lay-even="" lay-skin="row">
+						<thead>
+						<tr>
+							<th>日期</th>
+							<th>购买发放</th>
+							<th>后台发放钻石</th>
+							<th>钻石总发放</th>
+							<th>金币兑换回收</th>
+							<th>道具兑换回收</th>
+							<th>后台回收钻石</th>
+							<th>钻石总回收</th>
+							<th>钻石平衡</th>
+							
+							<th>钻石兑换发放</th>
+							<th>注册发放</th>
+							<th>签到发放</th>
+							<th>破产发放</th>
+							
+							<th>绑定手机发放</th>
+							<th>后台发放金币</th>
+							<th>金币总发放</th>
+							<th>游戏回收</th>
+							<th>兑换道具回收</th>
+							<th>后台回收金币</th>
+							<th>金币总回收</th>
+							<th>金币平衡</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr v-for="(item, index) in grid.data">
+							<td>{{formatDate(item.gesDate)}}</td>
+							<td>{{item.gesBuyDiamond}}</td>
+							<td>{{item.gesGiveDiamond}}</td>
+							<td>{{item.gesTatolDiamond}}</td>
+							<td>{{item.gesSysRecoveryGold}}</td>
+							<td>{{item.gesCashingRecoveryGold}}</td>
+							<td>{{item.gesSysRecoveryDiamond}}</td>
+							<td>{{item.gesTatolRecycledDiamond}}</td>
+							<td>{{item.gesDiamondBalance}}</td>
+							
+							<td>{{item.gesCashingGold}}</td>
+							<td>{{item.gesResisterGiveGold}}</td>
+							<td>{{item.gesSignGiveGold}}</td>
+							<td>{{item.gesBankruptGiveGold}}</td>
+							
+							<td>{{item.gesSetPhoneGiveGold}}</td>
+							<td>{{item.gesSysGiveGold}}</td>
+							<td>{{item.gesActivityGiveGold}}</td>
+							
+							<td>{{item.gesGameRecoveryGold}}</td>
+							<td>{{item.gesCashingRecoveryGold}}</td>
+							<td>{{item.gesSysRecoveryGold}}</td>
+							<td>{{item.gesTatolRecoveryGold}}</td>
+							<td>{{item.gesGoldBalance}}</td>
+						</tr>
+						</tbody>
+					</table>
+					<div id="pager" class="laypager" style="float: right;"></div>
+				</div>
+			</div>
+		</div>
+    </div>
+	<script src="../static/lztb/game/economicProfile.js"></script>
+</div>

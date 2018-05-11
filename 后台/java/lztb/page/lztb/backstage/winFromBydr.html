@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>中奖展示配置新建捕鱼达人</title>
+    <link href="/lztb/static/plugs/layui/css/layui.css" rel="stylesheet">
+</head>
+
+<body>
+    <div id="bydrData" style="padding: 15px;">
+        <div class="layui-form">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">倍数需求区间</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" placeholder="区间下限" v-model="fdata.multipleMin" />
+                    </div>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" placeholder="区间上限" v-model="fdata.multipleMax" />
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">金币需求区间</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" placeholder="本轮获得最低金币数" v-model="fdata.goldMin" />
+                    </div>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" placeholder="本轮获得最高金币数" v-model="fdata.goldMax" />
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">奖类型：</label>
+                <div class="layui-input-block">
+                    <select v-model="fdata.type" style="height: 38px;width: 200px;" lay-ignore>
+                    <option value="0">鱼倍数奖</option>
+                    <option value="1">累计大奖</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">播报样式</label>
+                <div class="layui-input-block">
+                    <select v-model="fdata.broadcastStyle" style="height: 38px;width: 200px;" lay-ignore>
+                    <option value="">请选择</option>
+                    <option value="0">普通</option>
+                    <option value="1">豪华</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">中奖类型</label>
+                <div class="layui-input-block">
+                    <select v-model="fdata.awardType" style="height: 38px;width: 200px;" lay-ignore>
+                    <option value="">请选择</option>
+                    <option value="0">幸运星</option>
+                    <option value="1">跑马灯</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">上架状态</label>
+                <div class="layui-input-block">
+                    <select v-model="fdata.state" style="height: 38px;width: 200px;" lay-ignore>
+                    <option value="">请选择</option>
+                    <option value="0">上架</option>
+                    <option value="1">下架</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">播放地点</label>
+                <div class="layui-input-block">
+                    <select v-model="fdata.broadcastType" style="height: 38px;width: 200px;" lay-ignore>
+                    <option value="">请选择</option>
+                    <option value="0">捕鱼</option>
+                    <option value="1">全服</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <textarea placeholder="公告内容" class="layui-textarea" v-model="fdata.msg"></textarea>
+            </div>
+            <div class="layui-form-item" style="text-align: center">
+                <button class="layui-btn" @click="saveData()"> 提 交 </button>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="/lztb/static/plugs/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/lztb/static/plugs/layui/layui.js"></script>
+    <script type="text/javascript" src="/lztb/static/plugs/vue/vue.js"></script>
+    <script type="text/javascript" src="/lztb/static/model/site.js"></script>
+    <script type="text/javascript">
+        var vmBydrData = new Vue({
+            el: "#bydrData",
+            data: {
+                fdata: {
+                    awardType: null,
+                    broadcastStyle: null,
+                    broadcastType: null,
+                    configId: null,
+                    goldMax: null,
+                    goldMin: null,
+                    id: null,
+                    msg: null,
+                    multipleMax: null,
+                    multipleMin: null,
+                    state: null,
+                    type: null
+                }
+            },
+            methods: {
+                saveData:function(){
+                    $.ajax({
+                        url: '/config/winning/bydrSave',
+                        type: 'POST',
+                        data: vmBydrData.fdata,
+                        dataType: 'json',
+                        timeout: 10000,
+                        success: function (rs) {
+                            if (rs.code == '00000') {
+                                var rsdata = JSON.parse(rs.data);
+                                if(rsdata.code == 200) {
+                                    top.gCloseModalWindow();
+                                    top.SuccessBox("配置保存成功！", "提示", 2000);
+                                } else {
+                                    rsdata.info ? top.AlertMsg(rsdata.info) : top.AlertMsg(rsdata.msg);
+                                }
+                            } else {
+                                top.AlertMsg("保存失败："+rs.msg);
+                                console.error(rs);
+                            }
+                        },
+                        error: function (xhr, status, ex) {
+                            top.AlertMsg("请求失败：" + xhr.statusText);
+                            console.error(ex);
+                        }
+                    });
+                }
+            },
+            created: function () {
+                //VUE的实例创建完成后
+                var editd = localStorage.getItem("config_winning_bydr_edit");
+                if(editd) {
+                    console.log(JSON.parse(editd));
+                    this.fdata = JSON.parse(editd);
+                }
+            },
+            mounted: function () {
+                //VUE的DOM渲染完成后
+                layui.use(['layer', 'form'], function () {
+                    var layform = layui.form();
+                    layform.render();
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

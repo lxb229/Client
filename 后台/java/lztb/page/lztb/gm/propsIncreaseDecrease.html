@@ -1,0 +1,70 @@
+
+<!--道具增减-->
+<div class="ibox">
+    <!--主页内容-->
+    <div class="ibox-content fadeInUp animated">
+		<div id="app">
+		<div id="props_div">
+			<form id="props_form" class="layui-form">
+			<!-- <div class="layui-form"> -->
+				<div class="layui-tab-item layui-show">
+					<div class="layui-form-item">
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="游戏ID" name="obuUserid" :value="filter.obuUserid" id="obuUserid">
+						</div>
+						<div class="layui-input-inline">
+							<select style="display:block" name="gpodPropType" class="layui-input" :value="filter.gpodPropType" id="gpodPropType">
+								<option value="">请选择道具</option>
+								<option value="1">金币</option>
+								<option value="2">钻石</option>
+								<option value="200">喇叭</option>
+								<option value="201">幸运石</option>
+								<option value="202">双倍石</option>
+								<option value="203">玫瑰花</option>
+								<option value="204">钻戒</option>
+								<option value="205">跑车</option>
+								<option value="206">游艇</option>
+								<option value="207">新手礼包</option>
+								<option value="208">探宝卷</option>
+							</select>
+						</div>
+						<div class="layui-input-inline">
+							<input class="layui-input" name="gpodPropNum" id="gpodPropNum" placeholder="道具数量(+增加道具,-减少道具)" :value="filter.gpodPropNum">
+						</div>
+						<div class="layui-input-inline">
+							<input class="layui-input" name="gpodExplain" id="gpodExplain" placeholder="道具增减原因" :value="filter.gpodExplain">
+						</div>
+						<!-- <button class="layui-btn" lay-submit>保存</button> -->
+						<button class="layui-btn" v-on:click="saveProps()">保存</button>
+					</div>
+					<table class="layui-table" lay-even="" lay-skin="row">
+						<thead>
+						<tr>
+							<th>游戏ID</th>
+							<th>游戏昵称</th>
+							<th>增减道具</th>
+							<th>增减数量</th>
+							<th>增减原因</th>
+							<th>操作时间</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr v-for="(item, index) in grid.data">
+							<td>{{item.obuUserid}}</td>
+							<td>{{item.obuUserNick}}</td>
+							<td>{{item.gpodPropType}}</td>
+							<td>{{item.gpodPropNum}}</td>
+							<td>{{item.gpodExplain}}</td>
+							<td>{{formatDate(item.gpodCreateTime)}}</td>
+						</tr>
+						</tbody>
+					</table>
+					<div id="pager" class="laypager" style="float: right;"></div>
+				</div>
+			<!--</div>-->
+			</form>
+		</div>
+		</div>
+    </div>
+	<script src="../static/lztb/gm/propsIncreaseDecrease.js"></script>
+</div>

@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.guse.platform.dao.system.UsersMapper">
+
+    <resultMap id="Users" type="com.guse.platform.entity.system.Users">
+        <result property="userId" column="user_id"/>
+        <result property="loginName" column="login_name"/>
+        <result property="starNo" column="star_no"/>
+        <result property="loginPass" column="login_pass"/>
+        <result property="roleId" column="role_id"/>
+        <result property="userStatus" column="user_status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="accountId" column="account_id"/>
+        <result property="headImg" column="head_img"/>
+        <result property="sex" column="sex"/>
+        <result property="nick" column="nick"/>
+        <result property="createIp" column="create_ip"/>
+        <result property="accountType" column="account_type"/>
+        <result property="area" column="area"/>
+        <result property="phone" column="phone"/>
+        <result property="realName" column="real_name"/>
+        <result property="cardNo" column="card_no"/>
+        <result property="verCode" column="ver_code"/>
+        <result property="wxNo" column="wx_no"/>
+        <result property="sendTime" column="send_time"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+        system_users.user_id ,system_users.login_name ,system_users.star_no ,
+        system_users.login_pass ,system_users.role_id ,system_users.user_status ,
+        system_users.create_time ,system_users.update_time ,
+        system_users.account_id ,system_users.head_img ,system_users.sex ,system_users.nick ,
+        system_users.create_ip ,system_users.account_type ,system_users.area ,system_users.phone ,
+        system_users.real_name ,system_users.card_no ,system_users.ver_code ,system_users.wx_no ,system_users.send_time 
+	    ]]>
+	</sql>
+	<sql id="sql_of_where">
+	 	WHERE 1=1 
+    	<if test="bParam != null" >
+            <if test="bParam.userId != null"> AND user_id = #{bParam.userId,jdbcType=INTEGER} </if>
+            <if test="bParam.loginName != null and bParam.loginName!=''"> AND login_name like concat(concat('%',#{bParam.loginName,jdbcType=VARCHAR}),'%') </if>
+            <if test="bParam.starNo != null and bParam.starNo!=''"> AND star_no like concat(concat('%',#{bParam.starNo,jdbcType=VARCHAR}),'%') </if>
+            <if test="bParam.nick != null and bParam.nick !='' "> AND nick like concat(concat('%',#{bParam.nick,jdbcType=VARCHAR}),'%') </if>
+            <if test="bParam.userStatus != null"> AND user_status = #{bParam.userStatus,jdbcType=INTEGER} </if>
+            <if test="bParam.createTime != null"> AND create_time = #{bParam.createTime,jdbcType=TIMESTAMP} </if>
+            <if test="bParam.updateTime != null"> AND update_time = #{bParam.updateTime,jdbcType=TIMESTAMP} </if>
+        </if>
+    </sql>
+    <sql id="sql_user_join">
+    	LEFT JOIN city ON system_users.area = city.id
+		LEFT JOIN system_agency ON city.id = system_agency.sa_city_id
+    </sql>
+    <sql id="sql_user_role">
+    	<if test="user != null">
+    		<if test="user.roleId == 1 or user.roleId == 11">
+    			and 1=1 
+    		</if>
+    		<if test="user.roleId == 12">
+    			and (system_agency.sa_user_id = #{user.userId } or system_users.user_id = #{user.userId } ) 
+    		</if>
+    		<if test="user.roleId != 1 and user.roleId != 11 and user.roleId != 12">
+    			and 1=2 
+    		</if>
+    	</if>
+    </sql>
+	
+    <insert id="insert" parameterType="com.guse.platform.entity.system.Users">
+    <![CDATA[
+        INSERT INTO system_users (
+	        user_id  ,
+	        login_name  ,
+	        star_no ,
+	        login_pass  ,
+	        role_id  ,
+	        user_status  ,
+	        create_time  ,
+	        update_time  ,
+	        account_id ,
+	        head_img ,
+	        sex ,
+	        nick ,
+	        create_ip ,
+	        account_type ,
+	        area ,
+	        phone ,
+	        real_name ,
+	        card_no ,
+	        ver_code ,
+	        wx_no ,
+	        send_time 
+        ) VALUES (
+        	#{userId, jdbcType=INTEGER} ,
+        	#{loginName, jdbcType=VARCHAR} ,
+        	#{starNo, jdbcType=VARCHAR} ,
+        	#{loginPass, jdbcType=VARCHAR} ,
+        	#{roleId, jdbcType=INTEGER} ,
+        	#{userStatus, jdbcType=INTEGER} ,
+        	#{createTime, jdbcType=TIMESTAMP} ,
+        	#{updateTime, jdbcType=TIMESTAMP} ,
+        	#{accountId, jdbcType=BIGINT} ,
+	        #{headImg, jdbcType=VARCHAR} ,
+	        #{sex, jdbcType=INTEGER} ,
+	        #{nick, jdbcType=VARCHAR} ,
+	        #{createIp, jdbcType=VARCHAR} ,
+	        #{accountType, jdbcType=INTEGER} ,
+	        #{area, jdbcType=INTEGER} ,
+	        #{phone, jdbcType=VARCHAR} ,
+	        #{realName, jdbcType=VARCHAR} ,
+	        #{cardNo, jdbcType=VARCHAR} ,
+	        #{verCode, jdbcType=VARCHAR} ,
+	        #{wxNo, jdbcType=VARCHAR} ,
+	        #{sendTime, jdbcType=TIMESTAMP} 
+	        
+	        
+        )
+    ]]>
+    </insert>
+    
+    <update id="updateByPrimaryKeySelective" parameterType="com.guse.platform.entity.system.Users">
+		UPDATE system_users
+		<set>
+		 	<if test="loginName != null">
+	      	  login_name = #{loginName, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="starNo != null">
+	      	  star_no = #{starNo, jdbcType=VARCHAR}  ,
+		 	</if>
+		 	<if test="loginPass != null">
+	      	  login_pass = #{loginPass, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="roleId != null">
+	      	  role_id = #{roleId, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="userStatus != null">
+	      	  user_status = #{userStatus, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="createTime != null">
+	      	  create_time = #{createTime, jdbcType=TIMESTAMP} ,
+		 	</if>
+		 	<if test="updateTime != null">
+	      	  update_time = #{updateTime, jdbcType=TIMESTAMP} ,
+		 	</if>
+		 	<if test="accountId != null">
+	      	  account_id = #{accountId, jdbcType=BIGINT} ,
+		 	</if>
+		 	<if test="headImg != null">
+	      	  head_img =  #{headImg, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="sex != null">
+	      	  sex = #{sex, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="nick != null">
+	      	  nick = #{nick, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="createIp != null">
+	      	  create_ip = #{createIp, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="accountType != null">
+	      	  account_type = #{accountType, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="area != null">
+	      	  area = #{area, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="phone != null">
+	      	  phone = #{phone, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="realName != null">
+	      	  real_name = #{realName, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="cardNo != null">
+	      	  card_no = #{cardNo, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="verCode != null">
+	      	  ver_code = #{verCode, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="wxNo != null">
+	      	  wx_no = #{wxNo, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="sendTime != null">
+	      	  send_time = #{sendTime, jdbcType=TIMESTAMP} 
+		 	</if>
+		</set>
+		WHERE
+	       	user_id = #{userId} 
+    </update>
+
+    <delete id="deleteByPrimaryKey">
+    <![CDATA[
+        DELETE FROM system_users WHERE
+        user_id = #{userId} 
+    ]]>
+    </delete>
+    
+    <select id="selectByPrimaryKey" resultMap="Users">
+	    SELECT <include refid="Base_Column_List"/>
+	    <![CDATA[
+	        FROM system_users 
+	        WHERE 
+		        user_id = #{userId} 
+	    ]]>
+    </select>
+    
+    <select id="getUserByStartNo" resultMap="Users">
+	    SELECT <include refid="Base_Column_List"/>
+	    <![CDATA[
+	        FROM system_users 
+	        WHERE 
+		       account_id = #{accountId} and star_no = #{startNo} 
+		     limit 1
+	    ]]>
+    </select>
+    
+    <select id="getUserByAccountId" resultMap="Users">
+	    SELECT <include refid="Base_Column_List"/>
+	    <![CDATA[
+	        FROM system_users 
+	        WHERE 
+		       account_id = #{accountId} 
+		     limit 1
+	    ]]>
+    </select>
+    
+    <select id="getUserBy" resultMap="Users">
+	    SELECT <include refid="Base_Column_List"/>
+	    <![CDATA[
+	        FROM system_users 
+	        WHERE 
+		       star_no = #{startNo} 
+		     limit 1
+	    ]]>
+    </select>
+    
+    <select id="getUserByPhone" resultMap="Users">
+	    SELECT <include refid="Base_Column_List"/>
+	    <![CDATA[
+	        FROM system_users 
+	        WHERE 
+		       phone = #{phone} 
+		     limit 1
+	    ]]>
+    </select>
+    
+    <!-- 通用查询 -->
+    <select id="select" parameterType="java.util.Map" resultMap="Users">
+        select 
+        <include refid="Base_Column_List" />
+        from system_users
+        <include refid="sql_of_where" /> order by create_time desc
+    </select>
+    
+    <!-- 通用分页查询 -->
+    <select id="selectPageByParam" parameterType="java.util.Map" resultMap="Users">
+        select 
+        <include refid="Base_Column_List" />
+        from system_users
+        <include refid="sql_user_join" />
+        <include refid="sql_of_where" />
+        <include refid="sql_user_role" />
+        <if test="pParam != null">
+            <if test="pParam.orderByClause != null" > order by ${pParam.orderByClause} </if>
+            <if test="pParam.orderByClause == null" > order by create_time desc </if>
+            <if test="pParam.startIndex != null and pParam.pageSize != null" >
+              limit #{pParam.startIndex} , #{pParam.pageSize}
+            </if>
+        </if>
+        <if test="pParam == null">
+             order by create_date desc
+        </if>
+    </select>
+    
+    <!-- 通用分页查询记录总数 -->
+    <select id="countByParam" parameterType="java.util.Map" resultType="java.lang.Long">
+        select count(*) from system_users
+        <include refid="sql_user_join" />
+        <include refid="sql_of_where" />
+        <include refid="sql_user_role" />
+    </select>
+    
+    <!-- 根据登录名称查询用户 -->
+    <select id="getUserByLoginName" resultMap="Users">
+    	SELECT <include refid="Base_Column_List"/>
+	    <![CDATA[
+	        FROM system_users 
+	        WHERE 
+		        login_name like #{loginName}
+	    ]]>
+    </select>
+    
+    <!-- 根据登录名称查询用户 -->
+    <select id="getUserByNick" resultMap="Users">
+    	SELECT <include refid="Base_Column_List"/>
+	    <![CDATA[
+	        FROM system_users 
+	        WHERE 
+		        nick like #{nick}
+		    limit 1 
+	    ]]>
+    </select>
+    
+</mapper>
+

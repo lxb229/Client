@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangzhixuan.mapper.PlayerMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="Player" type="com.wangzhixuan.model.Player">
+		<result column="id" property="id" />
+		<result column="start_no" property="startNo" />
+		<result column="head_img" property="headImg" />
+		<result column="sex" property="sex" />
+		<result column="nick" property="nick" />
+		<result column="status" property="status" />
+		<result column="create_ip" property="createIp" />
+		<result column="type" property="type" />
+		<result column="phone" property="phone" />
+		<result column="real_name" property="realName" />
+		<result column="card_no" property="cardNo" />
+		<result column="create_time" property="createTime" />
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+        id, start_no, head_img, sex, nick, status, create_ip, 
+        type, phone, real_name, card_no, create_time 
+	    ]]>
+	</sql>
+	
+	<select id="selectPlayerPage" resultMap="Player">
+        SELECT <include refid="Base_Column_List"/> 
+	        FROM player 
+	        <where>
+	        	1=1
+	            <if test=" startNo != null and startNo != '' ">
+	               and start_no like concat(concat('%',#{startNo}),'%') 
+	            </if>
+	        </where>
+	        GROUP BY id 
+    </select>
+    
+</mapper>

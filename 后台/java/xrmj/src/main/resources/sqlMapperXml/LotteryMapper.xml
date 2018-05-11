@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangzhixuan.mapper.LotteryMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="Lottery" type="com.wangzhixuan.model.Lottery">
+		<result column="id" property="id" />
+		<result column="awards_lv" property="awardsLv" />
+		<result column="amount" property="amount" />
+		<result column="residue" property="residue" />
+		<result column="percentage" property="percentage" />
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+        id, awards_lv, amount, residue, percentage 
+	    ]]>
+	</sql>
+    
+   	<update id="setNewLottery">
+ 		update lottery set residue = amount 
+  	</update>
+  	
+  	<update id="emptyLottery">
+ 		update lottery set residue = 0 
+ 			<where>
+                awards_lv in 
+				<foreach collection="idList" index="index" item="item" open="(" separator="," close=")">  
+					#{item}  
+				</foreach> 
+	        </where> 
+  	</update>
+  	
+  	<update id="lessenLottery">
+		update lottery set residue = residue-#{number} 
+			<where>
+				awards_lv = #{awardsLv}
+			</where> 
+  	</update>
+  	
+    <select id="getRemainingLottery" resultMap="Lottery">
+        SELECT <include refid="Base_Column_List"/>
+	        FROM lottery 
+	        <where>
+	        	<![CDATA[ residue > 0 ]]>
+	        </where>
+    </select>
+    
+    <select id="getWishLvLottery" resultMap="Lottery">
+        SELECT <include refid="Base_Column_List"/>
+	        FROM lottery 
+	        <where>
+                awards_lv in 
+				<foreach collection="lvList" index="index" item="item" open="(" separator="," close=")">  
+					#{item}  
+				</foreach> 
+	        	<![CDATA[ and residue > 0 ]]>
+	        </where>
+    </select>
+    
+    <select id="getAwardsLvLottery" resultMap="Lottery">
+		SELECT <include refid="Base_Column_List"/>
+		 FROM lottery 
+		<where>
+		 	<![CDATA[ residue > 0 ]]>
+		 	<if test=" awardsLv != null ">
+		 		and awards_lv = #{awardsLv}
+		 	</if>
+		</where>
+		limit 1
+    </select>
+    
+	<select id="getLvLottery" resultMap="Lottery">
+		SELECT <include refid="Base_Column_List"/>
+		 FROM lottery 
+		<where>
+		 	<![CDATA[ residue > 0 ]]>
+		 	<if test=" awardsLv != null ">
+		 		and awards_lv = #{awardsLv}
+		 	</if>
+		</where>
+		limit 1
+    </select>
+    
+
+</mapper>

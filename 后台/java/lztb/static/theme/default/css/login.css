@@ -1,0 +1,98 @@
+/*登录页样式*/
+html，body{
+    width: 100%;
+    height: 100%;
+}
+body{
+    /*text-align: center;*/
+    background: url("./../img/login/bj.jpg") no-repeat;
+    background-size:100% auto;
+}
+header{
+    text-align: left;
+    margin: .75rem 1.875rem
+}
+header>div{
+    display: inline-block;
+    vertical-align: middle;
+}
+.bj{
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    background: rgba(34, 35, 36, 0.5);
+}
+.tip{
+    color: white;
+    font-size: 20px;
+    text-align: right;
+}
+.form{
+    z-index: 2;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -238px;
+    margin-top: -164.5px;
+    width:477px ;
+    padding: 50px 0;
+    text-align: center;
+    background: rgba(34, 35, 36, 0.5);
+}
+.form>div{
+    margin: 0 auto;
+}
+.layui-input-block{
+    margin-left: 0;
+}
+.layui-input-block{
+    margin: 2% 20%;
+}
+h1{
+    margin-bottom: 30px ;
+    color: white;
+    font-size: 30px;
+}
+.btnCo{
+    color: white;
+    background-color: #009688;
+
+    border: 0;
+}
+table th,table td{
+    text-align: center;
+}
+.container{
+    width: 1500px;
+    height: 600px;
+}
+@media screen and (max-width: 980px) {
+    .container {
+        width: 800px;
+    }
+    .halfContainer {
+        width: 400px;
+
+    }
+}
+.halfContainer{
+    display: inline-block;
+    width:700px;
+    height: 600px;
+}
+/*游戏数据>邮件排行模块*/
+.twoTable{
+    display: inline-table;
+    width: 49%;
+}
+
+.receptionSend>span{
+    display: inline-block;
+    width: 49%;
+    text-align: center;
+}
+/*幸运转盘明细*/
+.showHide{
+    display: none;
+}

@@ -1,0 +1,65 @@
+
+<!--游戏概况德州扑克-->
+<div class="ibox">
+    <!--主页内容-->
+    <div class="ibox-content fadeInUp animated">
+		<div id="app">
+			<div class="layui-form">
+				<div class="layui-tab-item layui-show">
+					<div class="layui-form-item">
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="开始日" name="startDate" :value="filter.startDate" id="startAt" >
+						</div>
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="截止日" name="endDate" :value="filter.endDate" id="endAt">
+						</div>
+						<button class="layui-btn layui-btn-primary layui-btn-radius" lay-submit>查询</button>
+						<a style="text-decoration:none;" class="layui-btn layui-btn-primary layui-btn-radius" href="/lztb/page/adm1.html#./lztb/game/gameDzpk.html?spm=m-2-4-2">返回德州扑克游戏概况</a>
+					</div>
+					<table class="layui-table" lay-even="" lay-skin="row">
+						<thead>
+						<tr>
+							<th>时间</th>
+							<th>房间</th>
+							<th>盲注</th>
+							<th>人数</th>
+							<th>人数比</th>
+							<th>总局数</th>
+							<th>玫瑰次数</th>
+							<th>飞吻次数</th>
+							<th>拖鞋次数</th>
+							<th>炸弹次数</th>
+							<th>互动道具次数</th>
+							<th>打赏次数</th>
+							<th>打赏回收</th>
+							<th>回收</th>
+							<th>机器人输赢</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr v-for="(item, index) in grid.data">
+							<td>{{formatDate(item.gdrDate)}}</td>
+							<td>{{item.gdrRoomType}}</td>
+							<td>{{item.gdrBlindBet}}</td>
+							<td>{{item.gdrPalyerNum}}</td>
+							<td>{{item.gdrPalyerRete}}</td>
+							<td>{{item.gdrTatolInningsNum}}</td>
+							<td>{{item.gdrRoseNum}}</td>
+							<td>{{item.gdrKissNum}}</td>
+							<td>{{item.gdrSlipperNum}}</td>
+							<td>{{item.gdrBombNum}}</td>
+							<td>{{item.gdrPropRecovery}}</td>
+							<td>{{item.gdrRewardNum}}</td>
+							<td>{{item.gdrRewardRecoveryGold}}</td>
+							<td>{{item.gdrTatolRecoveryGold}}</td>
+							<td>{{item.gdrRobotWinLoseGold}}</td>
+						</tr>
+						</tbody>
+					</table>
+					<div id="pager" class="laypager" style="float: right;"></div>
+				</div>
+			</div>
+		</div>
+    </div>
+	<script src="../static/lztb/game/room/dzpk.js"></script>
+</div>

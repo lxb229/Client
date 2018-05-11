@@ -1,0 +1,360 @@
+<!--中奖展示配置-->
+<div class="ibox">
+    <!--主页内容-->
+    <div class="ibox-content fadeInUp animated">
+        <div class="layui-form-item">
+            <div class="layui-input-inline ">
+                <select id="gamesSelect" name="modules" class="layui-input">
+                    <option value="1">龙珠探宝</option>
+                    <option value="2">五星宏辉</option>
+                    <option value="3">水浒传</option>
+                    <option value="4">捕鱼达人</option>
+                    <option value="5">糖果派对</option>
+                </select>
+            </div>
+            <button data-method="offset" data-type="auto" class="layui-btn layui-btn-normal">新建</button>
+        </div>
+        <!--龙珠探宝-->
+        <table class="layui-table" id="dragonTreasure">
+            <thead>
+            <tr>
+                <th>编号</th>
+                <th>内容</th>
+                <th>倍数需求区间</th>
+                <th>金币需求区间</th>
+                <th>播报样式</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>1</td>
+                <td>100</td>
+                <td>120</td>
+                <td>40</td>
+                <td>50</td>
+                <td>50</td>
+                <td>
+                    <button class="layui-btn layui-btn-primary layui-btn-radius">编辑</button>
+                    <button class="layui-btn layui-btn-primary layui-btn-radius">删除</button>
+                </td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>100</td>
+                <td>120</td>
+                <td>40</td>
+                <td>50</td>
+                <td>50</td>
+                <td>
+                    <button class="layui-btn layui-btn-primary layui-btn-radius">编辑</button>
+                    <button class="layui-btn layui-btn-primary layui-btn-radius">删除</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <!--五星宏辉-->
+        <table class="layui-table" id="macroFai" style="display: none">
+            <thead>
+            <tr>
+                <th>编号</th>
+                <th>内容</th>
+                <th>金币需求区间</th>
+                <th>播报样式</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>1</td>
+                <td>100</td>
+                <td>40</td>
+                <td>50</td>
+                <td>50</td>
+                <td>
+                    <button class="layui-btn layui-btn-primary layui-btn-radius">编辑</button>
+                    <button class="layui-btn layui-btn-primary layui-btn-radius">删除</button>
+                </td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>100</td>
+                <td>40</td>
+                <td>50</td>
+                <td>50</td>
+                <td>
+                    <button class="layui-btn layui-btn-primary layui-btn-radius">编辑</button>
+                    <button class="layui-btn layui-btn-primary layui-btn-radius">删除</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <!--水浒传-->
+        <table class="layui-table" id="waterMargin" style="display: none">
+            <thead>
+            <tr>
+                <th>编号</th>
+                <th>倍数需求区间(小 大)</th>
+                <th>金币需求区间(小 大)</th>
+                <th>优先选项</th>
+                <th>播报样式</th>
+                <th>中奖类型</th>
+                <th>播放地点</th>
+                <th>上架状态</th>
+                <th>内容</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>1</td>
+                <td>100</td>
+                <td>120</td>
+                <td>40</td>
+                <td>50</td>
+                <td>100</td>
+                <td>120</td>
+                <td>40</td>
+                <td>50</td>
+                <td>
+                    <button class="layui-btn layui-btn-primary layui-btn-radius">编辑</button>
+                    <button class="layui-btn layui-btn-primary layui-btn-radius">删除</button>
+                </td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>100</td>
+                <td>120</td>
+                <td>100</td>
+                <td>120</td>
+                <td>40</td>
+                <td>50</td>
+                <td>40</td>
+                <td>50</td>
+                <td>
+                    <button class="layui-btn layui-btn-primary layui-btn-radius">编辑</button>
+                    <button class="layui-btn layui-btn-primary layui-btn-radius">删除</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <!--捕鱼达人-->
+        <table class="layui-table" id="fishing" style="display: none">
+            <thead>
+            <tr>
+                <th>编号</th>
+                <th>内容</th>
+                <th>倍数需求区间</th>
+                <th>金币需求区间</th>
+                <th>类型</th>
+                <th>播报样式</th>
+                <th>中奖类型</th>
+                <th>播放地点</th>
+                <th>上架状态</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>1</td>
+                <td>100</td>
+                <td>120</td>
+                <td>40</td>
+                <td>50</td>
+
+                <td>100</td>
+                <td>120</td>
+                <td>40</td>
+                <td>50</td>
+                <td>
+                    <button class="layui-btn layui-btn-primary layui-btn-radius">编辑</button>
+                    <button class="layui-btn layui-btn-primary layui-btn-radius">删除</button>
+                </td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>100</td>
+                <td>120</td>
+                <td>40</td>
+                <td>100</td>
+                <td>120</td>
+                <td>40</td>
+                <td>50</td>
+                <td>50</td>
+                <td>
+                    <button class="layui-btn layui-btn-primary layui-btn-radius">编辑</button>
+                    <button class="layui-btn layui-btn-primary layui-btn-radius">删除</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <!--糖果派对-->
+        <table class="layui-table" id="jackpot" style="display: none">
+            <thead>
+            <tr>
+                <th>编号</th>
+                <th>内容</th>
+                <th>倍数需求区间</th>
+                <th>金币需求区间</th>
+                <th>类型</th>
+                <th>播报样式</th>
+                <th>中奖类型</th>
+                <th>播放地点</th>
+                <th>上架状态</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>1</td>
+                <td>100</td>
+                <td>120</td>
+                <td>40</td>
+                <td>50</td>
+                <td>100</td>
+                <td>120</td>
+                <td>40</td>
+                <td>50</td>
+                <td>
+                    <button class="layui-btn layui-btn-primary layui-btn-radius">编辑</button>
+                    <button class="layui-btn layui-btn-primary layui-btn-radius">删除</button>
+                </td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>100</td>
+                <td>120</td>
+                <td>40</td>
+                <td>50</td>
+                <td>100</td>
+                <td>120</td>
+                <td>40</td>
+                <td>50</td>
+                <td>
+                    <button class="layui-btn layui-btn-primary layui-btn-radius">编辑</button>
+                    <button class="layui-btn layui-btn-primary layui-btn-radius">删除</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div id="demo2"></div>
+    </div>
+    <script>
+        gamesSelect();
+        aa();
+        function gamesSelect(){
+            $("select").change(function(){
+                var bb=$("select option:selected").val();
+                if(bb==1){
+                    console.log('显示龙珠探宝');
+                    $('#dragonTreasure').show().siblings('table').hide();
+                }else if(bb==2){
+                    console.log('显示五星宏辉');
+                    $('#macroFai').show().siblings('table').hide();
+                }else if(bb==3){
+                    console.log('显示水浒传');
+                    $('#waterMargin').show().siblings('table').hide();
+                }
+                else if(bb==4){
+                    console.log('显示捕鱼达人');
+                    $('#fishing').show().siblings('table').hide();
+                }
+                else if(bb==5){
+                    console.log('显示糖果派对');
+                    $('#jackpot').show().siblings('table').hide();
+                }
+            })
+        }
+        function aa(){
+            $('#noLimitDetailedRecordBtn').click(function(){
+                $('#noLimitDetailedRecord').show();
+                $('#noLimit').hide()
+            })
+        }
+        layui.use(['laypage', 'layer'], function(){
+            var laypage = layui.laypage
+                    ,layer = layui.layer;
+            laypage({
+                cont: 'demo2'
+                ,pages: 100
+                ,skin: '#1E9FFF'
+            });
+            var nums = 5; //每页出现的数据量
+            //模拟渲染
+            var render = function(data, curr){
+                var arr = []
+                        ,thisData = data.concat().splice(curr*nums-nums, nums);
+                layui.each(thisData, function(index, item){
+                    arr.push('<li>'+ item +'</li>');
+                });
+                return arr.join('');
+            };
+            //调用分页
+//            laypage({
+//                cont: 'demo2'
+//                ,pages: Math.ceil(data.length/nums) //得到总页数
+//                ,jump: function(obj){
+//                    document.getElementById('biuuu_city_list').innerHTML = render(data, obj.curr);
+//                }
+//            });
+
+        });
+        //弹出窗口
+        //触发事件
+        var active = {
+            setTop: function(){
+                var that = this;
+                //多窗口模式，层叠置顶
+                layer.open({
+                    type: 2 //此处以iframe举例
+                    ,title: '当你选择该窗体时，即会在最顶端'
+                    ,area: ['390px', '260px']
+                    ,shade: 0
+                    ,maxmin: true
+                    ,offset: [ //为了演示，随机坐标
+                        Math.random()*($(window).height()-300)
+                        ,Math.random()*($(window).width()-390)
+                    ]
+                    ,content: 'http://layer.layui.com/test/settop.html'
+                    ,btn: ['继续弹出', '全部关闭'] //只是为了演示
+                    ,yes: function(){
+                        $(that).click();
+                    }
+                    ,btn2: function(){
+                        layer.closeAll();
+                    }
+
+                    ,zIndex: layer.zIndex //重点1
+                    ,success: function(layero){
+                        layer.setTop(layero); //重点2
+                    }
+                });
+            }
+            ,offset: function(othis){
+                var type = othis.data('type')
+                        ,text = othis.text();
+
+                layer.open({
+                    type: 1
+                    ,offset: type //具体配置参考：http://www.layui.com/doc/modules/layer.html#offset
+                    ,id: 'LAY_demo'+type //防止重复弹出
+                    ,content: '<div style="padding: 20px 100px;">'+ text +'</div>'
+                    ,btn: '关闭全部'
+                    ,btnAlign: 'c' //按钮居中
+                    ,shade: 0 //不显示遮罩
+                    ,yes: function(){
+                        layer.closeAll();
+                    }
+                });
+            }
+        };
+
+        $('.site-demo-button .layui-btn').on('click', function(){
+            var othis = $(this), method = othis.data('method');
+            active[method] ? active[method].call(this, othis) : '';
+        });
+    </script>
+</div>

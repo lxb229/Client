@@ -1,0 +1,142 @@
+//text-error
+.text-active{
+  color: @co_active;
+}
+.text-error{
+  color: @co_error;
+}
+
+//about html
+html{
+  background: @bg_xs;
+}
+
+//about body
+body{
+  background-color: @bg_xs;
+  font-family: "微软雅黑";
+}
+
+//about header
+.page-header{
+  border-bottom: 0;
+  background: @bg_xs;
+  z-index: 100;
+  .router-title{
+    line-height: @header_height;
+    color: @co_lg;
+  }
+
+  .user-panel{
+    line-height: @header_height - 6px;
+    color: @co_sm;
+  }
+
+  a, a:hover{
+    text-decoration: none;
+    color: @co_sm;
+  }
+}
+
+
+//about nav
+.page-nav{
+  padding-left: @padding_base*2 ;
+  padding-right: @padding_base* 2;
+  background: @bg_xs;
+  z-index: 90;
+}
+.page-nav a{
+  text-decoration: none;
+  font-size: 1.5* @base_font;
+}
+.nav-show>a{
+  background-color: @bg_sm;
+  color: @co_active;
+  border-radius: 30px;
+  font-weight: 600;
+}
+.nav-item ul{
+  background-color: transparent;
+}
+
+//about page-main
+.page-main{
+  background-color: @bg_xs;
+}
+
+
+//about statistics
+.main-statistics{
+  .item{
+    &>div{
+      border: 1px solid @bc_xs;
+      border-radius: 4px;
+    }
+    .title{
+      color: @co_sm;
+      font-weight: 100;
+    }
+    .number{
+      color: @co_md;
+    }
+  }
+}
+
+//about serch
+.main-search {
+  .title {
+    color: @co_md;
+    line-height: 30px;
+    padding-right: @padding_base* 4;
+  }
+  .input-group {
+    background-color: @bg_md;
+    border-radius: 4px;
+    .glyphicon {
+      color: @co_active;
+    }
+    input, input:focus {
+      background: transparent;
+      outline: none;
+      border: 0;
+      box-shadow: none;
+    }
+  }
+}
+
+
+//about page
+.main-page{
+  clear: both;
+  .total{
+    padding-right: 0;
+  }
+}
+.page{
+  &>span{
+    border: 1px solid @bc_xs;
+    border-radius: 4px;
+    &.jump,
+    &.more{
+      border: 0;
+    }
+    &.jump{
+      display: inline-block;
+    }
+    &.active{
+      background-color: @co_active;
+      color: #fff;
+    }
+  }
+  input{
+    border: 1px solid@bc_xs;
+    background: transparent;
+    outline: none;
+    &:focus{
+      outline: none;
+    }
+  }
+}
+
+//about table

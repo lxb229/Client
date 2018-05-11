@@ -1,0 +1,71 @@
+
+<!--ATT翻牌机房间信息-->
+<div class="ibox">
+    <!--主页内容-->
+    <div class="ibox-content fadeInUp animated">
+		<div id="app">
+			<div class="layui-form">
+				<div class="layui-tab-item layui-show">
+					<div class="layui-form-item">
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="开始日" name="startDate" :value="filter.startDate" id="startAt" >
+						</div>
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="截止日" name="endDate" :value="filter.endDate" id="endAt">
+						</div>
+						<button class="layui-btn layui-btn-primary layui-btn-radius" lay-submit>查询</button>
+						<a style="text-decoration:none;" class="layui-btn layui-btn-primary layui-btn-radius" href="/lztb/page/adm1.html#./lztb/game/gameAtt.html?spm=m-2-4-6">返回ATT翻盘机游戏概况</a>
+					</div>
+					<table class="layui-table" lay-even="" lay-skin="row">
+						<thead>
+						<tr>
+							<th>时间</th>
+							<th>房间</th>
+							<th>人数</th>
+							<th>人数比</th>
+							<th>总次数</th>
+							<th>对10以上</th>
+							<th>两条</th>
+							<th>三条</th>
+							<th>顺子</th>
+							<th>同花</th>
+							<th>葫芦</th>
+							<th>四条</th>
+							<th>同花顺</th>
+							<th>同花大顺</th>
+							<th>五条</th>
+							<th>赢分玩家</th>
+							<th>输分玩家</th>
+							<th>回收</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr v-for="(item, index) in grid.data">
+							<td>{{formatDate(item.garDate)}}</td>
+							<td>{{item.garRoomType}}</td>
+							<td>{{item.garPalyerNum}}</td>
+							<td>{{item.garPalyerRete}}</td>
+							<td>{{item.garTatolCount}}</td>
+							<td>{{item.garDoubleTenUp}}</td>
+							<td>{{item.garTwoDouble}}</td>
+							<td>{{item.garThreeStrip}}</td>
+							<td>{{item.garStraight}}</td>
+							<td>{{item.garWithFlowers}}</td>
+							<td>{{item.garGourd}}</td>
+							<td>{{item.garFourStrip}}</td>
+							<td>{{item.garStraightFlush}}</td>
+							<td>{{item.garBigStraightFlush}}</td>
+							<td>{{item.garFiveStrip}}</td>
+							<td>{{item.garWinPalyerNum}}</td>
+							<td>{{item.garLosePalyerNum}}</td>
+							<td>{{item.garSysRecoveryGold}}</td>
+						</tr>
+						</tbody>
+					</table>
+					<div id="pager" class="laypager" style="float: right;"></div>
+				</div>
+			</div>
+		</div>
+    </div>
+	<script src="../static/lztb/game/room/att.js"></script>
+</div>

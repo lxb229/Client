@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guse.stock.dao.IGameParDao">
+
+	<select id="findByIdentify" parameterType="java.lang.String" resultType="gamePar">
+		select * from pl_game_par t where t.identify = #{identify}
+		limit 1
+	</select>
+	
+	<select id="findByGame" parameterType="java.lang.Long" resultType="java.util.Map">
+		select IFNULL(par, '0') par,IFNULL(virtual_currency, '未知') par_des from pl_game_par t where t.game_id=#{game_id}
+	</select>
+
+</mapper>

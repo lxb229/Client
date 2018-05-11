@@ -1,0 +1,122 @@
+<!--中奖展示配置五星宏辉-->
+<div class="ibox">
+    <!--主页内容-->
+    <div class="ibox-content fadeInUp animated" id="winShow">
+        <div class="layui-form-item">
+            <button data-method="offset" data-type="auto" class="layui-btn layui-btn-normal" @click="wxhhFrom()">新建</button>
+        </div>
+        <!--五星宏辉-->
+        <table class="layui-table" id="macroFai">
+            <thead>
+                <tr>
+                    <th>编号</th>
+                    <th style="width: 730px;">内容</th>
+                    <th colspan="2">金币需求区间</th>
+                    <th>播报样式</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(item,index) in dlist">
+                    <td>{{index+1}}</td>
+                    <td>{{item.format}}</td>
+                    <td>{{item.award_gold_min}}</td>
+                    <td>{{item.award_gold_max}}</td>
+                    <td>{{item.style_type == 0 ? "普通":"豪华"}}</td>
+                    <td>{{item.is_open == 0 ? "下架":"上架"}}</td>
+                    <td>
+                        <a class="layui-btn layui-btn-mini" @click="wxhhFrom(item)">编辑</a>
+                        <a class="layui-btn layui-btn-mini layui-btn-danger" @click="delFrom(item)">删除</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script>
+        require(['vue', 'site'], function (Vue) {
+            var vmwxhh = new Vue({
+                el: "#winShow",
+                data: {
+                    dlist: []
+                },
+                methods: {
+                    wxhhFrom: function (data) {
+                        if (data) {
+                            localStorage.setItem("config_winning_wxhh_edit", JSON.stringify(data));
+                        }
+                        gOpenModalWindow("编辑五星宏辉中奖配置信息", "lztb/backstage/winFromWxhh.html", 800, 650, true, null, null, function () {
+                            localStorage.removeItem("config_winning_wxhh_edit");
+                            loadData(vmwxhh);
+                        });
+                    },
+                    delFrom: function (data) {
+                        ConfirmBox("您确定要删除这条中奖信息配置吗？", function () {
+                            delData(data);
+                        });
+                    }
+                },
+                created: function () {
+                    loadData(this);
+                }
+            });
+            function loadData(vm) {
+                $.ajax({
+                    url: '/config/winning/wxhhList',
+                    type: 'POST',
+                    data: {},
+                    dataType: 'json',
+                    timeout: 10000,
+                    success: function (rs) {
+                        if (rs.code == '00000') {
+                            vm.dlist = JSON.parse(rs.data);
+                        } else {
+                            AlertMsg(rs.msg);
+                            console.error(rs);
+                        }
+                    },
+                    error: function (xhr, status, ex) {
+                        AlertMsg("请求失败：" + xhr.statusText);
+                        console.error(ex);
+                    }
+                });
+            }
+            function delData(data) {
+                $.ajax({
+                    url: '/config/winning/wxhhDel',
+                    type: 'POST',
+                    data: { "id": data.format_id },
+                    dataType: 'json',
+                    timeout: 10000,
+                    success: function (rs) {
+                        if (rs.code == '00000') {
+                            var res = JSON.parse(rs.data);
+                            if (res.code == 200) {
+                                SuccessBox("中奖配置信息删除成功!", "提示", 2000);
+                                for (var i = 0; i < vmwxhh.dlist.length; i++) {
+                                    if (vmwxhh.dlist[i].format_id == data.format_id) {
+                                        vmwxhh.dlist.splice(i, 1);
+                                        break;
+                                    }
+                                }
+                            } else {
+                                if (res.info) {
+                                    AlertMsg(res.info);
+                                } else {
+                                    AlertMsg(res.msg);
+                                }
+                            }
+                        } else {
+                            AlertMsg(rs.msg);
+                            console.error(rs);
+                        }
+                    },
+                    error: function (xhr, status, ex) {
+                        AlertMsg("请求失败：" + xhr.statusText);
+                        console.error(ex);
+                    }
+                });
+            }
+        });
+    </script>
+</div>

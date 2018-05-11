@@ -1,0 +1,152 @@
+form{
+  font-size: 14px;
+  color: #0F0F0F;
+  input,button,select{
+    height: 40px;
+    line-height: 1;
+    border-radius: 4px;
+    color: @co_md;
+  }
+  button{
+    color: #fff;
+    padding: 9px 45px;
+    margin-right: 20px;
+    outline: none !important;
+    border: 0 !important;
+  }
+  button:hover,
+  button:focus{
+    color: #fff !important;
+    outline: none !important;
+    border: 0 !important;
+    padding: 9px 45px !important;
+  }
+  button.submit{
+    background: @bt_bg_lg_x;
+  }
+  button.cancel{
+    padding: 9px 45px;
+    background: @bt_bg_lg;
+  }
+  button.denger{
+    padding: 9px 45px;
+    background: #EB6877;
+  }
+  .btn-up{
+    display: block;
+    overflow: hidden;
+    background: #fff;
+    border: 3px solid @bg_md;
+    width: 90px;
+    height: 40px;
+    border-radius: 4px;
+    color: #ACACAC;
+    line-height: 34px;
+    cursor: pointer;
+  }
+}
+label{
+  color: #5F5F6C;
+  display: block;
+  margin: 24px 0 10px;
+}
+input,select{
+  width: 100%;
+  height: 40px;
+  border-radius: 4px;
+  font-size: 1.4* @base_font;
+  color: @co_md;
+  padding-left: 20px;
+  padding-right: 20px;
+  background: @bg_md;
+  border: none;
+  border-radius: 6px;
+  color: #ACACAC;
+  &:focus{
+    color: #333;
+  }
+
+  &.guild-logo{
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    opacity: 0;
+    z-index: 1;
+    cursor: pointer;
+  }
+}
+.guild-members{
+  padding: 23px 21px;
+  height: 82px;
+  background: @bg_md;
+  border-radius: 6px;
+  img{
+    border-radius: 100%;
+    width: 36px;
+    height: 36px;
+    display: block;
+  }
+}
+.btn_add_user{
+  border-radius: 100%;
+  width: 36px;
+  height: 36px;
+  display: block;
+}
+.form-button-groups{
+  margin-top: 50px;
+}
+.bonus-set-group{
+  li{
+    width: 266px;
+    margin-top: 10px;
+    color: @co_md;
+  }
+  .unit{
+    top: 12px;
+    right: 24px;
+  }
+  input{
+    width: 200px;
+    margin-left: 20px;
+    padding-right: 30px;
+  }
+}
+
+
+.textarea-box{
+  padding: 27px 35px;
+  background: @bg_md;
+  border-radius: 6px;
+  textarea{
+    width: 100%;
+    height: 300px;
+    resize: none;
+    outline: none;
+    border: none;
+    background-color: transparent;
+  }
+  p{
+    color: @co_md;
+    font-size: 1.4* @base_font;
+    margin-bottom: 0;
+  }
+}
+
+.app-top-activity-check{
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  position: relative;
+  top: 7px;
+  margin-right: 12px;
+  border: 3px solid @bc_md;
+  border-radius: 100%;
+  &.checked{
+    border: 0;
+    background: url("../images/ic_stick.png") no-repeat center center;
+    background-size: 24px 24px;
+  }
+}

@@ -1,0 +1,118 @@
+/**
+ * 增减道具
+ * Created by yal on 2017/8/16.
+ */
+require(['vue','layui','site'], function (Vue) {
+	var layuiForm;
+	layui.config({dir: baseUrl + '../plugs/layui/'});
+	layui.use(['layer','laypage','form', 'laydate'], function () {
+		layuiForm = layui.form();
+		var app = new Vue({
+			el: "#app",
+			data: {
+				grid: {
+					curr_page: 1, //当前页码
+					page_size: 30, //每页最大条数
+					total: 0, //总数
+					pageCount:0,
+					data: [], //当前页数据
+				},
+				filter: {
+					
+				},
+				gpodPropType:''
+			},
+			watch: {
+				"grid.curr_page": function (val, oldVal) { //页码改变自动reload
+					debugger;
+					if (val === oldVal) {
+						return;
+					}
+					this.gridReload();
+				}
+			},
+			methods: {
+				formatDate(time) {
+                  var date = new Date(time);
+                  return formatDate(date, 'yyyy-MM-dd');
+                },
+				gridFristLoad: function () { //表格首次加载(fetch data of first page -> set data -> initialize pager)
+					this.curr_page = 1;
+					this.fetchData(function (rs) {
+						app.grid.data = rs.data.list;
+						app.grid.total = rs.recordCount;
+						app.grid.pageCount = rs.pageCount;		
+						gLayPageIni('pager', app.grid.curr_page ,rs.data.pageCount , function (newPage) {
+							app.grid.curr_page = newPage;
+						});
+					});
+				},
+				gridReload: function () { //分页获取
+					this.fetchData(function (rs) {
+						app.grid.data = rs.data.list;
+						app.grid.total = rs.recordCount;
+					});
+				},
+				fetchData: function (cb) {
+					var options = this.filter;
+					options.pageNo = this.grid.curr_page;
+					options.pageSize = this.grid.page_size;
+					options.startAt = this.grid.startAt;
+					options.endAt = this.grid.endAt;
+					$.post("/gm/props/queryPropsInfoPageList", options, function (rs) {
+						console.log(rs);
+						cb(rs);
+					}, "json");
+				},
+				saveProps: function () { 
+                    var options = this.filter;
+					options.obuUserid = $("#obuUserid").val();
+					options.gpodPropType = $("#gpodPropType").val();
+					options.gpodPropNum = $("#gpodPropNum").val();
+					options.gpodExplain = $("#gpodExplain").val();
+					if($("#gpodPropType").val()==''){
+						AlertMsg("请选择道具");
+						return;
+					}
+                    //执行Ajax操作
+                    $.ajax({
+                        url: '/gm/props/addOrDelProps',
+                        type: 'POST',
+                        data: options,
+                        dataType: 'json',
+                        timeout: 10000,
+                        success: function (rs) {
+                            if (rs.code == '200') {
+								alert(rs.msg);
+								this.gridReload();
+                                //window.location.reload();
+                            } else {
+                                console.log(rs.msg);
+                                AlertMsg(rs.msg);
+                            }
+                        },
+                        error: function (xhr, status, ex) {
+                            AlertMsg("请求失败：" + xhr.statusText);
+                            console.error(ex);
+                        }
+                    });
+                    //return false;
+				}
+			},
+			created: function () {
+				this.gridFristLoad();
+			},
+			mounted: function () {
+				var vm = this;
+				var form = layui.form();
+				//提交  
+				form.on('submit', function (data) {
+					app.filter = data.field; //data.field为当前容器的全部表单字段，名值对形式：{name: value}
+					app.gridFristLoad();
+					return false; //阻止原生表单跳转
+				});
+			}
+		});
+
+	 });
+});		

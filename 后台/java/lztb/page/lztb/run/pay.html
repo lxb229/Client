@@ -1,0 +1,741 @@
+<!--付费分析-->
+<div class="ibox">
+    <!--主页内容 -->
+    <div class="ibox-content fadeInUp animated">
+        <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">付费数据</li>
+                <li>付费玩家趋势</li>
+                <li>新增玩家价值</li>
+                <li>付费排行</li>
+            </ul>
+            <div class="layui-tab-content" style="height: 100px;">
+                <div class="layui-tab-item layui-show">
+                    <!--付费数据-->
+                    <!--选择日期和导出-->
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">范围选择</label>
+                        <div class="layui-input-inline">
+                            <input class="layui-input" placeholder="开始日期" id="LAY_demorange_s2">
+                        </div>
+                        <div class="layui-input-inline">
+                            <input class="layui-input" placeholder="截止日期" id="LAY_demorange_e2">
+                        </div>
+                        <button class="layui-btn layui-btn-primary layui-btn-radius">导出</button>
+                    </div>
+                    <!--表格-->
+                    <table class="layui-table" lay-even="" lay-skin="row">
+                        <thead>
+                        <tr>
+                            <th>日期</th>
+                            <th>渠道</th>
+                            <th>充值金额</th>
+                            <th>充值人数</th>
+                            <th>充值人次</th>
+                            <th>新增充值人数</th>
+                            <th>新增充值金额</th>
+                            <th>付费率</th>
+                            <th>ARPPU</th>
+                            <th>每日首充礼包</th>
+                            <th>限时礼包</th>
+                            <th>首次充值人数</th>
+                            <th>首次充值金额</th>
+                            <th>破产充值人数</th>
+                            <th>每日破产人数</th>
+                            <th>破产充值金额</th>
+                            <th>微信充值人数</th>
+                            <th>微信充值金额</th>
+                            <th>官网微信充值人数</th>
+                            <th>官网微信充值金额</th>
+                            <th>支付宝充值人数</th>
+                            <th>支付宝充值金额</th>
+                            <th>官网支付宝充值人数</th>
+                            <th>官网支付宝充值金额</th>
+                            <th>IOS充值人数</th>
+                            <th>IOS充值金额</th>
+                            <th>12元订单</th>
+                            <th>30元订单</th>
+                            <th>50元订单</th>
+                            <th>108元订单</th>
+                            <th>218元订单</th>
+                            <th>518元订单</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>06-06</td>
+                            <td>100</td>
+                            <th>654</th>
+                            <th>654</th>
+                            <th>654</th>
+                            <th>654</th>
+                            <th>654</th>
+                            <td>100</td>
+                            <th>654</th>
+                            <th>654</th>
+                            <th>654</th>
+                            <td>100</td>
+                            <th>654</th>
+                            <th>654</th>
+                            <th>654</th>
+                            <th>654</th>
+                            <th>654</th>
+                            <td>100</td>
+                            <th>654</th>
+                            <th>654</th>
+                            <th>654</th>
+                            <td>100</td>
+                            <th>654</th>
+                            <th>654</th>
+                            <th>654</th>
+                            <th>654</th>
+                            <th>654</th>
+                            <td>100</td>
+                            <th>654</th>
+                            <th>654</th>
+                            <th>654</th>
+                            <th>654</th>
+                        </tr>
+                        <tr>
+                            <td>06-07</td>
+                            <td>100</td>
+                            <th>654</th>
+                            <th>654</th>
+                            <th>654</th>
+                            <th>654</th>
+                            <th>654</th>
+                            <td>100</td>
+                            <th>654</th>
+                            <th>654</th>
+                            <th>654</th>
+                            <td>100</td>
+                            <th>654</th>
+                            <th>654</th>
+                            <th>654</th>
+                            <th>654</th>
+                            <th>654</th>
+                            <td>100</td>
+                            <th>654</th>
+                            <th>654</th>
+                            <th>654</th>
+                            <td>100</td>
+                            <th>654</th>
+                            <th>654</th>
+                            <th>654</th>
+                            <th>654</th>
+                            <th>654</th>
+                            <td>100</td>
+                            <th>654</th>
+                            <th>654</th>
+                            <th>654</th>
+                            <th>654</th>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="layui-tab-item">
+                    <!--付费玩家趋势统计图-->
+                    <div id="payingPlayers" class="container"></div>
+                    <!--选择日期和导出-->
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">范围选择</label>
+                        <div class="layui-input-inline">
+                            <input class="layui-input" placeholder="开始日期" id="LAY_demorange_s3">
+                        </div>
+                        <div class="layui-input-inline">
+                            <input class="layui-input" placeholder="截止日期" id="LAY_demorange_e3">
+                        </div>
+                        <button class="layui-btn layui-btn-primary layui-btn-radius">导出</button>
+                    </div>
+                    <!--表格-->
+                    <table class="layui-table" lay-even="" lay-skin="row">
+                        <thead>
+                        <tr>
+                            <th>日期</th>
+                            <th>活跃玩家</th>
+                            <th>充值人数</th>
+                            <th>新增充值人数</th>
+                            <th>老玩家充值人数</th>
+                            <th>付费率</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>06-06</td>
+                            <td>100</td>
+                            <th>654</th>
+                            <th>654</th>
+                            <th>654</th>
+                            <th>654</th>
+                        </tr>
+                        <tr>
+                            <td>06-07</td>
+                            <td>45</td>
+                            <th>654</th>
+                            <th>654</th>
+                            <th>654</th>
+                            <th>654</th>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="layui-tab-item">
+                    <!--新增玩家价值统计图-->
+                    <div id="newPlayers" class="container"></div>
+                    <!--选择日期和导出-->
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">范围选择</label>
+                        <div class="layui-input-inline">
+                            <input class="layui-input" placeholder="开始日期" id="LAY_demorange_s4">
+                        </div>
+                        <div class="layui-input-inline">
+                            <input class="layui-input" placeholder="截止日期" id="LAY_demorange_e4">
+                        </div>
+                        <button class="layui-btn layui-btn-primary layui-btn-radius">导出</button>
+                    </div>
+                    <!--表格-->
+                    <table class="layui-table">
+                        <thead>
+                        <tr>
+                            <th>日期</th>
+                            <th>新增注册</th>
+                            <th>LTV0</th>
+                            <th>LTV1</th>
+                            <th>LTV2</th>
+                            <th>LTV3</th>
+                            <th>LTV4</th>
+                            <th>LTV5</th>
+                            <th>LTV6</th>
+                            <th>LTV7</th>
+                            <th>LTV8</th>
+                            <th>LTV9</th>
+                            <th>LTV10</th>
+                            <th>LTV11</th>
+                            <th>LTV12</th>
+                            <th>LTV13</th>
+                            <th>LTV14</th>
+                            <th>LTV15</th>
+                            <th>LTV16</th>
+                            <th>LTV17</th>
+                            <th>LTV18</th>
+                            <th>LTV19</th>
+                            <th>LTV20</th>
+                            <th>LTV21</th>
+                            <th>LTV22</th>
+                            <th>LTV23</th>
+                            <th>LTV24</th>
+                            <th>LTV25</th>
+                            <th>LTV26</th>
+                            <th>LTV27</th>
+                            <th>LTV28</th>
+                            <th>LTV29</th>
+                            <th>LTV30</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <th>合计</th>
+                            <th>100</th>
+                            <th>654</th>
+                            <th>654</th>
+                            <th>654</th>
+                            <th>654</th>
+                            <td>100</td>
+                            <th>654</th>
+                            <th>654</th>
+                            <th>654</th>
+                            <th>654</th>
+                            <td>100</td>
+                            <th>654</th>
+                            <th>654</th>
+                            <th>654</th>
+                            <th>654</th>
+                        </tr>
+                        <tr>
+                            <th>06-07</th>
+                            <th>100</th>
+                            <th>654</th>
+                            <th>654</th>
+                            <th>654</th>
+                            <th>654</th>
+                            <td>100</td>
+                            <th>654</th>
+                            <th>654</th>
+                            <th>654</th>
+                            <th>654</th>
+                            <td>100</td>
+                            <th>654</th>
+                            <th>654</th>
+                            <th>654</th>
+                            <th>654</th>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="layui-tab-item">
+                    <div class="layui-tab">
+                        <ul class="layui-tab-title">
+                            <li class="layui-this">实时订单</li>
+                            <li>今日排行</li>
+                            <li>自定义排行</li>
+                        </ul>
+                        <div class="layui-tab-content">
+                            <div class="layui-tab-item layui-show">
+                                <!--实时订单-->
+                                <!--选择日期和导出-->
+                                <div class="layui-form-item">
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="" autocomplete="off" placeholder="玩家ID" class="layui-input">
+                                    </div>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="" autocomplete="off" placeholder="玩家昵称" class="layui-input">
+                                    </div>
+                                    <div class="layui-inline ">
+                                        <select name="modules" class="layui-input">
+                                            <option value="">购买面额</option>
+                                            <option value="1">12元</option>
+                                            <option value="2">30元</option>
+                                            <option value="3">50元</option>
+                                            <option value="4">108元</option>
+                                            <option value="5">218元</option>
+                                            <option value="6">518元</option>
+                                        </select>
+                                    </div>
+                                    <div class="layui-inline">
+                                        <!--支付方式下拉框-->
+                                        <select name="modules" class="layui-input">
+                                            <option value="">支付方式</option>
+                                            <option value="1">iap(苹果官方内购)</option>
+                                            <option value="2">支付宝</option>
+                                            <option value="3">微信</option>
+                                            <option value="4">支付宝(web)</option>
+                                            <option value="5">微信(web)</option>
+                                            <option value="6">应用宝米大师</option>
+                                            <option value="">IOS支付宝</option>
+                                            <option value="1">IOS微信(官方宝石版)</option>
+                                            <option value="2">易宝支付(web)</option>
+                                            <option value="3">IOS微信(龙头版)</option>
+                                            <option value="4">百度支付</option>
+                                            <option value="5">360手机助手</option>
+                                            <option value="6">爱贝支付(web)</option>
+                                            <option value="">木蚂蚁</option>
+                                            <option value="1">虫虫支付</option>
+                                            <option value="2">IOS微信(个人版-att翻牌机)</option>
+                                            <option value="3">IOS微信(个人版-水浒传)</option>
+                                            <option value="4">IOS微信(个人版-街机电玩城)</option>
+                                            <option value="5">IOS微信(个人版-疯狂电玩城)</option>
+                                            <option value="6">IOS微信(个人版-娱乐电玩城)</option>
+                                            <option value="">IOS微信(个人版-糖果派对下分版)</option>
+                                            <option value="1">IOS微信(个人版-连环夺宝)</option>
+                                            <option value="2">IOS微信（个人版-欢乐电玩城）</option>
+                                            <option value="3">华为支付</option>
+                                            <option value="4">阿里游戏支付</option>
+                                            <option value="5">爱贝支付(联想渠道)</option>
+                                            <option value="6">笨游戏</option>
+                                            <option value="">应用汇</option>
+                                            <option value="1">360单机</option>
+                                            <option value="2">斯凯冒泡</option>
+                                            <option value="3">搜狗助手</option>
+                                            <option value="4">小米</option>
+                                            <option value="5">深海捕鱼-微信支付(安卓版)</option>
+                                            <option value="6">anysdk</option>
+                                        </select>
+                                    </div>
+                                    <div class="site-demo-button layui-inline" >
+                                        <button data-method="notice" class="layui-btn">注册渠道</button>
+                                    </div>
+                                    <div class="layui-input-inline">
+                                        <input class="layui-input" placeholder="开始日期" id="LAY_demorange_s5">
+                                    </div>
+                                    <div class="layui-input-inline">
+                                        <input class="layui-input" placeholder="截止日期" id="LAY_demorange_e5">
+                                    </div>
+                                    <button class="layui-btn layui-btn-primary layui-btn-radius">查询</button>
+                                    <button class="layui-btn layui-btn-primary layui-btn-radius">导出</button>
+                                </div>
+                                <!--表格-->
+                                <table class="layui-table">
+                                    <thead>
+                                    <tr>
+                                        <th>订单编号</th>
+                                        <th>渠道</th>
+                                        <th>支付方式</th>
+                                        <th>玩家ID</th>
+                                        <th>玩家昵称</th>
+                                        <th>面额类型</th>
+                                        <th>购买面额</th>
+                                        <th>充值前钻石</th>
+                                        <th>充值后钻石</th>
+                                        <th>获得钻石</th>
+                                        <th>购买时间</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <th>合计</th>
+                                        <th>100</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <td>100</td>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                    </tr>
+                                    <tr>
+                                        <th>06-07</th>
+                                        <th>100</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <td>100</td>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="layui-tab-item">
+                                <!--今日排行-->
+                                <button class="layui-btn layui-btn-primary layui-btn-radius">导出</button>
+                                <table class="layui-table">
+                                    <thead>
+                                    <tr>
+                                        <th>排名</th>
+                                        <th>游戏ID</th>
+                                        <th>登陆账号</th>
+                                        <th>游戏昵称</th>
+                                        <th>今日充值总金额</th>
+                                        <th>充值总金额</th>
+                                        <th>近7天充值金额</th>
+                                        <th>创建时间</th>
+                                        <th>最后登陆时间</th>
+                                        <th>首次充值时间</th>
+                                        <th>未充值天数</th>
+                                        <th>未登陆天数</th>
+                                        <th>VIP等级</th>
+                                        <th>手机号</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <th>1</th>
+                                        <th>100</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <td>100</td>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                    </tr>
+                                    <tr>
+                                        <th>2</th>
+                                        <th>100</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <td>100</td>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                            <div class="layui-tab-item">
+                                <!--自定义排行-->
+                                <div class="layui-input-inline">
+                                    <input type="text" name="title" autocomplete="off" placeholder="历史排行" class="layui-input">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="title" autocomplete="off" placeholder="最后登录时间" class="layui-input">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="title" autocomplete="off" placeholder="充值金额范围" class="layui-input">
+                                </div>
+                                <button class="layui-btn layui-btn-primary layui-btn-radius">查询</button>
+                                <div class="layui-input-inline">
+                                    <input class="layui-input" placeholder="开始日期" id="LAY_demorange_s6">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <input class="layui-input" placeholder="截止日期" id="LAY_demorange_e6">
+                                </div>
+
+                                <button class="layui-btn layui-btn-primary layui-btn-radius">导出</button>
+                                <table class="layui-table">
+                                    <thead>
+                                    <tr>
+                                        <th>排名</th>
+                                        <th>游戏ID</th>
+                                        <th>登陆账号</th>
+                                        <th>游戏昵称</th>
+                                        <th>今日充值总金额</th>
+                                        <th>充值总金额</th>
+                                        <th>近7天充值金额</th>
+                                        <th>创建时间</th>
+                                        <th>最后登陆时间</th>
+                                        <th>首次充值时间</th>
+                                        <th>未充值天数</th>
+                                        <th>未登陆天数</th>
+                                        <th>VIP等级</th>
+                                        <th>手机号</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <th>1</th>
+                                        <th>100</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <td>100</td>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                    </tr>
+                                    <tr>
+                                        <th>2</th>
+                                        <th>100</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <td>100</td>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        //        统计图
+        require(['echarts','vue'], function (echarts,Vue) {
+            var payingPlayers = echarts.init(document.getElementById('payingPlayers'));
+            var newPlayers = echarts.init(document.getElementById('newPlayers'));
+            function renderPayingPlayers() {
+//            付费玩家趋势统计图
+                option = {
+                    title : {
+                        text: '付费玩家'
+                        //                        subtext: '纯属虚构'
+                    },
+                    tooltip : {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data:['充值人数','新增充值人数','老玩家充值人数']
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar']},
+                            restore : {show: true},
+                            saveAsImage : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    xAxis : [
+                        {
+                            type : 'category',
+                            data : ['06-06','06-07','06-08','06-09','06-10','06-11','06-12']
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            type : 'value'
+                        }
+                    ],
+                    series : [
+                        {
+                            name:'充值人数',
+                            type:'bar',
+                            data:[3.0, 5.9, 8.0, 23.2, 25.6, 53.7, 85.6],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'新增充值人数',
+                            type:'bar',
+                            data:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'老玩家充值人数',
+                            type:'bar',
+                            data:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        }
+
+                    ]
+                };
+                payingPlayers.setOption(option);
+            }
+//            新增玩家价值统计图
+            option = {
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data:['LTV']
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                toolbox: {
+                    feature: {
+                        saveAsImage: {}
+                    }
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: ['LTV0','LTV0','LTV0','LTV0','LTV0','LTV0','LTV0']
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [
+                    {
+                        name:'LTV',
+                        type:'line',
+                        stack: '总量',
+                        data:[120, 132, 101, 134, 90, 230, 210]
+                    }
+                ]
+            };
+            newPlayers.setOption(option);
+            renderPayingPlayers();
+        });
+        //弹出层
+        layui.use('layer', function(){ //独立版的layer无需执行这一句
+            var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+
+            //触发事件
+            var active = {
+                setTop: function(){
+                    var that = this;
+                },notice: function(){
+                    //示范一个公告层
+                    layer.open({
+                        type: 1
+                        ,title: false //不显示标题栏
+                        ,closeBtn: false
+                        ,area: '300px;'
+                        ,shade: 0.8
+                        ,id: 'LAY_layuipro' //设定一个id，防止重复弹出
+                        ,btn: ['确定', '取消']
+                        ,moveType: 1 //拖拽模式，0或者1
+                        ,content: '<div class="layui-form-item" style="padding: 20px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;">' +
+                        '<div class="">' + '<input type="checkbox">&nbsp;android官网&emsp;' +
+                        '<input type="checkbox" checked="">&nbsp;ios官网&emsp;<br>' +
+                        '<input type="checkbox">&nbsp;应用宝&emsp;' +
+                        '<input type="checkbox">&nbsp;二维码推广(bd.lztb.cn)&emsp;<br>' +
+                        '<input type="checkbox">&nbsp;二维码推广(ewm.lztb.cn)&emsp;' +
+                        '<input type="checkbox">&nbsp;贴吧&emsp;<br>' +
+                        '<input type="checkbox">&nbsp;优酷&emsp;' +
+                        '<input type="checkbox">&nbsp;陌陌&emsp;<br>' +
+                        '<input type="checkbox">&nbsp;百度游戏中心&emsp;' +
+                        '<input type="checkbox">&nbsp;IOS个人(龙头版)&emsp;<br>' +
+                        '<input type="checkbox">&nbsp;老系统导入&emsp;' +
+                        '<input type="checkbox">&nbsp;360手机助手&emsp;<br>' +
+                        '<input type="checkbox">&nbsp;IOS个人版(att)&emsp;' +
+                        '<input type="checkbox">&nbsp;IOS个人版(水浒传)&emsp;<br>' +
+                        '<input type="checkbox">&nbsp;IOS个人版(街机电玩城)&emsp;' +
+                        '<input type="checkbox">&nbsp;IOS捕鱼&emsp;<br>' +
+                        '<input type="checkbox">&nbsp;IOS个人版(糖果派对)&emsp;' +
+                        '<input type="checkbox">&nbsp;IOS个人版(疯狂电玩城)&emsp;<br>' +
+                        '<input type="checkbox">&nbsp;IOS个人版(娱乐电玩城)&emsp;' +
+                        '<input type="checkbox">&nbsp;IOS个人版(欢乐电玩城)&emsp;<br>' +
+                        '<input type="checkbox">&nbsp;IOS捕鱼&emsp;' +
+                        '<input type="checkbox">&nbsp;android-深海捕鱼&emsp;<br>' +
+                        '<input type="checkbox">&nbsp;木蚂蚁&emsp;' +
+                        '<input type="checkbox">&nbsp;虫虫&emsp;<br>' +
+                        '<input type="checkbox">&nbsp;华为&emsp;' +
+                        '<input type="checkbox">&nbsp;阿里游戏&emsp;<br>' +
+                        '<input type="checkbox">&nbsp;anysdk&emsp;' +
+                        '</div></div>'
+                        ,success: function(layero){
+                            var btn = layero.find('.layui-layer-btn');
+                            btn.css('text-align', 'center');
+                            btn.find('.layui-layer-btn0').attr({
+//                                href: 'http://www.layui.com/'
+                                target: '_blank'
+                            });
+                        }
+                    });
+                }
+            };
+            $('.layui-btn').on('click', function(){
+                var othis = $(this), method = othis.data('method');
+                active[method] ? active[method].call(this, othis) : '';
+            });
+
+        });
+    </script>
+</div>

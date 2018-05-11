@@ -1,0 +1,96 @@
+<!--邮件配置-->
+<div class="ibox">
+    <!--主页内容-->
+    <div class="ibox-content fadeInUp animated" id="mailList">
+        <div class="site-demo-button">
+            <button data-method="offset" data-type="auto" class="layui-btn layui-btn-normal" @click="sendMail()">新建邮件</button>
+        </div>
+        <table class="layui-table">
+            <thead>
+                <tr>
+                    <th>邮件ID</th>
+                    <th>邮件标题</th>
+                    <th>内容</th>
+                    <th>发送道具</th>
+                    <th>发送时间</th>
+                    <th>失效时间</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(item,index) in mailList">
+                    <td>{{item.to_rid_list}}</td>
+                    <td>{{item.title}}</td>
+                    <td>{{item.content}}</td>
+                    <td>{{item.gift_list}}</td>
+                    <td>{{item.send_time}}</td>
+                    <td>{{item.expire_time}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <div id="pager" class="laypager" style="float: right;"></div>
+    </div>
+    <script>
+        require(['vue', 'site', 'layui'], function (Vue) {
+            layui.use(['laypage', 'layer'], function () {
+                
+                var mail = new Vue({
+                    el: "#mailList",
+                    data: {
+                        pindex:1,
+                        psize:15,
+                        pcount:0,
+                        dcount:0,
+                        mailList:[]
+                    },
+                    methods: {
+                        sendMail: function () {
+                            gOpenModalWindow("发送邮件", "lztb/backstage/mailFrom.html", 750, 650,true,null,null,function(){
+                                loadData(mail);
+                            });
+                        }
+                    },
+                    watch:{
+                        pcount:function(){
+                            gLayPageIni("pager",this.pindex,this.pcount, function(curr, first){
+                                mail.pindex = curr;
+                            });
+                        },
+                        pindex:function(){
+                            loadData(this);
+                        }
+                    },
+                    created: function() {
+                        loadData(this);
+                    }
+                });
+                function loadData(vm) {
+                    $.ajax({
+                        url: '/config/hall/emailList',
+                        type: 'POST',
+                        data: { 
+                            "pindex":vm.pindex,
+                            "psize":vm.psize
+                        },
+                        dataType: 'json',
+                        timeout: 10000,
+                        success: function (rs) {
+                            if (rs.code == '00000') {
+                                vm.mailList = JSON.parse(rs.data);
+                                if(vm.mailList && vm.mailList.length>0) {
+                                    vm.pcount = vm.mailList[0].total_page;
+                                }
+                            } else {
+                                AlertMsg(rs.msg);
+                                console.error(rs);
+                            }
+                        },
+                        error: function (xhr, status, ex) {
+                            AlertMsg("请求失败：" + xhr.statusText);
+                            console.error(ex);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</div>

@@ -1,0 +1,58 @@
+
+<!--幸运转盘-->
+<div class="ibox">
+    <!--主页内容-->
+    <div class="ibox-content fadeInUp animated">
+		<div id="app">
+			<div class="layui-form">
+				<div class="layui-tab-item layui-show">
+				<a style="text-decoration:none;" class="layui-btn layui-btn-primary layui-btn-radius" href="/lztb/page/adm1.html#./lztb/game/luckyWheelDetail.html?spm=m-2-7-1">幸运转盘明细</a>
+					<table class="layui-table" lay-even="" lay-skin="row">
+						<thead>
+						<tr>
+							<th>时间</th>
+							<th>玩家数</th>
+							<th>总次数</th>
+							<th>总回收</th>
+							<th>周卡</th>
+							<th>月卡</th>
+							<th>钻石(5个)</th>
+							<th>钻石(8个)</th>
+							<th>金币(2000)</th>
+							<th>金币(5000)</th>
+							<th>金币(1万)</th>
+							<th>金币(5万)</th>
+							<th>金币(10万)</th>
+							<th>金币(50万)</th>
+							<th>金币(300万)</th>
+							<th>金币(1000万)</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr v-for="(item, index) in grid.data">
+							<td>{{formatDate(item.garsDate)}}</td>
+							<td>{{item.garsPlayerNum}}</td>
+							<td>{{item.garsTatolCount}}</td>
+							<td>{{item.garsRecycledGold}}</td>
+							<td>{{item.garsWeekNum}}</td>
+							<td>{{item.garsMonthNum}}</td>
+							<td>{{item.garsDiamond5Num}}</td>
+							<td>{{item.garsDiamond8Num}}</td>
+							<td>{{item.garsGold2000Num}}</td>
+							<td>{{item.garsGold5000Num}}</td>
+							<td>{{item.garsGold1wNum}}</td>
+							<td>{{item.garsGold5wNum}}</td>
+							<td>{{item.garsGold10wNum}}</td>
+							<td>{{item.garsGold50wNum}}</td>
+							<td>{{item.garsGold300wNum}}</td>
+							<td>{{item.garsGold1000wNum}}</td>
+						</tr>
+						</tbody>
+					</table>
+					<div id="pager" class="laypager" style="float: right;"></div>
+				</div>
+			</div>
+		</div>
+    </div>
+	<script src="../static/lztb/game/luckWheel.js"></script>
+</div>

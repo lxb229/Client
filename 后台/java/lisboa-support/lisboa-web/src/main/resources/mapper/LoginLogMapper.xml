@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.guse.platform.dao.system.LoginLogMapper">
+
+    <resultMap id="LoginLog" type="com.guse.platform.entity.system.LoginLogs">
+        <result property="id" column="id"/>
+        <result property="loginTime" column="loginTime"/>
+        <result property="loginName" column="loginName"/>
+        <result property="ip" column="ip"/>
+        <result property="country" column="country"/>
+        <result property="province" column="province"/>
+        <result property="city" column="city"/>
+        <result property="county" column="county"/>
+        <result property="header" column="header"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+        id ,loginTime ,loginName ,ip ,country ,province ,city ,county ,header 
+	    ]]>
+	</sql>
+	<!-- 用于分页查询 -->
+	<sql id="sql_of_where">
+	 	WHERE 1=1 
+    	<if test="bParam != null" >	
+		 	<if test="bParam.loginTime != null">
+	      	 AND loginTime = #{bParam.loginTime, jdbcType=TIMESTAMP}
+		 	</if>
+		 	<if test="bParam.loginName != null">
+	      	 AND loginName = #{bParam.loginName, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="bParam.ip != null">
+	      	 AND ip = #{bParam.ip, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="bParam.country != null">
+	      	 AND country = #{bParam.country, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="bParam.province != null">
+	      	 AND province = #{bParam.province, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="bParam.city != null">
+	      	 AND city = #{bParam.city, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="bParam.county != null">
+	      	 AND county = #{bParam.county, jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="bParam.header != null">
+	      	 AND header = #{bParam.header, jdbcType=VARCHAR}
+		 	</if>
+	    </if>   
+    </sql>
+    
+    <!-- 通用查询 -->
+    <select id="select" parameterType="java.util.Map" resultMap="LoginLog">
+        select 
+        <include refid="Base_Column_List" />
+        from system_login_log 
+        <include refid="sql_of_where" /> order by create_time desc
+    </select>
+    
+    <!-- 通用分页查询 -->
+    <select id="selectPageByParam" parameterType="java.util.Map" resultMap="LoginLog">
+        select 
+        <include refid="Base_Column_List" />
+        from system_login_log 
+        <include refid="sql_of_where" />
+        <if test="pParam != null">
+            <if test="pParam.orderByClause != null" > order by ${pParam.orderByClause} </if>
+            <if test="pParam.orderByClause == null" >
+            		order by id  desc 
+            </if>
+            <if test="pParam.startIndex != null and pParam.pageSize != null" >
+              limit ${pParam.startIndex} , ${pParam.pageSize}
+            </if>
+        </if>
+          <if test="pParam == null">
+             order by create_date desc
+        </if>
+    </select>
+    
+    <!-- 通用分页查询记录总数 -->
+    <select id="countByParam" parameterType="java.util.Map" resultType="java.lang.Long">
+        select count(*) from system_login_log 
+        <include refid="sql_of_where" />
+    </select>
+    
+    
+    <insert id="insert" parameterType="com.guse.platform.entity.system.LoginLogs">
+    <![CDATA[
+        INSERT INTO system_login_log (
+	        id  ,
+	        loginTime  ,
+	        loginName  ,
+	        ip  ,
+	        country  ,
+	        province  ,
+	        city  ,
+	        county  ,
+	        header  
+        ) VALUES (
+        	#{id, jdbcType=INTEGER} ,
+        	#{loginTime, jdbcType=TIMESTAMP} ,
+        	#{loginName, jdbcType=VARCHAR} ,
+        	#{ip, jdbcType=VARCHAR} ,
+        	#{country, jdbcType=VARCHAR} ,
+        	#{province, jdbcType=VARCHAR} ,
+        	#{city, jdbcType=VARCHAR} ,
+        	#{county, jdbcType=VARCHAR} ,
+        	#{header, jdbcType=VARCHAR} 
+        )
+    ]]>
+    </insert>
+    
+    <delete id="deleteById">
+    <![CDATA[
+        DELETE FROM system_login_log WHERE
+        id = #{id} 
+    ]]>
+    </delete>
+    
+    <select id="selectById" resultMap="LoginLog">
+	    SELECT <include refid="Base_Column_List"/>
+	    <![CDATA[
+	        FROM system_login_log 
+	        WHERE 
+		        id = #{id} 
+	    ]]>
+    </select>
+    
+    <update id="updateByIdSelective" parameterType="com.guse.platform.entity.system.LoginLogs">
+		UPDATE system_login_log
+		<set>
+		 	<if test="loginTime != null">
+	      	  loginTime = #{loginTime, jdbcType=TIMESTAMP} ,
+		 	</if>
+		 	<if test="loginName != null">
+	      	  loginName = #{loginName, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="ip != null">
+	      	  ip = #{ip, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="country != null">
+	      	  country = #{country, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="province != null">
+	      	  province = #{province, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="city != null">
+	      	  city = #{city, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="county != null">
+	      	  county = #{county, jdbcType=VARCHAR} ,
+		 	</if>
+		 	<if test="header != null">
+	      	  header = #{header, jdbcType=VARCHAR} ,
+		 	</if>
+		</set>
+		WHERE
+	       	id = #{id} 
+    </update>
+	
+</mapper>
+

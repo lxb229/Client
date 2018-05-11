@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangzhixuan.mapper.JettonLogMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.wangzhixuan.model.JettonLog">
+		<result column="id" property="id" />
+		<result column="player_id" property="playerId" />
+		<result column="room_id" property="roomId" />
+		<result column="house_owner" property="houseOwner" />
+		<result column="jetton_num" property="jettonNum" />
+		<result column="jetton_time" property="jettonTime" />
+	</resultMap>
+	
+	<select id="selectJettonData" resultType="Map">
+		SELECT 
+			IFNULL(SUM(if(id>0,bet_num,0)),0) allJettons,
+			IFNULL(SUM(IF(TO_DAYS(bet_time)=TO_DAYS(NOW()),bet_num,0)),0) todayJettons
+			FROM bet_log
+	</select>
+
+</mapper>

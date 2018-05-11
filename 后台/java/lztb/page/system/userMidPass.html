@@ -1,0 +1,127 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width">
+    <title>修改密码</title>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link href="/lztb/static/plugs/layui/css/layui.css" rel="stylesheet">
+</head>
+<body>
+    <div id="form_user" class="layui-form" style="padding: 25px;">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label"><i class="required-symbol"></i>旧密码</label>
+                <div class="layui-input-block">
+                    <input type="password" maxlength="20" required class="layui-input" v-model="input.oldPwd" />
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label"><i class="required-symbol"></i>新密码</label>
+                <div class="layui-input-block">
+                    <input type="password" maxlength="20" required class="layui-input" v-model="input.newPwd" />
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label"><i class="required-symbol"></i>确认新密码</label>
+                <div class="layui-input-block">
+                    <input type="password" maxlength="20" required class="layui-input" v-model="input.newPwd2" />
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <button class="layui-btn" @click="saveData()"> 保存 </button>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="/lztb/static/plugs/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/lztb/static/plugs/layui/layui.js"></script>
+    <script type="text/javascript" src="/lztb/static/plugs/vue/vue.js"></script>
+    <script type="text/javascript" src="/lztb/static/model/site.js"></script>
+    <script type="text/javascript">
+        if (window.parent.window.gCloseModalWindow) {
+            window.gCloseModalWindow = window.parent.window.gCloseModalWindow;
+        }
+        if (window.parent.window.AlertMsg) {
+            window.AlertMsg = window.parent.window.AlertMsg;
+        } else {
+            window.AlertMsg = alert;
+        }
+        if (window.parent.window.SuccessBox) {
+            window.SuccessBox = window.parent.window.SuccessBox;
+        }
+        window.location.reload = window.parent.window.location.reload;
+        window.baseUrl = window.parent.window.baseUrl;
+
+        var layuiForm;
+        layui.config({ dir: '/lztb/static/plugs/layui/' });
+        layui.use(['layer', 'form', 'element'], function () {
+            //layuiForm = layui.form();
+        });
+
+        var app = new Vue({
+            el: "#form_user",
+            data: {
+                input: {
+                    loginName: '',
+                    oldPwd: null,
+                    newPwd: null,
+                    newPwd2: null
+                }
+            },
+            methods: {
+                saveData: function () {
+                    if (app.input.newPwd !== app.input.newPwd2) {
+                        AlertMsg("两次密码不匹配！");
+                        return;
+                    }
+                    if (app.input.oldPwd === app.input.newPwd) {
+                        AlertMsg("新旧密码不能相同！");
+                        return;
+                    }
+                    var options = {
+                        loginName: app.input.loginName,
+                        oldPwd: app.input.oldPwd,
+                        newPwd: app.input.newPwd
+                    };
+
+                    //修改密码
+                    $.ajax({
+                        url: '/system/users/modifyPwd',
+                        type: 'POST',
+                        data: options,
+                        dataType: 'json',
+                        timeout: 10000,
+                        success: function (rs) {
+                            if (rs.code == '00000') {
+                                gCloseModalWindow();
+                                alert("密码修改成功！");
+                                //SuccessBox("密码修改成功！", "操作成功！", 3000);
+                            } else {
+                                console.log(rs);
+                                AlertMsg(rs.msg);
+                            }
+                        },
+                        error: function (xhr, status, ex) {
+                            AlertMsg("请求失败：" + xhr.statusText);
+                            console.error(ex);
+                        }
+                    });
+                    return false;
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>中奖展示配置新建五星宏辉</title>
+    <link href="/lztb/static/plugs/layui/css/layui.css" rel="stylesheet">
+</head>
+
+<body>
+    <div id="wxhhData" style="padding: 15px;">
+        <div class="layui-form">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">金币区间</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" placeholder="区间下限" v-model="formData.award_gold_min" />
+                    </div>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" placeholder="区间上限" v-model="formData.award_gold_max" />
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">本轮最高</label>
+                <div class="layui-input-inline">
+                    <input type="text" placeholder="本轮获得最高金币数" class="layui-input" v-model="formData.win_gold_limit" />
+                </div>
+                <div class="layui-input-inline">
+                    <input type="checkbox" id="cis_open_gold_limit" lay-skin="primary" lay-filter="h" v-model="formData.is_open_gold_limit"/>
+                </div>
+            </div>
+            <!-- <div class="layui-form-item">
+                <div style="font-size: 16px">中奖配置</div>
+            </div> -->
+            <div class="layui-form-item">
+                <label class="layui-form-label">播报样式</label>
+                <div class="layui-input-block">
+                    <select v-model="formData.style_type" style="height: 38px;width: 200px;" lay-ignore>
+                    <option value="">请选择</option>
+                    <option value="0">普通</option>
+                    <option value="1">豪华</option>
+                </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">中奖类型</label>
+                <div class="layui-input-block">
+                    <select v-model="formData.type" style="height: 38px;width: 200px;" lay-ignore>
+                    <option value="">请选择</option>
+                    <option value="1">幸运星</option>
+                    <option value="4">跑马灯</option>
+                </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">模&emsp;&emsp;板</label>
+                <div class="layui-input-block">
+                    <select v-model="formData.mobanid" style="height: 38px;width: 200px;" lay-ignore>
+                        <option value="">请选择</option>
+                        <option value="1">模板1</option>
+                        <option value="2">模板2</option>
+                        <option value="3">模板3</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">播放地点</label>
+                <div class="layui-input-block">
+                    <select v-model="formData.show_channel" style="height: 38px;width: 200px;" lay-ignore>
+                    <option value="">请选择</option>
+                    <option value="1">全服</option>
+                    <option value="2">五星宏辉</option>
+                </select>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">上架状态</label>
+                <div class="layui-input-block">
+                    <select v-model="formData.is_open" style="height: 38px;width: 200px;" lay-ignore>
+                    <option value="">请选择</option>
+                    <option value="1">上架</option>
+                    <option value="2">下架</option>
+                </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <textarea placeholder="公告内容" class="layui-textarea" v-model="formData.format"></textarea>
+            </div>
+            <div class="layui-form-item" style="text-align: center">
+                <button class="layui-btn" @click="saveData()"> 提 交 </button>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="/lztb/static/plugs/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/lztb/static/plugs/layui/layui.js"></script>
+    <script type="text/javascript" src="/lztb/static/plugs/vue/vue.js"></script>
+    <script type="text/javascript" src="/lztb/static/model/site.js"></script>
+    <script type="text/javascript">
+        var vmwxhh = new Vue({
+            el: "#wxhhData",
+            data: {
+                formData:{
+                    award_gold_max:null,
+                    award_gold_min:null,
+                    format:null,
+                    format_id:null,
+                    format_type:null,
+                    is_open:null,
+                    is_open_gold_limit:null,
+                    show_channel:null,
+                    style_type:null,
+                    type:null,
+                    win_gold_limit:null,
+                    mobanid:null
+                },
+                tmpls:[
+                    {
+                        id:1,
+                        name:"模板一",
+                        tmp:"恭喜<color=#00ff00>%s</color>在五星宏辉中获得<color=#ffff00>%i</color>金币，真是运气爆棚啊！"
+                    },
+                    {
+                        id:2,
+                        name:"模板二",
+                        tmp:"玩家<color=#00ff00>%s</color>在本轮游戏中获得最高金币<color=#ffff00>%m</color>！"
+                    },
+                    {
+                        id:3,
+                        name:"模板三",
+                        tmp:"恭喜<color=#00ff00>%s</color>在五星宏辉中压中<color=#ffff00>>（数字8/钻石…）</color，获得<color=#ffff00>%i</color>金币，让人羡慕嫉妒恨啊！"
+                    }
+                ]
+            },
+            methods:{
+                saveData:function() {
+                    $.ajax({
+                        url: '/config/winning/wxhhSave',
+                        type: 'POST',
+                        data: vmwxhh.formData,
+                        dataType: 'json',
+                        timeout: 10000,
+                        success: function (rs) {
+                            if (rs.code == '00000') {
+                                var rsdata = JSON.parse(rs.data);
+                                if(rsdata.code == 200) {
+                                    top.gCloseModalWindow();
+                                    top.SuccessBox("配置保存成功！", "提示", 2000);
+                                } else {
+                                    rsdata.info ? top.AlertMsg(rsdata.info) : top.AlertMsg(rsdata.msg);
+                                }
+                            } else {
+                                top.AlertMsg("保存失败："+rs.msg);
+                                console.error(rs);
+                            }
+                        },
+                        error: function (xhr, status, ex) {
+                            top.AlertMsg("请求失败：" + xhr.statusText);
+                            console.error(ex);
+                        }
+                    });
+                }
+            },
+            watch:{
+                'formData.mobanid':function(nval,oval) {
+                    for (var i = 0; i < vmwxhh.tmpls.length; i++) {
+                        var tmp = vmwxhh.tmpls[i];
+                        if(tmp.id == nval) {
+                            vmwxhh.formData.format = tmp.tmp;
+                            break;
+                        }
+                    }
+                }
+            },
+            created: function () {
+                //VUE实例创建完成后
+                var strData = localStorage.getItem("config_winning_wxhh_edit");
+                if(strData) {
+                    strData = JSON.parse(strData);
+                    this.formData = strData;
+                }
+            },
+            mounted: function () {                
+                //VUE的DOM渲染后
+                var that = this;
+                layui.use(['layer', 'form','jquery'], function () {
+                    var layform = layui.form();
+                    var $ = $ || layui.jquery;
+                    layform.render();
+                    layform.render('checkbox');
+                    layform.on('checkbox(h)',function() {
+                        that.formData.is_open_gold_limit = $("#cis_open_gold_limit").is(":checked");
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,100 @@
+<!--实时数据-->
+<div class="ibox">
+    <div class="ibox-title">
+        <h5>用户明细</h5>
+    </div>
+    <div class="ibox-content fadeInUp animated">
+        <div id="app">
+           <div class="layui-form">
+                 <button class="layui-btn" v-on:click="exportExcel" style="float: right;">导出</button>
+           </div>
+           <table class="layui-table" lay-even="" lay-skin="">
+              <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>游戏ID</th>
+                    <th>游戏昵称</th>
+                    <th>游戏账号</th>
+                    <th>注册时间</th>
+                    <th>注册渠道</th>
+                    <th>最后一次登录时间</th>
+                    <th>注册IP</th>
+                    <th>最后一次登录IP</th>
+                    <th>最后一次登录地域</th>
+                    <th>历史总充值</th>
+                    <th>VIP</th>
+                    <th>账号状态</th>
+                    <th>所在游戏</th>
+                    <th>所在房间</th>
+                    <th>等级</th>
+                    <th>会员卡天数</th>
+                    <th>钻石</th>
+                    <th>金币</th>
+                </tr>
+            </thead>
+            <tbody>
+                 <tr v-for="(item, index) in grid.data">
+                    <td>{{index + 1}}</td>
+                    <td>{{item.obuUserid}}</td>
+                    <td>{{item.obuUserNick}}</td>
+                    <td>{{item.obuUsename}}</td>
+                    <td>{{item.obuRegisterTime}}</td>
+
+                    <td v-if="item.obdDloadChannel=1">ios官网</td>
+                    <td v-else-if="item.obdDloadChannel=2">IOS个人(龙头版)</td>
+                    <td v-else-if="item.obdDloadChannel=3">IOS个人版(att)</td>
+                    <td v-else-if="item.obdDloadChannel=4">IOS个人版(疯狂电玩城)</td>
+                    <td v-else-if="item.obdDloadChannel=5">IOS个人版(街机电玩城)</td>
+                    <td v-else-if="item.obdDloadChannel=6">IOS个人版(连环夺宝)</td>
+                    <td v-else-if="item.obdDloadChannel=7">IOS个人版(水浒传)</td>
+                    <td v-else-if="item.obdDloadChannel=8">IOS个人版(糖果派对)</td>
+                    <td v-else-if="item.obdDloadChannel=9">IOS个人版(娱乐电玩城)</td>
+                    <td v-else-if="item.obdDloadChannel=10">android官网</td>
+                    <td v-else-if="item.obdDloadChannel=11">阿里游戏</td>
+                    <td v-else-if="item.obdDloadChannel=12">百度游戏中心</td>
+                    <td v-else-if="item.obdDloadChannel=13">百度</td>
+                    <td v-else-if="item.obdDloadChannel=14">二维码推广(ewm.lztb.cn)</td>
+                    <td v-else-if="item.obdDloadChannel=15">华为</td>
+                    <td v-else-if="item.obdDloadChannel=16">老系统导入</td>
+                    <td v-else-if="item.obdDloadChannel=17">木蚂蚁</td>
+                    <td v-else-if="item.obdDloadChannel=18">应用宝</td>
+                    <td v-else>未知</td>
+
+                    <td>{{item.obuLastLoginTime}}</td>
+                    <td>{{item.obuRegisterIp}}</td>
+                    <td>{{item.obuLastLoginIp}}</td>
+                    <td>{{item.obuLastLoginRegion}}</td>
+                    <td>{{item.obuRechargeAmount}}</td>
+                    <td>{{item.vip}}</td>
+                    <td v-if="item.obuState=1">正常</td>
+                    <td v-else>冻结</td>
+                    
+                    <td v-if="item.oboInGame=1">龙珠探宝</td>
+                    <td v-else-if="item.oboInGame=2">疯狂宝石</td>
+                    <td v-else-if="item.oboInGame=3">ATT</td>
+                    <td v-else-if="item.oboInGame=4">水浒传</td>
+                    <td v-else-if="item.oboInGame=5">德州扑克</td>
+                    <td v-else-if="item.oboInGame=6">捕鱼达人</td>
+                    <td v-else-if="item.oboInGame=7">糖果派对</td>
+                    <td v-else-if="item.oboInGame=100">大厅</td>
+                    <td v-else>未知</td>
+
+                    <td v-if="item.oboRoom=1">惩奸除恶</td>
+                    <td v-else-if="item.oboInGame=2">称兄道弟</td>
+                    <td v-else-if="item.oboInGame=3">替天行道</td>
+                    <td v-else>未知</td>
+
+                    <td>{{item.obuLevel}}</td>
+                    <td>{{item.obuVipDays}}</td>
+                    <td>{{item.obuDiamond}}</td>
+                    <td>{{item.obuGold}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+ <script src="../static/lztb/operator/onlineUserDetial.js"></script>
+</div>
+
+
+

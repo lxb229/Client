@@ -1,0 +1,140 @@
+<!--中奖展示配置捕鱼达人-->
+<div class="ibox">
+    <!--主页内容-->
+    <div class="ibox-content fadeInUp animated" id="bydrList">
+        <div class="layui-form-item">
+            <button class="layui-btn layui-btn-normal" @click="editData()"> 新建 </button>
+        </div>
+        <!--捕鱼达人-->
+        <table class="layui-table">
+            <thead>
+                <tr>
+                    <th>编号</th>
+                    <th style="width: 730px;">内容</th>
+                    <th colspan="2">倍数需求区间</th>
+                    <th colspan="2">金币需求区间</th>
+                    <th>类型</th>
+                    <th>播报样式</th>
+                    <th>中奖类型</th>
+                    <th>播放地点</th>
+                    <th>上架状态</th>
+                     <th width="130px">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(item,index) in dlist">
+                    <td>{{index+1}}</td>
+                    <td>{{item.msg}}</td>
+                    <td>{{item.multipleMin}}</td>
+                    <td>{{item.multipleMax}}</td>
+                    <td>{{item.goldMin}}</td>
+                    <td>{{item.goldMax}}</td>
+                    <td>{{item.type == 0 ? "鱼倍数奖":"累计大奖"}}</td>
+                    <td>{{item.broadcastStyle == 0 ? "普通":"豪华"}}</td>
+                    <td>{{item.awardType == 0 ? "跑马灯":"幸运星"}}</td>
+                    <td>{{item.broadcastType == 0 ? "捕鱼":"全服"}}</td>
+                    <td>{{item.state == 0 ? "上架":"下架"}}</td>
+                    <td>
+                        <a class="layui-btn layui-btn-mini" @click="editData(item)">编辑</a>
+                        <a class="layui-btn layui-btn-mini layui-btn-danger" @click="delData(item)">删除</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script>
+        require(['vue', 'site'], function (Vue) {
+            var vmBydrList = new Vue({
+                el: "#bydrList",
+                data: {
+                    dlist:[]
+                },
+                methods: {
+                    editData: function (data) {
+                        if(data) {
+                            localStorage.setItem("config_winning_bydr_edit",JSON.stringify(data));
+                        }
+                        gOpenModalWindow("编辑捕鱼达人中奖配置信息", "lztb/backstage/winFromBydr.html", 750, 700,true,null,null,function(){
+                            localStorage.removeItem("config_winning_bydr_edit");
+                            loadData(vmBydrList);
+                        });
+                    },
+                    delData:function(data){
+                        ConfirmBox("您确定要删除这条中奖信息配置吗？", function () {
+                            delData(data);
+                        });
+                    }
+                },
+                created:function(){
+                    //VUE实例创建完成
+                    loadData(this);
+                },
+                mounted:function() {
+                    layui.use(['layer',], function () {
+                    });
+                }
+            });
+            function loadData(vm) {
+                $.ajax({
+                    url: '/config/winning/bydrList',
+                    type: 'POST',
+                    data: {},
+                    dataType: 'json',
+                    timeout: 10000,
+                    success: function (rs) {
+                        if (rs.code == '00000') {
+                            console.log(JSON.parse(rs.data));
+                            vm.dlist = JSON.parse(rs.data);
+                        } else {
+                            AlertMsg(rs.msg);
+                            console.error(rs);
+                        }
+                    },
+                    error: function (xhr, status, ex) {
+                        AlertMsg("请求失败：" + xhr.statusText);
+                        console.error(ex);
+                    }
+                });
+            }
+            function delData(data) {
+                $.ajax({
+                    url: '/config/winning/bydrDel',
+                    type: 'POST',
+                    data: { "id": data.id },
+                    dataType: 'json',
+                    timeout: 10000,
+                    success: function (rs) {
+                        debugger;
+                        if (rs.code == '00000') {
+                            var res = JSON.parse(rs.data);
+                            if (res.code == 200) {
+                                SuccessBox("中奖配置删除成功!", "提示", 2000);
+                                for (var i = 0; i < vmBydrList.dlist.length; i++) {
+                                    if (vmBydrList.dlist[i].id == data.id) {
+                                        vmBydrList.dlist.splice(i, 1);
+                                        break;
+                                    }
+                                }
+                            } else {
+                                if (res.info) {
+                                    AlertMsg(res.info);
+                                } else {
+                                    AlertMsg(res.msg);
+                                }
+                            }
+                        } else {
+                            AlertMsg(rs.msg);
+                            console.error(rs);
+                        }
+                    },
+                    error: function (xhr, status, ex) {
+                        AlertMsg("请求失败：" + xhr.statusText);
+                        console.error(ex);
+                    }
+                });
+            }
+            layui.use(['layer'], function (Vue) {
+            });
+        })
+    </script>
+</div>

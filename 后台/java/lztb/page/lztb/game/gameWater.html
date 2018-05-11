@@ -1,0 +1,462 @@
+<!--游戏流水-->
+<div class="ibox">
+    <!--主页内容-->
+    <div class="ibox-content fadeInUp animated">
+        <div class="layui-form-item">
+            <div class="layui-input-inline">
+                <select id="gamesSelect" name="modules" class="layui-input">
+                    <option value="1">龙珠淘宝</option>
+                    <option value="2">德州扑克</option>
+                    <option value="3">水浒传</option>
+                    <option value="4">糖果派对</option>
+                    <option value="5">深海捕鱼</option>
+                    <option value="6">ATT</option>
+                    <option value="7">五星宏辉</option>
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <input class="layui-input" placeholder="游戏ID" id="LAY_demorange_s">
+            </div>
+            <div class="layui-input-inline">
+                <input class="layui-input" placeholder="游戏昵称" id="LAY_demorange_e">
+            </div>
+            <button class="layui-btn layui-btn-primary layui-btn-radius">查询</button>
+            <!--点击ATT多出的两个按钮-->
+            <button class="layui-btn layui-btn-primary layui-btn-radius" id="checkTheMosaicGoldBtn" style="display: none;">查看彩金</button>
+            <button class="layui-btn layui-btn-primary layui-btn-radius" id="theRobotColoredGoldWaterBtn" style="display: none;">机器人彩金流水</button>
+        </div>
+        <!--龙珠探宝的表格-->
+        <table class="layui-table" id="dragonTreasure">
+            <thead>
+            <tr>
+                <th>局数</th>
+                <th>总金币数</th>
+                <th>本场金币数</th>
+                <th>独立池</th>
+                <th>线数</th>
+                <th>单注额</th>
+                <th>连爆次数</th>
+                <th>总倍数</th>
+                <th>总池大奖</th>
+                <th>独立池大奖</th>
+
+                <th>累积大奖</th>
+                <th>探宝环节</th>
+                <th>探宝池</th>
+                <th>时间</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>2017-03-03</td>
+                <td>100</td>
+                <td>120</td>
+                <td>40</td>
+                <td>50</td>
+                <td>100</td>
+                <td>120</td>
+                <td>40</td>
+                <td>50</td>
+                <td>100</td>
+                <td>120</td>
+                <td>40</td>
+                <td>50</td>
+                <td>100</td>
+            </tr>
+            <tr>
+                <td>2017-03-03</td>
+                <td>100</td>
+                <td>120</td>
+                <td>40</td>
+                <td>50</td>
+                <td>100</td>
+                <td>120</td>
+                <td>40</td>
+                <td>50</td>
+                <td>100</td>
+                <td>120</td>
+                <td>40</td>
+                <td>50</td>
+                <td>100</td>
+            </tr>
+            </tbody>
+        </table>
+        <!--德州扑克的表格-->
+        <table class="layui-table" id="noLimit" style="display: none">
+            <thead>
+            <tr>
+                <th>编号</th>
+                <th>总金币</th>
+                <th>牌桌携带金币</th>
+                <th>房间</th>
+                <th>盲注</th>
+                <th>类型</th>
+                <th>牌型</th>
+
+                <th>公共牌</th>
+                <th>手牌</th>
+                <th>输赢</th>
+                <th>时间</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>2017-03-03</td>
+                <td>100</td>
+                <td>120</td>
+                <td>40</td>
+                <td>50</td>
+                <td>100</td>
+                <td>100</td>
+                <td>120</td>
+                <td>40</td>
+                <td>50</td>
+                <td>100</td>
+            </tr>
+            <tr>
+                <td>40</td>
+                <td>50</td>
+                <td>100</td>
+                <td>120</td>
+                <td>40</td>
+                <td>50</td>
+                <td>100</td>
+                <td>120</td>
+                <td>40</td>
+                <td>50</td>
+                <td>100</td>
+            </tr>
+            </tbody>
+        </table>
+        <!--水浒传查不到数据表格暂时保留-->
+        <table class="layui-table" id="waterMargin" style="display: none">
+            <thead>
+            <tr>
+                <th>编号</th>
+                <th>游戏ID</th>
+                <th>游戏昵称</th>
+                <th>总局数</th>
+                <th>总金币数</th>
+                <th>状态</th>
+                <th>操作</th>
+                <th>测试</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>2017-03-03</td>
+                <td>100</td>
+                <td>120</td>
+                <td>40</td>
+                <td>50</td>
+                <td>100</td>
+                <td>120</td>
+                <td>40</td>
+            </tr>
+            <tr>
+                <td>2017-03-03</td>
+                <td>100</td>
+                <td>120</td>
+                <td>40</td>
+                <td>50</td>
+                <td>100</td>
+                <td>120</td>
+                <td>40</td>
+            </tr>
+            </tbody>
+        </table>
+        <!--糖果派对-->
+        <table class="layui-table" id="jackpot" style="display: none">
+            <thead>
+            <tr>
+                <th>编号</th>
+                <th>总金币</th>
+                <th>本场获得的金币</th>
+                <th>类型</th>
+                <th>线数</th>
+                <th>单注额</th>
+                <th>总倍数</th>
+                <th>时间</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>2017-03-03</td>
+                <td>100</td>
+                <td>120</td>
+                <td>40</td>
+                <td>50</td>
+                <td>40</td>
+                <td>50</td>
+            </tr>
+            <tr>
+                <td>2017-03-03</td>
+                <td>100</td>
+                <td>120</td>
+                <td>40</td>
+                <td>50</td>
+                <td>40</td>
+                <td>50</td>
+            </tr>
+            </tbody>
+        </table>
+        <!--深海捕鱼-->
+        <table class="layui-table" id="fishing" style="display: none">
+            <thead>
+            <tr>
+                <th>编号</th>
+                <th>房间</th>
+                <th>进房时间</th>
+                <th>进房金币</th>
+                <th>出房时间</th>
+                <th>出房金币</th>
+                <th>购买时间</th>
+                <th>购买金币</th>
+                <th>金币输赢</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>2017-03-03</td>
+                <td>100</td>
+                <td>120</td>
+                <td>40</td>
+                <td>50</td>
+                <td>40</td>
+                <td>50</td>
+                <td>40</td>
+                <td>50</td>
+            </tr>
+            <tr>
+                <td>2017-03-03</td>
+                <td>100</td>
+                <td>120</td>
+                <td>40</td>
+                <td>50</td>
+                <td>40</td>
+                <td>50</td>
+                <td>40</td>
+                <td>50</td>
+            </tr>
+            </tbody>
+        </table>
+        <!--ATT有问题表格保留-->
+        <table class="layui-table" id="att"  style="display: none">
+            <thead>
+            <tr>
+                <th>编号</th>
+                <th>游戏ID</th>
+                <th>游戏昵称</th>
+                <th>总局数</th>
+                <th>总金币数</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>2017-03-03</td>
+                <td>100</td>
+                <td>120</td>
+                <td>40</td>
+                <td>50</td>
+                <td>40</td>
+                <td>50</td>
+            </tr>
+            <tr>
+                <td>2017-03-03</td>
+                <td>100</td>
+                <td>120</td>
+                <td>40</td>
+                <td>50</td>
+                <td>40</td>
+                <td>50</td>
+            </tr>
+            </tbody>
+        </table>
+        <!--五星宏辉-->
+        <table class="layui-table" id="macroFai" style="display: none">
+            <thead>
+            <tr>
+                <th>编号</th>
+                <th>总金币</th>
+                <th>本局输赢额</th>
+                <th>种类下注</th>
+                <th>下注额</th>
+                <th>种类开奖结果</th>
+                <th>数量下注</th>
+                <th>下注额</th>
+
+                <th>数量开奖结果</th>
+                <th>时间</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>2017-03-03</td>
+                <td>100</td>
+                <td>120</td>
+                <td>40</td>
+                <td>50</td>
+                <td>40</td>
+                <td>50</td>
+
+                <td>40</td>
+                <td>50</td>
+                <td>50</td>
+            </tr>
+            <tr>
+                <td>2017-03-03</td>
+                <td>100</td>
+                <td>120</td>
+                <td>40</td>
+                <td>50</td>
+                <td>40</td>
+                <td>50</td>
+                <td>50</td>
+                <td>40</td>
+                <td>50</td>
+            </tr>
+            </tbody>
+        </table>
+        <!--查看彩金-->
+        <table class="layui-table" id="checkTheMosaicGold" style="display: none">
+            <thead>
+            <tr>
+                <th>房间</th>
+                <th>五条</th>
+                <th>同花大顺</th>
+                <th>同花顺</th>
+                <th>四条</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>2017-03-03</td>
+                <td>100</td>
+                <td>120</td>
+                <td>40</td>
+                <td>50</td>
+            </tr>
+            <tr>
+                <td>2017-03-03</td>
+                <td>100</td>
+                <td>120</td>
+                <td>40</td>
+                <td>50</td>
+            </tr>
+            </tbody>
+        </table>
+        <!--机器人彩金流水-->
+        <table class="layui-table" id="theRobotColoredGoldWater" style="display: none">
+            <thead>
+            <tr>
+                <th>时间</th>
+                <th>房间类型</th>
+                <th>玩家类型</th>
+                <th>五条</th>
+                <th>同花大顺</th>
+                <th>同花顺</th>
+                <th>四条</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>2017-03-03</td>
+                <td>100</td>
+                <td>120</td>
+                <td>40</td>
+                <td>50</td>
+
+                <td>40</td>
+                <td>50</td>
+            </tr>
+            <tr>
+                <td>2017-03-03</td>
+                <td>100</td>
+                <td>120</td>
+                <td>40</td>
+                <td>50</td>
+                <td>40</td>
+                <td>50</td>
+            </tr>
+            </tbody>
+        </table>
+        <div id="demo2"></div>
+    </div>
+    <script>
+        gamesSelect();
+        aa();
+        function gamesSelect(){
+            $("select").change(function(){
+                var bb=$("select option:selected").val();
+                if(bb==1){
+                    console.log('显示龙珠探宝');
+                    $('#dragonTreasure').show().siblings('table').hide();
+                }else if(bb==2){
+                    console.log('显示德州扑克');
+                    $('#noLimit').show().siblings('table').hide();
+                }else if(bb==3){
+                    console.log('显示水浒传');
+                    $('#waterMargin').show().siblings('table').hide();
+                }
+                else if(bb==4){
+                    console.log('显示糖果派对');
+                    $('#jackpot').show().siblings('table').hide();
+                }
+                else if(bb==5){
+                    console.log('显示深海捕鱼');
+                    $('#fishing').show().siblings('table').hide();
+                }
+                else if(bb==6){
+                    console.log('显示ATT');
+                    $('#checkTheMosaicGoldBtn,#theRobotColoredGoldWaterBtn,#att').show();
+                    $('#att').siblings('table').hide();
+                }else if(bb==7){
+                    console.log('显示五星宏辉');
+                    $('#macroFai').show().siblings('table').hide();
+                }
+            })
+        }
+        function aa(){
+            $('#noLimitDetailedRecordBtn').click(function(){
+                $('#noLimitDetailedRecord').show();
+                $('#noLimit').hide()
+            })
+            $("#checkTheMosaicGoldBtn").click(function(){
+                $('#checkTheMosaicGold').show().siblings('table').hide();
+            })
+            $("#theRobotColoredGoldWaterBtn").click(function(){
+                $('#theRobotColoredGoldWater').show().siblings('table').hide();
+            })
+        }
+        layui.use(['laypage', 'layer'], function(){
+            var laypage = layui.laypage
+                    ,layer = layui.layer;
+            laypage({
+                cont: 'demo2'
+                ,pages: 100
+                ,skin: '#1E9FFF'
+            });
+            var nums = 5; //每页出现的数据量
+            //模拟渲染
+            var render = function(data, curr){
+                var arr = []
+                        ,thisData = data.concat().splice(curr*nums-nums, nums);
+                layui.each(thisData, function(index, item){
+                    arr.push('<li>'+ item +'</li>');
+                });
+                return arr.join('');
+            };
+            //调用分页
+//            laypage({
+//                cont: 'demo2'
+//                ,pages: Math.ceil(data.length/nums) //得到总页数
+//                ,jump: function(obj){
+//                    document.getElementById('biuuu_city_list').innerHTML = render(data, obj.curr);
+//                }
+//            });
+
+        });
+    </script>
+</div>

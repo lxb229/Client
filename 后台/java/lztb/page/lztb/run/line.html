@@ -1,0 +1,842 @@
+<!--在线分析-->
+<div class="ibox">
+    <!--主页内容-->
+    <div class="ibox-content fadeInUp animated">
+        <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">在线用户明细</li>
+                <li>每日在线玩家趋势</li>
+                <li>在线玩家分布</li>
+                <li>时段登录分布</li>
+                <li>在线习惯</li>
+            </ul>
+            <div class="layui-tab-content" >
+                <div class="layui-tab-item layui-show">
+                    <table class="layui-table" lay-even="" lay-skin="row">
+                        <thead>
+                        <tr>
+                            <th>游戏ID</th>
+                            <th>游戏昵称</th>
+                            <th>游戏账号</th>
+                            <th>手机号码</th>
+                            <th>注册时间</th>
+                            <th>注册渠道</th>
+                            <th>注册IP</th>
+                            <th>最后一次登录时间</th>
+                            <th>最后一次登录IP</th>
+                            <th>最后一次登录地域</th>
+                            <th>历史总充值</th>
+                            <th>VIP</th>
+                            <th>账号状态</th>
+                            <th>房间信息</th>
+                            <th>是否在线</th>
+                            <th>等级</th>
+                            <th>会员卡天数</th>
+                            <th>钻石</th>
+                            <th>金币</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>5201314</td>
+                            <td>完美男人</td>
+                            <td>58974533</td>
+                            <td>13888888888</td>
+                            <td>5-12</td>
+                            <td>地方</td>
+                            <td>5-4</td>
+                            <td>254</td>
+                            <td>453</td>
+                            <td>321</td>
+                            <td>1989</td>
+                            <td>54</td>
+                            <td>453</td>
+                            <td>321</td>
+                            <td>是</td>
+                            <td>54</td>
+                            <td>321</td>
+                            <td>1989</td>
+                            <td>54</td>
+                        </tr>
+                        <tr>
+                            <td>5201314</td>
+                            <td>完美女人</td>
+                            <td>58974533</td>
+                            <td>13888888888</td>
+                            <td>5-12</td>
+                            <td>地方</td>
+                            <td>5-4</td>
+                            <td>254</td>
+                            <td>453</td>
+                            <td>321</td>
+                            <td>1989</td>
+                            <td>54</td>
+                            <td>453</td>
+                            <td>321</td>
+                            <td>是</td>
+                            <td>54</td>
+                            <td>321</td>
+                            <td>1989</td>
+                            <td>54</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!--每日在线玩家趋势-->
+                <div class="layui-tab-item ">
+                    <div id="chart_sinFo" class="container"></div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">范围选择</label>
+                        <div class="layui-input-inline">
+                            <input class="layui-input" placeholder="开始日期" id="LAY_demorange_s">
+                        </div>
+                        <div class="layui-input-inline">
+                            <input class="layui-input" placeholder="截止日期" id="LAY_demorange_e">
+                        </div>
+                        <button class="layui-btn layui-btn-primary layui-btn-radius">导出</button>
+                    </div>
+                    <table class="layui-table" lay-even="" lay-skin="row">
+                        <thead>
+                        <tr>
+                            <th>时间</th>
+                            <th>在线人数</th>
+                            <th>对比在线人数</th>
+                            <th>大厅人数</th>
+                            <th>游戏中人数</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>0:02:00</td>
+                            <td>100</td>
+                            <td>120</td>
+                            <td>40</td>
+                            <td>50</td>
+                        </tr>
+                        <tr>
+                            <td>0:02:00</td>
+                            <td>45</td>
+                            <td>52</td>
+                            <td>63</td>
+                            <td>42</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="layui-tab-item ">
+                    <div id="gamersAre"  class="container"></div>
+                    <legend>数据明细</legend>
+                    <table class="layui-table" lay-even="" lay-skin="row">
+                        <thead>
+                        <tr>
+                            <th>时间</th>
+                            <th>新玩家</th>
+                            <th>老玩家</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>0:02:00</td>
+                            <td>100</td>
+                            <td>120</td>
+                        </tr>
+                        <tr>
+                            <td>0:02:00</td>
+                            <td>45</td>
+                            <td>52</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="layui-tab-item ">
+                    <!--时段登录统计图-->
+                    <div id="timeLogin" class="container"></div>
+                    <legend>数据明细</legend>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">范围选择</label>
+                        <div class="layui-input-inline">
+                            <input class="layui-input" placeholder="开始日期" id="LAY_demorange_s1">
+                        </div>
+                        <div class="layui-input-inline">
+                            <input class="layui-input" placeholder="截止日期" id="LAY_demorange_e1">
+                        </div>
+                        <button class="layui-btn layui-btn-primary layui-btn-radius">导出</button>
+                    </div>
+                    <table class="layui-table" lay-even="" lay-skin="row">
+                        <thead>
+                        <tr>
+                            <th>时间</th>
+                            <th>人数</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>0:02:00</td>
+                            <td>100</td>
+                        </tr>
+                        <tr>
+                            <td>0:02:00</td>
+                            <td>45</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="layui-tab-item"><!--在线习惯-->
+                    <div class="layui-tab" lay-filter="test">
+                        <ul class="layui-tab-title">
+                            <li class="layui-this" lay-id="11">游戏时长</li>
+                            <li lay-id="22">游戏次数</li>
+                            <li lay-id="33">分布情况</li>
+                        </ul>
+                        <div class="layui-tab-content ">
+                            <div class="layui-tab-item layui-show">
+                                <!--游戏时长统计图-->
+                                <div id="gameTime" class="container" ></div>
+                                <!--选择日期和导出-->
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">范围选择</label>
+                                    <div class="layui-input-inline">
+                                        <input class="layui-input" placeholder="开始日期" id="LAY_demorange_s2">
+                                    </div>
+                                    <div class="layui-input-inline">
+                                        <input class="layui-input" placeholder="截止日期" id="LAY_demorange_e2">
+                                    </div>
+                                    <button class="layui-btn layui-btn-primary layui-btn-radius">导出</button>
+                                </div>
+                                <!--表格-->
+                                <table class="layui-table" lay-even="" lay-skin="row">
+                                    <thead>
+                                    <tr>
+                                        <th>日期</th>
+                                        <th>单次平均游戏时长</th>
+                                        <th>累计平均游戏时长</th>
+                                        <th>新玩家平均启动次数</th>
+                                        <th>老玩家平均启动次数</th>
+                                        <th>玩家平均启动次数</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>06-06</td>
+                                        <td>100</td>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                    </tr>
+                                    <tr>
+                                        <td>06-07</td>
+                                        <td>45</td>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="layui-tab-item ">
+                                <!--游戏次数统计图-->
+                                <div id="gameNumber" class="container"></div>
+                            </div>
+                            <div class="layui-tab-item " >
+                                <!--分布情况统计图-->
+                                <div id="distribution" class="halfContainer"></div>
+                                <div id="distributionNum"  class="halfContainer"></div>
+
+                                <!--选择日期和导出-->
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">范围选择</label>
+                                    <div class="layui-input-inline">
+                                        <input class="layui-input" placeholder="开始日期" id="LAY_demorange_s3">
+                                    </div>
+                                    <div class="layui-input-inline">
+                                        <input class="layui-input" placeholder="截止日期" id="LAY_demorange_e3">
+                                    </div>
+                                    <button class="layui-btn layui-btn-primary layui-btn-radius">导出</button>
+                                </div>
+                                <!--表格-->
+                                <table class="layui-table" lay-even="" lay-skin="row">
+                                    <thead>
+                                    <tr>
+                                        <th>日期</th>
+                                        <th>活跃玩家</th>
+                                        <th>游戏玩家</th>
+                                        <th>1mins以下</th>
+                                        <th>1~5mins</th>
+                                        <th>6~10mins</th>
+                                        <th>10~30mins</th>
+                                        <th>30~60mins</th>
+                                        <th>1~2hours</th>
+                                        <th>2~4hours</th>
+                                        <th>4hours以上</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>06-06</td>
+                                        <td>100</td>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <td>100</td>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                    </tr>
+                                    <tr>
+                                        <td>06-07</td>
+                                        <td>45</td>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <td>100</td>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <!--表格-->
+                                <table class="layui-table" lay-even="" lay-skin="row">
+                                    <thead>
+                                    <tr>
+                                        <th>日期</th>
+                                        <th>0~1次</th>
+                                        <th>2次</th>
+                                        <th>3次</th>
+                                        <th>4次</th>
+                                        <th>5次</th>
+                                        <th>5~10次</th>
+                                        <th>10~15次</th>
+                                        <th>>15次</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>06-06</td>
+                                        <td>100</td>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                    </tr>
+                                    <tr>
+                                        <td>06-07</td>
+                                        <td>45</td>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+//        统计图
+        require(['echarts','vue'], function (echarts,Vue) {
+            var countChart = echarts.init(document.getElementById('chart_sinFo'));
+            var countAre = echarts.init(document.getElementById('gamersAre'));
+            var timeLogin = echarts.init(document.getElementById('timeLogin'));
+            var gameTime = echarts.init(document.getElementById('gameTime'));
+            var gameNumber = echarts.init(document.getElementById('gameNumber'));
+            var distribution = echarts.init(document.getElementById('distribution'));
+            var distributionNum = echarts.init(document.getElementById('distributionNum'));
+
+            //            玩家趋势统计图
+            function renderCountChartChart() {
+                option = {
+                title : {
+                    text: '每日在线玩家趋势'
+                    //                        subtext: '纯属虚构'
+                },
+                tooltip : {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data:['昨日','今日']
+                },
+                toolbox: {
+                    show : true,
+                            feature : {
+                        dataView : {show: true, readOnly: false},
+                        magicType : {show: true, type: ['line', 'bar']},
+                        restore : {show: true},
+                        saveAsImage : {show: true}
+                    }
+                },
+                calculable : true,
+                        xAxis : [
+                    {
+                        type : 'category',
+                        data : ['00:00','02:00','04:00','06:00','08:00','10:00','12:00','14:00','16:00','18:00','20:00','22:00']
+                    }
+                ],
+                        yAxis : [
+                    {
+                        type : 'value'
+                    }
+                ],
+                        series : [
+                    {
+                        name:'昨日',
+                        type:'bar',
+                        data:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4,22],
+                        markPoint : {
+                            data : [
+                                {type : 'max', name: '最大值'},
+                                {type : 'min', name: '最小值'}
+                            ]
+                        },
+                        markLine : {
+                            data : [
+                                {type : 'average', name: '平均值'}
+                            ]
+                        }
+                    },
+                    {
+                        name:'今日',
+                        type:'bar',
+                        data:[2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 6.0],
+                        markPoint : {
+                            data : [
+                                {name : '年最高', value : 182.2, xAxis: 7, yAxis: 183},
+                                {name : '年最低', value : 2.3, xAxis: 11, yAxis: 3}
+                            ]
+                        },
+                        markLine : {
+                            data : [
+                                {type : 'average', name : '平均值'}
+                            ]
+                        }
+                    }
+                ]
+            };
+                countChart.setOption(option);
+            }
+            //            玩家分布统计图
+            function renderCountChartAre() {
+                option = {
+                    title : {
+                        text: '每日在线玩家分布'
+                        //                        subtext: '纯属虚构'
+                    },
+                    tooltip : {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data:['新玩家','老玩家']
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar']},
+                            restore : {show: true},
+                            saveAsImage : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    xAxis : [
+                        {
+                            type : 'category',
+                            data : ['00:00','02:00','04:00','06:00','08:00','10:00','12:00','14:00','16:00','18:00','20:00','22:00']
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            type : 'value'
+                        }
+                    ],
+                    series : [
+                        {
+                            name:'新玩家',
+                            type:'bar',
+                            data:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4,22],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'老玩家',
+                            type:'bar',
+                            data:[2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 6.0],
+                            markPoint : {
+                                data : [
+                                    {name : '年最高', value : 182.2, xAxis: 7, yAxis: 183},
+                                    {name : '年最低', value : 2.3, xAxis: 11, yAxis: 3}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name : '平均值'}
+                                ]
+                            }
+                        }
+                    ]
+                };
+                countAre.setOption(option);
+            }
+            //            时段登录统计图
+            function renderTimeLogin() {
+                option = {
+                    title : {
+                        text: '时段登录分布'
+                        //                        subtext: '纯属虚构'
+                    },
+                    tooltip : {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data:['登录人数']
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar']},
+                            restore : {show: true},
+                            saveAsImage : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    xAxis : [
+                        {
+                            type : 'category',
+                            data : ['00:00','01:00','02:00','03:00','04:00','5:00','6:00','7:00','8:00','9:00','10:00','11:00',
+                                '12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00','21:00','22:00','23:00']
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            type : 'value'
+                        }
+                    ],
+                    series : [
+                        {
+                            name:'登录人数',
+                            type:'bar',
+                            data:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4,22,2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4,22],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        }
+
+                    ]
+                };
+                timeLogin.setOption(option);
+            }
+            //            游戏时长统计图
+            function renderGameTime() {
+                option = {
+                    title : {
+                        text: '游戏时长'
+                        //                        subtext: '纯属虚构'
+                    },
+                    tooltip : {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data:['单次平均游戏时长(s)','累计平均游戏时长(s)']
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar']},
+                            restore : {show: true},
+                            saveAsImage : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    xAxis : [
+                        {
+                            type : 'category',
+                            data : ['06-06','06-07','06-08','06-09','06-10','06-11','06-12']
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            type : 'value'
+                        }
+                    ],
+                    series : [
+                        {
+                            name:'单次平均游戏时长(s)',
+                            type:'bar',
+                            data:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'累计平均游戏时长(s)',
+                            type:'bar',
+                            data:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        }
+
+                    ]
+                };
+                gameTime.setOption(option);
+            }
+            //            游戏次数统计图
+            function renderGameNumber() {
+                option = {
+                    title : {
+                        text: '游戏次数'
+                        //                        subtext: '纯属虚构'
+                    },
+                    tooltip : {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data:['新玩家平均启动次数','老玩家平均启动次数','玩家平均启动次数']
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar']},
+                            restore : {show: true},
+                            saveAsImage : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    xAxis : [
+                        {
+                            type : 'category',
+                            data : ['06-06','06-07','06-08','06-09','06-10','06-11','06-12']
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            type : 'value'
+                        }
+                    ],
+                    series : [
+                        {
+                            name:'新玩家平均启动次数',
+                            type:'bar',
+                            data:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'老玩家平均启动次数',
+                            type:'bar',
+                            data:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'玩家平均启动次数',
+                            type:'bar',
+                            data:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        }
+
+                    ]
+                };
+                gameNumber.setOption(option);
+            }
+            //            分布情况统计图
+            function renderDistribution() {
+                option = {
+//                    title : {
+//                        text: '分布情况'
+//                        //                        subtext: '纯属虚构'
+//                    },
+                    tooltip : {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data:['游戏时长分布']
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar']},
+                            restore : {show: true},
+                            saveAsImage : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    xAxis : [
+                        {
+                            type : 'category',
+                            data : ['1mins以下','1~5mins','6~10mins','10~30mins','30~60mins','1~2hours','2~4hours','4hours以上']
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            type : 'value'
+                        }
+                    ],
+                    series : [
+                        {
+                            name:'游戏时长分布',
+                            type:'bar',
+                            data:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 135.6],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        }
+
+                    ]
+                };
+                distribution.setOption(option);
+            }
+            //            分布情况统计图次数
+            function renderDistributionNum() {
+                option = {
+//                    title : {
+//                        text: '分布情况'
+//                        //                        subtext: '纯属虚构'
+//                    },
+                    tooltip : {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data:['平均玩家启动次数分布']
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar']},
+                            restore : {show: true},
+                            saveAsImage : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    xAxis : [
+                        {
+                            type : 'category',
+                            data : ['0~1次','0~1次','0~1次','0~1次','0~1次','0~1次','0~1次','0~1次']
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            type : 'value'
+                        }
+                    ],
+                    series : [
+                        {
+                            name:'平均玩家启动次数分布',
+                            type:'bar',
+                            data:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 135.6],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        }
+
+                    ]
+                };
+                distributionNum.setOption(option);
+            }
+            renderCountChartChart();
+            renderCountChartAre();
+            renderTimeLogin();
+            renderGameTime();
+            renderGameNumber();
+            renderDistribution();
+            renderDistributionNum()
+        });
+    </script>
+</div>

@@ -1,0 +1,51 @@
+
+<!--大厅-->
+<div class="ibox">
+    <!--主页内容-->
+    <div class="ibox-content fadeInUp animated">
+		<div id="app">
+		<div id="props_div">
+			<!-- <div class="layui-form"> -->
+				<div class="layui-tab-item layui-show">
+					<div class="layui-form-item">
+						<button class="layui-btn layui-btn-primary layui-btn-radius" v-on:click="selectAll">全选</button>
+						<button class="layui-btn layui-btn-primary layui-btn-radius" v-on:click="reverse">反选</button>
+						<button class="layui-btn" v-on:click="delBatch">删除</button>
+					</div>
+					<table class="layui-table" lay-even="" lay-skin="row" id="list">
+						<thead>
+						<tr>
+							<th>编号</th>
+							<th>玩家ID</th>
+							<th>玩家昵称</th>
+							<th>评论内容</th>
+							<th>评论时间</th>
+							<th>操作</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr v-for="(item, index) in grid.data">
+							<td>
+								<center>
+									<div class="layui-input-inline">
+										<input style="display:block;" type="checkbox" name="userCheck" class="checkbox-item" :value="item.rid" lay-skin="primary" v-model="checkedItem">
+									</div>
+									<div class="layui-input-inline"><span>&nbsp;&nbsp;&nbsp;&nbsp;{{index+1}}</span></div>
+								</center>
+							</td>
+							<td>{{item.rid.split('_')[0]}}</td>
+							<td>{{item.nick}}</td>
+							<td>{{item.content}}</td>
+							<td>{{item.sendTime}}</td>
+							<td><a href="javascript:void(0)" @click="delData(item.rid)">删除</a></td>
+						</tr>
+						</tbody>
+					</table>
+					<div id="pager" class="laypager" style="float: right;"></div>
+				</div>
+			<!--</div>-->
+		</div>
+		</div>
+    </div>
+	<script src="../static/lztb/gm/banHall.js"></script>
+</div>

@@ -1,0 +1,158 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width">
+    <title>新增/编辑</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link href="/lztb/static/plugs/layui/css/layui.css" rel="stylesheet">
+</head>
+
+<body>
+    <div id="dataForm" style="padding: 25px;">
+        <div class="layui-form">
+            <div class="layui-form-item">
+                <label class="layui-form-label">所属区域</label>
+                <div class="layui-input-block">
+                    <input type="text" disabled autocomplete="off" v-bind:value="menuName" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">代理id</label>
+                <div class="layui-input-block">
+                    <input type="text" maxlength="20" required autocomplete="off" v-model="saUserId" placeholder="请输入代理id" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">小于10万提成</label>
+                <div class="layui-input-block">
+                    <input type="text" maxlength="10" required autocomplete="off" v-model="saLessOne" placeholder="小于10万提成数字" class="layui-input">
+                </div>
+            </div>
+			<div class="layui-form-item">
+                <label class="layui-form-label">10-20万提成</label>
+                <div class="layui-input-block">
+                    <input type="text" maxlength="10" required autocomplete="off" v-model="saOneToTwo" placeholder="10-20万提成数字" class="layui-input">
+                </div>
+            </div>
+			<div class="layui-form-item">
+                <label class="layui-form-label">20-30万提成</label>
+                <div class="layui-input-block">
+                    <input type="text" maxlength="10" required autocomplete="off" v-model="saTwoToThree" placeholder="20-30万提成数字" class="layui-input">
+                </div>
+            </div>
+			<div class="layui-form-item">
+                <label class="layui-form-label">30-40万提成</label>
+                <div class="layui-input-block">
+                    <input type="text" maxlength="10" required autocomplete="off" v-model="saThreeToFour" placeholder="30-40万提成数字" class="layui-input">
+                </div>
+            </div><div class="layui-form-item">
+                <label class="layui-form-label">大于40万提成</label>
+                <div class="layui-input-block">
+                    <input type="text" maxlength="10" required autocomplete="off" v-model="saGreaterFoure" placeholder="大于40万提成数字" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item" style="margin-left: 46%;">
+                <button class="layui-btn layui-btn-small" @click="saveData()"> 保存数据 </button>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="/lztb/static/plugs/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/lztb/static/plugs/layui/layui.js"></script>
+    <script type="text/javascript" src="/lztb/static/plugs/vue/vue.js"></script>
+    <script type="text/javascript" src="/lztb/static/model/site.js"></script>
+    <script type="text/javascript">
+        if (window.parent.window.gCloseModalWindow) {
+            window.gCloseModalWindow = window.parent.window.gCloseModalWindow;
+        }
+        if (window.parent.window.AlertMsg) {
+            window.AlertMsg = window.parent.window.AlertMsg;
+        } else {
+            window.AlertMsg = alert;
+        }
+        window.location.reload = window.parent.window.location.reload;
+        window.baseUrl = window.parent.window.baseUrl;
+
+        var app = new Vue({
+            el: "#dataForm",
+            data: {
+                cityId:null,
+                menuName:null,
+                saId:null,
+                saUserId:null,
+                saLessOne:null,
+				saOneToTwo:null,
+				saTwoToThree:null,
+				saThreeToFour:null,
+				saGreaterFoure:null
+            },
+            methods:{
+                saveData:function() {
+                    if(!app.cityId){
+                        AlertMsg("区域ID为空，不能保存!");
+                        return;
+                    }
+                    if(!app.saUserId || !app.saLessOne){
+                        AlertMsg("资源名称和资源URL不能为空!");
+                        return;
+                    }
+                    $.ajax({
+						url: '/systemAgencyController/saveOrUpdateAgency',
+						type: 'POST',
+						data: {
+                            "saId":app.saId,
+                            "saCityId":app.cityId,
+                            "saUserId":app.saUserId,
+                            "saLessOne":app.saLessOne,
+                            "saOneToTwo":app.saOneToTwo,
+							"saTwoToThree":app.saTwoToThree,
+							"saThreeToFour":app.saThreeToFour,
+							"saGreaterFoure":app.saGreaterFoure
+                        },
+						dataType: 'json',
+						timeout: 10000,
+						success: function (rs) {
+							if (rs.code == '00000') {
+								AlertMsg("操作成功.");
+								gCloseModalWindow();
+							} else {
+								console.error(rs);
+								AlertMsg(rs.msg);
+							}
+						},
+						error: function (xhr, status, ex) {
+							AlertMsg("请求失败：" + xhr.statusText);
+							console.error(ex);
+						}
+					});
+                }
+            },
+            created:function() {
+                var menuNode = JSON.parse(localStorage.getItem("system_resource_add_data"));
+                if(!menuNode) {
+                    AlertMsg("请先选择菜单!");
+                    return;
+                }
+                this.cityId = menuNode.id;
+                this.menuName=menuNode.text;
+                var resData = JSON.parse(localStorage.getItem("system_resource_update_data"));
+                if(resData){
+                    this.saId = resData.saId;
+                    this.saUserId = resData.saUserId;
+                    this.saLessOne = resData.saLessOne;
+					this.saOneToTwo=resData.saOneToTwo;
+					this.saTwoToThree=resData.saTwoToThree;
+					this.saThreeToFour=resData.saThreeToFour;
+					this.saGreaterFoure=resData.saGreaterFoure;
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

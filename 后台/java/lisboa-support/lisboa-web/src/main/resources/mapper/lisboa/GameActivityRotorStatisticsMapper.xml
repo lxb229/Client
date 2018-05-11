@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.guse.platform.dao.doudou.GameActivityRotorStatisticsMapper">
+
+    <resultMap id="GameActivityRotorStatistics" type="com.guse.platform.entity.doudou.GameActivityRotorStatistics">
+        <result property="garsId" column="gars_id"/>
+        <result property="garsDate" column="gars_date"/>
+        <result property="garsPlayerNum" column="gars_player_num"/>
+        <result property="garsTatolCount" column="gars_tatol_count"/>
+        <result property="garsRecycledGold" column="gars_recycled_gold"/>
+        <result property="garsWeekNum" column="gars_week_num"/>
+        <result property="garsMonthNum" column="gars_month_num"/>
+        <result property="garsDiamond5Num" column="gars_diamond5_num"/>
+        <result property="garsDiamond8Num" column="gars_diamond8_num"/>
+        <result property="garsGold2000Num" column="gars_gold2000_num"/>
+        <result property="garsGold5000Num" column="gars_gold5000_num"/>
+        <result property="garsGold1wNum" column="gars_gold1w_num"/>
+        <result property="garsGold5wNum" column="gars_gold5w_num"/>
+        <result property="garsGold10wNum" column="gars_gold10w_num"/>
+        <result property="garsGold50wNum" column="gars_gold50w_num"/>
+        <result property="garsGold300wNum" column="gars_gold300w_num"/>
+        <result property="garsGold1000wNum" column="gars_gold1000w_num"/>
+        <result property="garsCreateTime" column="gars_create_time"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+        gars_id ,gars_date ,gars_player_num ,gars_tatol_count ,gars_recycled_gold ,gars_week_num ,gars_month_num ,gars_diamond5_num ,gars_diamond8_num ,gars_gold2000_num ,gars_gold5000_num ,gars_gold1w_num ,gars_gold5w_num ,gars_gold10w_num ,gars_gold50w_num ,gars_gold300w_num ,gars_gold1000w_num ,gars_create_time 
+	    ]]>
+	</sql>
+	<!-- 用于分页查询 -->
+	<sql id="sql_of_where">
+	 	WHERE 1=1 
+    	<if test="bParam != null" >	
+		 	<if test="bParam.garsDate != null">
+	      	 AND gars_date = #{bParam.garsDate, jdbcType=TIMESTAMP}
+		 	</if>
+		 	<if test="bParam.garsPlayerNum != null">
+	      	 AND gars_player_num = #{bParam.garsPlayerNum, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.garsTatolCount != null">
+	      	 AND gars_tatol_count = #{bParam.garsTatolCount, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.garsRecycledGold != null">
+	      	 AND gars_recycled_gold = #{bParam.garsRecycledGold, jdbcType=BIGINT}
+		 	</if>
+		 	<if test="bParam.garsWeekNum != null">
+	      	 AND gars_week_num = #{bParam.garsWeekNum, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.garsMonthNum != null">
+	      	 AND gars_month_num = #{bParam.garsMonthNum, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.garsDiamond5Num != null">
+	      	 AND gars_diamond5_num = #{bParam.garsDiamond5Num, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.garsDiamond8Num != null">
+	      	 AND gars_diamond8_num = #{bParam.garsDiamond8Num, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.garsGold2000Num != null">
+	      	 AND gars_gold2000_num = #{bParam.garsGold2000Num, jdbcType=BIGINT}
+		 	</if>
+		 	<if test="bParam.garsGold5000Num != null">
+	      	 AND gars_gold5000_num = #{bParam.garsGold5000Num, jdbcType=BIGINT}
+		 	</if>
+		 	<if test="bParam.garsGold1wNum != null">
+	      	 AND gars_gold1w_num = #{bParam.garsGold1wNum, jdbcType=BIGINT}
+		 	</if>
+		 	<if test="bParam.garsGold5wNum != null">
+	      	 AND gars_gold5w_num = #{bParam.garsGold5wNum, jdbcType=BIGINT}
+		 	</if>
+		 	<if test="bParam.garsGold10wNum != null">
+	      	 AND gars_gold10w_num = #{bParam.garsGold10wNum, jdbcType=BIGINT}
+		 	</if>
+		 	<if test="bParam.garsGold50wNum != null">
+	      	 AND gars_gold50w_num = #{bParam.garsGold50wNum, jdbcType=BIGINT}
+		 	</if>
+		 	<if test="bParam.garsGold300wNum != null">
+	      	 AND gars_gold300w_num = #{bParam.garsGold300wNum, jdbcType=BIGINT}
+		 	</if>
+		 	<if test="bParam.garsGold1000wNum != null">
+	      	 AND gars_gold1000w_num = #{bParam.garsGold1000wNum, jdbcType=BIGINT}
+		 	</if>
+		 	<if test="bParam.garsCreateTime != null">
+	      	 AND gars_create_time = #{bParam.garsCreateTime, jdbcType=TIMESTAMP}
+		 	</if>
+	    </if>   
+    </sql>
+    
+    <!-- 通用查询 -->
+    <select id="select" parameterType="java.util.Map" resultMap="GameActivityRotorStatistics">
+        select 
+        <include refid="Base_Column_List" />
+        from game_activity_rotor_statistics 
+        <include refid="sql_of_where" /> order by gars_create_time desc
+    </select>
+    
+    <!-- 通用分页查询 -->
+    <select id="selectPageByParam" parameterType="java.util.Map" resultMap="GameActivityRotorStatistics">
+        select 
+        <include refid="Base_Column_List" />
+        from game_activity_rotor_statistics 
+        <include refid="sql_of_where" />
+        <if test="pParam != null">
+            <if test="pParam.orderByClause != null" > order by ${pParam.orderByClause} </if>
+            <if test="pParam.orderByClause == null" >
+            		order by gars_id  desc 
+            </if>
+            <if test="pParam.startIndex != null and pParam.pageSize != null" >
+              limit ${pParam.startIndex} , ${pParam.pageSize}
+            </if>
+        </if>
+          <if test="pParam == null">
+             order by create_date desc
+        </if>
+    </select>
+    
+    <!-- 通用分页查询记录总数 -->
+    <select id="countByParam" parameterType="java.util.Map" resultType="java.lang.Long">
+        select count(*) from game_activity_rotor_statistics 
+        <include refid="sql_of_where" />
+    </select>
+    
+    
+    <insert id="insert" parameterType="com.guse.platform.entity.doudou.GameActivityRotorStatistics">
+    <![CDATA[
+        INSERT INTO game_activity_rotor_statistics (
+	        gars_id  ,
+	        gars_date  ,
+	        gars_player_num  ,
+	        gars_tatol_count  ,
+	        gars_recycled_gold  ,
+	        gars_week_num  ,
+	        gars_month_num  ,
+	        gars_diamond5_num  ,
+	        gars_diamond8_num  ,
+	        gars_gold2000_num  ,
+	        gars_gold5000_num  ,
+	        gars_gold1w_num  ,
+	        gars_gold5w_num  ,
+	        gars_gold10w_num  ,
+	        gars_gold50w_num  ,
+	        gars_gold300w_num  ,
+	        gars_gold1000w_num  ,
+	        gars_create_time  
+        ) VALUES (
+        	#{garsId, jdbcType=BIGINT} ,
+        	#{garsDate, jdbcType=TIMESTAMP} ,
+        	#{garsPlayerNum, jdbcType=INTEGER} ,
+        	#{garsTatolCount, jdbcType=INTEGER} ,
+        	#{garsRecycledGold, jdbcType=BIGINT} ,
+        	#{garsWeekNum, jdbcType=INTEGER} ,
+        	#{garsMonthNum, jdbcType=INTEGER} ,
+        	#{garsDiamond5Num, jdbcType=INTEGER} ,
+        	#{garsDiamond8Num, jdbcType=INTEGER} ,
+        	#{garsGold2000Num, jdbcType=BIGINT} ,
+        	#{garsGold5000Num, jdbcType=BIGINT} ,
+        	#{garsGold1wNum, jdbcType=BIGINT} ,
+        	#{garsGold5wNum, jdbcType=BIGINT} ,
+        	#{garsGold10wNum, jdbcType=BIGINT} ,
+        	#{garsGold50wNum, jdbcType=BIGINT} ,
+        	#{garsGold300wNum, jdbcType=BIGINT} ,
+        	#{garsGold1000wNum, jdbcType=BIGINT} ,
+        	#{garsCreateTime, jdbcType=TIMESTAMP} 
+        )
+    ]]>
+    </insert>
+    
+    <delete id="deleteById">
+    <![CDATA[
+        DELETE FROM game_activity_rotor_statistics WHERE
+        gars_id = #{garsId} 
+    ]]>
+    </delete>
+    
+    <select id="selectById" resultMap="GameActivityRotorStatistics">
+	    SELECT <include refid="Base_Column_List"/>
+	    <![CDATA[
+	        FROM game_activity_rotor_statistics 
+	        WHERE 
+		        gars_id = #{garsId} 
+	    ]]>
+    </select>
+    
+    <update id="updateByIdSelective" parameterType="com.guse.platform.entity.doudou.GameActivityRotorStatistics">
+		UPDATE game_activity_rotor_statistics
+		<set>
+		 	<if test="garsDate != null">
+	      	  gars_date = #{garsDate, jdbcType=TIMESTAMP} ,
+		 	</if>
+		 	<if test="garsPlayerNum != null">
+	      	  gars_player_num = #{garsPlayerNum, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="garsTatolCount != null">
+	      	  gars_tatol_count = #{garsTatolCount, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="garsRecycledGold != null">
+	      	  gars_recycled_gold = #{garsRecycledGold, jdbcType=BIGINT} ,
+		 	</if>
+		 	<if test="garsWeekNum != null">
+	      	  gars_week_num = #{garsWeekNum, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="garsMonthNum != null">
+	      	  gars_month_num = #{garsMonthNum, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="garsDiamond5Num != null">
+	      	  gars_diamond5_num = #{garsDiamond5Num, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="garsDiamond8Num != null">
+	      	  gars_diamond8_num = #{garsDiamond8Num, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="garsGold2000Num != null">
+	      	  gars_gold2000_num = #{garsGold2000Num, jdbcType=BIGINT} ,
+		 	</if>
+		 	<if test="garsGold5000Num != null">
+	      	  gars_gold5000_num = #{garsGold5000Num, jdbcType=BIGINT} ,
+		 	</if>
+		 	<if test="garsGold1wNum != null">
+	      	  gars_gold1w_num = #{garsGold1wNum, jdbcType=BIGINT} ,
+		 	</if>
+		 	<if test="garsGold5wNum != null">
+	      	  gars_gold5w_num = #{garsGold5wNum, jdbcType=BIGINT} ,
+		 	</if>
+		 	<if test="garsGold10wNum != null">
+	      	  gars_gold10w_num = #{garsGold10wNum, jdbcType=BIGINT} ,
+		 	</if>
+		 	<if test="garsGold50wNum != null">
+	      	  gars_gold50w_num = #{garsGold50wNum, jdbcType=BIGINT} ,
+		 	</if>
+		 	<if test="garsGold300wNum != null">
+	      	  gars_gold300w_num = #{garsGold300wNum, jdbcType=BIGINT} ,
+		 	</if>
+		 	<if test="garsGold1000wNum != null">
+	      	  gars_gold1000w_num = #{garsGold1000wNum, jdbcType=BIGINT} ,
+		 	</if>
+		 	<if test="garsCreateTime != null">
+	      	  gars_create_time = #{garsCreateTime, jdbcType=TIMESTAMP} ,
+		 	</if>
+		</set>
+		WHERE
+	       	gars_id = #{garsId} 
+    </update>
+	
+</mapper>
+

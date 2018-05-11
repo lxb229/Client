@@ -1,0 +1,82 @@
+html,body{
+  background: #F2F2FC;
+  overflow-x: hidden;
+}
+ul,li{
+  padding: 0;
+  margin: 0;
+}
+li{
+  list-style: none;
+}
+
+
+.container-fluid{
+  padding-top: 20px;
+  padding-bottom: 40px;
+}
+.activityDetl{
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,.15);
+  position: relative;
+  padding-top: 30px;
+  background: #fff;
+  overflow: hidden;
+}
+.status{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 80px;
+  height: 80px;
+  /*border: 1px solid red;*/
+  background: center center no-repeat;
+  background-size: cover;
+  z-index: 10;
+}
+.runing{
+  background-image: url("./../imgs/tag_1.png");
+}
+.ending{
+  background-image: url("./../imgs/tag_2.png");
+}
+.noing{
+  background-image: url("./../imgs/tag_3.png");
+}
+
+.top-image{
+  width: 100%;
+  margin-top: -30px;
+}
+
+h3{
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 30px;
+}
+
+.summary{
+  padding: 10px 15px;
+  background: #F4F2F8;
+  border-radius: 6px;
+  margin: 15px 0;
+}
+.summary span{
+  color: #5F5F6C;
+}
+.content{
+  color: #5F5F6C;
+  padding-bottom: 20px;
+}
+
+.submit{
+  background-color: #000;
+  color: #fff;
+  font-size: 16px;
+  border: 0;
+  outline: none;
+  border-radius: 60px;
+  padding: 10px 40px;
+  margin: 20px 0 0;
+  box-shadow: 0 5px 15px rgba(0,0,0,.15);
+}

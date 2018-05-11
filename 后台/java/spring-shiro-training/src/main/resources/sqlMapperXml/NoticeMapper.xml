@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangzhixuan.mapper.NoticeMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="Notice" type="com.wangzhixuan.model.Notice">
+		<result column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="title_img" property="titleImg" />
+		<result column="content_img" property="contentImg" />
+		<result column="create_time" property="createTime" />
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+        id, name, title_img, content_img, create_time  
+	    ]]>
+	</sql>
+	
+	<select id="selectNoticePage" resultMap="Notice">
+        SELECT <include refid="Base_Column_List"/> 
+	        FROM notice 
+	        <where>
+	        	1=1
+	            <if test=" name != null and name != '' ">
+	               and name like concat(concat('%',#{name}),'%') 
+	            </if>
+	        </where>
+	        GROUP BY id 
+    </select>
+    
+    <select id="selectAllNotice" resultMap="Notice">
+        SELECT <include refid="Base_Column_List"/> 
+	        FROM notice 
+    </select>
+
+</mapper>

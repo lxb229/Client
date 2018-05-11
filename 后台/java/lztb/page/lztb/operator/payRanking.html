@@ -1,0 +1,244 @@
+<!--实时数据-->
+<div class="ibox">
+    <div class="ibox-title">
+    <h5>付费排行分析</h5>
+    </div>
+    <div class="ibox-content fadeInUp animated">
+        <div class="layui-tab">
+            <ul class="layui-tab-title">
+                <li class="layui-this">实时订单</li>
+                <li>今日排行</li>
+                <li>历史排行</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <!--实时订单-->
+                    <!--选择日期和导出-->
+                    <div id="recharge_div">
+                    <form class="layui-form" id="recharge_form" method="post">
+                    <div class="layui-form-item">
+                        <div class="layui-input-inline">
+                            <input type="text" name="obuUserid" :value="filter.obuUserid" autocomplete="off" placeholder="玩家ID" class="layui-input" >
+                        </div>
+                        <div class="layui-input-inline">
+                            <input type="text" name="obuUserNick" :value="filter.obuUserNick" autocomplete="off" placeholder="玩家昵称" class="layui-input">
+                        </div>
+                        <div class="layui-input-inline ">
+                            <select name="obrAmountType" class="layui-input" :value="filter.obrAmountType">
+                                <option value="">购买面额</option>
+                                <option value="1">12元</option>
+                                <option value="2">30元</option>
+                                <option value="3">50元</option>
+                                <option value="4">108元</option>
+                                <option value="5">218元</option>
+                                <option value="6">518元</option>
+                            </select>
+                        </div>
+                        <div class="layui-input-inline">
+                            <!--支付方式下拉框-->
+                            <select name="obrPayType" class="layui-input" :value="filter.obrPayType">
+                                <option value="">支付方式</option>
+                                <option value="1">微信</option>
+                                <option value="2">官网微信</option>
+                                <option value="3">支付宝</option>
+                                <option value="4">官网支付宝</option>
+                                <option value="5">IOS</option>
+                            </select>
+                        </div>
+                        <div class="layui-input-inline ">
+                            <select name="obdDloadChannel" class="layui-input" :value="filter.obdDloadChannel">
+                                <option value="">注册渠道</option>
+                                <option value="1">android官网</option>
+                                <option value="2">ios官网</option>
+                                <option value="3">应用宝</option>
+                                <option value="4">二维码推广（bd.lztb.cn）</option>
+                                <option value="5">二维码推广（ewm.lztb.cn）</option>
+                                <option value="6">贴吧</option>
+                                <option value="7">优酷</option>
+                                <option value="8">陌陌</option>
+                                <option value="9">百度游戏中心</option>
+                                <option value="10">IOS个人（龙头版）</option>
+                                <option value="11">老系统导入</option>
+                                <option value="12">360手机助手</option>
+                                <option value="13">IOS个人版（att）</option>
+                                <option value="14">IOS个人版（水浒传）</option>
+                                <option value="15">IOS个人版（街机电玩城）</option>
+                                <option value="16">IOS捕鱼</option>
+                                <option value="17">IOS个人版（糖果派对）</option>
+                                <option value="18">IOS个人版（疯狂动物城）</option>
+                                <option value="19">IOS个人版（娱乐电玩城）</option>
+                                <option value="20">IOS个人版（欢乐电玩城）</option>
+                                <option value="21">android-深海捕鱼</option>
+                                <option value="22">木蚂蚁</option>
+                                <option value="23">虫虫</option>
+                                <option value="24">华为</option>
+                                <option value="25">阿里游戏</option>
+                                <option value="26">anysdk</option>
+                            </select>
+                        </div>
+                        <div class="layui-input-inline">
+                            <input class="layui-input" placeholder="开始日期"  name="startDate" :value="filter.startDate" id="startDate_a" />
+                        </div>
+                        <div class="layui-input-inline">
+                            <input class="layui-input" placeholder="结束日期" name="endDate" :value="filter.endDate" id="endDate_a" />
+                        </div>
+                        <button class="layui-btn" lay-submit lay-filter="recharge_form">查询</button>
+                        <button class="layui-btn" v-on:click="exportExcel">导出</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                    <!--表格-->
+                    <table class="layui-table">
+                        <thead>
+                            <tr>
+                                <th>订单编号</th>
+                                <th>渠道</th>
+                                <th>支付方式</th>
+                                <th>玩家ID</th>
+                                <th>玩家昵称</th>
+                                <th>面额类型</th>
+                                <th>购买面额</th>
+                                <th>充值前钻石</th>
+                                <th>充值后钻石</th>
+                                <th>获得钻石</th>
+                                <th>购买时间</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                           <tr v-for="(item, index) in grid.data">
+                                <td>{{item.obrOrderCode}}</td>
+                                <td>{{item.obdDloadChannel}}</td>
+                                <td>{{item.obrPayType}}</td>
+                                <td>{{item.obuUserid}}</td>
+                                <td>{{item.obuUserNick}}</td>
+                                <td>{{item.obrAmountType}}</td>
+                                <td>{{item.obrAmountType}}</td>
+                                <td>{{item.obrAmountType}}</td>
+                                <td>{{item.obrAfterDiamond}}</td>
+                                <td>{{item.obrBuyDiamond}}</td>
+                                <td>{{item.obrPayTime}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div id="pager" class="laypager" style="float: right;"></div>
+                    </form>
+                    </div>
+                </div>
+                <div class="layui-tab-item">
+                    <!--今日排行-->
+                    <div id="ranking_div">
+                    <form  id="ranking_form">
+                         <button class="layui-btn" v-on:click="exportExcel">导出</button>
+                    </form>
+                    <table class="layui-table">
+                        <thead>
+                            <tr>
+                                <th>排名</th>
+                                <th>游戏ID</th>
+                                <th>登陆账号</th>
+                                <th>游戏昵称</th>
+                                <th>今日充值总金额</th>
+                                <th>充值总金额</th>
+                                <th>近7天充值金额</th>
+                                <th>创建时间</th>
+                                <th>最后登陆时间</th>
+                                <th>首次充值时间</th>
+                                <th>未充值天数</th>
+                                <th>未登陆天数</th>
+                                <th>VIP等级</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(item, index) in grid.data">
+                                <td>{{item.omrRanking}}</td>
+                                <td>{{item.obuUserid}}</td>
+                                <td>{{item.obuUsename}}</td>
+                                <td>{{item.obuUserNick}}</td>
+                                <td>{{item.omrTodayRechargeAmount}}</td>
+                                <td>{{item.omrHistoryRechargeAmount}}</td>
+                                <td>{{item.omrDay7RechargeAmount}}</td>
+                                <td>{{item.obuRegisterTime}}</td>
+                                <td>{{item.obuLastLoginTime}}</td>
+                                <td>{{item.obuFirstRechargeTime}}</td>
+                                <td>{{item.omrNotRechargeDays}}</td>
+                                <td>{{item.omrNotRechargeDays}}</td>
+                                <td>{{item.omrVipLevel}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+                <div class="layui-tab-item">
+                    <div id="history_div">
+                    <form class="layui-form" id="history_form" method="post">
+                        <div class="layui-form-item">
+                            <div class="layui-input-inline">
+                                <input class="layui-input allDate" placeholder="最后登录时间始" name="longinTimeStart" :value="filter.longinTimeStart" id="longinTimeStart_c" />
+                            </div>
+                             <div class="layui-input-inline">
+                                <input class="layui-input allDate" placeholder="最后登录时间止" name="longinTimeEnd" :value="filter.longinTimeEnd" id="longinTimeEnd_c" />
+                            </div>
+                            <div class="layui-input-inline">
+                                <input type="number" name="amountStart" :value="filter.amountStart"  min="1" autocomplete="off" placeholder="充值金额(起始值)" class="layui-input" />
+                            </div>
+                            <div class="layui-input-inline">
+                                <input type="number" name="amountEnd" :value="filter.amountEnd"  min="1" autocomplete="off" placeholder="充值金额(结束值)" class="layui-input" />
+                            </div>
+                            <div class="layui-input-inline">
+                                <input class="layui-input" placeholder="注册日期始" name="startDate" :value="filter.startDate" id="startDate_c" />
+                            </div>
+                            <div class="layui-input-inline">
+                                <input class="layui-input" placeholder="注册日期止" name="endDate" :value="filter.endDate" id="endDate_c" />
+                            </div>
+                            <button class="layui-btn" lay-submit lay-filter="history_form">查询</button>
+                            <button class="layui-btn" v-on:click="exportExcel">导出</button>
+                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                        </div>
+                        <table class="layui-table">
+                            <thead>
+                                <tr>
+                                    <th>排名</th>
+                                    <th>游戏ID</th>
+                                    <th>登陆账号</th>
+                                    <th>游戏昵称</th>
+                                    <th>今日充值总金额</th>
+                                    <th>充值总金额</th>
+                                    <th>近7天充值金额</th>
+                                    <th>创建时间</th>
+                                    <th>最后登陆时间</th>
+                                    <th>首次充值时间</th>
+                                    <th>未充值天数</th>
+                                    <th>未登陆天数</th>
+                                    <th>VIP等级</th>
+                                    <th>手机号</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(item, index) in grid.data">
+                                    <td>{{(index+1)+((grid.curr_page-1) * grid.page_size)}}</td>
+                                    <td>{{item.obuUserid}}</td>
+                                    <td>{{item.obuUsename}}</td>
+                                    <td>{{item.obuUserNick}}</td>
+                                    <td>{{item.todayRechargeAmount}}</td>
+                                    <td>{{item.obuRechargeAmount}}</td>
+                                    <td>{{item.sevenRechargeAmount}}</td>
+                                    <td>{{item.obuRegisterTime}}</td>
+                                    <td>{{item.obuLastLoginTime}}</td>
+                                    <td>{{item.obuFirstRechargeTime}}</td>
+                                    <td>{{item.notRechargeDay}}</td>
+                                    <td>{{item.notLonginDay}}</td>
+                                    <td>{{item.obuLevel}}</td>
+                                    <td>{{item.obuUsename}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div id="pagerc" class="laypager" style="float: right;"></div>
+                    </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../static/lztb/operator/payPanking_a.js"></script>
+<script src="../static/lztb/operator/payPanking_b.js"></script>
+<script src="../static/lztb/operator/payPanking_c.js"></script>	

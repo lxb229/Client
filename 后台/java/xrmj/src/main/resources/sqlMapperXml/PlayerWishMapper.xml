@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangzhixuan.mapper.PlayerWishMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="PlayerWish" type="com.wangzhixuan.model.PlayerWish">
+		<result column="id" property="id" />
+		<result column="start_no" property="startNo" />
+		<result column="wish" property="wish" />
+		<result column="wish_lv" property="wishLv" />
+		<result column="create_party_number" property="createPartyNumber" />
+		<result column="buy_number" property="buyNumber" />
+		<result column="join_number" property="joinNumber" />
+	</resultMap>
+	
+	<select id="selectPlayerWishVoPage"  resultType="PlayerWishVo">
+       SELECT 
+			p.start_no AS	startNo,
+			p.nick,
+			pw.wish,
+			pm.room_card AS roomCard,
+			(pm.app_pay+pm.offline_pay+pm.web_pay+pm.wechat_pay) AS payAmount,
+			pm.app_pay AS appPay,
+			pm.offline_pay AS offlinePay,
+			pm.web_pay AS webPay,
+			pm.wechat_pay AS wechatPay,
+			pm.use_room_card AS useRoomCard,
+			pm.gold_coin AS goldCoin,
+			pm.silver_coin AS silverCoin,
+			pm.all_gold AS allGold,
+			pm.all_silver AS allSilver
+		FROM player p
+		LEFT JOIN player_wish pw ON p.start_no = pw.start_no
+		LEFT JOIN player_money pm ON p.start_no = pm.start_no
+	        <where>
+	        	1=1
+	            <if test=" startNo != null and startNo != '' ">
+	               and p.start_no like concat(concat('%',#{startNo}),'%') 
+	            </if>
+	        </where>
+		GROUP BY p.id
+    </select>
+	
+	<update id="clearWish">
+ 		UPDATE player_wish set wish=0, wish_lv=1, create_party_number=0, buy_number=0 
+  	</update>
+
+</mapper>

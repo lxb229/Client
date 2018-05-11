@@ -1,0 +1,89 @@
+
+<!--邮件排行-->
+<div class="ibox">
+    <!--主页内容-->
+    <div class="ibox-content fadeInUp animated">
+		<div id="app">
+			<div class="layui-form">
+				<div class="layui-tab-item layui-show">
+					<div class="layui-form-item">
+						<div class="layui-input-inline">
+							<select style="display:block;" name="select" v-model="selected" class="layui-input">
+								<option value="1" selected>今日排名</option>
+								<option value="2" >最近七日</option>
+								<option value="3" >最近15日</option>
+								<option value="4" >最近30日</option>
+								<option value="5" >历史排名</option>
+							</select>
+						</div>
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="开始日" name="startDate" :value="filter.startDate" id="startAt" >
+						</div>
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="截止日" name="endDate" :value="filter.endDate" id="endAt">
+						</div>
+						<button class="layui-btn layui-btn-primary layui-btn-radius" lay-submit>查询</button>
+					</div>
+					<div class="receptionSend">
+						<span>接收金币排行</span>
+						<span>发送金币排行</span>
+					</div>
+					<table class="layui-table twoTable">
+						<thead>
+						<tr>
+							<th>排名</th>
+							<th>接收ID</th>
+							<th>接收昵称</th>
+							<th>总接收玫瑰</th>
+							<th>总接收钻戒</th>
+							<th>总接收跑车</th>
+							<th>总接收游艇</th>
+							<th>总接收游戏币</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr v-for="(item, index) in grid.dataRece">
+							<td>{{index+1}}</td>
+							<td>{{item.obuUserid}}</td>
+							<td>{{item.obuUserNick}}</td>
+							<td>{{item.gmsRoseNum}}</td>
+							<td>{{item.gmsDiamondRingNum}}</td>
+							<td>{{item.gmsSportsCarNum}}</td>
+							<td>{{item.gmsYachtNum}}</td>
+							<td>{{item.gmsGoldNum}}</td>
+						</tr>
+						</tbody>
+					</table>
+					<table class="layui-table twoTable">
+						<thead>
+						<tr>
+							<th>排名</th>
+							<th>发送ID</th>
+							<th>发送昵称</th>
+							<th>总发送玫瑰</th>
+							<th>总发送钻戒</th>
+							<th>总发送跑车</th>
+							<th>总发送游艇</th>
+							<th>总发送游戏币</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr v-for="(item, index) in grid.dataSend">
+							<td>{{index+1}}</td>
+							<td>{{item.obuUserid}}</td>
+							<td>{{item.obuUserNick}}</td>
+							<td>{{item.gmsRoseNum}}</td>
+							<td>{{item.gmsDiamondRingNum}}</td>
+							<td>{{item.gmsSportsCarNum}}</td>
+							<td>{{item.gmsYachtNum}}</td>
+							<td>{{item.gmsGoldNum}}</td>
+						</tr>
+						</tbody>
+					</table>
+					<div id="pager" class="laypager" style="float: right;"></div>
+				</div>
+			</div>
+		</div>
+    </div>
+	<script src="../static/lztb/game/emailList.js"></script>
+</div>

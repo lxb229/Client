@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangzhixuan.mapper.CommodityImageMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="CommodityImage" type="com.wangzhixuan.model.CommodityImage">
+		<result column="id" property="id" />
+		<result column="commodity" property="commodity" />
+		<result column="image_type" property="imageType" />
+		<result column="image_url" property="imageUrl" />
+		<result column="user_id" property="userId" />
+		<result column="create_time" property="createTime" />
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+        id, commodity, image_type, image_url, user_id, create_time 
+	    ]]>
+	</sql>
+	
+	<select id="getIconList"  resultMap="CommodityImage">
+		SELECT <include refid="Base_Column_List"/> 
+		FROM commodity_image 
+			<where>
+				image_type = 1 
+				<if  test=" commodity != null ">
+					and commodity = #{commodity}
+				</if>
+			</where>
+    </select>
+    
+    <select id="getDetailsList"  resultMap="CommodityImage">
+		SELECT <include refid="Base_Column_List"/> 
+		FROM commodity_image 
+			<where>
+				image_type = 2 
+				<if  test=" commodity != null ">
+					and commodity = #{commodity}
+				</if>
+			</where>
+    </select>
+
+	<select id="selectCommodityImageVoPage"  resultType="CommodityImageVo">
+		SELECT
+			ci.id AS id,
+			ci.commodity AS commodity,
+			c.commodity_name AS commodityName,
+			ci.image_type AS imageType,
+			ci.image_url AS imageUrl,
+			ci.user_id AS userId,
+			ci.create_time AS createTime
+		FROM commodity_image ci
+		LEFT JOIN commodity c ON ci.commodity = c.id
+			<where>
+	        	1=1
+	            <if test=" commodityName != null and commodityName != '' ">
+	               and c.commodity_name like concat(concat('%',#{commodityName}),'%') 
+	            </if>
+	        </where>
+		GROUP BY ci.id
+    </select>
+    
+</mapper>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>新建新闻</title>
+    <link href="/lztb/static/plugs/layui/css/layui.css" rel="stylesheet">
+    <!--<script src="../../../static/admin/app.js"></script>-->
+</head>
+<body>
+<div id="mail" style="padding: 15px;">
+<form id="webForm">
+    <div class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">文章标题</label>
+            <div class="layui-input-block">
+                <input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">文章类型</label>
+            <div class="layui-input-inline">
+                <select name="modules" lay-verify="required" lay-search="">
+                    <option value="">请选择</option>
+                    <option value="1">新闻</option>
+                    <option value="2">活动</option>
+                    <option value="3">公告</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">选择图片</label>
+            <div class="layui-input-inline">
+                <input type="file" name="file" value="选择文件"/>
+            </div>
+            <div class="layui-input-inline">
+                <button class="layui-btn layui-btn-primary">上传图片</button>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">当前图片</label>
+            <div class="layui-input-block">
+                <input type="text" placeholder="http：//116.62.40.249:8080/img/"  class="layui-input"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">图片预览</label>
+            <div><img src="hdjsahjk.jpg" alt=""/></div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">正文缩略</label>
+            <div class="layui-input-block">
+                <input type="text" class="layui-input"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div id="container" class="ueditor"></div>
+        </div>
+        <div class="layui-form-item" style="text-align: center">
+            <button lay-submit="" lay-filter="marqueeSub" type='submit' class="layui-btn layui-btn-danger" >提交</button>
+            <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消吗？" data-close>取消</button>
+        </div>
+    </div>
+</form>    
+</div>
+
+<script type="text/javascript" src="/lztb/static/plugs/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="/lztb/static/plugs/layui/layui.js"></script>
+<script type="text/javascript" src="/lztb/static/plugs/vue/vue.js"></script>
+<script type="text/javascript" src="/lztb/static/model/site.js"></script>
+<script type="text/javascript" src="/lztb/static/plugs/ueditor/ueditor.all.js"></script>
+<script type="text/javascript" src="/lztb/static/plugs/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="/lztb/static/plugs/ueditor/ueditor.all.js"></script>
+
+ <!-- 加载编辑器的容器 -->
+  
+    <script type="text/javascript">
+        var ue = UE.getEditor('container');
+       
+       /* UE.Editor.prototype.getActionUrl = function(action){  
+            return "/ueditor/upload";
+        }  */
+    </script>
+
+<script type="text/javascript">
+    window.baseUrl = window.parent.window.baseUrl;
+    layui.config({ dir: baseUrl + '../plugs/layui/' });
+
+
+    layui.use(['layer','form','laydate','layedit','upload'], function () {
+   
+        var  layform  = layui.form();
+
+
+
+        layui.upload({
+            url: '' //上传接口
+            ,success: function(res){ //上传成功后的回调
+                console.log(res)
+            }
+        });
+
+    
+      
+    });
+        
+
+
+</script>
+</body>
+</html>

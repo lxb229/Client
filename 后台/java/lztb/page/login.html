@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>四川省澳博互动游戏运营平台</title>
+    <link href="../static/plugs/layui/css/layui.css" rel="stylesheet">
+    <link href="../static/theme/default/css/login.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="bj">
+        <header>
+            <div><img src="./../static/theme/default/img/login/lztb.png" alt="" /></div>
+            <div class="tip">龙珠探宝</div>
+        </header>
+        <div class="form">
+            <h1>四川省澳博互动游戏运营平台</h1>
+            <div id="loginForm" class="layui-form ">
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <input v-model="loginName" @keyup.13="login($event)" id="loginName" type="text" required placeholder="请输入账号" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <input v-model="loginPass" @keyup.13="login($event)" type="password" placeholder="请输入密码" required autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-input btnCo" @click="login()">登录</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+<script src="../static/plugs/vue/vue.js"></script>
+<script src="../static/plugs/layui/layui.js"></script>
+<script src="../static/plugs/jquery/jquery.min.js"></script>
+<script type="text/javascript">
+    layui.use(['layer'], function () {
+        var app = new Vue({
+            el: '#loginForm',
+            data: {
+                loginName:'admin',
+                loginPass:'123123'
+            },
+            methods: {
+                login: function () {
+                    if(!app.loginName || !app.loginPass) {
+                        AlertMsg("请输入用户名和密码！");
+                        return;
+                    }
+
+                    $.ajax({
+                        url: '/system/user/login',
+                        type: 'POST',
+                        data: { 'loginName': app.loginName,'loginPass': app.loginPass},
+                        dataType: 'json',
+                        timeout: 10000,
+                        success: function (rs) {
+                            if (rs.code == '00000') {
+                                var user = JSON.stringify(rs.data);
+                                localStorage.setItem("loginUserInfo_data",user);
+                                window.location.href='../page/adm.html';
+                            } else {
+                                AlertMsg("登录失败："+rs.msg);
+                            }
+                        },
+                        error: function (xhr, status, ex) {
+                            console.error(xhr);
+                            console.error(status);
+                            console.error(ex);
+                            AlertMsg("登录失败：" + xhr.statusText);
+                        }
+                    });
+                }
+            }
+        });
+        $("#loginName").focus();
+    });
+</script>
+<script src="../static/model/site.js"></script>
+</html>

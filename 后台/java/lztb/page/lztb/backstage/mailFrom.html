@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>发送邮件</title>
+    <link href="/lztb/static/plugs/layui/css/layui.css" rel="stylesheet">
+</head>
+
+<body>
+    <div id="mailSend" style="padding: 15px;">
+        <div class="layui-form">
+            <div class="layui-form-item">
+                <input class="layui-input" placeholder="游戏id（123,4654多个用户使用逗号分割）" v-model="dform.to_rid_list" />
+            </div>
+            <div class="layui-form-item">
+                <input class="layui-input" placeholder="邮件标题" v-model="dform.title" />
+            </div>
+            <div class="layui-form-item">
+                <textarea placeholder="邮件内容" class="layui-textarea" v-model="dform.content"></textarea>
+            </div>
+            <div class="layui-form-item">
+                <textarea placeholder="发送原因" class="layui-textarea" v-model="dform.reson"></textarea>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">发送时间</label>
+                    <div class="layui-input-block">
+                        <input class="layui-input" placeholder="时间为空为新手邮件" v-model="send_time" id="send_time" />
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">失效时间</label>
+                    <div class="layui-input-block">
+                        <input class="layui-input" v-model="expire_time" id="expire_time" />
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">是否有道具</label>
+                <div class="layui-input-block">
+                    <input type="checkbox" lay-skin="primary" lay-filter="have" />
+                </div>
+            </div>
+            <template v-for="(item,index) in dform.propList">
+                <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">道具：</label>
+                            <div class="layui-inline">
+                                <select style="height:38px;" name="propS" lay-ignore v-model="item.name">
+                                    <option value="-">请选择道具</option>
+                                    <option value="1,0," selected>金币</option>
+                                    <option value="2,0,">钻石</option>
+                                    <option value="4,0,">VIP</option>
+                                    <option value="3,200,">喇叭</option>
+                                    <option value="3,201,">幸运石</option>
+                                    <option value="3,202,">双倍石</option>
+                                    <option value="3,203,">玫瑰花</option>
+                                    <option value="3,204,">钻戒</option>
+                                    <option value="3,205,">跑车</option>
+                                    <option value="3,206,">游艇</option>
+                                    <option value="3,207,">新手礼包</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">数量：</label>
+                            <div class="layui-input-inline">
+                                <input type="number" min="1" max="9999999999" class="layui-input" v-model="item.num" placeholder="道具数量" />
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layui-btn-danger layui-btn-small" @click="addProp()"><i class="layui-icon">&#xe654;</i></button>
+                        </div>
+                    </div>
+            </template>
+            <div class="layui-form-item" style="text-align: center">
+                <button class="layui-btn" @click="sendMail()"> 提 交 </button>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="/lztb/static/plugs/layui/layui.js"></script>
+    <script type="text/javascript" src="/lztb/static/plugs/vue/vue.js"></script>
+    <script type="text/javascript" src="/lztb/static/model/site.js"></script>
+    <script type="text/javascript">
+        window.baseUrl = window.parent.window.baseUrl;
+        layui.config({ dir: baseUrl + '../plugs/layui/' });
+        layui.use(['layer', 'form', 'laydate','jquery'], function () {
+            var layform = layui.form();
+            var laydate = layui.laydate;
+            var $ = layui.jquery;
+            var app = new Vue({
+                el: "#mailSend",
+                data: {
+                    dform: {
+                        to_rid_list: null,
+                        title: null,
+                        content: null,
+                        reson: null,
+                        send_time: null,
+                        expire_time: null,
+                        propList: [],
+                        send_item_list:null
+                    }
+                },
+                watch: {
+                },
+                methods: {
+                    addProp: function () {
+                        app.dform.propList.push({
+                            name:'-',
+                            num:1
+                        });
+                    },
+                    sendMail:function(){
+                        for(var i=0;i<app.dform.propList.length;i++) {
+                            var prop = app.dform.propList[i];
+                            if(prop.name == '-') {
+                                continue;
+                            }
+                            if(!app.dform.send_item_list){
+                                app.dform.send_item_list = prop.name + prop.num;
+                            } else {
+                                app.dform.send_item_list += ";"+prop.name + prop.num;
+                            }
+                        }
+                        $.ajax({
+                        url: '/config/hall/emailSend',
+                        type: 'POST',
+                        data: app.dform,
+                        dataType: 'json',
+                        timeout: 10000,
+                        success: function (rs) {
+                            debugger;
+                            if (rs.code == '00000') {
+                                var rsdata = JSON.parse(rs.data);
+                                if(rsdata.code == 200) {
+                                    top.gCloseModalWindow();
+                                    top.SuccessBox(rsdata.msg, "提示", 2000);
+                                } else {
+                                    top.AlertMsg(rsdata.msg);
+                                }
+                            } else {
+                                top.AlertMsg(rs.msg);
+                                console.error(rs);
+                            }
+                        },
+                        error: function (xhr, status, ex) {
+                            top.AlertMsg("请求失败：" + xhr.statusText);
+                            console.error(ex);
+                        }
+                    });
+                    }
+                },
+                created: function () {
+                },
+                mounted: function () {
+                },
+                updated:function () {
+                    layform.render();
+                    layform.render('select');
+                }
+            });
+
+            layform.render();
+            layform.on('checkbox(have)', function (data) {
+                if(app.dform.propList.length == 0) {
+                    app.dform.propList.push({
+                        name:'-',
+                        num:1
+                    });
+                } else {
+                    app.dform.propList=[];
+                }
+            });
+            var laydate = layui.laydate;
+            var start = {
+                min: laydate.now()
+                , max: '2099-06-16 23:59:59'
+                , istoday: false
+                , type: 'datetime'
+                , format: 'YYYY-MM-DD hh:mm:ss'
+                , choose: function (datas) {
+                    end.min = datas; //开始日选好后，重置结束日的最小日期
+                    end.start = datas; //将结束日的初始值设定为开始日
+                    app.dform.send_time = datas;
+                }
+            };
+            var end = {
+                min: laydate.now()
+                , max: '2099-06-16 23:59:59'
+                , istoday: false
+                , type: 'datetime'
+                , format: 'YYYY-MM-DD hh:mm:ss'
+                , choose: function (datas) {
+                    start.max = datas; //结束日选好后，重置开始日的最大日期
+                    app.dform.expire_time = datas;
+                }
+            };
+            document.getElementById('send_time').onclick = function () {
+                start.elem = this;
+                laydate(start);
+            };
+            document.getElementById('expire_time').onclick = function () {
+                end.elem = this;
+                laydate(end);
+            };
+        });
+    </script>
+</body>
+
+</html>

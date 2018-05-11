@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangzhixuan.mapper.CommodityListMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="CommodityList" type="com.wangzhixuan.model.CommodityList">
+		<result column="id" property="id" />
+		<result column="warehouse_in" property="warehouseIn" />
+		<result column="warehouse_out" property="warehouseOut" />
+		<result column="commodity" property="commodity" />
+		<result column="supplier" property="supplier" />
+		<result column="card_no" property="cardNo" />
+		<result column="secret_key" property="secretKey" />
+		<result column="status" property="status" />
+		<result column="redeem_code" property="redeemCode" />
+		<result column="use_status" property="useStatus" />
+		<result column="create_time" property="createTime" />
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+        id, warehouse_in, warehouse_out, commodity, supplier, card_no, secret_key, 
+        status, redeem_code, use_status, create_time 
+	    ]]>
+	</sql>
+	
+	<select id="getListByWarehouseIn" resultMap="CommodityList">
+        SELECT <include refid="Base_Column_List"/> 
+	        FROM commodity_list 
+	        <where>
+	        	status = 0 and use_status = 0 
+	            <if test=" warehouseIn != null ">
+	               and warehouse_in = #{warehouseIn} 
+	            </if>
+	        </where>
+	        ORDER BY id 
+    </select>
+    
+    <select id="getListByCommodity" resultMap="CommodityList">
+        SELECT <include refid="Base_Column_List"/> 
+	        FROM commodity_list 
+	        <where>
+	        	status = 0 and use_status = 0 
+	            <if test=" commodity != null ">
+	               and commodity = #{commodity} 
+	            </if>
+	        </where>
+	        ORDER BY id 
+    </select>
+    
+    <select id="getListByWarehouseOut" resultMap="CommodityList">
+        SELECT <include refid="Base_Column_List"/> 
+	        FROM commodity_list 
+	        <where>
+	        	status = 0 and use_status = 2 
+	            <if test=" warehouseOut != null ">
+	               and warehouse_out = #{warehouseOut} 
+	            </if>
+	        </where>
+	        ORDER BY id 
+    </select>
+
+
+</mapper>

@@ -1,0 +1,2231 @@
+<!--实时数据-->
+<div class="ibox">
+    <!--主页内容 -->
+    <div class="ibox-content fadeInUp animated">
+        <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">新增玩家分析</li>
+                <li>活跃玩家分析</li>
+                <li>流失与回流分析</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <!--四级菜单-->
+                    <div class="layui-tab" lay-filter="test">
+                        <ul class="layui-tab-title">
+                            <li class="layui-this" lay-id="11">新增玩家分析</li>
+                            <li lay-id="22">首次在线时长分析</li>
+                            <li lay-id="33">小号分析</li>
+                            <li lay-id="44">新增玩家渠道分布</li>
+                        </ul>
+                        <div class="layui-tab-content">
+                            <div class="layui-tab-item layui-show">
+                                <!--新增玩家分析统计图-->
+                                <div id="playerAnalyze" class="container"></div>
+                                <!--选择日期和导出-->
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">范围选择</label>
+                                    <div class="layui-input-inline">
+                                        <input class="layui-input" placeholder="开始日期" id="LAY_demorange_s2">
+                                    </div>
+                                    <div class="layui-input-inline">
+                                        <input class="layui-input" placeholder="截止日期" id="LAY_demorange_e2">
+                                    </div>
+                                    <button class="layui-btn layui-btn-primary layui-btn-radius">导出</button>
+                                </div>
+                                <!--表格-->
+                                <table class="layui-table" lay-even="" lay-skin="row">
+                                    <thead>
+                                    <tr>
+                                        <th>日期</th>
+                                        <th>新增设备</th>
+                                        <th>新增注册</th>
+                                        <th>新增玩家</th>
+                                        <th>账号注册率</th>
+                                        <th>角色创建率</th>
+                                        <th>新增活跃比</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>06-06</td>
+                                        <td>100</td>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                    </tr>
+                                    <tr>
+                                        <td>06-07</td>
+                                        <td>45</td>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="layui-tab-item">
+                                <!--首次在线时长分析统计图-->
+                                <div id="durationAnalysis" class="container"></div>
+                                <!--选择日期和导出-->
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">范围选择</label>
+                                    <div class="layui-input-inline">
+                                        <input class="layui-input" placeholder="开始日期" id="LAY_demorange_s3">
+                                    </div>
+                                    <div class="layui-input-inline">
+                                        <input class="layui-input" placeholder="截止日期" id="LAY_demorange_e3">
+                                    </div>
+                                    <button class="layui-btn layui-btn-primary layui-btn-radius">导出</button>
+                                </div>
+                                <!--表格-->
+                                <table class="layui-table" lay-even="" lay-skin="row">
+                                    <thead>
+                                    <tr>
+                                        <th>日期</th>
+                                        <th>1mins以下</th>
+                                        <th>1~5mins</th>
+                                        <th>6~10mins</th>
+                                        <th>10~30mins</th>
+                                        <th>30~60mins</th>
+                                        <th>1~2hours</th>
+                                        <th>2~4hours</th>
+                                        <th>4hours以上</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>06-06</td>
+                                        <td>100</td>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                    </tr>
+                                    <tr>
+                                        <td>06-07</td>
+                                        <td>45</td>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="layui-tab-item">
+                                <div class="layui-tab layui-tab-card">
+                                    <ul class="layui-tab-title">
+                                        <li class="layui-this">按照设备区分</li>
+                                        <li>按照IP区分</li>
+                                    </ul>
+                                    <div class="layui-tab-content" style="height: 100px;">
+                                        <div class="layui-tab-item layui-show">
+                                            <!--按照设备区分统计图-->
+                                            <div id="equipment" class="container"></div>
+                                            <!--选择日期和导出-->
+                                            <div class="layui-form-item">
+                                                <label class="layui-form-label">范围选择</label>
+                                                <div class="layui-input-inline">
+                                                    <input class="layui-input" placeholder="开始日期" id="LAY_demorange_s4">
+                                                </div>
+                                                <div class="layui-input-inline">
+                                                    <input class="layui-input" placeholder="截止日期" id="LAY_demorange_e4">
+                                                </div>
+                                                <button class="layui-btn layui-btn-primary layui-btn-radius">导出</button>
+                                            </div>
+                                            <!--表格-->
+                                            <table class="layui-table" lay-even="" lay-skin="row">
+                                                <thead>
+                                                <tr>
+                                                    <th>日期</th>
+                                                    <th>0个</th>
+                                                    <th>1个</th>
+                                                    <th>2个</th>
+                                                    <th>3个</th>
+                                                    <th>4个</th>
+                                                    <th>5个</th>
+                                                    <th>5~10个</th>
+                                                    <th>10以上</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td>06-06</td>
+                                                    <td>100</td>
+                                                    <th>654</th>
+                                                    <th>654</th>
+                                                    <th>654</th>
+                                                    <th>654</th>
+                                                    <th>654</th>
+                                                    <th>654</th>
+                                                    <th>654</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>06-07</td>
+                                                    <td>45</td>
+                                                    <th>654</th>
+                                                    <th>654</th>
+                                                    <th>654</th>
+                                                    <th>654</th>
+                                                    <th>654</th>
+                                                    <th>654</th>
+                                                    <th>654</th>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="layui-tab-item">
+                                            <!--按照IP区分统计图-->
+                                            <div id="IP" class="container"></div>
+                                            <!--选择日期和导出-->
+                                            <div class="layui-form-item">
+                                                <label class="layui-form-label">范围选择</label>
+                                                <div class="layui-input-inline">
+                                                    <input class="layui-input" placeholder="开始日期" id="LAY_demorange_s5">
+                                                </div>
+                                                <div class="layui-input-inline">
+                                                    <input class="layui-input" placeholder="截止日期" id="LAY_demorange_e5">
+                                                </div>
+                                                <button class="layui-btn layui-btn-primary layui-btn-radius">导出</button>
+                                            </div>
+                                            <!--表格-->
+                                            <table class="layui-table" lay-even="" lay-skin="row">
+                                                <thead>
+                                                <tr>
+                                                    <th>日期</th>
+                                                    <th>0个</th>
+                                                    <th>1个</th>
+                                                    <th>2个</th>
+                                                    <th>3个</th>
+                                                    <th>4个</th>
+                                                    <th>5个</th>
+                                                    <th>5~10个</th>
+                                                    <th>10以上</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td>06-06</td>
+                                                    <td>100</td>
+                                                    <th>654</th>
+                                                    <th>654</th>
+                                                    <th>654</th>
+                                                    <th>654</th>
+                                                    <th>654</th>
+                                                    <th>654</th>
+                                                    <th>654</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>06-07</td>
+                                                    <td>45</td>
+                                                    <th>654</th>
+                                                    <th>654</th>
+                                                    <th>654</th>
+                                                    <th>654</th>
+                                                    <th>654</th>
+                                                    <th>654</th>
+                                                    <th>654</th>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                            </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-tab-item">
+                                <!--新增玩家渠道分布统计图-->
+                                <div id="channel" class="container"></div>
+                                <!--选择日期和导出-->
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">范围选择</label>
+                                    <div class="layui-input-inline">
+                                        <input class="layui-input" placeholder="开始日期" id="LAY_demorange_s8">
+                                    </div>
+                                    <div class="layui-input-inline">
+                                        <input class="layui-input" placeholder="截止日期" id="LAY_demorange_e8">
+                                    </div>
+                                    <button class="layui-btn layui-btn-primary layui-btn-radius">导出</button>
+                                </div>
+                                <!--表格-->
+                                <table class="layui-table" lay-even="" lay-skin="row">
+                                    <thead>
+                                    <tr>
+                                        <th>日期</th>
+                                        <th>6-2</th>
+                                        <th>6-3</th>
+                                        <th>6-4</th>
+                                        <th>6-5</th>
+                                        <th>6-6</th>
+                                        <th>6-7</th>
+                                        <th>6-8</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>ios官网</td>
+                                        <td>100</td>
+                                        <td>654</td>
+                                        <td>654</td>
+                                        <td>654</td>
+                                        <td>654</td>
+                                        <td>654</td>
+                                        <td>654</td>
+                                    </tr>
+                                    <tr>
+                                        <td>IOS个人(龙头版)</td>
+                                        <td>45</td>
+                                        <td>654</td>
+                                        <td>654</td>
+                                        <td>654</td>
+                                        <td>654</td>
+                                        <td>654</td>
+                                        <td>654</td>
+                                    </tr>
+                                    <tr>
+                                        <td>未知</td>
+                                        <td>45</td>
+                                        <td>654</td>
+                                        <td>654</td>
+                                        <td>654</td>
+                                        <td>654</td>
+                                        <td>654</td>
+                                        <td>654</td>
+                                    </tr>
+                                    <!--'ios官网','IOS个人(龙头版)','IOS个人版(att)','IOS个人版(疯狂电玩城)','IOS个人版(街机电玩城)','IOS个人版(连环夺宝)','IOS个人版(水浒传)', 'IOS个人版(糖果派对)',-->
+                                    <!--'IOS个人版(娱乐电玩城)','android官网', '阿里游戏','百度游戏中心','百度', '二维码推广(ewm.lztb.cn)','华为','老系统导入', '木蚂蚁','应用宝','未知'-->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-tab-item">
+                    <div class="layui-tab" lay-filter="test">
+                        <ul class="layui-tab-title">
+                            <li class="layui-this" lay-id="11">活跃玩家趋势</li>
+                            <li lay-id="22">活跃玩家</li>
+                            <li lay-id="33">活跃玩家渠道分布</li>
+                            <li lay-id="44">活跃玩家结构</li>
+                        </ul>
+                        <div class="layui-tab-content">
+                            <div class="layui-tab-item layui-show">
+                                <!--活跃玩家趋势统计图-->
+                                <div id="activePlayers" class="container"></div><!--选择日期和导出-->
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">范围选择</label>
+                                    <div class="layui-input-inline">
+                                        <input class="layui-input" placeholder="开始日期" id="LAY_demorange_s6">
+                                    </div>
+                                    <div class="layui-input-inline">
+                                        <input class="layui-input" placeholder="截止日期" id="LAY_demorange_e6">
+                                    </div>
+                                    <button class="layui-btn layui-btn-primary layui-btn-radius">导出</button>
+                                </div>
+                                <!--表格-->
+                                <table class="layui-table" lay-even="" lay-skin="row">
+                                    <thead>
+                                    <tr>
+                                        <th>日期</th>
+                                        <th>活跃玩家</th>
+                                        <th>活跃新玩家</th>
+                                        <th>活跃老玩家</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>06-06</td>
+                                        <td>100</td>
+                                        <th>654</th>
+                                        <th>654</th>
+                                    </tr>
+                                    <tr>
+                                        <td>06-07</td>
+                                        <td>45</td>
+                                        <th>654</th>
+                                        <th>654</th>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="layui-tab-item">
+                                <!--活跃玩家统计图-->
+                                <div id="players" class="halfContainer"></div>
+                                <div id="playersDauMau" class="halfContainer"></div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">范围选择</label>
+                                    <div class="layui-input-inline">
+                                        <input class="layui-input" placeholder="开始日期" id="LAY_demorange_s7">
+                                    </div>
+                                    <div class="layui-input-inline">
+                                        <input class="layui-input" placeholder="截止日期" id="LAY_demorange_e7">
+                                    </div>
+                                    <button class="layui-btn layui-btn-primary layui-btn-radius">导出</button>
+                                </div>
+                                <!--表格-->
+                                <table class="layui-table" lay-even="" lay-skin="row">
+                                    <thead>
+                                    <tr>
+                                        <th>日期</th>
+                                        <th>DAU</th>
+                                        <th>WAU</th>
+                                        <th>MAU</th>
+                                        <th>DAU/MAU</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>06-06</td>
+                                        <td>100</td>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                    </tr>
+                                    <tr>
+                                        <td>06-07</td>
+                                        <td>45</td>
+                                        <th>654</th>
+                                        <th>654</th>
+                                        <th>654</th>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="layui-tab-item">
+                                <!--活跃玩家渠道分布统计图-->
+                                <div id="active" class="container"></div>
+                                <!--选择日期和导出-->
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">范围选择</label>
+                                    <div class="layui-input-inline">
+                                        <input class="layui-input" placeholder="开始日期" id="LAY_demorange_s10">
+                                    </div>
+                                    <div class="layui-input-inline">
+                                        <input class="layui-input" placeholder="截止日期" id="LAY_demorange_e10">
+                                    </div>
+                                    <button class="layui-btn layui-btn-primary layui-btn-radius">导出</button>
+                                </div>
+                                <!--表格-->
+                                <table class="layui-table" lay-even="" lay-skin="row">
+                                    <thead>
+                                    <tr>
+                                        <th>日期</th>
+                                        <th>6-2</th>
+                                        <th>6-3</th>
+                                        <th>6-4</th>
+                                        <th>6-5</th>
+                                        <th>6-6</th>
+                                        <th>6-7</th>
+                                        <th>6-8</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>ios官网</td>
+                                        <td>100</td>
+                                        <td>654</td>
+                                        <td>654</td>
+                                        <td>654</td>
+                                        <td>654</td>
+                                        <td>654</td>
+                                        <td>654</td>
+                                    </tr>
+                                    <tr>
+                                        <td>IOS个人(龙头版)</td>
+                                        <td>45</td>
+                                        <td>654</td>
+                                        <td>654</td>
+                                        <td>654</td>
+                                        <td>654</td>
+                                        <td>654</td>
+                                        <td>654</td>
+                                    </tr>
+                                    <tr>
+                                        <td>未知</td>
+                                        <td>45</td>
+                                        <td>654</td>
+                                        <td>654</td>
+                                        <td>654</td>
+                                        <td>654</td>
+                                        <td>654</td>
+                                        <td>654</td>
+                                    </tr>
+                                    <!--'ios官网','IOS个人(龙头版)','IOS个人版(att)','IOS个人版(疯狂电玩城)','IOS个人版(街机电玩城)','IOS个人版(连环夺宝)','IOS个人版(水浒传)', 'IOS个人版(糖果派对)',-->
+                                    <!--'IOS个人版(娱乐电玩城)','android官网', '阿里游戏','百度游戏中心','百度', '二维码推广(ewm.lztb.cn)','华为','老系统导入', '木蚂蚁','应用宝','未知'-->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="layui-tab-item">
+                                <div class="layui-tab layui-tab-card">
+                                    <ul class="layui-tab-title">
+                                        <li class="layui-this">游戏天数</li>
+                                        <li>付费贡献</li>
+                                    </ul>
+                                    <div class="layui-tab-content" >
+                                        <div class="layui-tab-item layui-show">
+                                            <!--活跃玩家结构（游戏天数）统计图-->
+                                            <div id="structure" class="container"></div>
+                                            <!--选择日期和导出-->
+                                            <div class="layui-form-item">
+                                                <label class="layui-form-label">范围选择</label>
+                                                <div class="layui-input-inline">
+                                                    <input class="layui-input" placeholder="开始日期" id="LAY_demorange_s9">
+                                                </div>
+                                                <div class="layui-input-inline">
+                                                    <input class="layui-input" placeholder="截止日期" id="LAY_demorange_e9">
+                                                </div>
+                                                <button class="layui-btn layui-btn-primary layui-btn-radius">导出</button>
+                                            </div>
+                                            <!--表格-->
+                                            <table class="layui-table" lay-even="" lay-skin="row">
+                                                <thead>
+                                                <tr>
+                                                    <th>日期</th>
+                                                    <th>首日</th>
+                                                    <th>2~7天</th>
+                                                    <th>8~14天</th>
+                                                    <th>15~30天</th>
+                                                    <th>31~60天</th>
+                                                    <th>61~90天</th>
+                                                    <th>90~180天</th>
+                                                    <th>＞180天</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td>6-1</td>
+                                                    <td>100</td>
+                                                    <td>100</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>6-2</td>
+                                                    <td>100</td>
+                                                    <td>45</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>6-3</td>
+                                                    <td>100</td>
+                                                    <td>45</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="layui-tab-item">
+                                            <!--活跃玩家结构（付费贡献）统计图-->
+                                            <div id="payingContribution" class="container"></div><!--选择日期和导出-->
+                                            <div class="layui-form-item">
+                                                <label class="layui-form-label">范围选择</label>
+                                                <div class="layui-input-inline">
+                                                    <input class="layui-input" placeholder="开始日期" id="LAY_demorange_s11">
+                                                </div>
+                                                <div class="layui-input-inline">
+                                                    <input class="layui-input" placeholder="截止日期" id="LAY_demorange_e11">
+                                                </div>
+                                                <button class="layui-btn layui-btn-primary layui-btn-radius">导出</button>
+                                            </div>
+                                            <!--表格-->
+                                            <table class="layui-table" lay-even="" lay-skin="row">
+                                                <thead>
+                                                <tr>
+                                                    <th>日期</th>
+                                                    <th>免费玩家</th>
+                                                    <th>VIP1</th>
+                                                    <th>VIP2</th>
+                                                    <th>VIP3</th>
+                                                    <th>VIP4</th>
+                                                    <th>VIP5</th>
+                                                    <th>VIP6</th>
+                                                    <th>VIP7</th>
+                                                    <th>VIP8</th>
+                                                    <th>VIP9</th>
+                                                    <th>VIP10</th>
+                                                    <th>VIP11</th>
+                                                    <th>VIP12</th>
+                                                    <th>VIP13</th>
+                                                    <th>VIP14</th>
+                                                    <th>VIP15</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td>6-1</td>
+                                                    <td>100</td>
+                                                    <td>100</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                    <td>100</td>
+                                                    <td>100</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>6-2</td>
+                                                    <td>100</td>
+                                                    <td>45</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                    <td>100</td>
+                                                    <td>100</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>6-3</td>
+                                                    <td>100</td>
+                                                    <td>45</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                    <td>100</td>
+                                                    <td>100</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                    <td>654</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-tab-item">
+                    <div class="layui-tab" lay-filter="test">
+                        <ul class="layui-tab-title">
+                            <li class="layui-this" lay-id="11">流失与回流玩家</li>
+                        </ul>
+                        <div class="layui-tab-content">
+                            <div class="layui-tab-item layui-show">
+                                <!--流失与回流玩家统计图-->
+                                <div id="drain" class="container"></div>
+                                <!--选择日期和导出-->
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">范围选择</label>
+                                    <div class="layui-input-inline">
+                                        <input class="layui-input" placeholder="开始日期" id="LAY_demorange_s12">
+                                    </div>
+                                    <div class="layui-input-inline">
+                                        <input class="layui-input" placeholder="截止日期" id="LAY_demorange_e12">
+                                    </div>
+                                    <button class="layui-btn layui-btn-primary layui-btn-radius">导出</button>
+                                </div>
+                                <!--表格-->
+                                <table class="layui-table" lay-even="" lay-skin="row">
+                                    <thead>
+                                    <tr>
+                                        <th>日期</th>
+                                        <th>流失玩家</th>
+                                        <th>回流玩家</th>
+                                        <th>流失率</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>6-5</td>
+                                        <td>100</td>
+                                        <td>100</td>
+                                        <td>654</td>
+                                    </tr>
+                                    <tr>
+                                        <td>6-4</td>
+                                        <td>100</td>
+                                        <td>45</td>
+                                        <td>654</td>
+                                    </tr>
+                                    <tr>
+                                        <td>6-3</td>
+                                        <td>100</td>
+                                        <td>45</td>
+                                        <td>654</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        //        统计图
+        require(['echarts','vue'], function (echarts,Vue) {
+            var playerAnalyze = echarts.init(document.getElementById('playerAnalyze'));
+            var durationAnalysis = echarts.init(document.getElementById('durationAnalysis'));
+            var equipment = echarts.init(document.getElementById('equipment'));
+            var IP = echarts.init(document.getElementById('IP'));
+            var channel = echarts.init(document.getElementById('channel'));
+            var activePlayers = echarts.init(document.getElementById('activePlayers'));
+            var players = echarts.init(document.getElementById('players'));
+            var playersDauMau = echarts.init(document.getElementById('playersDauMau'));
+            var active = echarts.init(document.getElementById('active'));
+            var structure = echarts.init(document.getElementById('structure'));
+            var payingContribution = echarts.init(document.getElementById('payingContribution'));
+            var drain = echarts.init(document.getElementById('drain'));
+
+
+            function renderPlayerAnalyze() {
+                //            新增玩家分析统计图
+                option = {
+                    title : {
+                        text: '新增玩家'
+                        //                        subtext: '纯属虚构'
+                    },
+                    tooltip : {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data:['新增设备','新增注册','新增玩家']
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar']},
+                            restore : {show: true},
+                            saveAsImage : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    xAxis : [
+                        {
+                            type : 'category',
+                            data : ['06-06','06-07','06-08','06-09','06-10','06-11','06-12']
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            type : 'value'
+                        }
+                    ],
+                    series : [
+                        {
+                            name:'新增设备',
+                            type:'bar',
+                            data:[3.0, 5.9, 8.0, 23.2, 25.6, 53.7, 85.6],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'新增注册',
+                            type:'bar',
+                            data:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'新增玩家',
+                            type:'bar',
+                            data:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        }
+
+                    ]
+                };
+                playerAnalyze.setOption(option);
+                //            首次在线时长分析统计图
+                option = {
+                    backgroundColor: '#2c343c',
+                    title: {
+//                        text: 'Customized Pie',
+                        left: 'center',
+                        top: 20,
+                        textStyle: {
+                            color: '#ccc'
+                        }
+                    },
+
+                    tooltip : {
+                        trigger: 'item',
+                        formatter: "{a} <br/>{b} : {c} ({d}%)"
+                    },
+
+                    visualMap: {
+                        show: false,
+                        min: 80,
+                        max: 600,
+                        inRange: {
+                            colorLightness: [0, 1]
+                        }
+                    },
+                    series : [
+                        {
+                            name:'访问来源',
+                            type:'pie',
+                            radius : '55%',
+                            center: ['50%', '50%'],
+                            data:[
+                                {value:205, name:'1mins以下'},
+                                {value:310, name:'1~5mins'},
+                                {value:274, name:'6~10mins'},
+                                {value:235, name:'10~30mins'},
+                                {value:400, name:'30~60mins'},
+                                {value:274, name:'1~2hours'},
+                                {value:235, name:'2~4hours'},
+                                {value:400, name:'4hours以上'}
+                            ].sort(function (a, b) { return a.value - b.value; }),
+                            roseType: 'radius',
+                            label: {
+                                normal: {
+                                    textStyle: {
+                                        color: 'rgba(255, 255, 255, 0.3)'
+                                    }
+                                }
+                            },
+                            labelLine: {
+                                normal: {
+                                    lineStyle: {
+                                        color: 'rgba(255, 255, 255, 0.3)'
+                                    },
+                                    smooth: 0.2,
+                                    length: 10,
+                                    length2: 20
+                                }
+                            },
+                            itemStyle: {
+                                normal: {
+                                    color: '#c23531',
+                                    shadowBlur: 200,
+                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                }
+                            },
+
+                            animationType: 'scale',
+                            animationEasing: 'elasticOut',
+                            animationDelay: function (idx) {
+                                return Math.random() * 200;
+                            }
+                        }
+                    ]
+                };
+                durationAnalysis.setOption(option);
+                 //            按照设备区分统计图
+                option = {
+                    backgroundColor: '#2c343c',
+                    title: {
+                        text: '按照设备区分统计图',
+                        left: 'center',
+                        top: 20,
+                        textStyle: {
+                            color: '#ccc'
+                        }
+                    },
+
+                    tooltip : {
+                        trigger: 'item',
+                        formatter: "{a} <br/>{b} : {c} ({d}%)"
+                    },
+
+                    visualMap: {
+                        show: false,
+                        min: 80,
+                        max: 600,
+                        inRange: {
+                            colorLightness: [0, 1]
+                        }
+                    },
+                    series : [
+                        {
+                            name:'访问来源',
+                            type:'pie',
+                            radius : '55%',
+                            center: ['50%', '50%'],
+                            data:[
+                                {value:205, name:'0个'},
+                                {value:310, name:'1个'},
+                                {value:274, name:'2个'},
+                                {value:235, name:'3个'},
+                                {value:400, name:'4个'},
+                                {value:274, name:'5个'},
+                                {value:235, name:'6~10个'},
+                                {value:400, name:'10个以上'}
+                            ].sort(function (a, b) { return a.value - b.value; }),
+                            roseType: 'radius',
+                            label: {
+                                normal: {
+                                    textStyle: {
+                                        color: 'rgba(255, 255, 255, 0.3)'
+                                    }
+                                }
+                            },
+                            labelLine: {
+                                normal: {
+                                    lineStyle: {
+                                        color: 'rgba(255, 255, 255, 0.3)'
+                                    },
+                                    smooth: 0.2,
+                                    length: 10,
+                                    length2: 20
+                                }
+                            },
+                            itemStyle: {
+                                normal: {
+                                    color: '#c23531',
+                                    shadowBlur: 200,
+                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                }
+                            },
+
+                            animationType: 'scale',
+                            animationEasing: 'elasticOut',
+                            animationDelay: function (idx) {
+                                return Math.random() * 200;
+                            }
+                        }
+                    ]
+                };
+                equipment.setOption(option);
+                //            按照IP区分统计图
+                option = {
+                    backgroundColor: '#2c343c',
+                    title: {
+                        text: '按照IP区分统计图',
+                        left: 'center',
+                        top: 20,
+                        textStyle: {
+                            color: '#ccc'
+                        }
+                    },
+
+                    tooltip : {
+                        trigger: 'item',
+                        formatter: "{a} <br/>{b} : {c} ({d}%)"
+                    },
+
+                    visualMap: {
+                        show: false,
+                        min: 80,
+                        max: 600,
+                        inRange: {
+                            colorLightness: [0, 1]
+                        }
+                    },
+                    series : [
+                        {
+                            name:'访问来源',
+                            type:'pie',
+                            radius : '55%',
+                            center: ['50%', '50%'],
+                            data:[
+                                {value:205, name:'0个'},
+                                {value:310, name:'1个'},
+                                {value:274, name:'2个'},
+                                {value:235, name:'3个'},
+                                {value:400, name:'4个'},
+                                {value:274, name:'5个'},
+                                {value:235, name:'6~10个'},
+                                {value:400, name:'10个以上'}
+                            ].sort(function (a, b) { return a.value - b.value; }),
+                            roseType: 'radius',
+                            label: {
+                                normal: {
+                                    textStyle: {
+                                        color: 'rgba(255, 255, 255, 0.3)'
+                                    }
+                                }
+                            },
+                            labelLine: {
+                                normal: {
+                                    lineStyle: {
+                                        color: 'rgba(255, 255, 255, 0.3)'
+                                    },
+                                    smooth: 0.2,
+                                    length: 10,
+                                    length2: 20
+                                }
+                            },
+                            itemStyle: {
+                                normal: {
+                                    color: '#c23531',
+                                    shadowBlur: 200,
+                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                }
+                            },
+
+                            animationType: 'scale',
+                            animationEasing: 'elasticOut',
+                            animationDelay: function (idx) {
+                                return Math.random() * 200;
+                            }
+                        }
+                    ]
+                };
+                IP.setOption(option);
+                //            新增玩家渠道分布统计图
+                option = {
+                    tooltip : {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data:['ios官网','IOS个人(龙头版)','IOS个人版(att)','IOS个人版(疯狂电玩城)','IOS个人版(街机电玩城)','IOS个人版(连环夺宝)','IOS个人版(水浒传)', 'IOS个人版(糖果派对)',
+                            'IOS个人版(娱乐电玩城)','android官网', '阿里游戏','百度游戏中心','百度', '二维码推广(ewm.lztb.cn)','华为','老系统导入', '木蚂蚁','应用宝','未知']
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar']},
+                            restore : {show: true},
+                            saveAsImage : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    xAxis : [
+                        {
+                            type : 'category',
+                            data : ['06-06','06-07']
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            type : 'value'
+                        }
+                    ],
+                    series : [
+                        {
+                            name:'ios官网',
+                            type:'bar',
+                            data:[79.0, 54.9],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'IOS个人(龙头版)',
+                            type:'bar',
+                            data:[2.0, 4.9],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'IOS个人版(att)',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'IOS个人版(疯狂电玩城)',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'IOS个人版(街机电玩城)',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'IOS个人版(连环夺宝)',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'IOS个人版(水浒传)',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'IOS个人版(糖果派对)',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'IOS个人(娱乐电玩城)',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'android官网',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'阿里游戏',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'百度游戏中心',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'百度',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'二维码推广(ewm.lztb.cn)',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'华为',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'老系统导入',
+                            type:'bar',
+                            data:[25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'木蚂蚁',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'应用宝',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'未知',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        }
+
+                    ]
+                };
+                channel.setOption(option);
+                //            活跃玩家趋势统计图
+                option = {
+                    title : {
+                        text: '活跃玩家趋势'
+                        //                        subtext: '纯属虚构'
+                    },
+                    tooltip : {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data:['新玩家','老玩家','活跃玩家']
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar']},
+                            restore : {show: true},
+                            saveAsImage : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    xAxis : [
+                        {
+                            type : 'category',
+                            data : ['06-06','06-07','06-08','06-09','06-10','06-11','06-12']
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            type : 'value'
+                        }
+                    ],
+                    series : [
+                        {
+                            name:'新玩家',
+                            type:'bar',
+                            data:[3.0, 5.9, 8.0, 23.2, 25.6, 53.7, 85.6],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'老玩家',
+                            type:'bar',
+                            data:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'活跃玩家',
+                            type:'bar',
+                            data:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        }
+
+                    ]
+                };
+                activePlayers.setOption(option);
+                //            活跃玩家统计图
+                option = {
+                    title : {
+                        text: '活跃玩家趋势'
+                        //                        subtext: '纯属虚构'
+                    },
+                    tooltip : {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data:['新玩家','老玩家','活跃玩家']
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar']},
+                            restore : {show: true},
+                            saveAsImage : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    xAxis : [
+                        {
+                            type : 'category',
+                            data : ['06-06','06-07','06-08','06-09','06-10','06-11','06-12']
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            type : 'value'
+                        }
+                    ],
+                    series : [
+                        {
+                            name:'新玩家',
+                            type:'bar',
+                            data:[3.0, 5.9, 8.0, 23.2, 25.6, 53.7, 85.6],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'老玩家',
+                            type:'bar',
+                            data:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'活跃玩家',
+                            type:'bar',
+                            data:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        }
+
+                    ]
+                };
+                players.setOption(option);
+                //                DauMau
+                option = {
+//                    title : {
+//                        text: '活跃玩家趋势'
+                    //                        subtext: '纯属虚构'
+//                    },
+                    tooltip : {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data:['DAU/MAU']
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar']},
+                            restore : {show: true},
+                            saveAsImage : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    xAxis : [
+                        {
+                            type : 'category',
+                            data : ['06-06','06-07','06-08','06-09','06-10','06-11','06-12']
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            type : 'value'
+                        }
+                    ],
+                    series : [
+                        {
+                            name:'新玩家',
+                            type:'bar',
+                            data:[3.0, 5.9, 8.0, 23.2, 25.6, 53.7, 85.6],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        }
+                    ]
+                };
+                playersDauMau.setOption(option);
+                //活跃玩家渠道分析
+                option = {
+                    tooltip : {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data:['ios官网','IOS个人(龙头版)','IOS个人版(att)','IOS个人版(疯狂电玩城)','IOS个人版(街机电玩城)','IOS个人版(连环夺宝)','IOS个人版(水浒传)', 'IOS个人版(糖果派对)',
+                            'IOS个人版(娱乐电玩城)','android官网', '阿里游戏','百度游戏中心','百度', '二维码推广(ewm.lztb.cn)','华为','老系统导入', '木蚂蚁','应用宝','未知']
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar']},
+                            restore : {show: true},
+                            saveAsImage : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    xAxis : [
+                        {
+                            type : 'category',
+                            data : ['06-06','06-07']
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            type : 'value'
+                        }
+                    ],
+                    series : [
+                        {
+                            name:'ios官网',
+                            type:'bar',
+                            data:[79.0, 54.9],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'IOS个人(龙头版)',
+                            type:'bar',
+                            data:[2.0, 4.9],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'IOS个人版(att)',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'IOS个人版(疯狂电玩城)',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'IOS个人版(街机电玩城)',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'IOS个人版(连环夺宝)',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'IOS个人版(水浒传)',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'IOS个人版(糖果派对)',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'IOS个人(娱乐电玩城)',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'android官网',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'阿里游戏',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'百度游戏中心',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'百度',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'二维码推广(ewm.lztb.cn)',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'华为',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'老系统导入',
+                            type:'bar',
+                            data:[25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'木蚂蚁',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'应用宝',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'未知',
+                            type:'bar',
+                            data:[ 25.6, 76.7],
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最大值'},
+                                    {type : 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: '平均值'}
+                                ]
+                            }
+                        }
+
+                    ]
+                };
+                active.setOption(option);
+                //                活跃玩家结构
+                option = {
+                    title: {
+                        text: '活跃玩家结构'
+                    },
+                    tooltip : {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'cross',
+                            label: {
+                                backgroundColor: '#6a7985'
+                            }
+                        }
+                    },
+                    legend: {
+                        data:['首日','2~7天','8~14天','15~30天','31~60天','61~90天','90~180天','＞180天']
+                    },
+                    toolbox: {
+                        feature: {
+                            saveAsImage: {}
+                        }
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    xAxis : [
+                        {
+                            type : 'category',
+                            boundaryGap : false,
+                            data : ['6-2','6-3','6-4','6-5','6-6','6-7','6-8']
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            type : 'value'
+                        }
+                    ],
+                    series : [
+                        {
+                            name:'首日',
+                            type:'line',
+                            stack: '总量',
+                            areaStyle: {normal: {}},
+                            data:[120, 132, 101, 134, 90, 230, 210]
+                        },
+                        {
+                            name:'2~7天',
+                            type:'line',
+                            stack: '总量',
+                            areaStyle: {normal: {}},
+                            data:[120, 132, 101, 134, 90, 230, 210]
+                        },
+                        {
+                            name:'8~14天',
+                            type:'line',
+                            stack: '总量',
+                            areaStyle: {normal: {}},
+                            data:[220, 182, 191, 234, 290, 330, 310]
+                        },
+//                        '90~180天','＞180天'
+                        {
+                            name:'15~30天',
+                            type:'line',
+                            stack: '总量',
+                            areaStyle: {normal: {}},
+                            data:[150, 232, 201, 154, 190, 330, 410]
+                        },
+                        {
+                            name:'31~60天',
+                            type:'line',
+                            stack: '总量',
+                            areaStyle: {normal: {}},
+                            data:[320, 332, 301, 334, 390, 330, 320]
+                        },
+                        {
+                            name:'61~90天',
+                            type:'line',
+                            stack: '总量',
+                            areaStyle: {normal: {}},
+                            data:[820, 932, 901, 934, 1290, 1330, 1320]
+                        },
+                        {
+                            name:'90~180天',
+                            type:'line',
+                            stack: '总量',
+                            areaStyle: {normal: {}},
+                            data:[320, 332, 301, 334, 390, 330, 320]
+                        },
+                        {
+                            name:'＞180天',
+                            type:'line',
+                            stack: '总量',
+                            areaStyle: {normal: {}},
+                            data:[820, 932, 901, 934, 1290, 1330, 1320]
+                        }
+                    ]
+                };
+                structure.setOption(option);
+//                活跃玩家结构（付费贡献）统计图
+                option = {
+                    tooltip : {
+                        trigger: 'axis',
+                        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                        }
+                    },
+                    legend: {
+                        data:['免费玩家','VIP1','VIP2','VIP3','VIP4','VIP5','VIP6','VIP7','VIP8','VIP9','VIP10','VIP11','VIP12','VIP13','VIP14','VIP15']
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    xAxis : [
+                        {
+                            type : 'category',
+                            data : ['周一','周二','周三','周四','周五','周六','周日']
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            type : 'value'
+                        }
+                    ],
+                    series : [
+                        {
+                            name:'免费玩家',
+                            type:'bar',
+                            data:[320, 332, 301, 334, 390, 330, 320]
+                        },
+                        {
+                            name:'VIP1',
+                            type:'bar',
+                            stack: '广告',
+                            data:[120, 132, 101, 134, 90, 230, 210]
+                        },
+                        {
+                            name:'VIP2',
+                            type:'bar',
+                            stack: '广告',
+                            data:[220, 182, 191, 234, 290, 330, 310]
+                        },
+                        {
+                            name:'VIP3',
+                            type:'bar',
+                            stack: '广告',
+                            data:[150, 232, 201, 154, 190, 330, 410]
+                        },
+//                        '免费玩家','VIP1','VIP2','VIP3','VIP4','VIP5','VIP6','VIP7','VIP8','VIP9','VIP10','VIP11','VIP12','VIP13','VIP14','VIP15'
+                        {
+                            name:'VIP4',
+                            type:'bar',
+                            data:[862, 1018, 964, 1026, 1679, 1600, 1570],
+                            markLine : {
+                                lineStyle: {
+                                    normal: {
+                                        type: 'dashed'
+                                    }
+                                },
+                                data : [
+                                    [{type : 'min'}, {type : 'max'}]
+                                ]
+                            }
+                        },
+                        {
+                            name:'VIP5',
+                            type:'bar',
+                            barWidth : 5,
+                            stack: '搜索引擎',
+                            data:[620, 732, 701, 734, 1090, 1130, 1120]
+                        },
+                        {
+                            name:'VIP6',
+                            type:'bar',
+                            stack: '搜索引擎',
+                            data:[120, 132, 101, 134, 290, 230, 220]
+                        },
+                        {
+                            name:'VIP7',
+                            type:'bar',
+                            stack: '搜索引擎',
+                            data:[60, 72, 71, 74, 190, 130, 110]
+                        },
+                        {
+                            name:'VIP8',
+                            type:'bar',
+                            stack: '搜索引擎',
+                            data:[62, 82, 91, 84, 109, 110, 120]
+                        },
+                        {
+                            name:'VIP9',
+                            type:'bar',
+                            barWidth : 5,
+                            stack: '搜索引擎',
+                            data:[620, 732, 701, 734, 1090, 1130, 1120]
+                        },
+                        {
+                            name:'VIP10',
+                            type:'bar',
+                            stack: '搜索引擎',
+                            data:[120, 132, 101, 134, 290, 230, 220]
+                        },
+                        {
+                            name:'VIP11',
+                            type:'bar',
+                            stack: '搜索引擎',
+                            data:[60, 72, 71, 74, 190, 130, 110]
+                        },
+                        {
+                            name:'VIP12',
+                            type:'bar',
+                            stack: '搜索引擎',
+                            data:[62, 82, 91, 84, 109, 110, 120]
+                        },
+                        {
+                            name:'VIP13',
+                            type:'bar',
+                            stack: '搜索引擎',
+                            data:[120, 132, 101, 134, 290, 230, 220]
+                        },
+                        {
+                            name:'VIP14',
+                            type:'bar',
+                            stack: '搜索引擎',
+                            data:[60, 72, 71, 74, 190, 130, 110]
+                        },
+                        {
+                            name:'VIP15',
+                            type:'bar',
+                            stack: '搜索引擎',
+                            data:[62, 82, 91, 84, 109, 110, 120]
+                        }
+                    ]
+                };
+                payingContribution.setOption(option);
+//                流失与回流玩家统计图
+                option = {
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data:['流失玩家','回流玩家','流失率']
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    toolbox: {
+                        feature: {
+                            saveAsImage: {}
+                        }
+                    },
+                    xAxis: {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: ['6-1','6-2','6-3','6-4','6-5','6-6','6-7']
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: [
+                        {
+                            name:'流失玩家',
+                            type:'line',
+                            stack: '总量',
+                            data:[120, 132, 101, 134, 90, 230, 210]
+                        },
+                        {
+                            name:'回流玩家',
+                            type:'line',
+                            stack: '总量',
+                            data:[220, 182, 191, 234, 290, 330, 310]
+                        },
+                        {
+                            name:'流失率',
+                            type:'line',
+                            stack: '总量',
+                            data:[150, 232, 201, 154, 190, 330, 410]
+                        }
+                    ]
+                };
+                drain.setOption(option);
+            }
+            renderPlayerAnalyze();
+        })
+    </script>
+</div>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>中奖展示配置新建糖果派对</title>
+    <link href="/lztb/static/plugs/layui/css/layui.css" rel="stylesheet">
+    <!--<script src="../../../static/admin/app.js"></script>-->
+</head>
+<body>
+<div id="vmFromtgpd" style="padding: 15px;">
+    <div class="layui-form">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label style="width: 85px" class="layui-form-label">倍数需求区间</label>
+                <div class="layui-input-inline">
+                    <input class="layui-input" placeholder="区间下限"  name="" v-model="formData.bs_min"/>
+                </div>
+                <div class="layui-input-inline">
+                    <input class="layui-input" placeholder="区间上限"  name="" v-model="formData.bs_max"/>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label style="width: 85px"  class="layui-form-label">金币需求区间</label>
+                <div class="layui-input-inline">
+                    <input class="layui-input" placeholder="本轮获得最低金币数"  name=""  v-model="formData.award_gold_min"/>
+                </div>
+                <div class="layui-input-inline">
+                    <input class="layui-input" placeholder="本轮获得最高金币数"  name=""  v-model="formData.award_gold_max"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div style="font-size: 16px">中奖配置</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">中奖类型</label>
+            <div class="layui-input-block">
+                <select name="modules" style="height: 38px;width: 200px;" lay-ignore v-model="formData.award_type">
+                    <option value="0">倍数奖</option>
+                    <option value="1">彩金奖</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">播报样式</label>
+            <div class="layui-input-block">
+                <select name="modules" style="height: 38px;width: 200px;" lay-ignore v-model="formData.style_type">
+                    <option value="0">普通</option>
+                    <option value="1">豪华</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">中奖类型</label>
+            <div class="layui-input-block">
+                <select name="modules" style="height: 38px;width: 200px;" lay-ignore v-model="formData.type">
+                    <option value="1">幸运星</option>
+                    <option value="2">今日集锦</option>
+                    <option value="3">累积大奖</option>
+                    <option value="4">跑马灯</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">上架状态</label>
+            <div class="layui-input-block">
+                <select name="modules" style="height: 38px;width: 200px;" lay-ignore v-model="formData.is_open">
+                    <option value="1">上架</option>
+                    <option value="0">下架</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">播报地点</label>
+            <div class="layui-input-block">
+                <select name="modules" style="height: 38px;width: 200px;" lay-ignore v-model="formData.player_address">
+                    <option value="1">全服</option>
+                    <option value="2">糖果派对</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <textarea placeholder="公告内容" class="layui-textarea" v-model="formData.format"></textarea>
+        </div>
+        <div class="layui-form-item" style="text-align: center">
+            <button lay-submit="" lay-filter="marqueeSub" type='submit' class="layui-btn layui-btn-danger" @click="saveData()">提交</button>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="/lztb/static/plugs/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="/lztb/static/plugs/layui/layui.js"></script>
+<script type="text/javascript" src="/lztb/static/plugs/vue/vue.js"></script>
+<script type="text/javascript" src="/lztb/static/model/site.js"></script>
+<script type="text/javascript">
+     var vmFromtgpd = new Vue({
+            el: "#vmFromtgpd",
+            data: {
+               formData:{
+                    bs_min:null,
+                    bs_max:null,
+                    award_gold_min:null,
+                    award_gold_max:null,
+                    award_type:0,
+                    style_type:0,
+                    type:1,
+                    is_open:1,
+                    player_address:1,
+                    format_id:null,
+                    format:null
+                },
+            },
+            watch: {
+              
+            },
+            computed: {
+            },
+            methods: {
+               saveData:function() {
+                console.log(vmFromtgpd.formData);
+                    $.ajax({
+                        url: '/config/winning/tgpdSave',
+                        type: 'POST',
+                        data: vmFromtgpd.formData,
+                        dataType: 'json',
+                        timeout: 10000,
+                        success: function (rs) {
+                            if (rs.code == '00000') {
+                                var rsdata = JSON.parse(rs.data);
+                                if(rsdata.code == 200) {
+                                    top.gCloseModalWindow();
+                                    top.SuccessBox(rsdata.info, "提示", 2000);
+                                } else {
+                                    top.AlertMsg(rsdata.info);
+                                }      
+                            } else {
+                                top.AlertMsg("保存失败："+rs.msg);
+                                console.error(rs);
+                            }
+                        },
+                        error: function (xhr, status, ex) {
+                            top.AlertMsg("请求失败：" + xhr.statusText);
+                            console.error(ex);
+                        }
+                    });
+                }
+            },
+            created: function () {
+                //VUE实例创建完成后
+                var strData = localStorage.getItem("config_winning_tgpd_edit");
+                if(strData) {
+                    strData = JSON.parse(strData);
+                    console.log(strData);
+                    this.formData = strData;
+                }
+            },
+            mounted: function () {     
+                  layui.use(['layer','form','laydate'], function () {
+                        var  layform  = layui.form();
+                        layform.render('select');
+                    });
+            },
+        });
+
+</script>
+</body>
+</html>

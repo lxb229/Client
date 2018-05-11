@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangzhixuan.mapper.PlayerMoneyMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="PlayerMoney" type="com.wangzhixuan.model.PlayerMoney">
+		<result column="id" property="id" />
+		<result column="start_no" property="startNo" />
+		<result column="room_card" property="roomCard" />
+		<result column="gold_coin" property="goldCoin" />
+		<result column="silver_coin" property="silverCoin" />
+		<result column="app_pay" property="appPay" />
+		<result column="offline_pay" property="offlinePay" />
+		<result column="web_pay" property="webPay" />
+		<result column="wechat_pay" property="wechatPay" />
+		<result column="use_room_card" property="useRoomCard" />
+		<result column="all_gold" property="allGold" />
+		<result column="all_silver" property="allSilver" />
+	</resultMap>
+
+</mapper>

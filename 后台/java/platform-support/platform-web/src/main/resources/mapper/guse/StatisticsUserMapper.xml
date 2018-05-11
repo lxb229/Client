@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.guse.platform.dao.doudou.StatisticsUserMapper">
+
+    <resultMap id="StatisticsUser" type="com.guse.platform.entity.doudou.StatisticsUser">
+        <result property="suId" column="su_id"/>
+        <result property="suCityId" column="su_city_id"/>
+        <result property="suCreateTime" column="su_create_time"/>
+        <result property="suNewUser" column="su_new_user"/>
+        <result property="suActiveUser" column="su_active_user"/>
+        <result property="suNewAgency" column="su_new_agency"/>
+    </resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+        su_id ,su_city_id ,su_create_time ,su_new_user ,su_active_user ,su_new_agency 
+	    ]]>
+	</sql>
+	<!-- 用于分页查询 -->
+	<sql id="sql_of_where">
+	 	WHERE 1=1 
+    	<if test="bParam != null" >	
+		 	<if test="bParam.suCityId != null">
+	      	 AND su_city_id = #{bParam.suCityId, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.suCreateTime != null">
+	      	 AND su_create_time = #{bParam.suCreateTime, jdbcType=TIMESTAMP}
+		 	</if>
+		 	<if test="bParam.suNewUser != null">
+	      	 AND su_new_user = #{bParam.suNewUser, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.suActiveUser != null">
+	      	 AND su_active_user = #{bParam.suActiveUser, jdbcType=INTEGER}
+		 	</if>
+		 	<if test="bParam.suNewAgency != null">
+	      	 AND su_new_agency = #{bParam.suNewAgency, jdbcType=INTEGER}
+		 	</if>
+	    </if>   
+    </sql>
+    
+    <!-- 通用查询 -->
+    <select id="select" parameterType="java.util.Map" resultMap="StatisticsUser">
+        select 
+        <include refid="Base_Column_List" />
+        from statistics_user 
+        <include refid="sql_of_where" /> order by create_time desc
+    </select>
+    
+    <!-- 通用分页查询 -->
+    <select id="selectPageByParam" parameterType="java.util.Map" resultMap="StatisticsUser">
+        select 
+        <include refid="Base_Column_List" />
+        from statistics_user 
+        <include refid="sql_of_where" />
+        <if test="pParam != null">
+            <if test="pParam.orderByClause != null" > order by ${pParam.orderByClause} </if>
+            <if test="pParam.orderByClause == null" >
+            		order by su_id  desc 
+            </if>
+            <if test="pParam.startIndex != null and pParam.pageSize != null" >
+              limit ${pParam.startIndex} , ${pParam.pageSize}
+            </if>
+        </if>
+          <if test="pParam == null">
+             order by create_date desc
+        </if>
+    </select>
+    
+    <!-- 通用分页查询记录总数 -->
+    <select id="countByParam" parameterType="java.util.Map" resultType="java.lang.Long">
+        select count(*) from statistics_user 
+        <include refid="sql_of_where" />
+    </select>
+    
+    
+    <insert id="insert" parameterType="com.guse.platform.entity.doudou.StatisticsUser">
+    <![CDATA[
+        INSERT INTO statistics_user (
+	        su_id  ,
+	        su_city_id  ,
+	        su_create_time  ,
+	        su_new_user  ,
+	        su_active_user  ,
+	        su_new_agency  
+        ) VALUES (
+        	#{suId, jdbcType=INTEGER} ,
+        	#{suCityId, jdbcType=INTEGER} ,
+        	#{suCreateTime, jdbcType=TIMESTAMP} ,
+        	#{suNewUser, jdbcType=INTEGER} ,
+        	#{suActiveUser, jdbcType=INTEGER} ,
+        	#{suNewAgency, jdbcType=INTEGER} 
+        )
+    ]]>
+    </insert>
+    
+    <delete id="deleteById">
+    <![CDATA[
+        DELETE FROM statistics_user WHERE
+        su_id = #{suId} 
+    ]]>
+    </delete>
+    
+    <select id="selectById" resultMap="StatisticsUser">
+	    SELECT <include refid="Base_Column_List"/>
+	    <![CDATA[
+	        FROM statistics_user 
+	        WHERE 
+		        su_id = #{suId} 
+	    ]]>
+    </select>
+    
+    <update id="updateByIdSelective" parameterType="com.guse.platform.entity.doudou.StatisticsUser">
+		UPDATE statistics_user
+		<set>
+		 	<if test="suCityId != null">
+	      	  su_city_id = #{suCityId, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="suCreateTime != null">
+	      	  su_create_time = #{suCreateTime, jdbcType=TIMESTAMP} ,
+		 	</if>
+		 	<if test="suNewUser != null">
+	      	  su_new_user = #{suNewUser, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="suActiveUser != null">
+	      	  su_active_user = #{suActiveUser, jdbcType=INTEGER} ,
+		 	</if>
+		 	<if test="suNewAgency != null">
+	      	  su_new_agency = #{suNewAgency, jdbcType=INTEGER} ,
+		 	</if>
+		</set>
+		WHERE
+	       	su_id = #{suId} 
+    </update>
+	
+</mapper>
+

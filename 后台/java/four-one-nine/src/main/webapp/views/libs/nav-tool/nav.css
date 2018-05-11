@@ -1,0 +1,118 @@
+.nav-item a,
+.nav-item a:hover,
+.nav-item a:visited,
+.nav-item a:active{
+    color: #95959A;
+}
+.page-nav>ul>.nav-item>a{
+    font-weight: bold;
+    font-size: 15px;
+}
+.nav-item{
+    margin: 4px 0;
+
+}
+.nav-item a{
+    display: block;
+    margin: auto;
+    border-radius: 20px;
+    height: 30px;
+    width: 86%;
+    line-height: 30px;
+    position: relative;
+
+    padding-left: 50px;
+    text-align: left;
+
+}
+.nav-show a,
+.nav-show a:hover{
+    background: #DCDDEF;
+    color: #00A0E9;
+}
+.nav-item ul{
+    display: none;
+}
+.nav-item .nav-item{
+    width: 80%;
+    margin: auto;
+    font-size: 14px;
+    color: #95959A;
+}
+.nav-item .nav-item a{
+    padding-left: 0px;
+    text-align: center;
+}
+.nav-item .icon{
+    width: 14px;
+    height: 14px;
+    display: block;
+    position: absolute;
+    /*border: 1px solid red;*/
+    top: 8px;
+    left: 12px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 14px 14px;
+}
+.right{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border: 5px solid transparent;
+    border-left-color: #959595;
+
+    transition: transform 300ms;
+    -moz-transition: transform 300ms; /* Firefox 4 */
+    -webkit-transition: transform 300ms; /* Safari 和 Chrome */
+    -o-transition: transform 300ms; /* Opera */
+}
+
+.icon-strc{
+    background-image: url("../images/menu/menu_ic_data_off.png");
+}
+.nav-show .icon-strc{
+    background-image: url("../images/menu/menu_ic_data_on.png");
+}
+.icon-money{
+    background-image: url("../images/menu/menu_ic_money.png");
+}
+.nav-show .icon-money{
+    background-image: url("../images/menu/menu_ic_money_on.png");
+}
+.icon-activity{
+    background-image: url("../images/menu/menu_ic_activity.png");
+}
+.nav-show .icon-activity{
+    background-image: url("../images/menu/menu_ic_activity_on.png");
+}
+.icon-push{
+    background-image: url("../images/menu/menu_ic_push.png");
+}
+.nav-show .icon-push{
+    background-image: url("../images/menu/menu_ic_push_on.png");
+}
+.icon-serve{
+    background-image: url("../images/menu/menu_ic_serve.png");
+}
+.nav-show .icon-serve{
+    background-image: url("../images/menu/menu_ic_serve_on.png");
+}
+.icon-member{
+    background-image: url("../images/menu/menu_ic_user.png");
+}
+.nav-show .icon-member{
+    background-image: url("../images/menu/menu_ic_user_on.png");
+}
+.icon-class{
+    background-image: url("../images/menu/menu_ic_class.png");
+}
+.nav-show .icon-class{
+    background-image: url("../images/menu/menu_ic_class_on.png");
+}
+.icon-font{
+    background-image: url("../images/menu/menu_ic_font.png");
+}
+.nav-show .icon-font{
+    background-image: url("../images/menu/menu_ic_font_on.png");
+}

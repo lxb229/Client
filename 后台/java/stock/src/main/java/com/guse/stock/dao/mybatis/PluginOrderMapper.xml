@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guse.stock.dao.IPluginOrderDao">
+
+	<select id="finbByUserId" parameterType="java.lang.String" resultType="pluginOrder">
+		select * from rp_plugin_order where user_id=#{userId} 
+		<if test="endTime != null and endTime != '' and endTime != 0 ">
+			and end_time&gt;=#{endTime} 
+		</if>
+		<if test="type != null and type != '' and type != 0 ">
+			and type=#{type} 
+		</if>
+		order by create_time desc limit 1
+	</select>
+
+</mapper>

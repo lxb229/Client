@@ -1,0 +1,50 @@
+<!--用户明细-->
+<div class="ibox">
+    <!--主页内容-->
+    <div class="ibox-content fadeInUp animated">
+		<div id="app">
+			<div class="layui-form">
+				<div class="layui-tab-item layui-show">
+					<div class="layui-form-item">
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="ID查询" name="obuUserid" :value="filter.obuUserid" id="obuUserid" >
+						</div>
+						<div class="layui-input-inline">
+							<input class="layui-input" placeholder="昵称查询" name="obuUserNick" :value="filter.obuUserNick" id="obuUserNick">
+						</div>
+						<button class="layui-btn layui-btn-primary layui-btn-radius" lay-submit>查询</button>
+					</div>
+					<table class="layui-table" lay-even="" lay-skin="row">
+						<thead>
+						<tr>
+							<th>游戏ID</th>
+							<th>用户昵称</th>
+							<th title="用户当前金币持有量">金币</th>
+							<th title="用户当前钻石持有量">钻石</th>
+							<th title="用户从首次充值到现在总共充值金额">充值金额</th>
+							<th title="三类：正常（上次登录后30日内再次登录的用户）、死号（上次登录后30日内未登录过游戏的）、回流（死号用
+							户再次登录游戏的，回流用户30日内未登录又会转为死号。用户）">账号类型</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr v-for="(item, index) in grid.data">
+							<td>{{item.obuUserid}}</td>
+							<td>{{item.obuUserNick}}</td>
+							<td>{{item.obuGold}}</td>
+							<td>{{item.obuDiamond}}</td>
+							<td>{{item.obuRechargeAmount}}</td>
+							<td>
+								<span v-if="item.obuBriskState==1">正常</span>
+								<span v-if="item.obuBriskState==2">死号</span>
+								<span v-if="item.obuBriskState==3">回流</span>
+							</td>
+						</tr>
+						</tbody>
+					</table>
+					<div id="pager" class="laypager" style="float: right;"></div>
+				</div>
+			</div>
+		</div>
+    </div>
+	<script src="../static/lztb/game/userDetails.js"></script>
+</div>
